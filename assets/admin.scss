@@ -1,0 +1,74 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+
+.vrts_list_table_page {
+
+	.testing-status {
+
+		&--paused {
+			color: $alert-red;
+		}
+
+		&--running {
+			color: $alert-green;
+		}
+	}
+}
+
+.column-vrts_testing_status {
+	width: 3.5rem;
+
+	.vrts-status {
+		display: block;
+		width: 20px;
+		height: 20px;
+	}
+
+	.vrts-icon-status {
+		display: inline-block;
+		width: 12px;
+		height: 12px;
+		border-radius: 50%;
+		margin: 3px 10px 0 3px;
+		background: $gray-700;
+		vertical-align: top;
+
+		&--paused {
+			background: $alert-red;
+		}
+
+		&--running {
+			background: $alert-green;
+		}
+	}
+}
+
+.vrts-metabox-notice {
+	background: #fff;
+	border: 1px solid $gray-10;
+	border-left-width: 4px;
+	padding: 12px;
+
+	&-is-info {
+		border-left-color: $blue-50;
+	}
+
+	&-is-error {
+		border-left-color: $red-50;
+	}
+
+	&-is-success {
+		border-left-color: $alert-green;
+	}
+
+	+ .vrts-metabox-notice {
+		margin-top: 1rem;
+	}
+
+	> :first-child {
+		margin-top: 0;
+	}
+
+	> :last-child {
+		margin-bottom: 0;
+	}
+}

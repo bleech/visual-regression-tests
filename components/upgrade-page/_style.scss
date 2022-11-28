@@ -1,0 +1,14 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+@import "@wordpress/base-styles/breakpoints";
+
+$breakpoint-horizontal: $break-medium;
+
+.vrts_upgrade_page {
+
+	iframe {
+		margin-top: 10px;
+		max-width: #{$break-wide};
+		scale: 0.8;
+		transform-origin: top left;
+	}
+}

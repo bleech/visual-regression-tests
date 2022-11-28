@@ -1,0 +1,633 @@
+# Copyright (C) 2022 Bleech
+# This file is distributed under the GPLv2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: VRTs – Visual Regression Tests 1.0.0\n"
+"Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
+"Last-Translator: hello@bleech.de\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-11-28T11:17:27+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.7.1\n"
+"X-Domain: visual-regression-tests\n"
+
+#. Plugin Name of the plugin
+msgid "VRTs – Visual Regression Tests"
+msgstr ""
+
+#. Plugin URI of the plugin
+msgid "https://bleech.de/en/products/visual-regression-tests/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Test your website for unwanted visual changes. Run automatic tests and spot differences."
+msgstr ""
+
+#. Author of the plugin
+msgid "Bleech"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://bleech.de"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-get-started.php:3
+msgid "Let’s get started!"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-get-started.php:4
+msgid "Click “Add New“ to create a Visual Regression Test for your Website and find issues before others do."
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-new-test-added.php:3
+msgid "Test added successfully"
+msgstr ""
+
+#. translators: %s: the title of the page.
+#: components/admin-notification/views/admin-notification-new-test-added.php:8
+msgid "Tests will be run for the following page: %s"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-new-test-failed.php:2
+#: components/metabox-options/metabox-notifications/metabox-notification-upgrade-required.php:2
+#: editor/components/metabox-notifications/index.js:91
+msgid "Ready for an Upgrade?"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-new-test-failed.php:7
+#: components/metabox-options/metabox-notifications/metabox-notification-upgrade-required.php:7
+#: editor/components/metabox-notifications/index.js:102
+msgid "Looks like you need a bigger plan to add more tests."
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-new-test-failed.php:9
+#: components/metabox-options/metabox-notifications/metabox-notification-upgrade-required.php:9
+#: editor/components/metabox-notifications/index.js:107
+msgid "Upgrade here!"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-plugin-activated.php:3
+msgid "VRTs Plugin successfully activated!"
+msgstr ""
+
+#. translators: %1$s, %2$s and %3$s, %4$s: link wrapper.
+#: components/admin-notification/views/admin-notification-plugin-activated.php:7
+msgid "Start to %1$sconfigure tests%2$s, or check the customization options in the %3$splugin settings%4$s."
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-test-disabled.php:3
+msgid "Test disabled successfully"
+msgstr ""
+
+#. translators: %s: the title of the page.
+#: components/admin-notification/views/admin-notification-test-disabled.php:8
+msgid "No more tests will be run for the following page: %s"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-test-disabled.php:16
+msgid "Undo"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:3
+msgid "Snapshot vs. Alert"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:6
+msgid "Difference"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:9
+msgid "Split"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:12
+msgid "Side by Side"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:18
+#: components/alerts-page/views/alert-content.php:24
+#: components/alerts-page/views/alert-content.php:25
+#: components/alerts-page/views/alert-content.php:40
+#: components/alerts-page/views/alert-content.php:41
+#: components/metabox-options/index.php:45
+#: components/metabox-options/index.php:49
+#: components/metabox-options/index.php:52
+#: includes/list-tables/class-tests-list-table.php:125
+#: editor/components/screenshot/index.js:7
+msgid "Snapshot"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:28
+#: components/alerts-page/views/alert-content.php:45
+msgid "Screenshot"
+msgstr ""
+
+#: components/alerts-page/views/alert-content.php:29
+#: components/alerts-page/views/alert-content.php:46
+msgid "Alert"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:3
+msgid "Edit Alert"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:10
+#: components/alerts-page/views/alerts-page-view.php:10
+msgid "Permalink:"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:14
+#: components/alerts-page/views/alerts-page-view.php:14
+msgid "Current Page"
+msgstr ""
+
+#. translators: %d: pages.
+#: components/alerts-page/views/alerts-page-edit.php:19
+#: components/alerts-page/views/alerts-page-view.php:19
+msgctxt "e.g. 1 of 2"
+msgid "%1$d of %2$d"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:28
+#: components/alerts-page/views/alerts-page-view.php:28
+msgid "Previous alert"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:34
+#: components/alerts-page/views/alerts-page-view.php:34
+msgid "Next alert"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:53
+#: components/alerts-page/views/alerts-page-view.php:53
+msgid "Details"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:63
+#: components/alerts-page/views/alerts-page-view.php:63
+msgid "Detected:"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:71
+#: components/alerts-page/views/alerts-page-view.php:71
+msgid "Visual Difference:"
+msgstr ""
+
+#. translators: %s: the count of pixels with a visual difference.
+#: components/alerts-page/views/alerts-page-edit.php:74
+#: components/alerts-page/views/alerts-page-view.php:74
+#: includes/list-tables/class-alerts-list-table.php:75
+#: includes/list-tables/class-alerts-list-table.php:188
+#: includes/list-tables/class-alerts-list-table.php:195
+msgid "%s element"
+msgid_plural "%s pixels"
+msgstr[0] ""
+msgstr[1] ""
+
+#: components/alerts-page/views/alerts-page-edit.php:80
+msgid "Info:"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:82
+msgid "Testing is paused until alert gets resolved."
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:91
+#: components/alerts-page/views/alerts-page-view.php:83
+msgid "Go Back"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:95
+#: includes/list-tables/class-alerts-list-table.php:161
+#: includes/list-tables/class-alerts-list-table.php:242
+msgid "Resolve"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:98
+msgid "Resolving the alert will resume testing."
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-list.php:3
+#: includes/features/class-alerts-page.php:30
+#: includes/features/class-alerts-page.php:31
+msgid "Alerts"
+msgstr ""
+
+#. translators: %s: search query.
+#: components/alerts-page/views/alerts-page-list.php:11
+#: components/tests-page/views/tests-page-list.php:19
+msgid "Search results for: %s"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-list.php:28
+#: components/tests-page/views/tests-page-list.php:35
+#: components/tests-page/views/tests-page-list.php:56
+msgid "Search"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-view.php:3
+msgid "View Alert"
+msgstr ""
+
+#: components/metabox-options/index.php:8
+msgid "Run tests"
+msgstr ""
+
+#: components/metabox-options/index.php:10
+#: editor/components/metabox-content/index.js:98
+msgid "Activate tests to get alerted about visual differences in comparison to the snapshot."
+msgstr ""
+
+#: components/metabox-options/index.php:33
+#: includes/features/class-admin-columns.php:48
+#: includes/list-tables/class-tests-list-table.php:124
+#: editor/components/metabox-content/index.js:114
+msgid "Status"
+msgstr ""
+
+#: components/metabox-options/index.php:36
+#: includes/list-tables/class-tests-list-table.php:75
+#: includes/list-tables/class-tests-list-table.php:253
+#: editor/components/metabox-content/index.js:129
+msgid "Paused"
+msgstr ""
+
+#: components/metabox-options/index.php:36
+#: includes/list-tables/class-tests-list-table.php:74
+#: includes/list-tables/class-tests-list-table.php:248
+#: editor/components/metabox-content/index.js:125
+msgid "Running"
+msgstr ""
+
+#: components/metabox-options/index.php:48
+#: editor/components/screenshot/index.js:16
+msgid "View full snapshot image in new tab"
+msgstr ""
+
+#: components/metabox-options/index.php:56
+#: editor/components/screenshot/index.js:46
+msgid "Snapshot created on"
+msgstr ""
+
+#: components/metabox-options/index.php:58
+#: editor/components/screenshot/index.js:55
+msgid "First Snapshot: in progress"
+msgstr ""
+
+#: components/metabox-options/index.php:60
+#: editor/components/screenshot/index.js:63
+msgid "Snapshot gets auto-generated upon publishing or updating the page."
+msgstr ""
+
+#: components/metabox-options/metabox-notifications/metabox-notification-new-test-added.php:2
+#: editor/components/metabox-notifications/index.js:11
+msgid "You have added a new test"
+msgstr ""
+
+#. translators: %s: page title.
+#. translators: %s name of the page
+#: components/metabox-options/metabox-notifications/metabox-notification-new-test-added.php:7
+#: editor/components/metabox-notifications/index.js:22
+msgid "The Visual Regression Test for the page %s has been added!"
+msgstr ""
+
+#: components/metabox-options/metabox-notifications/metabox-notification-unlock-more-tests.php:2
+#: editor/components/metabox-notifications/index.js:50
+msgid "Unlock more tests"
+msgstr ""
+
+#. translators: %1$s, %2$s: number of tests.
+#: components/metabox-options/metabox-notifications/metabox-notification-unlock-more-tests.php:9
+#: editor/components/metabox-notifications/index.js:60
+msgid "Good work! You have added %1$s of %2$s available tests."
+msgstr ""
+
+#. translators: %1$s, %2$s: link wrapper.
+#: components/metabox-options/metabox-notifications/metabox-notification-unlock-more-tests.php:15
+#: editor/components/metabox-notifications/index.js:69
+msgid "Upgrade %1$shere%2$s to add more tests to your website!"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:3
+#: includes/features/class-admin.php:41
+#: includes/features/class-tests-page.php:27
+#: includes/features/class-tests-page.php:28
+msgid "Tests"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:11
+msgid "Add New"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:46
+#: components/tests-page/views/tests-page-list.php:87
+msgid "Add New Test"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:47
+msgid "Close"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:50
+msgid "Destination URL"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:70
+msgid "No search term specified. Showing recent items."
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:71
+msgid "Search or use up and down arrow keys to select an item."
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:82
+msgid "Cancel"
+msgstr ""
+
+#. translators: 1: Date, 2: Time.
+#: includes/core/utilities/class-date-time-helpers.php:22
+msgctxt "date at time"
+msgid "%1$s at %2$s"
+msgstr ""
+
+#. translators: Date format. See https://www.php.net/manual/datetime.format.php
+#: includes/core/utilities/class-date-time-helpers.php:24
+msgctxt "date format"
+msgid "Y/m/d"
+msgstr ""
+
+#. translators: Time format. See https://www.php.net/manual/datetime.format.php
+#: includes/core/utilities/class-date-time-helpers.php:26
+msgctxt "time format"
+msgid "g:i a"
+msgstr ""
+
+#: includes/features/class-admin-columns.php:68
+msgid "Status: Running"
+msgstr ""
+
+#: includes/features/class-admin-columns.php:69
+msgid "Status: Paused"
+msgstr ""
+
+#: includes/features/class-admin-columns.php:82
+#: includes/features/class-admin-columns.php:83
+msgid "Status: Testing not activated"
+msgstr ""
+
+#: includes/features/class-admin.php:42
+#: includes/features/class-settings-page.php:30
+#: includes/features/class-settings-page.php:31
+#: includes/features/class-settings-page.php:43
+msgid "Settings"
+msgstr ""
+
+#: includes/features/class-alerts-page.php:162
+#: includes/features/class-alerts-page.php:230
+#: includes/features/class-tests-page.php:95
+#: includes/features/class-tests-page.php:170
+msgid "Are you cheating?"
+msgstr ""
+
+#: includes/features/class-alerts-page.php:166
+#: includes/features/class-alerts-page.php:234
+#: includes/features/class-tests-page.php:99
+#: includes/features/class-tests-page.php:174
+msgid "Permission Denied!"
+msgstr ""
+
+#: includes/features/class-alerts-page.php:176
+#: includes/features/class-alerts-page.php:245
+msgid "Error: Alert ID is required."
+msgstr ""
+
+#. translators: %1$s and %2$s: link wrapper.
+#: includes/features/class-enqueue-scripts.php:101
+#: includes/features/class-metaboxes.php:117
+#: includes/list-tables/class-tests-list-table.php:82
+msgid "Resolve %1$salert%2$s to resume testing"
+msgstr ""
+
+#: includes/features/class-settings-page.php:67
+msgid "Notification Email Address"
+msgstr ""
+
+#: includes/features/class-settings-page.php:68
+msgid "Add a single email address, or separate multiple email addresses with commas, i.e. info@example.com, admin@example.com."
+msgstr ""
+
+#: includes/features/class-settings-page.php:74
+msgid "Email address"
+msgstr ""
+
+#: includes/features/class-settings-page.php:80
+msgid "Click an element before creating a snapshot"
+msgstr ""
+
+#. translators: %s: link wrapper.
+#: includes/features/class-settings-page.php:85
+msgid "Add a %1$sCSS selector%2$s to click on the first element found before creating a new snapshot."
+msgstr ""
+
+#: includes/features/class-settings-page.php:89
+msgid "Useful to accept cookie banners or anything else that should be clicked after page load."
+msgstr ""
+
+#: includes/features/class-settings-page.php:96
+msgid "e.g.: [data-cookie-accept]"
+msgstr ""
+
+#: includes/features/class-settings-page.php:102
+msgid "License Key"
+msgstr ""
+
+#: includes/features/class-settings-page.php:105
+msgid "No license key yet?"
+msgstr ""
+
+#: includes/features/class-settings-page.php:107
+msgid "Upgrade here."
+msgstr ""
+
+#: includes/features/class-settings-page.php:114
+msgctxt "license key placeholder"
+msgid "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
+msgstr ""
+
+#: includes/features/class-tests-page.php:109
+msgid "Error: Post ID is required."
+msgstr ""
+
+#: includes/features/class-tests-page.php:185
+msgid "Error: Test ID is required."
+msgstr ""
+
+#: includes/features/class-tests-page.php:233
+msgid "(no title)"
+msgstr ""
+
+#: includes/features/class-tests-page.php:234
+msgid "No results to enable visual regression testing found."
+msgstr ""
+
+#. translators: Minimum input length in characters to start searching posts in the "Insert/edit link" modal.
+#: includes/features/class-tests-page.php:236
+msgctxt "minimum input length for searching post links"
+msgid "3"
+msgstr ""
+
+#: includes/features/class-upgrade-page.php:26
+#: includes/features/class-upgrade-page.php:27
+#: includes/features/class-upgrade-page.php:39
+msgid "Upgrade"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:44
+msgid "No alerts found."
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:66
+#: includes/list-tables/class-tests-list-table.php:67
+msgid "Open the page in a new tab"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:79
+#: includes/list-tables/class-tests-list-table.php:95
+msgid "In progress"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:82
+msgid "Detected"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:100
+#: includes/list-tables/class-tests-list-table.php:122
+msgid "Title"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:101
+#: includes/list-tables/class-tests-list-table.php:123
+msgid "Path"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:102
+msgid "Visual Difference"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:103
+msgid "Date"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:128
+msgid "View this alert"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:129
+msgid "View"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:136
+msgid "Delete this alert permanently"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:137
+#: includes/list-tables/class-alerts-list-table.php:237
+msgid "Delete permanently"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:152
+msgid "Edit this alert"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:153
+#: includes/list-tables/class-alerts-list-table.php:167
+msgid "Edit"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:160
+msgid "Resolve this alert"
+msgstr ""
+
+#. translators: %s: link wrapper
+#: includes/list-tables/class-alerts-list-table.php:198
+msgid "Tests on %1$spage%2$s are %3$spaused%4$s"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:204
+msgid "Edit page with this alert"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:306
+msgid "Open"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:311
+msgid "Resolved"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:42
+msgid "No tests found."
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:83
+msgid "Edit the alert"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:102
+msgid "View this snapshot"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:103
+msgid "View Snapshot"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:145
+#: includes/list-tables/class-tests-list-table.php:160
+msgid "Edit this page"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:146
+msgid "Edit Page"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:153
+msgid "Disable testing for this page"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:154
+#: includes/list-tables/class-tests-list-table.php:188
+msgid "Disable testing"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:243
+msgid "All"
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:46
+msgid "Action parameter is missing"
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:79
+#: includes/rest-api/class-rest-service-controller.php:104
+msgid "Access token is missing"
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:98
+msgid "Project id is missing"
+msgstr ""
+
+#: editor/components/metabox-content/index.js:97
+msgid "Run Tests"
+msgstr ""
+
+#: editor/components/screenshot/index.js:25
+#: editor/components/screenshot/index.js:36
+msgid "Visual Regression current state"
+msgstr ""
+
+#: editor/plugins/options/index.js:50
+msgid "Options"
+msgstr ""

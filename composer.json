@@ -1,0 +1,31 @@
+{
+	"name": "bleech/visual-regression-tests",
+	"description": "Test your website for unwanted visual changes. Run automatic tests and spot differences.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Bleech",
+			"email": "hello@bleech.de"
+		}
+	],
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"sort-packages": true,
+		"optimize-autoloader": true,
+		"process-timeout": 2000,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"wp-cli/wp-cli-bundle": "^2.7",
+		"wp-coding-standards/wpcs": "^2.3"
+	}
+}

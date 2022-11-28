@@ -1,0 +1,74 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+
+.vrts_post_options_metabox {
+
+	figcaption {
+
+		> :first-child {
+			margin-top: 0;
+		}
+
+		> :last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.testing-status {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0;
+
+		&--paused {
+			color: $alert-red;
+		}
+
+		&--running {
+			color: $alert-green;
+		}
+
+		&-wrapper {
+			margin: 1.5rem 0;
+
+			> :first-child {
+				margin-top: 0;
+			}
+
+			> :last-child {
+				margin-bottom: 0;
+			}
+
+			.howto {
+				margin-top: 0.25rem;
+				font-size: 0.75rem;
+				color: $gray-700;
+			}
+		}
+	}
+
+	.figure {
+		margin: 0;
+		aspect-ratio: 16/9;
+
+		&-link {
+			outline: none;
+			box-shadow: none;
+		}
+
+		&-title {
+			margin-bottom: 0.5rem;
+		}
+
+		&-image {
+			border: solid 1px #bfbfbf;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center top;
+		}
+
+		.howto {
+			margin-top: 0.5rem;
+		}
+	}
+}

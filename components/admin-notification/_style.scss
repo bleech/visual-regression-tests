@@ -1,0 +1,26 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+
+.vrts-notice {
+	padding-bottom: 0.75em;
+
+	p,
+	form {
+		display: inline;
+		padding-right: 0;
+	}
+
+	.admin-notice-button {
+		border: 0;
+		margin-bottom: 2px;
+		background: transparent;
+		padding: 0;
+		min-height: 19px;
+		line-height: 1;
+		border-radius: 0;
+		text-decoration: underline;
+
+		&:hover {
+			background: transparent;
+		}
+	}
+}
