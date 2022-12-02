@@ -21,6 +21,10 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-plugin-activated.php';
 		break;
 
+	case 'settings_saved':
+			$template = dirname( __FILE__ ) . '/views/admin-notification-settings-saved.php';
+		break;
+
 	default:
 		$template = '';
 		break;
