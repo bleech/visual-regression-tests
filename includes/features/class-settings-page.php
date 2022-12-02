@@ -25,7 +25,7 @@ class Settings_Page {
 	 * Add submenu.
 	 */
 	public function add_submenu_page() {
-		add_submenu_page(
+		$submenu_page = add_submenu_page(
 			'vrts',
 			esc_html__( 'Settings', 'visual-regression-tests' ),
 			esc_html__( 'Settings', 'visual-regression-tests' ),
@@ -33,6 +33,8 @@ class Settings_Page {
 			$this->page_slug,
 			[ $this, 'render_page' ]
 		);
+
+		add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
 	}
 
 	/**
@@ -135,4 +137,22 @@ class Settings_Page {
 			$response = Service::rest_service_request( $service_api_route, $parameters, 'put' );
 		}
 	}
+
+	/**
+	 * Init notifications.
+	 */
+	public function init_notifications() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's OK.
+		if ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_settings_saved' ] );
+		}
+	}
+
+	/**
+	 * Render Settings saved notification.
+	 */
+	public function render_notification_settings_saved() {
+		Admin_Notices::render_notification( 'settings_saved', false );
+	}
+
 }
