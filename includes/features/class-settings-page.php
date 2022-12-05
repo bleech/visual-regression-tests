@@ -2,6 +2,8 @@
 
 namespace Vrts\Features;
 
+use Vrts\Features\Subscription;
+
 class Settings_Page {
 	/**
 	 * Page slug.
@@ -53,7 +55,7 @@ class Settings_Page {
 	 */
 	public function add_settings() {
 		vrts()->settings()->add_section([
-			'id' => 'vrts-settings-section',
+			'id' => 'vrts-settings-section-notifications',
 			'page' => $this->page_slug,
 			'title' => '',
 		]);
@@ -63,17 +65,57 @@ class Settings_Page {
 		// sanitize_callback can be a default wp sanitize function or a custom function from the Sanitization class.
 		// 'sanitize_callback' => '[ Sanitization::class, 'sanitize_checkbox' ]'.
 
+		$has_subscription = Subscription::get_subscription_status();
+		if ( '1' !== $has_subscription ) {
+			$email_notification_address_description = sprintf(
+				'%1$s<br>%2$s <a href="%3$s" title="%4$s">%4$s</a>',
+				esc_html__( 'Add a single email address.', 'visual-regression-tests' ),
+				esc_html__( 'Want add more email addresses?', 'visual-regression-tests' ),
+				esc_url( admin_url( 'admin.php?page=vrts-upgrade' ) ),
+				esc_html__( 'Upgrade here.', 'visual-regression-tests' )
+			);
+		} else {
+			$email_notification_address_description = esc_html__( 'Add a single email address.', 'visual-regression-tests' );
+		}
+
 		vrts()->settings()->add_setting([
 			'type' => 'text',
 			'id' => 'vrts_email_notification_address',
 			'title' => esc_html__( 'Notification Email Address', 'visual-regression-tests' ),
-			'description' => esc_html__( 'Add a single email address, or separate multiple email addresses with commas, i.e. info@example.com, admin@example.com.', 'visual-regression-tests' ),
-			'section' => 'vrts-settings-section',
+			'description' => $email_notification_address_description,
+			'section' => 'vrts-settings-section-notifications',
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => get_bloginfo( 'admin_email' ),
 			'placeholder' => esc_html__( 'Email address', 'visual-regression-tests' ),
+		]);
+
+		if ( '1' === $has_subscription ) {
+			vrts()->settings()->add_section([
+				'id' => 'vrts-settings-section-notifications-pro',
+				'page' => $this->page_slug,
+				'title' => '',
+			]);
+
+			vrts()->settings()->add_setting([
+				'type' => 'text',
+				'id' => 'vrts_email_notification_cc_address',
+				'title' => esc_html__( 'Notification Email CC Address(es)', 'visual-regression-tests' ),
+				'description' => esc_html__( 'Add a single email address, or separate multiple email addresses with commas, i.e. info@example.com, admin@example.com.', 'visual-regression-tests' ),
+				'section' => 'vrts-settings-section-notifications-pro',
+				'sanitize_callback' => 'sanitize_text_field',
+				'show_in_rest' => true,
+				'value_type' => 'string',
+				'default' => '',
+				'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
+			]);
+		}
+
+		vrts()->settings()->add_section([
+			'id' => 'vrts-settings-section-click-selectors',
+			'page' => $this->page_slug,
+			'title' => '',
 		]);
 
 		vrts()->settings()->add_setting([
@@ -90,12 +132,18 @@ class Settings_Page {
 				),
 				esc_html__( 'Useful to accept cookie banners or anything else that should be clicked after page load.', 'visual-regression-tests' )
 			),
-			'section' => 'vrts-settings-section',
+			'section' => 'vrts-settings-section-click-selectors',
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => '',
 			'placeholder' => esc_html__( 'e.g.: [data-cookie-accept]', 'visual-regression-tests' ),
+		]);
+
+		vrts()->settings()->add_section([
+			'id' => 'vrts-settings-section-click-license',
+			'page' => $this->page_slug,
+			'title' => '',
 		]);
 
 		vrts()->settings()->add_setting([
@@ -108,7 +156,7 @@ class Settings_Page {
 				esc_url( admin_url( 'admin.php?page=vrts-upgrade' ) ),
 				esc_html__( 'Upgrade here.', 'visual-regression-tests' )
 			),
-			'section' => 'vrts-settings-section',
+			'section' => 'vrts-settings-section-click-license',
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest' => true,
 			'value_type' => 'string',
