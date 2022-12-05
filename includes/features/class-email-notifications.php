@@ -15,7 +15,7 @@ class Email_Notifications {
 	 */
 	public function send_email( $differences, $post_id, $alert_id ) {
 		$notification_emails = $this->sanitize_multiple_emails( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
-		$home_url = get_home_url();
+		$home_url = get_site_url();
 		$admin_url = get_admin_url();
 
 		// Check if notification email already exists.
