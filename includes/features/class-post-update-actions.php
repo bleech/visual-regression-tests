@@ -32,14 +32,13 @@ class Post_Update_Actions {
 	/**
 	 * Delete tests when post is trashed.
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post Post object.
+	 * @param int $post_id Post ID.
 	 */
 	public function on_trash_post_action( $post_id ) {
 		// If trashed post has test, delete the test too.
 		if ( Test::get_item_id( $post_id ) ) {
 			Test::delete( $post_id );
-			//If an alert exists already, resolve it too.
+			// If an alert exists already, resolve it too.
 			$alert_id = Alert::get_alert_id_by_post_id( $post_id, 0 );
 			if ( $alert_id ) {
 				Alert::set_alert_state( $alert_id, 1 );
