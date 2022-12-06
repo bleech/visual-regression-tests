@@ -190,7 +190,7 @@ class Alerts_List_Table extends \WP_List_Table {
 			// Status "Open".
 			$differences = intval( $item->differences / 4 );
 			return sprintf(
-				'%s<br>%s %s',
+				'%s<br>%s',
 				/* translators: %s: the count of pixels with a visual difference. */
 				esc_html( sprintf( _n( '%s element', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
 				sprintf(
@@ -200,8 +200,7 @@ class Alerts_List_Table extends \WP_List_Table {
 					'</a>',
 					'<span class="testing-status--paused">',
 					'</span>'
-				),
-				__( 'Edit page with this alert', 'visual-regression-tests' )
+				)
 			);
 
 		}//end if
