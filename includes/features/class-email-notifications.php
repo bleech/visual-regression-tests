@@ -2,8 +2,7 @@
 
 namespace Vrts\Features;
 
-use Vrts\Models\Alert;
-
+use Vrts\Features\Subscription;
 class Email_Notifications {
 
 	/**
@@ -14,8 +13,8 @@ class Email_Notifications {
 	 *  @param int $alert_id the id of the alert.
 	 */
 	public function send_email( $differences, $post_id, $alert_id ) {
-		$notification_emails = $this->sanitize_multiple_emails( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
-		$home_url = get_site_url();
+		$notification_email = sanitize_email( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
+		$home_url = get_home_url();
 		$admin_url = get_admin_url();
 
 		// Check if notification email already exists.
@@ -26,8 +25,15 @@ class Email_Notifications {
 		esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
 		'This alert was sent by the Visual Regression Tests plugin on ' . esc_url( $home_url );
 
-		if ( $notification_emails ) {
-			$sent = wp_mail( $notification_emails, $subject, $message );
+		$has_subscription = Subscription::get_subscription_status();
+		$headers = '';
+		if ( '1' === $has_subscription ) {
+			$notification_email_cc = $this->sanitize_multiple_emails( vrts()->settings()->get_option( 'vrts_email_notification_cc_address' ) );
+			$headers[] = 'Cc: ' . $notification_email_cc;
+		}
+
+		if ( $notification_email ) {
+			$sent = wp_mail( $notification_email, $subject, $message, $headers );
 			if ( $sent ) {
 				return true;
 			} else {
