@@ -22,7 +22,11 @@ switch ( $data['view'] ) {
 		break;
 
 	case 'settings_saved':
-			$template = dirname( __FILE__ ) . '/views/admin-notification-settings-saved.php';
+		$template = dirname( __FILE__ ) . '/views/admin-notification-settings-saved.php';
+		break;
+
+	case 'connection_failed':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-connection-failed.php';
 		break;
 
 	default:

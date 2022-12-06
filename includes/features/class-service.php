@@ -203,4 +203,11 @@ class Service {
 		delete_option( 'vrts_homepage_added' );
 		delete_option( self::SERVICE . '_version' );
 	}
+
+	/**
+	 * Check if external service was able to connect
+	 */
+	public static function is_connected() {
+		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
+	}
 }
