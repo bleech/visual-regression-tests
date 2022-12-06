@@ -96,6 +96,34 @@ class Alert {
 	}
 
 	/**
+	 * Get alert id by post id
+	 *
+	 * @param int $post_id the id of the post.
+	 * @param int $alert_state the state of the item.
+	 *
+	 * @return array
+	 */
+	public static function get_alert_id_by_post_id( $post_id = 0, $alert_state = 0 ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT id FROM $alerts_table
+				WHERE alert_state = %d
+				AND post_id = %d
+				ORDER BY id ASC
+				LIMIT 1",
+				$alert_state,
+				$post_id
+			)
+		);
+	}
+
+	/**
 	 * Get total test items from database
 	 *
 	 * @param int $filter_status_query the id of status.

@@ -2,6 +2,8 @@
 
 namespace Vrts\Features;
 
+use Vrts\Features\Subscription;
+
 class Upgrade_Page {
 	/**
 	 * Page slug.
@@ -37,6 +39,7 @@ class Upgrade_Page {
 	public function render_page() {
 		vrts()->component( 'upgrade-page', [
 			'title' => esc_html__( 'Upgrade', 'visual-regression-tests' ),
+			'has_subscription' => Subscription::get_subscription_status(),
 		] );
 	}
 }

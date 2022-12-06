@@ -207,7 +207,9 @@ class Metaboxes {
 			);
 		} else {
 			// Delete data from tests database table if "Run Tests" checkbox is not checked.
-			Test::delete( $post_id );
+			if ( Test::get_item_id( $post_id ) ) {
+				Test::delete( $post_id );
+			}
 		}
 	}
 
@@ -498,7 +500,9 @@ class Metaboxes {
 			);
 		} elseif ( 0 === $status ) {
 			// Delete data from tests database table if "Run Tests" checkbox is not checked.
-			Test::delete( $post_id );
+			if ( Test::get_item_id( $post_id ) ) {
+				Test::delete( $post_id );
+			}
 		}//end if
 
 	}
