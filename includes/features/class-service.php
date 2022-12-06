@@ -200,6 +200,10 @@ class Service {
 	 * Drop the database table for tests.
 	 */
 	public static function delete_option() {
+		delete_option( 'vrts_project_id' );
+		delete_option( 'vrts_project_token' );
+		delete_option( 'vrts_create_token' );
+		delete_option( 'vrts_access_token' );
 		delete_option( 'vrts_homepage_added' );
 		delete_option( self::SERVICE . '_version' );
 	}
