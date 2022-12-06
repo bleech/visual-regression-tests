@@ -43,7 +43,7 @@ class Rest_Service_Controller {
 
 		if ( ! array_key_exists( 'action', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Action parameter is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Action parameter is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
@@ -74,9 +74,17 @@ class Rest_Service_Controller {
 	 * @param array $data Rest api response body.
 	 */
 	private function verify_service_request( $data ) {
+		$service_project_id = get_option( 'vrts_project_id' );
+
+		if ( $service_project_id ) {
+			return rest_ensure_response([
+				'error' => esc_html__( 'Project already exists.', 'visual-regression-tests' ),
+			], 403);
+		}
+
 		if ( ! array_key_exists( 'token', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Access token is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Access token is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
@@ -93,15 +101,23 @@ class Rest_Service_Controller {
 	 * @param array $data Rest api response body.
 	 */
 	private function site_created_request( $data ) {
+		$service_project_id = get_option( 'vrts_project_id' );
+
+		if ( $service_project_id ) {
+			return rest_ensure_response([
+				'error' => esc_html__( 'Project already exists.', 'visual-regression-tests' ),
+			], 403);
+		}
+
 		if ( ! array_key_exists( 'id', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Project id is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Project id is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
 		if ( ! array_key_exists( 'token', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Access token is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Access token is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
