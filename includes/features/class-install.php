@@ -3,7 +3,6 @@
 namespace Vrts\Features;
 
 use Vrts\Features\Service;
-use Vrts\Models\Test;
 use Vrts\Tables\Alerts_Table;
 use Vrts\Tables\Tests_Table;
 
@@ -19,7 +18,7 @@ class Install {
 	/**
 	 * Install plugin.
 	 *
-	 * @param bool $network_wide If the plugin has been actived network wide.
+	 * @param bool $network_wide If the plugin has been activated network wide.
 	 */
 	public function install( $network_wide ) {
 		if ( is_multisite() && $network_wide ) {

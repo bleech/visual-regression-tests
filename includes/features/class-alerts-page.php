@@ -7,7 +7,6 @@ use Vrts\List_Tables\Alerts_List_Table;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Tables\Tests_Table;
-use Vrts\Tables\Alerts_Table;
 
 class Alerts_Page {
 

@@ -264,7 +264,7 @@ class Tests_Page {
 	}
 
 	/**
-	 * Init notification.
+	 * Init notifications.
 	 */
 	public function init_notifications() {
 		$total_test_items = Test::get_total_items();
