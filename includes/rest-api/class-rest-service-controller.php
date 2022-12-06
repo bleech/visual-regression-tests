@@ -141,6 +141,7 @@ class Rest_Service_Controller {
 
 		update_option( 'vrts_project_token', $data['token'] );
 		update_option( 'vrts_project_id', $data['id'] );
+		Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 
 		// Add homepage as a test right after the service is linked to plugin.
 		Service::add_homepage_test();
