@@ -219,6 +219,9 @@ class Tests_Page {
 	 * Add required assets.
 	 */
 	public function add_assets() {
+		// Remove may previously enqueued wplink script.
+		wp_deregister_script( 'wplink' );
+
 		// Register custom wplink for the Add New functionality.
 		wp_register_script( 'vrts-wplink', vrts()->get_plugin_url( 'assets/scripts/wplink.js' ), [ 'jquery', 'wp-a11y' ], vrts()->get_plugin_info( 'version' ), false );
 
