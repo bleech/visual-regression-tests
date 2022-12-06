@@ -20,6 +20,8 @@ class Rest_Service_Controller {
 		$this->resource_name = 'service';
 
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+		add_action( 'wp_ajax_nopriv_vrts_service', [ $this, 'ajax_action' ] );
+		add_action( 'wp_ajax_priv_vrts_service', [ $this, 'ajax_action' ] );
 	}
 
 	/**
@@ -34,6 +36,18 @@ class Rest_Service_Controller {
 	}
 
 	/**
+	 * Actions for admin-ajax.php
+	 */
+	public function ajax_action() {
+		$data = @json_decode( $_REQUEST['data'] );
+
+		$restResponse = $this->perform_action( $data );
+
+		status_header( $restResponse->get_status() );
+		wp_send_json( $restResponse->get_data() );
+	}
+
+	/**
 	 * Gets some data.
 	 *
 	 * @param WP_REST_Request $request Current request.
@@ -41,6 +55,10 @@ class Rest_Service_Controller {
 	public function service_callback( WP_REST_Request $request ) {
 		$data = $request->get_params();
 
+		return $this->perform_action($data);
+	}
+
+	public function perform_action( $data ) {
 		if ( ! array_key_exists( 'action', $data ) ) {
 			return rest_ensure_response([
 				'error' => esc_html__( 'Action parameter is missing', 'visual-regression-tests' ),
