@@ -154,11 +154,9 @@ $navigation-item-border-height: 3px;
 		transition: opacity 0.2s ease-in-out;
 	}
 
-	img,
-	canvas {
+	img {
 		max-width: 100%;
-		width: 100%;
-		height: auto;
+		margin: 0 auto;
 	}
 
 	.alert-content {

@@ -15,17 +15,17 @@
 	</div>
 
 	<div id="difference" class="inside alert-content-inside active">
-		<img crossorigin="anonymous" loading="lazy" src="<?php echo esc_url( $data['comparison_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+		<img crossorigin="anonymous" src="<?php echo esc_url( $data['comparison_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 	</div>
 
 	<div id="comparison" class="inside alert-content-inside">
 		<img-comparison-slider class="img-comparison-slider">
 			<figure slot="first" class="figure figure-before">
-				<img class="figure-image" crossorigin="anonymous" loading="lazy" data-src="<?php echo esc_url( $data['base_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+				<img class="figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['base_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 				<figcaption class="caption caption-first"><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></figcaption>
 			</figure>
 			<figure slot="second" class="figure figure-after">
-				<img class="figure-image" crossorigin="anonymous" loading="lazy" data-src="<?php echo esc_url( $data['target_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
+				<img class="figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['target_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
 				<figcaption class="caption caption-second"><?php esc_html_e( 'Alert', 'visual-regression-tests' ); ?></figcaption>
 			</figure>
 			<svg slot="handle" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -37,12 +37,12 @@
 
 	<div id="side-by-side" class="inside alert-content-inside">
 		<figure class="figure">
-			<img class="figure-image" crossorigin="anonymous" loading="lazy" src="<?php echo esc_url( $data['base_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+			<img class="figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['base_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 			<figcaption class="caption"><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></figcaption>
 		</figure>
 
 		<figure class="figure">
-			<img class="figure-image" crossorigin="anonymous" loading="lazy" src="<?php echo esc_url( $data['target_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
+			<img class="figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['target_screenshot_url'] ); ?>" alt="<?php esc_html_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
 			<figcaption class="caption"><?php esc_html_e( 'Alert', 'visual-regression-tests' ); ?></figcaption>
 		</figure>
 	</div>
