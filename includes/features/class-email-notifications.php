@@ -18,15 +18,24 @@ class Email_Notifications {
 		$admin_url = get_admin_url();
 
 		// Check if notification email already exists.
-		$subject = 'VRTs: Alert #' . $alert_id . ' (' . esc_url( $home_url ) . ')';
-		$message = "Howdy,\n\n" .
-		"New visual differences have been detected on a page.\n\n" .
-		"Review and resolve the alert to resume testing:\n" .
-		esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
-		'This alert was sent by the Visual Regression Tests plugin on ' . esc_url( $home_url );
+		$subject = sprintf(
+			/* translators: %1$s: the id of the alert, %2$s: the home url */
+			esc_html__( 'VRTs: Alert %1$s (%2$s)' ),
+			$alert_id,
+			esc_url( $home_url )
+		);
+
+		$message = esc_html__( 'Howdy,' ) . "\n\n" .
+			esc_html__( 'New visual differences have been detected on a page.' ) . "\n\n" .
+			esc_html__( 'Review and resolve the alert to resume testing:' ) . "\n" .
+			esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
+			sprintf(
+				/* translators: %1$s: the home url */
+				esc_html__( 'This alert was sent by the Visual Regression Tests plugin on %1$s' ), esc_url( $home_url )
+			);
 
 		$has_subscription = Subscription::get_subscription_status();
-		$headers = '';
+		$headers = [];
 		if ( '1' === $has_subscription ) {
 			$notification_email_cc = $this->sanitize_multiple_emails( vrts()->settings()->get_option( 'vrts_email_notification_cc_address' ) );
 			$headers[] = 'Cc: ' . $notification_email_cc;
