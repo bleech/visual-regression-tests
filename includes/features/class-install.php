@@ -8,11 +8,15 @@ use Vrts\Tables\Tests_Table;
 
 class Install {
 
+	const ACTIVATION_TRANSIENT = 'vrts_activation';
+
 	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		register_activation_hook( vrts()->get_plugin_file(), [ $this, 'install' ] );
+		register_activation_hook( vrts()->get_plugin_file(), [ $this, 'set_activation_admin_notice_transient' ] );
+		add_action( 'admin_notices', [ $this, 'activation_admin_notice' ] );
 	}
 
 	/**
@@ -56,5 +60,22 @@ class Install {
 	 */
 	private function connect_service() {
 		Service::connect_service();
+	}
+
+	/**
+	 * Set activation transient.
+	 */
+	public function set_activation_admin_notice_transient() {
+		set_transient( self::ACTIVATION_TRANSIENT, true, 5 );
+	}
+
+	/**
+	 * Display activation admin notice.
+	 */
+	public function activation_admin_notice() {
+		if ( get_transient( self::ACTIVATION_TRANSIENT ) ) {
+			Admin_Notices::render_notification( 'plugin_activated' );
+			delete_transient( self::ACTIVATION_TRANSIENT );
+		}
 	}
 }
