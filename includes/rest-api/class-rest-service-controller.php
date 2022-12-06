@@ -39,12 +39,13 @@ class Rest_Service_Controller {
 	 * Actions for admin-ajax.php
 	 */
 	public function ajax_action() {
-		$data = @json_decode( $_REQUEST['data'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.PHP.NoSilencedErrors.Discouraged -- It's ok.
+		$data = ( isset( $_REQUEST['data'] ) ? @json_decode( $_REQUEST['data'] ) : null );
 
-		$restResponse = $this->perform_action( $data );
+		$rest_response = $this->perform_action( $data );
 
-		status_header( $restResponse->get_status() );
-		wp_send_json( $restResponse->get_data() );
+		status_header( $rest_response->get_status() );
+		wp_send_json( $rest_response->get_data() );
 	}
 
 	/**
@@ -55,9 +56,14 @@ class Rest_Service_Controller {
 	public function service_callback( WP_REST_Request $request ) {
 		$data = $request->get_params();
 
-		return $this->perform_action($data);
+		return $this->perform_action( $data );
 	}
 
+	/**
+	 * Perform ajax actions.
+	 *
+	 * @param WP_REST_Request $data Current ajax data.
+	 */
 	public function perform_action( $data ) {
 		if ( ! array_key_exists( 'action', $data ) ) {
 			return rest_ensure_response([

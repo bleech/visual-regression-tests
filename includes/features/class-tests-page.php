@@ -275,7 +275,7 @@ class Tests_Page {
 		$frontpage_id = get_option( 'page_on_front' );
 		$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 
-		if ( !Service::is_connected() ) {
+		if ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
 		} else {
 			if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
