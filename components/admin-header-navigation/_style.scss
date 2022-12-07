@@ -4,8 +4,6 @@
 @import "@wordpress/base-styles/variables";
 @import "@wordpress/base-styles/default-custom-properties";
 
-$breakpoint-mobile-horizontal: $break-medium;
-$breakpoint-tablet: $break-medium; /* adminbar goes big */
 $navigation-item-border-height: 3px;
 
 .vrts_admin_header_menu {
@@ -15,7 +13,7 @@ $navigation-item-border-height: 3px;
 	padding-left: 10px;
 	padding-top: calc((1.33em - #{$navigation-item-border-height}) + 46px);
 
-	@media (min-width: $breakpoint-mobile-horizontal) {
+	@media (min-width: $break-medium) {
 		display: flex;
 		padding-top: calc((1.33em - #{$navigation-item-border-height}) + 32px);
 	}
@@ -24,7 +22,7 @@ $navigation-item-border-height: 3px;
 		padding-top: 0;
 	}
 
-	@media (min-width: $breakpoint-mobile-horizontal) {
+	@media (min-width: $break-medium) {
 		margin-left: -20px;
 		padding-left: 20px;
 	}
@@ -65,13 +63,17 @@ $navigation-item-border-height: 3px;
 		font-size: 13px;
 		display: flex;
 		margin: 0;
-		overflow: auto;
 		white-space: nowrap;
-		-ms-overflow-style: none;
-		scrollbar-width: none;
+		margin-bottom: -0.5px;
 
-		&::-webkit-scrollbar {
-			display: none;
+		@media (max-width: $break-medium) {
+			overflow: auto;
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
 		}
 
 		&_item {
@@ -81,6 +83,7 @@ $navigation-item-border-height: 3px;
 		}
 
 		&_link {
+			margin: 1px;
 			padding: 16px 20px;
 			text-decoration: none;
 			border-bottom: transparent solid $navigation-item-border-height;
