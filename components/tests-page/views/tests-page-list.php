@@ -3,7 +3,7 @@
 		<?php esc_html_e( 'Tests', 'visual-regression-tests' ); ?>
 	</h1>
 
-	<?php if ( intval( $data['remaining_tests'] ) === 0 ) { ?>
+	<?php if ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) { ?>
 		<button type="button" class="page-title-action" id="modal-add-new-disabled" disabled>
 	<?php } else { ?>
 		<button type="button" class="page-title-action" id="show-modal-add-new">

@@ -20,6 +20,8 @@ class Rest_Service_Controller {
 		$this->resource_name = 'service';
 
 		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+		add_action( 'wp_ajax_nopriv_vrts_service', [ $this, 'ajax_action' ] );
+		add_action( 'wp_ajax_priv_vrts_service', [ $this, 'ajax_action' ] );
 	}
 
 	/**
@@ -34,6 +36,18 @@ class Rest_Service_Controller {
 	}
 
 	/**
+	 * Actions for admin-ajax.php
+	 */
+	public function ajax_action() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It's ok.
+		$data = json_decode( wp_unslash( $_REQUEST['data'] ?? '' ), true );
+		$rest_response = $this->perform_action( $data ?? [] );
+
+		status_header( $rest_response->get_status() );
+		wp_send_json( $rest_response->get_data() );
+	}
+
+	/**
 	 * Gets some data.
 	 *
 	 * @param WP_REST_Request $request Current request.
@@ -41,9 +55,18 @@ class Rest_Service_Controller {
 	public function service_callback( WP_REST_Request $request ) {
 		$data = $request->get_params();
 
+		return $this->perform_action( $data );
+	}
+
+	/**
+	 * Perform ajax actions.
+	 *
+	 * @param WP_REST_Request $data Current ajax data.
+	 */
+	public function perform_action( $data ) {
 		if ( ! array_key_exists( 'action', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Action parameter is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Action parameter is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
@@ -74,9 +97,17 @@ class Rest_Service_Controller {
 	 * @param array $data Rest api response body.
 	 */
 	private function verify_service_request( $data ) {
+		$service_project_id = get_option( 'vrts_project_id' );
+
+		if ( $service_project_id ) {
+			return rest_ensure_response([
+				'error' => esc_html__( 'Project already exists.', 'visual-regression-tests' ),
+			], 403);
+		}
+
 		if ( ! array_key_exists( 'token', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Access token is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Access token is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
@@ -93,20 +124,29 @@ class Rest_Service_Controller {
 	 * @param array $data Rest api response body.
 	 */
 	private function site_created_request( $data ) {
+		$service_project_id = get_option( 'vrts_project_id' );
+
+		if ( $service_project_id ) {
+			return rest_ensure_response([
+				'error' => esc_html__( 'Project already exists.', 'visual-regression-tests' ),
+			], 403);
+		}
+
 		if ( ! array_key_exists( 'id', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Project id is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Project id is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
 		if ( ! array_key_exists( 'token', $data ) ) {
 			return rest_ensure_response([
-				'error' => esc_html__( 'Access token is missing', 'visual-regression-tests' ),
+				'error' => esc_html__( 'Access token is missing.', 'visual-regression-tests' ),
 			], 403);
 		}
 
 		update_option( 'vrts_project_token', $data['token'] );
 		update_option( 'vrts_project_id', $data['id'] );
+		Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 
 		// Add homepage as a test right after the service is linked to plugin.
 		Service::add_homepage_test();

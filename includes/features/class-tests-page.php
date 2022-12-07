@@ -80,6 +80,7 @@ class Tests_Page {
 			'search_query' => sanitize_text_field( wp_unslash( $_POST['s'] ?? '' ) ),
 			'list_table' => new Tests_List_Table(),
 			'remaining_tests' => Subscription::get_remaining_tests(),
+			'is_connected' => Service::is_connected(),
 		]);
 	}
 
@@ -274,8 +275,12 @@ class Tests_Page {
 		$frontpage_id = get_option( 'page_on_front' );
 		$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 
-		if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_get_started' ] );
+		if ( ! Service::is_connected() ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
+		} else {
+			if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
+				add_action( 'admin_notices', [ $this, 'render_notification_get_started' ] );
+			}
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
@@ -296,6 +301,13 @@ class Tests_Page {
 		if ( $is_new_test_failed || '0' === $remaining_tests ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_new_test_failed' ] );
 		}
+	}
+
+	/**
+	 * Render connection_failed Notification.
+	 */
+	public function render_notification_connection_failed() {
+		Admin_Notices::render_notification( 'connection_failed' );
 	}
 
 	/**
