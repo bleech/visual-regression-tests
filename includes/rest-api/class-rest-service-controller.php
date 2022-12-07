@@ -61,7 +61,7 @@ class Rest_Service_Controller {
 	/**
 	 * Perform ajax actions.
 	 *
-	 * @param WP_REST_Request $data Current ajax data.
+	 * @param array $data Current ajax data.
 	 */
 	public function perform_action( $data ) {
 		if ( ! array_key_exists( 'action', $data ) ) {

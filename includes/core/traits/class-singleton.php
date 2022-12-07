@@ -36,8 +36,8 @@ trait Singleton {
 	private function __clone() {}
 
 	/**
-	 * Private unserialize method to prevent unserializing of the Singleton
+	 * Public unserialize method to prevent unserializing of the Singleton
 	 * instance.
 	 */
-	private function __wakeup() {}
+	public function __wakeup() {}
 }

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.0.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.1.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-07T09:05:03+00:00\n"
+"POT-Creation-Date: 2022-12-07T08:58:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -426,23 +426,28 @@ msgstr ""
 
 #. translators: %1$s: the id of the alert, %2$s: the home url
 #: includes/features/class-email-notifications.php:23
+msgctxt "notification email subject"
 msgid "VRTs: Alert %1$s (%2$s)"
 msgstr ""
 
 #: includes/features/class-email-notifications.php:28
+msgctxt "notification email"
 msgid "Howdy,"
 msgstr ""
 
 #: includes/features/class-email-notifications.php:29
+msgctxt "notification email"
 msgid "New visual differences have been detected on a page."
 msgstr ""
 
 #: includes/features/class-email-notifications.php:30
+msgctxt "notification email"
 msgid "Review and resolve the alert to resume testing:"
 msgstr ""
 
 #. translators: %1$s: the home url
 #: includes/features/class-email-notifications.php:34
+msgctxt "notification email"
 msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
 
