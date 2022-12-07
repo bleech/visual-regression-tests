@@ -13,11 +13,11 @@ $navigation-item-border-height: 3px;
 	border-bottom: 1px solid $light-gray-500;
 	margin-left: -10px;
 	padding-left: 10px;
-	padding-top: calc((1.33rem - #{$navigation-item-border-height}) + 46px);
+	padding-top: calc((1.33em - #{$navigation-item-border-height}) + 46px);
 
 	@media (min-width: $breakpoint-mobile-horizontal) {
 		display: flex;
-		padding-top: calc((1.33rem - #{$navigation-item-border-height}) + 32px);
+		padding-top: calc((1.33em - #{$navigation-item-border-height}) + 32px);
 	}
 
 	@media (min-width: 600px) {
@@ -56,15 +56,23 @@ $navigation-item-border-height: 3px;
 
 	h2 {
 		display: inline-block;
-		font-size: 1rem;
-		margin: 0 2rem 0 0;
-		padding: 0.95rem 0;
+		font-size: 16px;
+		margin: 0 2em 0 0;
+		padding: 0.95em 0;
 	}
 
 	.vrts_navigation {
+		font-size: 13px;
 		display: flex;
-		flex-wrap: wrap;
 		margin: 0;
+		overflow: auto;
+		white-space: nowrap;
+		-ms-overflow-style: none;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
 
 		&_item {
 			margin-bottom: 0;
@@ -73,7 +81,7 @@ $navigation-item-border-height: 3px;
 		}
 
 		&_link {
-			padding: 1rem calc(1.33rem - #{$navigation-item-border-height}) calc(1rem - #{$navigation-item-border-height}) calc(1.33rem - #{$navigation-item-border-height});
+			padding: 16px 20px;
 			text-decoration: none;
 			border-bottom: transparent solid $navigation-item-border-height;
 
@@ -107,7 +115,7 @@ $navigation-item-border-height: 3px;
 		}
 
 		&_item:last-child {
-			margin: 0 calc(1.33rem - 3px) 0 calc(1.33rem - 3px);
+			margin: 0 20px 0 20px;
 			padding: 0;
 			flex-direction: column;
 			justify-content: center;
