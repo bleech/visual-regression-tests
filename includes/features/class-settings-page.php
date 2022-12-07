@@ -70,7 +70,7 @@ class Settings_Page {
 			$email_notification_address_description = sprintf(
 				'%1$s<br>%2$s <a href="%3$s" title="%4$s">%4$s</a>',
 				esc_html__( 'Add a single email address.', 'visual-regression-tests' ),
-				esc_html__( 'Want add more email addresses?', 'visual-regression-tests' ),
+				esc_html__( 'Want to add more email addresses?', 'visual-regression-tests' ),
 				esc_url( admin_url( 'admin.php?page=vrts-upgrade' ) ),
 				esc_html__( 'Upgrade here.', 'visual-regression-tests' )
 			);
