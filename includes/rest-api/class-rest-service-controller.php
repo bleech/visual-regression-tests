@@ -39,9 +39,9 @@ class Rest_Service_Controller {
 	 * Actions for admin-ajax.php
 	 */
 	public function ajax_action() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It's ok.
-		$data = ( isset( $_REQUEST['data'] ) && is_array( $_REQUEST['data'] ) ? $_REQUEST['data'] : null );
-		$rest_response = $this->perform_action( $data );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It's ok.
+		$data = json_decode( wp_unslash( $_REQUEST['data'] ?? '' ), true );
+		$rest_response = $this->perform_action( $data ?? [] );
 
 		status_header( $rest_response->get_status() );
 		wp_send_json( $rest_response->get_data() );
