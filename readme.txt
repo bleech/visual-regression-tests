@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.1
-Stable tag: 1.0
+Stable tag: 1.0.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,8 +12,9 @@ Test your website for unwanted visual changes. Run automatic tests and spot diff
 
 == Description ==
 
-VRTs - Visual Regression Tests is a plugin to test your website for unwanted visual changes. The plugin runs automatic daily tests for chosen pages and posts. The tool creates daily comparison screenshots and compares them with a reference snapshot. If there is a difference between the screenshots, you'll be automatically notified via email. Use three comparison mode to spot the differences easily.
+VRTs - Visual Regression Tests is a plugin to test your website for unwanted visual changes. The plugin runs automatic daily tests for chosen pages and posts. The tool creates daily comparison screenshots and compares them with a reference snapshot. If there is a difference between the screenshots, you'll be automatically notified via email. Use three comparison modes to spot the differences easily.
 
+**Please note:** The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly.
 
 = YOUR STRATEGY TO SPOT UNWANTED CHANGES =
 
@@ -39,12 +40,18 @@ In which cases can visual regression testing help you spot issues?
 
 = FEATURES =
 
-* **Instant first test:** After plugin activation, the start page is immediately monitored and alerts are sent to the stored admin email.
+* **Instant first test:** After plugin activation, the homepage is immediately monitored and alerts are sent to the stored admin email.
 * **Daily Tests:** The plugin automatically scans selected posts and pages daily. It validates the visual content by comparing two screenshots.
 * **3 comparison modi:** Choose between three ways to compare snapshots - Difference, Split, Side-by-Side view.
 * **Instant alerts:** As soon as a change is detected between the snapshot and the comparison screenshot, you will be notified via email.
 * **GDPR compliant:** Snapshots are stored on European servers. We do not collect any personal data.
-* **Cross-team:** Admins, developers and editors can create and view tests and work together on the immediate solution.
+* **Cross-team:** Team members with admin rights can create and view tests and work together on the immediate solution.
+
+
+= FREE FOREVER =
+* Test up to **3 pages**
+* **Daily testing** interval
+* **30 days** alert history
 
 
 = GO PRO =
@@ -61,7 +68,7 @@ Do you like VRTs and want to run more tests? Unlock more features with VRTs Pro:
 
 = BUG-REPORT =
 
-You found a bug? Please report it by creating an issue on GitHub! Make sure to follow the bug requirements.
+You found a bug? Please report it by creating an issue on the [support forum](https://wordpress.org/support/plugin/visual-regression-tests/).
 
 
 = READ MORE =
@@ -94,7 +101,7 @@ You can do visual testing either manually or with automated tools. Checking your
 
 = Is the testing done on my server? =
 
-The tests are stored in your WordPress installation. The screenshots and comparisons are performed on an external server and sent to your WordPress website.
+Screenshots and comparisons are performed on an external server and sent to your WordPress website. Only required meta data is stored in your database.
 
 = Does the plugin work with cookie consent banners? =
 
@@ -121,7 +128,7 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 = AFTER ACTIVATION =
 
-* By default: The start page is immediately monitored and alerts are sent to the stored admin email.
+* By default: The homepage is immediately monitored and alerts are sent to the stored admin email.
 * Open the settings to configure who should receive alerts.
 * Open a page or post to activate more tests.
 
