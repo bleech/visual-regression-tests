@@ -20,18 +20,18 @@ class Email_Notifications {
 		// Check if notification email already exists.
 		$subject = sprintf(
 			/* translators: %1$s: the id of the alert, %2$s: the home url */
-			esc_html__( 'VRTs: Alert %1$s (%2$s)' ),
+			esc_html__( 'VRTs: Alert %1$s (%2$s)', 'visual-regression-tests' ),
 			$alert_id,
 			esc_url( $site_url )
 		);
 
-		$message = esc_html__( 'Howdy,' ) . "\n\n" .
-			esc_html__( 'New visual differences have been detected on a page.' ) . "\n\n" .
-			esc_html__( 'Review and resolve the alert to resume testing:' ) . "\n" .
+		$message = esc_html__( 'Howdy,', 'visual-regression-tests' ) . "\n\n" .
+			esc_html__( 'New visual differences have been detected on a page.', 'visual-regression-tests' ) . "\n\n" .
+			esc_html__( 'Review and resolve the alert to resume testing:', 'visual-regression-tests' ) . "\n" .
 			esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
 			sprintf(
 				/* translators: %1$s: the home url */
-				esc_html__( 'This alert was sent by the Visual Regression Tests plugin on %1$s' ), esc_url( $site_url )
+				esc_html__( 'This alert was sent by the Visual Regression Tests plugin on %1$s', 'visual-regression-tests' ), esc_url( $site_url )
 			);
 
 		$has_subscription = Subscription::get_subscription_status();

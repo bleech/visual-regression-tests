@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-06T16:32:14+00:00\n"
+"POT-Creation-Date: 2022-12-07T09:05:03+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -32,6 +32,18 @@ msgstr ""
 
 #. Author URI of the plugin
 msgid "https://bleech.de"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-connection-failed.php:3
+msgid "Connection failed"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-connection-failed.php:4
+msgid "Something went wrong while connecting to the external service. If you just installed the plugin, refresh this page in a bit."
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-connection-failed.php:5
+msgid "The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-get-started.php:3
@@ -395,21 +407,43 @@ msgstr ""
 
 #: includes/features/class-alerts-page.php:161
 #: includes/features/class-alerts-page.php:229
-#: includes/features/class-tests-page.php:95
-#: includes/features/class-tests-page.php:170
+#: includes/features/class-tests-page.php:96
+#: includes/features/class-tests-page.php:171
 msgid "Are you cheating?"
 msgstr ""
 
 #: includes/features/class-alerts-page.php:165
 #: includes/features/class-alerts-page.php:233
-#: includes/features/class-tests-page.php:99
-#: includes/features/class-tests-page.php:174
+#: includes/features/class-tests-page.php:100
+#: includes/features/class-tests-page.php:175
 msgid "Permission Denied!"
 msgstr ""
 
 #: includes/features/class-alerts-page.php:175
 #: includes/features/class-alerts-page.php:244
 msgid "Error: Alert ID is required."
+msgstr ""
+
+#. translators: %1$s: the id of the alert, %2$s: the home url
+#: includes/features/class-email-notifications.php:23
+msgid "VRTs: Alert %1$s (%2$s)"
+msgstr ""
+
+#: includes/features/class-email-notifications.php:28
+msgid "Howdy,"
+msgstr ""
+
+#: includes/features/class-email-notifications.php:29
+msgid "New visual differences have been detected on a page."
+msgstr ""
+
+#: includes/features/class-email-notifications.php:30
+msgid "Review and resolve the alert to resume testing:"
+msgstr ""
+
+#. translators: %1$s: the home url
+#: includes/features/class-email-notifications.php:34
+msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
@@ -483,24 +517,24 @@ msgctxt "license key placeholder"
 msgid "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
 msgstr ""
 
-#: includes/features/class-tests-page.php:109
+#: includes/features/class-tests-page.php:110
 msgid "Error: Post ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:185
+#: includes/features/class-tests-page.php:186
 msgid "Error: Test ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:236
+#: includes/features/class-tests-page.php:237
 msgid "(no title)"
 msgstr ""
 
-#: includes/features/class-tests-page.php:237
+#: includes/features/class-tests-page.php:238
 msgid "No results to enable visual regression testing found."
 msgstr ""
 
 #. translators: Minimum input length in characters to start searching posts in the "Insert/edit link" modal.
-#: includes/features/class-tests-page.php:239
+#: includes/features/class-tests-page.php:240
 msgctxt "minimum input length for searching post links"
 msgid "3"
 msgstr ""
@@ -628,17 +662,22 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:46
-msgid "Action parameter is missing"
+#: includes/rest-api/class-rest-service-controller.php:69
+msgid "Action parameter is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:79
 #: includes/rest-api/class-rest-service-controller.php:104
-msgid "Access token is missing"
+#: includes/rest-api/class-rest-service-controller.php:131
+msgid "Project already exists."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:98
-msgid "Project id is missing"
+#: includes/rest-api/class-rest-service-controller.php:110
+#: includes/rest-api/class-rest-service-controller.php:143
+msgid "Access token is missing."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:137
+msgid "Project id is missing."
 msgstr ""
 
 #: editor/components/metabox-content/index.js:97
