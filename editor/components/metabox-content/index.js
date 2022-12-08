@@ -13,6 +13,8 @@ import {
 	NotificationUpgradeRequired,
 } from 'editor/components/metabox-notifications';
 
+import apiFetch from '@wordpress/api-fetch';
+
 const MetaboxContent = () => {
 	const hasPostAlert = window.vrts_editor_vars.has_post_alert;
 	const postMetaKeyTestStatus = window.vrts_editor_vars.field_test_status_key;
@@ -62,11 +64,17 @@ const MetaboxContent = () => {
 		}
 	} );
 
-	useEffect( () => {
+	useEffect( async () => {
 		if ( isSavingProcess ) {
-			const showAddedNewTestNotification = runTestsIsChecked;
+			const postId = select( 'core/editor' ).getCurrentPostId();
+			const response = await apiFetch( {
+				path: `/vrts/v1/tests/post/${ postId }`,
+			} ).catch( ( error ) => {
+				console.log( error ); // eslint-disable-line no-console
+			} );
+			const testId = await response.test_id;
 
-			if ( true === showAddedNewTestNotification ) {
+			if ( true === runTestsIsChecked && null === testId ) {
 				window.vrts_editor_vars.is_new_test = true;
 			} else {
 				window.vrts_editor_vars.is_new_test = false;
