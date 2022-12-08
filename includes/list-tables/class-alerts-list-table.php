@@ -72,7 +72,7 @@ class Alerts_List_Table extends \WP_List_Table {
 				return sprintf(
 					'<span class="testing-status--paused">%1$s</span>',
 					/* translators: %s: the count of pixels with a visual difference. */
-					esc_html( sprintf( _n( '%s element', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) )
+					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) )
 				);
 
 			case 'target_screenshot_finish_date':
