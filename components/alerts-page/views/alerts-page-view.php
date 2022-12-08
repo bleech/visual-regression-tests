@@ -71,7 +71,7 @@
 											<?php esc_html_e( 'Visual Difference:', 'visual-regression-tests' ); ?>
 											<strong>
 												<?php /* translators: %s: the count of pixels with a visual difference. */ ?>
-												<?php echo esc_html( sprintf( _n( '%s element', '%s pixels', esc_html( $data['alert']->differences ), 'visual-regression-tests' ), esc_html( $data['alert']->differences ) ) ); ?>
+												<?php echo esc_html( sprintf( _n( '%s pixel', '%s pixels', esc_html( $data['alert']->differences ), 'visual-regression-tests' ), esc_html( $data['alert']->differences ) ) ); ?>
 											</strong>
 										</div>
 									</div>
