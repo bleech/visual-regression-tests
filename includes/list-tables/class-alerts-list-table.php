@@ -185,14 +185,14 @@ class Alerts_List_Table extends \WP_List_Table {
 			// Status "Resolved".
 			$differences = intval( $item->differences / 4 );
 			/* translators: %s: the count of pixels with a visual difference. */
-			return esc_html( sprintf( _n( '%s element', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) );
+			return esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) );
 		} else {
 			// Status "Open".
 			$differences = intval( $item->differences / 4 );
 			return sprintf(
 				'%s<br>%s',
 				/* translators: %s: the count of pixels with a visual difference. */
-				esc_html( sprintf( _n( '%s element', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
+				esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
 				sprintf(
 					/* translators: %s: link wrapper */
 					esc_html__( 'Tests on %1$spage%2$s are %3$spaused%4$s', 'visual-regression-tests' ),
