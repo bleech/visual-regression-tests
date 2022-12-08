@@ -1,3 +1,10 @@
+<?php
+if ( ! $data['is_connected'] ) {
+	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-connection-failed.php';
+	return;
+}
+?>
+
 <?php wp_nonce_field( $data['nonce'], $data['nonce'] ); ?>
 <p>
 	<?php if ( 0 === intval( $data['remaining_tests'] ) && 0 === $data['run_tests_checked'] ) { ?>
@@ -11,10 +18,11 @@
 </p>
 
 <?php
+
 // Notification: New Test added.
 if ( true === $data['is_new_test'] ) {
 	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-new-test-added.php';
-} elseif ( intval( $data['remaining_tests'] ) > 0 ) {
+} elseif ( 1 === intval( $data['remaining_tests'] ) ) {
 	// Notification: Unlock more tests.
 	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-unlock-more-tests.php';
 } elseif ( 0 === intval( $data['remaining_tests'] ) ) {

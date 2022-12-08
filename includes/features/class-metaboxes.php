@@ -125,7 +125,7 @@ class Metaboxes {
 			);
 		}
 
-		vrts()->component('metabox-options', [
+		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
 			'run_tests_checked' => $run_tests_checked,
@@ -138,6 +138,7 @@ class Metaboxes {
 			'is_new_test' => self::is_new_test( $post_id ),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
+			'is_connected' => Service::is_connected(),
 		]);
 	}
 

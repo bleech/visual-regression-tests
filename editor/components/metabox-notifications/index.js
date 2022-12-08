@@ -114,8 +114,35 @@ const NotificationUpgradeRequired = ( { upgradeUrl = '' } ) => {
 	);
 };
 
+const NotificationConnectionFailed = ( {} ) => {
+	return (
+		<>
+			<div className="vrts-metabox-notice vrts-metabox-notice-is-error">
+				<p>
+					<strong>
+						{ __( 'Connection failed', 'visual-regression-tests' ) }
+					</strong>
+				</p>
+				<p>
+					{ __(
+						'Something went wrong while connecting to the external service. If you just installed the plugin, refresh this page in a bit.',
+						'visual-regression-tests'
+					) }
+				</p>
+				<p>
+					{ __(
+						'The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly.',
+						'visual-regression-tests'
+					) }
+				</p>
+			</div>
+		</>
+	);
+};
+
 export {
 	NotificationNewTestAdded,
 	NotificationUnlockMoreTests,
 	NotificationUpgradeRequired,
+	NotificationConnectionFailed,
 };

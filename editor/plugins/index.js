@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
 import { createElement } from '@wordpress/element';
 
 // Custom
-import MetaboxContent from 'editor/components/metabox-content';
+import Metabox from 'editor/components/metabox';
 const vrtsLogoIcon = createElement(
 	'svg',
 	{ width: 20, height: 20, viewBox: '0 0 20 20' },
@@ -30,7 +30,7 @@ registerPlugin( 'visual-regression-tests-plugin-sidebar', {
 					title={ pluginName }
 					icon={ vrtsLogoIcon }
 				>
-					<MetaboxContent />
+					<Metabox />
 				</PluginDocumentSettingPanel>
 
 				<PluginSidebarMoreMenuItem
@@ -50,7 +50,7 @@ registerPlugin( 'visual-regression-tests-plugin-sidebar', {
 						title={ __( 'Options', 'visual-regression-tests' ) }
 						intialOpen={ true }
 					>
-						<MetaboxContent />
+						<Metabox />
 					</PanelBody>
 				</PluginSidebar>
 			</>
