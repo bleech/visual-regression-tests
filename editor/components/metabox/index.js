@@ -11,11 +11,13 @@ import {
 	NotificationNewTestAdded,
 	NotificationUnlockMoreTests,
 	NotificationUpgradeRequired,
+	NotificationConnectionFailed,
 } from 'editor/components/metabox-notifications';
 
-const MetaboxContent = () => {
+import apiFetch from '@wordpress/api-fetch';
+
+const Metabox = () => {
 	const hasPostAlert = window.vrts_editor_vars.has_post_alert;
-	const postMetaKeyTestStatus = window.vrts_editor_vars.field_test_status_key;
 	const targetScreenshotUrl = window.vrts_editor_vars.target_screenshot_url;
 	const snapshotDate = window.vrts_editor_vars.snapshot_date;
 	const testingStatusInstructions =
@@ -30,8 +32,8 @@ const MetaboxContent = () => {
 
 	const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' );
 	const runTestsValue =
-		postMeta !== undefined && postMeta[ postMetaKeyTestStatus ]
-			? postMeta[ postMetaKeyTestStatus ]
+		postMeta !== undefined && postMeta._vrts_testing_status
+			? postMeta._vrts_testing_status
 			: false;
 	const [ runTestsIsChecked, setRunTestsChecked ] = useState( runTestsValue );
 	const runTestsOnChange = ( value ) => {
@@ -47,7 +49,7 @@ const MetaboxContent = () => {
 
 		dispatch( 'core/editor' ).editPost( {
 			meta: {
-				[ postMetaKeyTestStatus ]: value,
+				_vrts_testing_status: value,
 			},
 		} );
 	};
@@ -62,11 +64,17 @@ const MetaboxContent = () => {
 		}
 	} );
 
-	useEffect( () => {
+	useEffect( async () => {
 		if ( isSavingProcess ) {
-			const showAddedNewTestNotification = runTestsIsChecked;
+			const postId = select( 'core/editor' ).getCurrentPostId();
+			const response = await apiFetch( {
+				path: `/vrts/v1/tests/post/${ postId }`,
+			} ).catch( ( error ) => {
+				console.log( error ); // eslint-disable-line no-console
+			} );
+			const testId = await response.test_id;
 
-			if ( true === showAddedNewTestNotification ) {
+			if ( true === runTestsIsChecked && null === testId ) {
 				window.vrts_editor_vars.is_new_test = true;
 			} else {
 				window.vrts_editor_vars.is_new_test = false;
@@ -77,7 +85,7 @@ const MetaboxContent = () => {
 	let metaboxNotification = null;
 	if ( true === isNewTest ) {
 		metaboxNotification = <NotificationNewTestAdded />;
-	} else if ( remainingTests > 0 ) {
+	} else if ( remainingTests === 1 ) {
 		metaboxNotification = (
 			<NotificationUnlockMoreTests
 				upgradeUrl={ upgradeUrl }
@@ -89,6 +97,11 @@ const MetaboxContent = () => {
 		metaboxNotification = (
 			<NotificationUpgradeRequired upgradeUrl={ upgradeUrl } />
 		);
+	}
+
+	const isConnected = window.vrts_editor_vars.is_connected;
+	if ( ! isConnected ) {
+		return <NotificationConnectionFailed />;
 	}
 
 	return (
@@ -155,4 +168,4 @@ const MetaboxContent = () => {
 	);
 };
 
-export default MetaboxContent;
+export default Metabox;

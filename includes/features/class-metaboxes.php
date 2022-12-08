@@ -61,16 +61,21 @@ class Metaboxes {
 	 * @param int $post_id WP Post id.
 	 */
 	public static function is_new_test( $post_id ) {
-		$test_added_show_notice = (bool) get_post_meta( $post_id, self::$field_is_new_test_key, true );
+		$is_new_test = false;
+		$current_test_id = Test::get_item_id( $post_id );
+		$is_show_new_notice_meta = (bool) get_post_meta( $post_id, self::$field_is_new_test_key, true );
 
-		if ( true === $test_added_show_notice ) {
+		if ( true === $is_show_new_notice_meta ) {
 			delete_post_meta(
 				$post_id,
 				self::$field_is_new_test_key
 			);
 		}
+		if ( true === $is_show_new_notice_meta && null !== $current_test_id ) {
+			$is_new_test = true;
+		}
 
-		return $test_added_show_notice;
+		return $is_new_test;
 	}
 
 	/**
@@ -120,7 +125,7 @@ class Metaboxes {
 			);
 		}
 
-		vrts()->component('metabox-options', [
+		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
 			'run_tests_checked' => $run_tests_checked,
@@ -133,6 +138,7 @@ class Metaboxes {
 			'is_new_test' => self::is_new_test( $post_id ),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
+			'is_connected' => Service::is_connected(),
 		]);
 	}
 
@@ -198,12 +204,6 @@ class Metaboxes {
 				$post_id,
 				self::$field_test_status_key,
 				intval( $_POST[ self::$field_test_status_key ] )
-			);
-
-			update_post_meta(
-				$post_id,
-				self::$field_is_new_test_key,
-				1
 			);
 		} else {
 			// Delete data from tests database table if "Run Tests" checkbox is not checked.
@@ -490,14 +490,14 @@ class Metaboxes {
 				];
 				// Save data to custom database table.
 				Test::save( $args );
-			}
 
-			// Required for metabox "new test added" notification.
-			update_post_meta(
-				$post_id,
-				self::$field_is_new_test_key,
-				1
-			);
+				// Add post meta to display "New Test" added notification.
+				update_post_meta(
+					$post_id,
+					self::$field_is_new_test_key,
+					1
+				);
+			}
 		} elseif ( 0 === $status ) {
 			// Delete data from tests database table if "Run Tests" checkbox is not checked.
 			if ( Test::get_item_id( $post_id ) ) {
