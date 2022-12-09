@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-08T09:05:56+00:00\n"
+"POT-Creation-Date: 2022-12-09T08:54:38+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -35,14 +35,20 @@ msgid "https://bleech.de"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:3
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:2
+#: editor/components/metabox-notifications/index.js:123
 msgid "Connection failed"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:4
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:3
+#: editor/components/metabox-notifications/index.js:127
 msgid "Something went wrong while connecting to the external service. If you just installed the plugin, refresh this page in a bit."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:5
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
+#: editor/components/metabox-notifications/index.js:133
 msgid "The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly."
 msgstr ""
 
@@ -64,19 +70,19 @@ msgid "Tests will be run for the following page: %s"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-failed.php:2
-#: components/metabox-options/metabox-notifications/metabox-notification-upgrade-required.php:2
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:2
 #: editor/components/metabox-notifications/index.js:91
 msgid "Ready for an Upgrade?"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-failed.php:7
-#: components/metabox-options/metabox-notifications/metabox-notification-upgrade-required.php:7
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:7
 #: editor/components/metabox-notifications/index.js:102
 msgid "Looks like you need a bigger plan to add more tests."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-failed.php:9
-#: components/metabox-options/metabox-notifications/metabox-notification-upgrade-required.php:9
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:9
 #: editor/components/metabox-notifications/index.js:107
 msgid "Upgrade here!"
 msgstr ""
@@ -132,9 +138,9 @@ msgstr ""
 #: components/alerts-page/views/alert-content.php:25
 #: components/alerts-page/views/alert-content.php:40
 #: components/alerts-page/views/alert-content.php:41
-#: components/metabox-options/index.php:45
-#: components/metabox-options/index.php:49
-#: components/metabox-options/index.php:52
+#: components/metabox-classic-editor/index.php:53
+#: components/metabox-classic-editor/index.php:57
+#: components/metabox-classic-editor/index.php:60
 #: includes/list-tables/class-tests-list-table.php:125
 #: editor/components/screenshot/index.js:7
 msgid "Snapshot"
@@ -252,81 +258,81 @@ msgstr ""
 msgid "View Alert"
 msgstr ""
 
-#: components/metabox-options/index.php:8
+#: components/metabox-classic-editor/index.php:15
 msgid "Run tests"
 msgstr ""
 
-#: components/metabox-options/index.php:10
-#: editor/components/metabox-content/index.js:98
+#: components/metabox-classic-editor/index.php:17
+#: editor/components/metabox/index.js:111
 msgid "Activate tests to get alerted about visual differences in comparison to the snapshot."
 msgstr ""
 
-#: components/metabox-options/index.php:33
+#: components/metabox-classic-editor/index.php:41
 #: includes/features/class-admin-columns.php:48
 #: includes/list-tables/class-tests-list-table.php:124
-#: editor/components/metabox-content/index.js:114
+#: editor/components/metabox/index.js:127
 msgid "Status"
 msgstr ""
 
-#: components/metabox-options/index.php:36
+#: components/metabox-classic-editor/index.php:44
 #: includes/list-tables/class-tests-list-table.php:75
 #: includes/list-tables/class-tests-list-table.php:253
-#: editor/components/metabox-content/index.js:129
+#: editor/components/metabox/index.js:142
 msgid "Paused"
 msgstr ""
 
-#: components/metabox-options/index.php:36
+#: components/metabox-classic-editor/index.php:44
 #: includes/list-tables/class-tests-list-table.php:74
 #: includes/list-tables/class-tests-list-table.php:248
-#: editor/components/metabox-content/index.js:125
+#: editor/components/metabox/index.js:138
 msgid "Running"
 msgstr ""
 
-#: components/metabox-options/index.php:48
+#: components/metabox-classic-editor/index.php:56
 #: editor/components/screenshot/index.js:16
 msgid "View full snapshot image in new tab"
 msgstr ""
 
-#: components/metabox-options/index.php:56
+#: components/metabox-classic-editor/index.php:64
 #: editor/components/screenshot/index.js:46
 msgid "Snapshot created on"
 msgstr ""
 
-#: components/metabox-options/index.php:58
+#: components/metabox-classic-editor/index.php:66
 #: editor/components/screenshot/index.js:55
 msgid "First Snapshot: in progress"
 msgstr ""
 
-#: components/metabox-options/index.php:60
+#: components/metabox-classic-editor/index.php:68
 #: editor/components/screenshot/index.js:63
 msgid "Snapshot gets auto-generated upon publishing or updating the page."
 msgstr ""
 
-#: components/metabox-options/metabox-notifications/metabox-notification-new-test-added.php:2
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:2
 #: editor/components/metabox-notifications/index.js:11
 msgid "You have added a new test"
 msgstr ""
 
 #. translators: %s: page title.
 #. translators: %s name of the page
-#: components/metabox-options/metabox-notifications/metabox-notification-new-test-added.php:7
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:7
 #: editor/components/metabox-notifications/index.js:22
 msgid "The Visual Regression Test for the page %s has been added!"
 msgstr ""
 
-#: components/metabox-options/metabox-notifications/metabox-notification-unlock-more-tests.php:2
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:2
 #: editor/components/metabox-notifications/index.js:50
 msgid "Unlock more tests"
 msgstr ""
 
 #. translators: %1$s, %2$s: number of tests.
-#: components/metabox-options/metabox-notifications/metabox-notification-unlock-more-tests.php:9
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:9
 #: editor/components/metabox-notifications/index.js:60
 msgid "Good work! You have added %1$s of %2$s available tests."
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
-#: components/metabox-options/metabox-notifications/metabox-notification-unlock-more-tests.php:15
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:15
 #: editor/components/metabox-notifications/index.js:69
 msgid "Upgrade %1$shere%2$s to add more tests to your website!"
 msgstr ""
@@ -453,7 +459,7 @@ msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
 #: includes/features/class-enqueue-scripts.php:101
-#: includes/features/class-metaboxes.php:117
+#: includes/features/class-metaboxes.php:122
 #: includes/list-tables/class-tests-list-table.php:82
 msgid "Resolve %1$salert%2$s to resume testing"
 msgstr ""
@@ -667,25 +673,41 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:69
+#: includes/rest-api/class-rest-service-controller.php:68
 msgid "Action parameter is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:104
-#: includes/rest-api/class-rest-service-controller.php:131
+#: includes/rest-api/class-rest-service-controller.php:101
+#: includes/rest-api/class-rest-service-controller.php:124
 msgid "Project already exists."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:110
-#: includes/rest-api/class-rest-service-controller.php:143
+#: includes/rest-api/class-rest-service-controller.php:105
+#: includes/rest-api/class-rest-service-controller.php:132
 msgid "Access token is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:137
+#: includes/rest-api/class-rest-service-controller.php:128
 msgid "Project id is missing."
 msgstr ""
 
-#: editor/components/metabox-content/index.js:97
+#: includes/rest-api/class-rest-service-controller.php:154
+msgid "Test id is missing."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:223
+msgid "Test not found."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:232
+msgid "Unknown action."
+msgstr ""
+
+#: includes/rest-api/class-rest-tests-controller.php:48
+msgid "The test does not exist."
+msgstr ""
+
+#: editor/components/metabox/index.js:110
 msgid "Run Tests"
 msgstr ""
 
@@ -694,6 +716,6 @@ msgstr ""
 msgid "Visual Regression current state"
 msgstr ""
 
-#: editor/plugins/options/index.js:50
+#: editor/plugins/index.js:50
 msgid "Options"
 msgstr ""
