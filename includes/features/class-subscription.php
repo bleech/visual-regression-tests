@@ -6,15 +6,6 @@ use Vrts\Features\Service;
 
 class Subscription {
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		// Add license key on setting save.
-		add_action( 'add_option_vrts_license_key', [ $this, 'do_after_update_license_key' ], 10, 2 );
-		add_action( 'update_option_vrts_license_key', [ $this, 'do_after_update_license_key' ], 10, 2 );
-	}
-
-	/**
 	 * Update the number of tests available.
 	 *
 	 *  @param mixed $remaining_tests Option value. Must be serializable if non-scalar. Expected to not be SQL-escaped.
@@ -32,28 +23,6 @@ class Subscription {
 
 		if ( null !== $has_subscription ) {
 			update_option( 'vrts_has_subscription', $has_subscription );
-		}
-	}
-
-	/**
-	 * Register the Gumroad API key with the service.
-	 *
-	 *  @param mixed $old old value.
-	 *  @param mixed $new new value.
-	 */
-	public function do_after_update_license_key( $old, $new ) {
-		if ( $old !== $new ) {
-			$service_project_id = get_option( 'vrts_project_id' );
-			$service_api_route = 'sites/' . $service_project_id . '/register';
-
-			$parameters = [
-				'license_key'   => $new,
-			];
-
-			$response = Service::rest_service_request( $service_api_route, $parameters, 'post' );
-
-			// TODO: Add the new number of tests available and show message that the key was added successfully based on response code.
-			self::get_latest_status();
 		}
 	}
 

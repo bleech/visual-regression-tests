@@ -19,6 +19,7 @@ class Settings_Page {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'add_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
 		add_action( 'update_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
+		add_action( 'pre_update_option_vrts_license_key', [ $this, 'do_before_add_license_key' ], 10, 2 );
 
 		$this->add_settings();
 	}
@@ -187,11 +188,79 @@ class Settings_Page {
 	}
 
 	/**
+	 * Register the Gumroad API key with the service.
+	 *
+	 *  @param mixed $old old value.
+	 *  @param mixed $new new value.
+	 *  @param mixed $old old value.
+	 */
+	public function do_before_add_license_key( $new, $old ) {
+		// If license key is empty but was previously added
+		if ( ! $new && $old ) {
+			self::remove_license_key();
+			update_option('vrts_license_removed', true);
+
+			return null;
+		}
+
+		if ( $old !== $new ) {
+
+			$service_project_id = get_option( 'vrts_project_id' );
+			$service_api_route = 'sites/' . $service_project_id . '/register';
+
+			$parameters = [
+				'license_key'   => $new,
+			];
+
+			$response = Service::rest_service_request( $service_api_route, $parameters, 'post' );
+			$status_code = $response['status_code'];
+			Subscription::get_latest_status();
+
+			if ( $status_code !== 200 ) {
+				// If new key is not valid, remove the old one
+				self::remove_license_key();
+				update_option('vrts_license_failed', true);
+				return null;
+			}
+
+			update_option('vrts_license_success', true);
+
+			return $new;
+		}
+
+		return $old;
+	}
+
+	/**
+	 * Remove license key from the service
+	 */
+	public static function remove_license_key() {
+		$service_project_id = get_option( 'vrts_project_id' );
+		$service_api_route = 'sites/' . $service_project_id . '/unregister';
+
+		$response = Service::rest_service_request( $service_api_route, [], 'post' );
+
+		Subscription::get_latest_status();
+	}
+
+	/**
 	 * Init notifications.
 	 */
 	public function init_notifications() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's OK.
-		if ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
+		if ( true == (boolean) get_option('vrts_license_success') ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_license_added' ] );
+			delete_option('vrts_license_success');
+		}
+		else if ( true == (boolean) get_option('vrts_license_failed') ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_license_not_added' ] );
+			delete_option('vrts_license_failed');
+		}
+		else if ( true == (boolean) get_option('vrts_license_removed') ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_license_removed' ] );
+			delete_option('vrts_license_removed');
+		}
+		else if ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_settings_saved' ] );
 		}
 	}
@@ -203,4 +272,24 @@ class Settings_Page {
 		Admin_Notices::render_notification( 'settings_saved', false );
 	}
 
+	/**
+	 * Render License added notification.
+	 */
+	public function render_notification_license_added() {
+		Admin_Notices::render_notification( 'license_added', false );
+	}
+
+	/**
+	 * Render License adding failed notification.
+	 */
+	public function render_notification_license_not_added() {
+		Admin_Notices::render_notification( 'license_not_added', false );
+	}
+
+	/**
+	 * Render License adding removed notification.
+	 */
+	public function render_notification_license_removed() {
+		Admin_Notices::render_notification( 'license_removed', false );
+	}
 }
