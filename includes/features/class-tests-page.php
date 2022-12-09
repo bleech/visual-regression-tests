@@ -295,9 +295,13 @@ class Tests_Page {
 			add_action( 'admin_notices', [ $this, 'render_notification_test_disabled' ] );
 		}
 
+		$remaining_tests = Subscription::get_remaining_tests();
+		if ( '1' === $remaining_tests ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_unlock_more_tests' ] );
+		}
+
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$is_new_test_failed = isset( $_GET['new-test-failed'] ) ? sanitize_text_field( wp_unslash( $_GET['new-test-failed'] ) ) : false;
-		$remaining_tests = Subscription::get_remaining_tests();
 		if ( $is_new_test_failed || '0' === $remaining_tests ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_new_test_failed' ] );
 		}
@@ -348,6 +352,17 @@ class Tests_Page {
 		Admin_Notices::render_notification('test_disabled', false, [
 			'page_title' => get_the_title( $post_id ),
 			'post_id' => intval( $post_id ),
+		]);
+	}
+
+	/**
+	 * Render unlock_more_tests Notification.
+	 */
+	public function render_notification_unlock_more_tests() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
+		Admin_Notices::render_notification('unlock_more_tests', false, [
+			'total_tests' => Subscription::get_total_tests(),
+			'remaining_tests' => Subscription::get_remaining_tests(),
 		]);
 	}
 }
