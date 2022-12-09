@@ -1,6 +1,10 @@
 <?php
 
 switch ( $data['view'] ) {
+	case 'connection_failed':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-connection-failed.php';
+		break;
+
 	case 'get_started':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-get-started.php';
 		break;
@@ -13,10 +17,6 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-new-test-failed.php';
 		break;
 
-	case 'test_disabled':
-		$template = dirname( __FILE__ ) . '/views/admin-notification-test-disabled.php';
-		break;
-
 	case 'plugin_activated':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-plugin-activated.php';
 		break;
@@ -25,8 +25,12 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-settings-saved.php';
 		break;
 
-	case 'connection_failed':
-		$template = dirname( __FILE__ ) . '/views/admin-notification-connection-failed.php';
+	case 'test_disabled':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-test-disabled.php';
+		break;
+
+	case 'unlock_more_tests':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-unlock-more-tests.php';
 		break;
 
 	default:
