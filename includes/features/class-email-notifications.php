@@ -15,6 +15,8 @@ class Email_Notifications {
 	public function send_email( $differences, $post_id, $alert_id ) {
 		$notification_email = sanitize_email( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
 		$site_url = get_site_url();
+		$parse_url = parse_url( $site_url );
+		$base_url  = $parse_url['scheme'] . '://' . $parse_url['host'];
 		$admin_url = get_admin_url();
 
 		// Check if notification email already exists.
@@ -22,7 +24,7 @@ class Email_Notifications {
 			/* translators: %1$s: the id of the alert, %2$s: the home url */
 			esc_html_x( 'VRTs: Alert %1$s (%2$s)', 'notification email subject', 'visual-regression-tests' ),
 			$alert_id,
-			esc_url( $site_url )
+			esc_url( $base_url )
 		);
 
 		$message = esc_html_x( 'Howdy,', 'notification email', 'visual-regression-tests' ) . "\n\n" .
@@ -31,7 +33,7 @@ class Email_Notifications {
 			esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
 			sprintf(
 				/* translators: %1$s: the home url */
-				esc_html_x( 'This alert was sent by the Visual Regression Tests plugin on %1$s', 'notification email', 'visual-regression-tests' ), esc_url( $site_url )
+				esc_html_x( 'This alert was sent by the Visual Regression Tests plugin on %1$s', 'notification email', 'visual-regression-tests' ), esc_url( $base_url )
 			);
 
 		$has_subscription = Subscription::get_subscription_status();
