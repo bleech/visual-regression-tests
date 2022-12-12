@@ -15,7 +15,7 @@ class Email_Notifications {
 	public function send_email( $differences, $post_id, $alert_id ) {
 		$notification_email = sanitize_email( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
 		$site_url = get_site_url();
-		$parse_url = parse_url( $site_url );
+		$parse_url = wp_parse_url( $site_url );
 		$base_url  = $parse_url['scheme'] . '://' . $parse_url['host'];
 		$admin_url = get_admin_url();
 
