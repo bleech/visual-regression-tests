@@ -105,6 +105,13 @@ const Metabox = () => {
 		return <NotificationConnectionFailed />;
 	}
 
+	let testingStatusText = __( 'Running', 'visual-regression-tests' );
+	if ( hasPostAlert ) {
+		testingStatusText = __( 'Paused', 'visual-regression-tests' );
+	} else if ( ! testStatus ) {
+		testingStatusText = __( 'Disabled', 'visual-regression-tests' );
+	}
+
 	return (
 		<>
 			<ToggleControl
@@ -130,20 +137,12 @@ const Metabox = () => {
 							<strong>
 								<span
 									className={
-										! hasPostAlert && testStatus
+										hasPostAlert || ! testStatus
 											? 'testing-status--running'
 											: 'testing-status--paused'
 									}
 								>
-									{ ! hasPostAlert && testStatus
-										? __(
-												'Running',
-												'visual-regression-tests'
-										  )
-										: __(
-												'Paused',
-												'visual-regression-tests'
-										  ) }
+									{ testingStatusText }
 								</span>
 							</strong>
 						</p>

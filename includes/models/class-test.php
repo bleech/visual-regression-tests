@@ -450,7 +450,7 @@ class Test {
 	}
 
 	/**
-	 * Pause test.
+	 * Unpause test.
 	 *
 	 * @param int $service_test_id The service test id.
 	 */
