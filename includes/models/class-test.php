@@ -378,6 +378,21 @@ class Test {
 	}
 
 	/**
+	 * Get active test ids
+	 *
+	 * @return array
+	 */
+	public static function get_active_test_ids() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+		$query = "SELECT service_test_id FROM $tests_table";
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's ok.
+		return $wpdb->get_col( $query );
+	}
+
+	/**
 	 * Set alert for a test.
 	 *
 	 * @param int $post_id The id of the post.
@@ -389,6 +404,62 @@ class Test {
 		$tests_table = Tests_Table::get_table_name();
 		$data = [ 'current_alert_id' => $alert_id ];
 		$where = [ 'post_id' => $post_id ];
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->update( $tests_table, $data, $where );
+	}
+
+	/**
+	 * Get post status
+	 *
+	 * @param int $post_id the id of the post.
+	 *
+	 * @return boolean
+	 */
+	public static function get_status( $post_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$post_status = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT status FROM $tests_table WHERE post_id = %d",
+				$post_id
+			)
+		);
+
+		return $post_status;
+	}
+
+	/**
+	 * Pause test.
+	 *
+	 * @param int $service_test_id The service test id.
+	 */
+	public static function pause( $service_test_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+		$data = [ 'status' => false ];
+		$where = [ 'service_test_id' => $service_test_id ];
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->update( $tests_table, $data, $where );
+	}
+
+	/**
+	 * Pause test.
+	 *
+	 * @param int $service_test_id The service test id.
+	 */
+	public static function unpause( $service_test_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+		$data = [ 'status' => 1 ];
+		$where = [ 'service_test_id' => $service_test_id ];
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->update( $tests_table, $data, $where );

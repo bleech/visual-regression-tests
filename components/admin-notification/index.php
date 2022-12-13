@@ -29,10 +29,6 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-license-added.php';
 		break;
 
-	case 'license_removed':
-		$template = dirname( __FILE__ ) . '/views/admin-notification-license-removed.php';
-		break;
-
 	case 'license_not_added':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-license-not-added.php';
 		break;

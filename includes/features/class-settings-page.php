@@ -197,9 +197,9 @@ class Settings_Page {
 		// If license key is empty but was previously added.
 		if ( ! $new && $old ) {
 			self::remove_license_key();
-			update_option( 'vrts_license_removed', true );
+			update_option( 'vrts_license_failed', true );
 
-			return null;
+			return $new;
 		}
 
 		if ( $old !== $new ) {
@@ -219,7 +219,7 @@ class Settings_Page {
 				// If new key is not valid, remove the old one.
 				self::remove_license_key();
 				update_option( 'vrts_license_failed', true );
-				return null;
+				return $new;
 			}
 
 			update_option( 'vrts_license_success', true );
@@ -245,18 +245,16 @@ class Settings_Page {
 	 * Init notifications.
 	 */
 	public function init_notifications() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's OK.
+		if ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_settings_saved' ] );
+		}
 		if ( true === (bool) get_option( 'vrts_license_success' ) ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_license_added' ] );
 			delete_option( 'vrts_license_success' );
 		} elseif ( true === (bool) get_option( 'vrts_license_failed' ) ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_license_not_added' ] );
 			delete_option( 'vrts_license_failed' );
-		} elseif ( true === (bool) get_option( 'vrts_license_removed' ) ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_license_removed' ] );
-			delete_option( 'vrts_license_removed' );
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's OK.
-		} elseif ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_settings_saved' ] );
 		}
 	}
 
