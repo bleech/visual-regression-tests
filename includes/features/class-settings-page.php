@@ -245,16 +245,15 @@ class Settings_Page {
 	 * Init notifications.
 	 */
 	public function init_notifications() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's OK.
-		if ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_settings_saved' ] );
-		}
 		if ( true === (bool) get_option( 'vrts_license_success' ) ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_license_added' ] );
 			delete_option( 'vrts_license_success' );
 		} elseif ( true === (bool) get_option( 'vrts_license_failed' ) ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_license_not_added' ] );
 			delete_option( 'vrts_license_failed' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's OK.
+		} elseif ( isset( $_GET['settings-updated'] ) && true === (bool) $_GET['settings-updated'] ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_settings_saved' ] );
 		}
 	}
 
