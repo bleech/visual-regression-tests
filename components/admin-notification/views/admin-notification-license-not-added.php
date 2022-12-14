@@ -5,7 +5,7 @@
 		<?php
 		printf(
 			/* translators: %1$s, %2$s: link wrapper. */
-			esc_html__( 'We couldn\'t verify the license key that you entered. Please check the input for typos and try entering it again. A license key can only be used on one website at a time. In case you\'re using the license key on another website already, you need to remove it there first. Please don\'t hesitate to %1$scontact us%2$s for support.', 'visual-regression-tests' ),
+			esc_html__( 'We could not verify the license key you entered. Please check the entry for typos and try again. A license key can only be used on one website at a time. If you are already using the license key on another website, you need to remove it there first. Please don\'t hesitate to %1$scontact us%2$s for assistance.', 'visual-regression-tests' ),
 			'<a href="mailto:products@bleech.de" target="_blank">',
 			'</a>'
 		);
