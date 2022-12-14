@@ -137,7 +137,7 @@ const Metabox = () => {
 							<strong>
 								<span
 									className={
-										hasPostAlert || ! testStatus
+										hasPostAlert || testStatus
 											? 'testing-status--running'
 											: 'testing-status--paused'
 									}
