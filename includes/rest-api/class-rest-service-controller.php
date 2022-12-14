@@ -171,44 +171,46 @@ class Rest_Service_Controller {
 
 		if ( $post_id ) {
 			if ( array_key_exists( 'is_paused', $data ) && $data['is_paused'] ) {
-				$prepare_alert = [];
-				$prepare_alert['post_id'] = $post_id;
-				$prepare_alert['screenshot_test_id'] = $data['test_id'];
-				$prepare_alert['target_screenshot_url'] = $data['comparison']['screenshot']['image_url'];
-				$prepare_alert['target_screenshot_finish_date'] = $data['comparison']['screenshot']['updated_at'];
-				$prepare_alert['base_screenshot_url'] = $data['comparison']['base_screenshot']['image_url'];
-				$prepare_alert['base_screenshot_finish_date'] = $data['comparison']['base_screenshot']['updated_at'];
-				$prepare_alert['comparison_screenshot_url'] = $data['comparison']['image_url'];
-				$prepare_alert['differences'] = $data['comparison']['pixels_diff'];
+				if ( $data['comparison']['pixels_diff'] > 0 ) {
+					$prepare_alert = [];
+					$prepare_alert['post_id'] = $post_id;
+					$prepare_alert['screenshot_test_id'] = $data['test_id'];
+					$prepare_alert['target_screenshot_url'] = $data['comparison']['screenshot']['image_url'];
+					$prepare_alert['target_screenshot_finish_date'] = $data['comparison']['screenshot']['updated_at'];
+					$prepare_alert['base_screenshot_url'] = $data['comparison']['base_screenshot']['image_url'];
+					$prepare_alert['base_screenshot_finish_date'] = $data['comparison']['base_screenshot']['updated_at'];
+					$prepare_alert['comparison_screenshot_url'] = $data['comparison']['image_url'];
+					$prepare_alert['differences'] = $data['comparison']['pixels_diff'];
 
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
-				if ( $wpdb->insert( $table_alert, $prepare_alert ) ) {
-					$alert_id = $wpdb->insert_id;
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
+					if ( $wpdb->insert( $table_alert, $prepare_alert ) ) {
+						$alert_id = $wpdb->insert_id;
 
+						// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+						$wpdb->update($table_alert,
+							[ 'title' => '#' . $alert_id ],
+							[ 'id' => $alert_id ]
+						);
+					}
+
+					// Update test row with new id foreign key and add latest screenshot.
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-					$wpdb->update($table_alert,
-						[ 'title' => '#' . $alert_id ],
-						[ 'id' => $alert_id ]
+					$wpdb->update( $table_test,
+						[
+							'current_alert_id' => $alert_id,
+							'target_screenshot_url' => $data['comparison']['screenshot']['image_url'],
+							'snapshot_date' => $data['comparison']['updated_at'],
+						],
+						[ 'service_test_id' => $data['test_id'] ]
 					);
-				}
 
-				// Update test row with new id foreign key and add latest screenshot.
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-				$wpdb->update( $table_test,
-					[
-						'current_alert_id' => $alert_id,
-						'target_screenshot_url' => $data['comparison']['screenshot']['image_url'],
-						'snapshot_date' => $data['comparison']['updated_at'],
-					],
-					[ 'service_test_id' => $data['test_id'] ]
-				);
-
-				// Send email only if alert was created.
-				if ( $alert_id ) {
-					// Send e-mail notification.
-					$email_notifications = new Email_Notifications();
-					$email_notifications->send_email( $data['comparison']['pixels_diff'], $post_id, $alert_id );
-				}
+					// Send email only if alert was created.
+					if ( $alert_id ) {
+						// Send e-mail notification.
+						$email_notifications = new Email_Notifications();
+						$email_notifications->send_email( $data['comparison']['pixels_diff'], $post_id, $alert_id );
+					}
+				}//end if
 			} elseif ( $data['schedule']['base_screenshot'] ) {
 				// Update test row with new id foreign key and add latest screenshot.
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
