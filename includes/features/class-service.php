@@ -38,8 +38,41 @@ class Service {
 			];
 
 			$response = self::rest_service_request( $service_api_route, $parameters, 'post' );
+			self::store_site_urls( true );
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
+	}
+
+	/**
+	 * Store site urls locally.
+	 *
+	 * @param string $on_activation true only when plugin gets activated.
+	 * @param string $site_url the site url.
+	 * @param string $rest_url the rest url.
+	 * @param string $admin_ajax_url the admin ajax url.
+	 */
+	public static function store_site_urls( $on_activation = false, $site_url = null, $rest_url = null, $admin_ajax_url = null ) {
+		$site_urls = get_option( 'vrts_site_urls' );
+
+		// Update site urls only if it doesn't exist in the db.
+		if ( ! $site_urls ) {
+			if ( $on_activation ) {
+				$home_url = home_url();
+				$site_url = site_url();
+				$rest_url = get_rest_url() . 'vrts/v1/service';
+				$admin_ajax_url = admin_url( 'admin-ajax.php' );
+			}
+
+			$parameters = [
+				'home_url' => $home_url,
+				'site_url' => $site_url,
+				'rest_url' => $rest_url,
+				'admin_ajax_url' => $admin_ajax_url,
+			];
+
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- It's benign. Used to check if the installation moved from production to local.
+			update_option( 'vrts_site_urls', base64_encode( wp_json_encode( $parameters ) ) );
+		}
 	}
 
 	/**
