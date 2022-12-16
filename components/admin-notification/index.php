@@ -35,8 +35,8 @@ switch ( $data['view'] ) {
 
 	case 'connection_failed':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-connection-failed.php';
-    break;
-    
+		break;
+
 	case 'test_disabled':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-test-disabled.php';
 		break;
