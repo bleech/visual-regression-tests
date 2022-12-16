@@ -40,7 +40,6 @@ class Cron_Jobs {
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
 		$stored_urls = json_decode( base64_decode( $site_urls ), true );
 
-		$comparison_base_url = $stored_urls['base_url'];
 		$comparison_rest_url = $stored_urls['rest_url'];
 		$comparison_admin_ajax_url = $stored_urls['admin_ajax_url'];
 
