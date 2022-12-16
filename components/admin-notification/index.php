@@ -25,6 +25,18 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-settings-saved.php';
 		break;
 
+	case 'license_added':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-license-added.php';
+		break;
+
+	case 'license_not_added':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-license-not-added.php';
+		break;
+
+	case 'connection_failed':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-connection-failed.php';
+		break;
+
 	case 'test_disabled':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-test-disabled.php';
 		break;

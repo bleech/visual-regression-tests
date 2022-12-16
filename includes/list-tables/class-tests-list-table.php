@@ -69,7 +69,7 @@ class Tests_List_Table extends \WP_List_Table {
 				);
 
 			case 'status':
-				$class = null === $item->current_alert_id ? 'testing-status--running' : 'testing-status--paused';
+				$class = ( null === $item->current_alert_id ) && true === (bool) $item->status ? 'testing-status--running' : 'testing-status--paused';
 				$text = null === $item->current_alert_id
 					? esc_html__( 'Running', 'visual-regression-tests' )
 					: esc_html__( 'Paused', 'visual-regression-tests' );
@@ -81,6 +81,16 @@ class Tests_List_Table extends \WP_List_Table {
 						/* translators: %1$s and %2$s: link wrapper. */
 						esc_html__( 'Resolve %1$salert%2$s to resume testing', 'visual-regression-tests' ),
 						'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'Edit the alert', 'visual-regression-tests' ) . '">',
+						'</a>'
+					);
+				} elseif ( false === (bool) $item->status ) {
+					$text = esc_html__( 'Disabled', 'visual-regression-tests' );
+					$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
+					$instructions = '<br>';
+					$instructions .= sprintf(
+						/* translators: %1$s and %2$s: link wrapper. */
+						esc_html__( '%1$sUpgrade plugin%2$s to resume testing', 'visual-regression-tests' ),
+						'<a href="' . $base_link . '" title="' . esc_attr__( 'Upgrade plugin', 'visual-regression-tests' ) . '">',
 						'</a>'
 					);
 				}

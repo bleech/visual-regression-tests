@@ -111,6 +111,7 @@ class Enqueue_Scripts {
 					'plugin_name' => vrts()->get_plugin_info( 'name' ),
 					'rest_url' => esc_url_raw( rest_url() ),
 					'has_post_alert' => Test::has_post_alert( $post->ID ),
+					'test_status' => (bool) Test::get_status( $post->ID ),
 					'target_screenshot_url' => Test::get_target_screenshot_url( $post->ID ),
 					'snapshot_date' => Date_Time_Helpers::get_formatted_date_time( Test::get_snapshot_date( $post->ID ) ),
 					'testing_status_instructions' => $testing_status_instructions,

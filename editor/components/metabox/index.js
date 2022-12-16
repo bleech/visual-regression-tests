@@ -19,6 +19,7 @@ import apiFetch from '@wordpress/api-fetch';
 const Metabox = () => {
 	const hasPostAlert = window.vrts_editor_vars.has_post_alert;
 	const targetScreenshotUrl = window.vrts_editor_vars.target_screenshot_url;
+	const testStatus = window.vrts_editor_vars.test_status;
 	const snapshotDate = window.vrts_editor_vars.snapshot_date;
 	const testingStatusInstructions =
 		window.vrts_editor_vars.testing_status_instructions;
@@ -104,6 +105,13 @@ const Metabox = () => {
 		return <NotificationConnectionFailed />;
 	}
 
+	let testingStatusText = __( 'Running', 'visual-regression-tests' );
+	if ( hasPostAlert ) {
+		testingStatusText = __( 'Paused', 'visual-regression-tests' );
+	} else if ( ! testStatus ) {
+		testingStatusText = __( 'Disabled', 'visual-regression-tests' );
+	}
+
 	return (
 		<>
 			<ToggleControl
@@ -129,20 +137,12 @@ const Metabox = () => {
 							<strong>
 								<span
 									className={
-										! hasPostAlert
+										hasPostAlert || testStatus
 											? 'testing-status--running'
 											: 'testing-status--paused'
 									}
 								>
-									{ ! hasPostAlert
-										? __(
-												'Running',
-												'visual-regression-tests'
-										  )
-										: __(
-												'Paused',
-												'visual-regression-tests'
-										  ) }
+									{ testingStatusText }
 								</span>
 							</strong>
 						</p>

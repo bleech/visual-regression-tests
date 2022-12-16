@@ -3,17 +3,9 @@
 namespace Vrts\Features;
 
 use Vrts\Features\Service;
+use Vrts\Models\Test;
 
 class Subscription {
-	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		// Add license key on setting save.
-		add_action( 'add_option_vrts_license_key', [ $this, 'do_after_update_license_key' ], 10, 2 );
-		add_action( 'update_option_vrts_license_key', [ $this, 'do_after_update_license_key' ], 10, 2 );
-	}
-
 	/**
 	 * Update the number of tests available.
 	 *
@@ -32,28 +24,6 @@ class Subscription {
 
 		if ( null !== $has_subscription ) {
 			update_option( 'vrts_has_subscription', $has_subscription );
-		}
-	}
-
-	/**
-	 * Register the Gumroad API key with the service.
-	 *
-	 *  @param mixed $old old value.
-	 *  @param mixed $new new value.
-	 */
-	public function do_after_update_license_key( $old, $new ) {
-		if ( $old !== $new ) {
-			$service_project_id = get_option( 'vrts_project_id' );
-			$service_api_route = 'sites/' . $service_project_id . '/register';
-
-			$parameters = [
-				'license_key'   => $new,
-			];
-
-			$response = Service::rest_service_request( $service_api_route, $parameters, 'post' );
-
-			// TODO: Add the new number of tests available and show message that the key was added successfully based on response code.
-			self::get_latest_status();
 		}
 	}
 
@@ -117,13 +87,39 @@ class Subscription {
 	 * Send request to server to get the subscription and tests status.
 	 */
 	public static function get_latest_status() {
+		$local_test_ids = Test::get_active_test_ids();
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id;
 		$response = Service::rest_service_request( $service_api_route, [], 'get' );
 
+		$remaining_credits = $response['response']['remaining_credits'];
+		$total_credits = $response['response']['total_credits'];
+		$has_subscription = $response['response']['has_subscription'];
+
+		// Active test ids returned by service.
+		$active_test_ids = $response['response']['active_test_ids'];
+		$paused_test_ids = $response['response']['paused_test_ids'];
+
+		foreach ( $local_test_ids as $test_id ) {
+			if ( ! $has_subscription ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- This is a loose comparison by design.
+				if ( ! in_array( $test_id, $active_test_ids ) && in_array( $test_id, $paused_test_ids ) ) {
+					Test::pause( $test_id );
+				}
+			} else {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- This is a loose comparison by design.
+				if ( in_array( $test_id, $paused_test_ids ) ) {
+					$service_api_route = 'tests/' . $test_id . '/resume';
+					$response = Service::rest_service_request( $service_api_route, [], 'post' );
+
+					Test::unpause( $test_id );
+				}
+			}
+		}
+
 		if ( array_key_exists( 'status_code', $response ) && 200 === $response['status_code'] ) {
 			if ( array_key_exists( 'response', $response ) ) {
-				self::update_available_tests( $response['response']['remaining_credits'], $response['response']['total_credits'], $response['response']['has_subscription'] );
+				self::update_available_tests( $remaining_credits, $total_credits, $has_subscription );
 			}
 		}
 	}
