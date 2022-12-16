@@ -47,10 +47,14 @@ class Cron_Jobs {
 		$admin_ajax_url = admin_url( 'admin-ajax.php' );
 
 		if ( $rest_url !== $comparison_rest_url ) {
+			delete_option( 'vrts_project_id' );
+			delete_option( 'vrts_project_token' );
 			update_option( 'vrts_connection_inactive', true );
 		}
 
 		if ( $admin_ajax_url !== $comparison_admin_ajax_url ) {
+			delete_option( 'vrts_project_id' );
+			delete_option( 'vrts_project_token' );
 			update_option( 'vrts_connection_inactive', true );
 		}
 	}
