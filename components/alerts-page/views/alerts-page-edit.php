@@ -79,7 +79,13 @@
 											<i class="dashicons dashicons-info-outline"></i>
 											<?php esc_html_e( 'Info:', 'visual-regression-tests' ); ?>
 											<strong class="testing-status--paused">
-												<?php esc_html_e( 'Testing is paused until alert gets resolved.', 'visual-regression-tests' ); ?>
+											<?php
+											if ( $data['is_connected'] ) {
+												esc_html_e( 'Testing is paused until alert gets resolved.', 'visual-regression-tests' );
+											} else {
+												esc_html_e( 'Testing is disconected until connection with the service works again.', 'visual-regression-tests' );
+											}
+											?>
 											</strong>
 										</div>
 									</div>
@@ -87,15 +93,27 @@
 								</div>
 
 								<div id="major-publishing-actions">
-									<div id="delete-action">
-										<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>"> <?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?> </a>
-									</div>
-
-									<div id="publishing-action">
-										<?php submit_button( esc_attr__( 'Resolve', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert', false ); ?>
-									</div>
-									<div class="clear"></div>
-									<p><?php esc_html_e( 'Resolving the alert will resume testing.', 'visual-regression-tests' ); ?></p>
+									<?php
+									if ( $data['is_connected'] ) {
+										?>
+										<div id="delete-action">
+											<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>"> <?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?> </a>
+										</div>
+										<div id="publishing-action">
+											<?php submit_button( esc_attr__( 'Resolve', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert', false ); ?>
+										</div>
+										<div class="clear"></div>
+										<p><?php esc_html_e( 'Resolving the alert will resume testing.', 'visual-regression-tests' ); ?></p>
+										<?php
+									} else {
+										?>
+										<div id="publishing-action">
+											<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>"> <?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?> </a>
+										</div>
+										<div class="clear"></div>
+										<?php
+									}
+									?>
 								</div>
 
 							</div>

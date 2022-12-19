@@ -5,6 +5,7 @@ namespace Vrts\List_Tables;
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Features\Alerts_Page;
 use Vrts\Models\Alert;
+use Vrts\Features\Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -116,6 +117,7 @@ class Alerts_List_Table extends \WP_List_Table {
 	public function column_title( $item ) {
 		$actions = [];
 		$base_link = admin_url( 'admin.php?page=vrts-alerts' );
+		$is_connected = Service::is_connected();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
@@ -153,13 +155,15 @@ class Alerts_List_Table extends \WP_List_Table {
 				__( 'Edit', 'visual-regression-tests' )
 			);
 
-			$actions['trash'] = sprintf(
-				'<a href="%s" data-id="%d" title="%s">%s</a>',
-				$base_link . '&action=resolve&alert_id=' . $item->id,
-				$item->id,
-				__( 'Resolve this alert', 'visual-regression-tests' ),
-				__( 'Resolve', 'visual-regression-tests' )
-			);
+			if ( $is_connected ) {
+				$actions['trash'] = sprintf(
+					'<a href="%s" data-id="%d" title="%s">%s</a>',
+					$base_link . '&action=resolve&alert_id=' . $item->id,
+					$item->id,
+					__( 'Resolve this alert', 'visual-regression-tests' ),
+					__( 'Resolve', 'visual-regression-tests' )
+				);
+			}
 
 			return sprintf(
 				'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',
@@ -179,6 +183,7 @@ class Alerts_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_differences( $item ) {
+		$is_connected = Service::is_connected();
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
 		if ( 'resolved' === $filter_status_query ) {
@@ -189,20 +194,35 @@ class Alerts_List_Table extends \WP_List_Table {
 		} else {
 			// Status "Open".
 			$differences = ceil( $item->differences / 4 );
-			return sprintf(
-				'%s<br>%s',
-				/* translators: %s: the count of pixels with a visual difference. */
-				esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
-				sprintf(
-					/* translators: %s: link wrapper */
-					esc_html__( 'Tests on %1$spage%2$s are %3$spaused%4$s', 'visual-regression-tests' ),
-					'<a href="' . esc_url( get_edit_post_link( $item->post_id ) ) . '" target="_blank">',
-					'</a>',
-					'<span class="testing-status--paused">',
-					'</span>'
-				)
-			);
-
+			if ( $is_connected ) {
+				return sprintf(
+					'%s<br>%s',
+					/* translators: %s: the count of pixels with a visual difference. */
+					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
+					sprintf(
+						/* translators: %s: link wrapper */
+						esc_html__( 'Tests on %1$spage%2$s are %3$spaused%4$s', 'visual-regression-tests' ),
+						'<a href="' . esc_url( get_edit_post_link( $item->post_id ) ) . '" target="_blank">',
+						'</a>',
+						'<span class="testing-status--paused">',
+						'</span>'
+					)
+				);
+			} else {
+				return sprintf(
+					'%s<br>%s',
+					/* translators: %s: the count of pixels with a visual difference. */
+					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
+					sprintf(
+						/* translators: %s: link wrapper */
+						esc_html__( 'Tests on %1$spage%2$s are %3$snot running until reconnection with the plugin.%4$s', 'visual-regression-tests' ),
+						'<a href="' . esc_url( get_edit_post_link( $item->post_id ) ) . '" target="_blank">',
+						'</a>',
+						'<span class="testing-status--paused">',
+						'</span>'
+					)
+				);
+			}//end if
 		}//end if
 	}
 

@@ -7,6 +7,7 @@ use Vrts\List_Tables\Alerts_List_Table;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Tables\Tests_Table;
+use Vrts\Features\Service;
 
 class Alerts_Page {
 
@@ -122,6 +123,7 @@ class Alerts_Page {
 			$alert = (object) Alert::get_item( $alert_id );
 			$permalink = esc_url( get_permalink( $alert->post_id ) );
 			$base_link = admin_url( 'admin.php?page=vrts-alerts' );
+			$is_connected = Service::is_connected();
 
 			vrts()->component('alerts-page', [
 				'action' => $action,
@@ -140,6 +142,7 @@ class Alerts_Page {
 					'prev_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
 					'next_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
 				],
+				'is_connected'  => $is_connected,
 			]);
 		} else {
 			// Render Lists page.
