@@ -231,19 +231,24 @@ class Service {
 			$service_api_route = 'sites/' . $service_project_id;
 			$response = self::rest_service_request( $service_api_route, [], 'get' );
 
-			$parse_home_url = wp_parse_url( home_url() );
-			$parse_site_url = wp_parse_url( site_url() );
+			if ( $response ) {
+				$parse_home_url = wp_parse_url( home_url() );
+				$parse_site_url = wp_parse_url( site_url() );
 
-			$comparison_base_url = $response['response']['base_url'];
-			$comparison_home_url = ( str_contains( $comparison_base_url, $parse_home_url['host'] ) ? $comparison_base_url : null );
-			$comparison_site_url = ( str_contains( $comparison_base_url, $parse_site_url['host'] ) ? $comparison_base_url : null );
-			$comparison_rest_url = $response['response']['rest_url'];
-			$comparison_admin_ajax_url = $response['response']['admin_ajax_url'];
+				$comparison_base_url = $response['response']['base_url'];
+				$comparison_home_url = ( str_contains( $comparison_base_url, $parse_home_url['host'] ) ? $comparison_base_url : null );
+				$comparison_site_url = ( str_contains( $comparison_base_url, $parse_site_url['host'] ) ? $comparison_base_url : null );
+				$comparison_rest_url = $response['response']['rest_url'];
+				$comparison_admin_ajax_url = $response['response']['admin_ajax_url'];
 
-			// Store the site urls if not previously saved.
-			$on_activation = false;
-			self::store_site_urls( $on_activation, $comparison_site_url, $comparison_rest_url, $comparison_admin_ajax_url );
-		}
+				// Store the site urls if not previously saved.
+				$on_activation = false;
+				self::store_site_urls( $on_activation, $comparison_site_url, $comparison_rest_url, $comparison_admin_ajax_url );
+			} else {
+				$on_activation = true;
+				self::store_site_urls( $on_activation );
+			}
+		}//end if
 
 		$site_urls = get_option( 'vrts_site_urls' );
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
