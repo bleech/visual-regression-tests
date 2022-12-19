@@ -68,7 +68,7 @@ class Alerts_List_Table extends \WP_List_Table {
 				);
 
 			case 'differences':
-				$differences = intval( $item->differences / 4 );
+				$differences = ceil( $item->differences / 4 );
 				return sprintf(
 					'<span class="testing-status--paused">%1$s</span>',
 					/* translators: %s: the count of pixels with a visual difference. */
@@ -183,12 +183,12 @@ class Alerts_List_Table extends \WP_List_Table {
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
 		if ( 'resolved' === $filter_status_query ) {
 			// Status "Resolved".
-			$differences = intval( $item->differences / 4 );
+			$differences = ceil( $item->differences / 4 );
 			/* translators: %s: the count of pixels with a visual difference. */
 			return esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) );
 		} else {
 			// Status "Open".
-			$differences = intval( $item->differences / 4 );
+			$differences = ceil( $item->differences / 4 );
 			return sprintf(
 				'%s<br>%s',
 				/* translators: %s: the count of pixels with a visual difference. */
