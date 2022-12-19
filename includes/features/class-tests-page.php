@@ -276,6 +276,7 @@ class Tests_Page {
 		$total_test_items = Test::get_total_items();
 		$frontpage_id = get_option( 'page_on_front' );
 		$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
+		$is_connected = Service::is_connected();
 
 		if ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
@@ -304,7 +305,7 @@ class Tests_Page {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$is_new_test_failed = isset( $_GET['new-test-failed'] ) ? sanitize_text_field( wp_unslash( $_GET['new-test-failed'] ) ) : false;
-		if ( $is_new_test_failed || '0' === $remaining_tests ) {
+		if ( ( $is_new_test_failed || '0' === $remaining_tests ) && $is_connected ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_new_test_failed' ] );
 		}
 	}
