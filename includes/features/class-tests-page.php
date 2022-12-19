@@ -22,6 +22,8 @@ class Tests_Page {
 	 * Add submenu.
 	 */
 	public function add_submenu_page() {
+		Service::check_connection();
+
 		$submenu_page = add_submenu_page(
 			'vrts',
 			__( 'Tests', 'visual-regression-tests' ),
@@ -203,7 +205,7 @@ class Tests_Page {
 
 			$redirect_to = add_query_arg([
 				'message' => 'success',
-				'testing-disabled' => true,
+				'testing-disabled' => ( Service::is_connected() ? true : false ),
 				'post_id' => $item['post_id'],
 			], $page_url);
 		}

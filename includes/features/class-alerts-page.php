@@ -22,6 +22,8 @@ class Alerts_Page {
 	 * Add submenu.
 	 */
 	public function add_submenu_page() {
+		Service::check_connection();
+
 		$count = Alert::get_total_items();
 
 		$submenu_page = add_submenu_page(

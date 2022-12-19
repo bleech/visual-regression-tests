@@ -83,67 +83,76 @@ class Service {
 	 * @param string $request_type the request type.
 	 */
 	public static function rest_service_request( $service_api_route, $parameters = [], $request_type = '' ) {
-		$request_url = self::BASE_URL . $service_api_route;
-		$service_project_id = get_option( 'vrts_project_id' );
-		$service_project_token = get_option( 'vrts_project_token' );
-		$response = [];
 
-		$args = [
-			'project_id' => $service_project_id,
-			'headers'     => [
-				'Content-Type' => 'application/json; charset=utf-8',
-				'Authorization' => 'Bearer ' . $service_project_token,
-			],
-			'body'        => wp_json_encode( $parameters ),
-			'data_format' => 'body',
-		];
+		if ( ! (bool) get_option( 'vrts_connection_inactive' ) ) {
+			$request_url = self::BASE_URL . $service_api_route;
+			$service_project_id = get_option( 'vrts_project_id' );
+			$service_project_token = get_option( 'vrts_project_token' );
+			$response = [];
 
-		// If project already created, attach project id and service token.
-		if ( $service_project_id && $service_project_token ) {
-			$args['project_id']  = $service_project_id;
-			$args['headers']['Authorization'] = 'Bearer ' . $service_project_token;
-		}
+			if ( $service_project_id && $service_project_token ) {
+				self::check_connection();
+				$service_project_id = get_option( 'vrts_project_id' );
+				$service_project_token = get_option( 'vrts_project_token' );
+			}
 
-		switch ( $request_type ) {
-			case 'get':
-				$args = [
-					'method' => 'GET',
-					'project_id' => $service_project_id,
-					'headers'     => [
-						'Authorization' => 'Bearer ' . $service_project_token,
-					],
-					'body'        => $parameters,
-					'data_format' => 'body',
-				];
-				$data = wp_remote_post( $request_url, $args );
+			$args = [
+				'project_id' => $service_project_id,
+				'headers'     => [
+					'Content-Type' => 'application/json; charset=utf-8',
+					'Authorization' => 'Bearer ' . $service_project_token,
+				],
+				'body'        => wp_json_encode( $parameters ),
+				'data_format' => 'body',
+			];
+
+			// If project already created, attach project id and service token.
+			if ( $service_project_id && $service_project_token ) {
+				$args['project_id']  = $service_project_id;
+				$args['headers']['Authorization'] = 'Bearer ' . $service_project_token;
+			}
+
+			switch ( $request_type ) {
+				case 'get':
+					$args = [
+						'method' => 'GET',
+						'project_id' => $service_project_id,
+						'headers'     => [
+							'Authorization' => 'Bearer ' . $service_project_token,
+						],
+						'body'        => $parameters,
+						'data_format' => 'body',
+					];
+					$data = wp_remote_post( $request_url, $args );
+					$response = [
+						'response' => json_decode( wp_remote_retrieve_body( $data ), true ),
+						'status_code' => wp_remote_retrieve_response_code( $data ),
+					];
+					break;
+
+				case 'delete':
+					$args['method'] = 'DELETE';
+					$data = wp_remote_post( $request_url, $args );
+					break;
+
+				case 'put':
+					$args['method'] = 'PUT';
+					$data = wp_remote_post( $request_url, $args );
+					break;
+
+				default:
+					$data = wp_remote_post( $request_url, $args );
+					break;
+			}//end switch
+
+			if ( empty( $response ) ) {
 				$response = [
-					'response' => json_decode( wp_remote_retrieve_body( $data ), true ),
+					'response' => $data,
 					'status_code' => wp_remote_retrieve_response_code( $data ),
 				];
-				break;
-
-			case 'delete':
-				$args['method'] = 'DELETE';
-				$data = wp_remote_post( $request_url, $args );
-				break;
-
-			case 'put':
-				$args['method'] = 'PUT';
-				$data = wp_remote_post( $request_url, $args );
-				break;
-
-			default:
-				$data = wp_remote_post( $request_url, $args );
-				break;
-		}//end switch
-
-		if ( empty( $response ) ) {
-			$response = [
-				'response' => $data,
-				'status_code' => wp_remote_retrieve_response_code( $data ),
-			];
-		}
-		return $response;
+			}
+			return $response;
+		}//end if
 	}
 
 	/**
@@ -221,6 +230,52 @@ class Service {
 	}
 
 	/**
+	 * Check connection between plugin and service.
+	 */
+	public static function check_connection() {
+		$site_urls = get_option( 'vrts_site_urls' );
+		if ( ! $site_urls ) {
+			$service_project_id = get_option( 'vrts_project_id' );
+			$service_api_route = 'sites/' . $service_project_id;
+			$response = self::rest_service_request( $service_api_route, [], 'get' );
+
+			$parse_home_url = wp_parse_url( home_url() );
+			$parse_site_url = wp_parse_url( site_url() );
+
+			$comparison_base_url = $response['response']['base_url'];
+			$comparison_home_url = ( str_contains( $comparison_base_url, $parse_home_url['host'] ) ? $comparison_base_url : null );
+			$comparison_site_url = ( str_contains( $comparison_base_url, $parse_site_url['host'] ) ? $comparison_base_url : null );
+			$comparison_rest_url = $response['response']['rest_url'];
+			$comparison_admin_ajax_url = $response['response']['admin_ajax_url'];
+
+			// Store the site urls if not previously saved.
+			$on_activation = false;
+			self::store_site_urls( $on_activation, $comparison_home_url, $comparison_site_url, $comparison_rest_url, $comparison_admin_ajax_url );
+		}
+
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
+		$stored_urls = json_decode( base64_decode( $site_urls ), true );
+
+		$comparison_rest_url = $stored_urls['rest_url'];
+		$comparison_admin_ajax_url = $stored_urls['admin_ajax_url'];
+
+		$rest_url = get_rest_url() . 'vrts/v1/service';
+		$admin_ajax_url = admin_url( 'admin-ajax.php' );
+
+		if ( $rest_url !== $comparison_rest_url ) {
+			delete_option( 'vrts_project_id' );
+			delete_option( 'vrts_project_token' );
+			update_option( 'vrts_connection_inactive', true );
+		}
+
+		if ( $admin_ajax_url !== $comparison_admin_ajax_url ) {
+			delete_option( 'vrts_project_id' );
+			delete_option( 'vrts_project_token' );
+			update_option( 'vrts_connection_inactive', true );
+		}
+	}
+
+	/**
 	 * Delete project from the service.
 	 */
 	public static function disconnect_service() {
@@ -238,6 +293,8 @@ class Service {
 		delete_option( 'vrts_create_token' );
 		delete_option( 'vrts_access_token' );
 		delete_option( 'vrts_homepage_added' );
+		delete_option( 'vrts_site_urls' );
+		delete_option( 'vrts_connection_inactive' );
 		delete_option( self::SERVICE . '_version' );
 	}
 
@@ -245,6 +302,6 @@ class Service {
 	 * Check if external service was able to connect
 	 */
 	public static function is_connected() {
-		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
+		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' ) && ! (bool) get_option( 'vrts_connection_inactive' );
 	}
 }
