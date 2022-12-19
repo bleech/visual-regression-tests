@@ -76,7 +76,10 @@ class Tests_List_Table extends \WP_List_Table {
 					? esc_html__( 'Running', 'visual-regression-tests' )
 					: esc_html__( 'Paused', 'visual-regression-tests' );
 				$instructions = '';
-				if ( $item->current_alert_id ) {
+				if ( ! (bool) $is_connected ) {
+					$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
+					$instructions = '';
+				} elseif ( $item->current_alert_id ) {
 					$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
 					$instructions = '<br>';
 					$instructions .= sprintf(
@@ -85,9 +88,6 @@ class Tests_List_Table extends \WP_List_Table {
 						'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'Edit the alert', 'visual-regression-tests' ) . '">',
 						'</a>'
 					);
-				} elseif ( ! (bool) $is_connected ) {
-					$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
-					$instructions = '';
 				} elseif ( false === (bool) $item->status ) {
 					$text = esc_html__( 'Disabled', 'visual-regression-tests' );
 					$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
