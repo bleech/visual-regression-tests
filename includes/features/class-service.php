@@ -17,30 +17,52 @@ class Service {
 		$installed_version = get_option( $option_name );
 
 		if ( self::DB_VERSION !== $installed_version ) {
-			$time = current_time( 'mysql' );
-			$rest_base_url = get_rest_url();
-			$service_api_route = 'sites';
-			$create_token = md5( 'verysecret' . $time );
-			$access_token = self::generate_random_string( 50 );
-
-			// Save options temporarily for verification.
-			update_option( 'vrts_create_token', $create_token );
-			update_option( 'vrts_access_token', $access_token );
-
-			$parameters = [
-				'create_token' => $create_token,
-				'home_url' => home_url(),
-				'site_url' => site_url(),
-				'rest_url' => $rest_base_url . 'vrts/v1/service',
-				'admin_ajax_url' => admin_url( 'admin-ajax.php' ),
-				'requested_at' => $time,
-				'access_token' => $access_token,
-			];
-
-			$response = self::rest_service_request( $service_api_route, $parameters, 'post' );
-			self::store_site_urls( true );
+			self::create_site();
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
+	}
+
+	/**
+	 * Rerty connection.
+	 */
+	public static function retry_connection() {
+		return static::create_site( true );
+	}
+
+	/**
+	 * Helper to create site on service.
+	 *
+	 * @param boolean $force Create site synchronously.
+	 */
+	private static function create_site( $force = false ) {
+		if ( ! empty( get_option( 'vrts_project_id' ) ) || ! empty( get_option( 'vrts_project_token' ) ) ) {
+			return;
+		}
+		$time = current_time( 'mysql' );
+		$rest_base_url = get_rest_url();
+		$service_api_route = 'sites';
+		$create_token = md5( 'verysecret' . $time );
+		$access_token = self::generate_random_string( 50 );
+
+		// Save options temporarily for verification.
+		update_option( 'vrts_create_token', $create_token );
+		update_option( 'vrts_access_token', $access_token );
+
+		$parameters = [
+			'create_token' => $create_token,
+			'home_url' => home_url(),
+			'site_url' => site_url(),
+			'rest_url' => $rest_base_url . 'vrts/v1/service',
+			'admin_ajax_url' => admin_url( 'admin-ajax.php' ),
+			'requested_at' => $time,
+			'access_token' => $access_token,
+		];
+		if ( $force ) {
+			$parameters['force'] = true;
+		}
+
+		self::store_site_urls( false, $parameters['site_url'], $parameters['rest_url'], $parameters['admin_ajax_url'] );
+		return self::rest_service_request( $service_api_route, $parameters, 'post' );
 	}
 
 	/**
@@ -82,7 +104,7 @@ class Service {
 	 */
 	public static function rest_service_request( $service_api_route, $parameters = [], $request_type = '' ) {
 
-		if ( ! (bool) get_option( 'vrts_connection_inactive' ) ) {
+		if ( ! static::urls_mismatch() ) {
 			$request_url = self::BASE_URL . $service_api_route;
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_project_token = get_option( 'vrts_project_token' );
@@ -296,6 +318,13 @@ class Service {
 	 * Check if external service was able to connect
 	 */
 	public static function is_connected() {
-		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' ) && ! (bool) get_option( 'vrts_connection_inactive' );
+		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' ) && ! static::urls_mismatch();
+	}
+
+	/**
+	 * Check if local urls match the ones propagated to the service.
+	 */
+	public static function urls_mismatch() {
+		return (bool) get_option( 'vrts_connection_inactive' );
 	}
 }
