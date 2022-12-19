@@ -57,14 +57,12 @@ class Service {
 		// Update site urls only if it doesn't exist in the db.
 		if ( ! $site_urls ) {
 			if ( $on_activation ) {
-				$home_url = home_url();
 				$site_url = site_url();
 				$rest_url = get_rest_url() . 'vrts/v1/service';
 				$admin_ajax_url = admin_url( 'admin-ajax.php' );
 			}
 
 			$parameters = [
-				'home_url' => $home_url,
 				'site_url' => $site_url,
 				'rest_url' => $rest_url,
 				'admin_ajax_url' => $admin_ajax_url,
@@ -89,12 +87,6 @@ class Service {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_project_token = get_option( 'vrts_project_token' );
 			$response = [];
-
-			if ( $service_project_id && $service_project_token ) {
-				self::check_connection();
-				$service_project_id = get_option( 'vrts_project_id' );
-				$service_project_token = get_option( 'vrts_project_token' );
-			}
 
 			$args = [
 				'project_id' => $service_project_id,
@@ -250,9 +242,10 @@ class Service {
 
 			// Store the site urls if not previously saved.
 			$on_activation = false;
-			self::store_site_urls( $on_activation, $comparison_home_url, $comparison_site_url, $comparison_rest_url, $comparison_admin_ajax_url );
+			self::store_site_urls( $on_activation, $comparison_site_url, $comparison_rest_url, $comparison_admin_ajax_url );
 		}
 
+		$site_urls = get_option( 'vrts_site_urls' );
 		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
 		$stored_urls = json_decode( base64_decode( $site_urls ), true );
 
@@ -263,14 +256,10 @@ class Service {
 		$admin_ajax_url = admin_url( 'admin-ajax.php' );
 
 		if ( $rest_url !== $comparison_rest_url ) {
-			delete_option( 'vrts_project_id' );
-			delete_option( 'vrts_project_token' );
 			update_option( 'vrts_connection_inactive', true );
 		}
 
 		if ( $admin_ajax_url !== $comparison_admin_ajax_url ) {
-			delete_option( 'vrts_project_id' );
-			delete_option( 'vrts_project_token' );
 			update_option( 'vrts_connection_inactive', true );
 		}
 	}
