@@ -83,7 +83,7 @@
 											if ( $data['is_connected'] ) {
 												esc_html_e( 'Testing is paused until alert gets resolved.', 'visual-regression-tests' );
 											} else {
-												esc_html_e( 'Testing is disconected until connection with the service works again.', 'visual-regression-tests' );
+												esc_html_e( 'Testing is disconnected until connection with the service is fixed.', 'visual-regression-tests' );
 											}
 											?>
 											</strong>

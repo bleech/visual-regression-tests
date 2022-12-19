@@ -215,7 +215,7 @@ class Alerts_List_Table extends \WP_List_Table {
 					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
 					sprintf(
 						/* translators: %s: link wrapper */
-						esc_html__( 'Tests on %1$spage%2$s are %3$snot running until reconnection with the plugin.%4$s', 'visual-regression-tests' ),
+						esc_html__( 'Tests on %1$spage%2$s are %3$snot running until connection with the service is fixed.%4$s', 'visual-regression-tests' ),
 						'<a href="' . esc_url( get_edit_post_link( $item->post_id ) ) . '" target="_blank">',
 						'</a>',
 						'<span class="testing-status--paused">',
