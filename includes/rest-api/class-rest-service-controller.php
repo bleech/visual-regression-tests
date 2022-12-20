@@ -43,8 +43,15 @@ class Rest_Service_Controller {
 		$data = json_decode( wp_unslash( $_REQUEST['data'] ?? '' ), true );
 		$rest_response = $this->perform_action( $data ?? [] );
 
-		status_header( $rest_response->get_status() );
-		wp_send_json( $rest_response->get_data() );
+		// If rest response is WP error, get the status code.
+		if ( is_wp_error( $rest_response ) ) {
+			$error_data = $rest_response->get_error_data();
+			status_header( $error_data['status'] );
+			wp_send_json( $rest_response->get_error_message() );
+		} else {
+			status_header( $rest_response->get_status() );
+			wp_send_json( $rest_response->get_data() );
+		}
 	}
 
 	/**
