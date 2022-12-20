@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-09T13:02:51+00:00\n"
+"POT-Creation-Date: 2022-12-20T09:06:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -338,6 +338,23 @@ msgstr ""
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:7
 #: editor/components/metabox-notifications/index.js:22
 msgid "The Visual Regression Test for the page %s has been added!"
+msgstr ""
+
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:2
+#: editor/components/metabox-notifications/index.js:50
+msgid "Unlock more tests"
+msgstr ""
+
+#. translators: %1$s, %2$s: number of tests.
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:9
+#: editor/components/metabox-notifications/index.js:60
+msgid "Good work! You have added %1$s of %2$s available tests."
+msgstr ""
+
+#. translators: %1$s, %2$s: link wrapper.
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:15
+#: editor/components/metabox-notifications/index.js:69
+msgid "Upgrade %1$shere%2$s to add more tests to your website!"
 msgstr ""
 
 #: components/tests-page/views/tests-page-list.php:3
@@ -676,22 +693,34 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:69
+#: includes/rest-api/class-rest-service-controller.php:75
 msgid "Action parameter is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:104
+#: includes/rest-api/class-rest-service-controller.php:108
 #: includes/rest-api/class-rest-service-controller.php:131
 msgid "Project already exists."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:110
-#: includes/rest-api/class-rest-service-controller.php:143
+#: includes/rest-api/class-rest-service-controller.php:112
+#: includes/rest-api/class-rest-service-controller.php:139
 msgid "Access token is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:137
+#: includes/rest-api/class-rest-service-controller.php:135
 msgid "Project id is missing."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:161
+msgid "Test id is missing."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:230
+msgid "Test not found."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:239
+msgid "Unknown action."
 msgstr ""
 
 #: includes/rest-api/class-rest-tests-controller.php:48

@@ -43,8 +43,15 @@ class Rest_Service_Controller {
 		$data = json_decode( wp_unslash( $_REQUEST['data'] ?? '' ), true );
 		$rest_response = $this->perform_action( $data ?? [] );
 
-		status_header( $rest_response->get_status() );
-		wp_send_json( $rest_response->get_data() );
+		// If rest response is WP error, get the status code.
+		if ( is_wp_error( $rest_response ) ) {
+			$error_data = $rest_response->get_error_data();
+			status_header( $error_data['status'] );
+			wp_send_json( $rest_response->get_error_message() );
+		} else {
+			status_header( $rest_response->get_status() );
+			wp_send_json( $rest_response->get_data() );
+		}
 	}
 
 	/**
@@ -65,9 +72,7 @@ class Rest_Service_Controller {
 	 */
 	public function perform_action( $data ) {
 		if ( ! array_key_exists( 'action', $data ) ) {
-			return rest_ensure_response([
-				'error' => esc_html__( 'Action parameter is missing.', 'visual-regression-tests' ),
-			], 403);
+			return new WP_Error( 'error', esc_html__( 'Action parameter is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
 
 		switch ( $data['action'] ) {
@@ -100,15 +105,11 @@ class Rest_Service_Controller {
 		$service_project_id = get_option( 'vrts_project_id' );
 
 		if ( $service_project_id ) {
-			return rest_ensure_response([
-				'error' => esc_html__( 'Project already exists.', 'visual-regression-tests' ),
-			], 403);
+			return new WP_Error( 'error', esc_html__( 'Project already exists.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
 
 		if ( ! array_key_exists( 'token', $data ) ) {
-			return rest_ensure_response([
-				'error' => esc_html__( 'Access token is missing.', 'visual-regression-tests' ),
-			], 403);
+			return new WP_Error( 'error', esc_html__( 'Access token is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
 
 		update_option( 'vrts_project_token', $data['token'] );
@@ -127,21 +128,15 @@ class Rest_Service_Controller {
 		$service_project_id = get_option( 'vrts_project_id' );
 
 		if ( $service_project_id ) {
-			return rest_ensure_response([
-				'error' => esc_html__( 'Project already exists.', 'visual-regression-tests' ),
-			], 403);
+			return new WP_Error( 'error', esc_html__( 'Project already exists.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
 
 		if ( ! array_key_exists( 'id', $data ) ) {
-			return rest_ensure_response([
-				'error' => esc_html__( 'Project id is missing.', 'visual-regression-tests' ),
-			], 403);
+			return new WP_Error( 'error', esc_html__( 'Project id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
 
 		if ( ! array_key_exists( 'token', $data ) ) {
-			return rest_ensure_response([
-				'error' => esc_html__( 'Access token is missing.', 'visual-regression-tests' ),
-			], 403);
+			return new WP_Error( 'error', esc_html__( 'Access token is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
 
 		update_option( 'vrts_project_token', $data['token'] );
@@ -162,6 +157,9 @@ class Rest_Service_Controller {
 	 * @param array $data Rest api response body.
 	 */
 	private function test_updated_request( $data ) {
+		if ( ! array_key_exists( 'test_id', $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Test id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		}
 		global $wpdb;
 
 		$table_alert = Alerts_Table::get_table_name();
@@ -230,6 +228,8 @@ class Rest_Service_Controller {
 			]);
 
 		}//end if
+
+		return new WP_Error( 'error', esc_html__( 'Test not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
 	}
 
 	/**
@@ -238,9 +238,7 @@ class Rest_Service_Controller {
 	 * @param string $data Rest api response body.
 	 */
 	private function unknown_action_request( $data ) {
-		return rest_ensure_response([
-			'create_token' => get_option( 'vrts_create_token' ),
-		]);
+		return new WP_Error( 'error', esc_html__( 'Unknown action.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 	}
 
 	/**
