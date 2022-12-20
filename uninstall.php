@@ -18,8 +18,8 @@ require_once 'includes/tables/class-tests-table.php';
 
 Vrts\Features\Admin_Notices::delete_dismissed_options();
 Vrts\Features\Metaboxes::delete_meta_keys();
-Vrts\Features\Service::delete_option();
 Vrts\Features\Service::disconnect_service();
+Vrts\Features\Service::delete_option();
 Vrts\Features\Subscription::delete_options();
 
 Vrts\Tables\Alerts_Table::uninstall_table();

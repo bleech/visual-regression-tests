@@ -131,6 +131,7 @@ class Metaboxes {
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
+			'test_status' => (bool) Test::get_status( $post_id ),
 			'target_screenshot_url' => Test::get_target_screenshot_url( $post_id ),
 			'snapshot_date' => $snapshot_date,
 			'testing_status_instructions' => $testing_status_instructions,

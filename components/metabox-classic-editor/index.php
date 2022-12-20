@@ -34,14 +34,22 @@ if ( true === $data['is_new_test'] ) {
 <?php
 // Display details only when "Run Tests" checkbox is active.
 if ( 1 === $data['run_tests_checked'] ) {
-	$status_class_name = true === $data['has_post_alert'] ? 'testing-status--paused' : 'testing-status--running';
+	$status_class_name = ( true === $data['has_post_alert'] ) || (bool) ! $data['test_status'] ? 'testing-status--paused' : 'testing-status--running';
 	?>
 	<div class="testing-status-wrapper">
 		<p class="testing-status">
 			<strong><?php esc_html_e( 'Status', 'visual-regression-tests' ); ?></strong>
 			<span class="<?php echo esc_attr( $status_class_name ); ?>">
 				<strong>
-					<?php true === $data['has_post_alert'] ? esc_html_e( 'Paused', 'visual-regression-tests' ) : esc_html_e( 'Running', 'visual-regression-tests' ); ?>
+					<?php
+					if ( true === $data['has_post_alert'] ) {
+						esc_html_e( 'Paused', 'visual-regression-tests' );
+					} elseif ( ! $data['test_status'] ) {
+						esc_html_e( 'Disabled', 'visual-regression-tests' );
+					} else {
+						esc_html_e( 'Running', 'visual-regression-tests' );
+					}
+					?>
 				</strong>
 			</span>
 		</p>
