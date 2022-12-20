@@ -121,6 +121,7 @@ class Enqueue_Scripts {
 					'total_tests' => Subscription::get_total_tests(),
 					'upgrade_url' => admin_url( 'admin.php?page=vrts-upgrade' ),
 					'is_connected' => Service::is_connected(),
+					'urls_mismatch' => Service::urls_mismatch(),
 				]
 			);
 		}//end if

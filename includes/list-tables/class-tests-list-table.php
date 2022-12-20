@@ -4,6 +4,7 @@ namespace Vrts\List_Tables;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
+use Vrts\Features\Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -69,12 +70,16 @@ class Tests_List_Table extends \WP_List_Table {
 				);
 
 			case 'status':
-				$class = ( null === $item->current_alert_id ) && true === (bool) $item->status ? 'testing-status--running' : 'testing-status--paused';
+				$is_connected = Service::is_connected();
+				$class = ( null === $item->current_alert_id ) && true === (bool) $item->status && true === (bool) $is_connected ? 'testing-status--running' : 'testing-status--paused';
 				$text = null === $item->current_alert_id
 					? esc_html__( 'Running', 'visual-regression-tests' )
 					: esc_html__( 'Paused', 'visual-regression-tests' );
 				$instructions = '';
-				if ( $item->current_alert_id ) {
+				if ( ! (bool) $is_connected ) {
+					$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
+					$instructions = '';
+				} elseif ( $item->current_alert_id ) {
 					$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
 					$instructions = '<br>';
 					$instructions .= sprintf(
@@ -93,7 +98,8 @@ class Tests_List_Table extends \WP_List_Table {
 						'<a href="' . $base_link . '" title="' . esc_attr__( 'Upgrade plugin', 'visual-regression-tests' ) . '">',
 						'</a>'
 					);
-				}
+				}//end if
+
 				return sprintf(
 					'<span class="%s">%s</span>%s',
 					$class,
@@ -147,6 +153,7 @@ class Tests_List_Table extends \WP_List_Table {
 	 */
 	public function column_post_title( $item ) {
 		$actions = [];
+		$is_connected = Service::is_connected();
 
 		$actions['edit'] = sprintf(
 			'<a href="%s" data-id="%d" title="%s">%s</a>',
@@ -156,13 +163,15 @@ class Tests_List_Table extends \WP_List_Table {
 			esc_html__( 'Edit Page', 'visual-regression-tests' )
 		);
 
-		$actions['trash'] = sprintf(
-			'<a href="%s" data-id="%d" title="%s">%s</a>',
-			admin_url( 'admin.php?page=vrts&action=disable-testing&test_id=' ) . $item->id,
-			$item->id,
-			esc_html__( 'Disable testing for this page', 'visual-regression-tests' ),
-			esc_html__( 'Disable testing', 'visual-regression-tests' )
-		);
+		if ( $is_connected ) {
+			$actions['trash'] = sprintf(
+				'<a href="%s" data-id="%d" title="%s">%s</a>',
+				admin_url( 'admin.php?page=vrts&action=disable-testing&test_id=' ) . $item->id,
+				$item->id,
+				esc_html__( 'Disable testing for this page', 'visual-regression-tests' ),
+				esc_html__( 'Disable testing', 'visual-regression-tests' )
+			);
+		}
 
 		return sprintf(
 			'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',

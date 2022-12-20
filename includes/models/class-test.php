@@ -323,51 +323,53 @@ class Test {
 	 * @param array $args The arguments to insert.
 	 */
 	public static function save( $args = [] ) {
-		global $wpdb;
+		if ( Service::is_connected() ) {
+			global $wpdb;
 
-		$tests_table = Tests_Table::get_table_name();
-		$defaults = [
-			'id' => null,
-			'status' => 0,
-			'post_id' => null,
-		];
+			$tests_table = Tests_Table::get_table_name();
+			$defaults = [
+				'id' => null,
+				'status' => 0,
+				'post_id' => null,
+			];
 
-		$service_project_id = get_option( 'vrts_project_id' );
-		$click_selectors = vrts()->settings()->get_option( 'vrts_click_selectors' );
-		$args = wp_parse_args( $args, $defaults );
-		$post_id = $args['post_id'];
-		$request_url = 'tests';
-		$parameters = [
-			'project_id' => $service_project_id,
-			'url' => get_permalink( $post_id ),
-			'frequency' => 'daily',
-		];
-		$response_data = Service::rest_service_request( $request_url, $parameters, 'post' );
-		$response_body = json_decode( $response_data['response']['body'], true );
-		$response_code = $response_data['status_code'];
-		if ( 201 === $response_code ) {
-			$test_id = $response_body['id'];
-			$args['service_test_id'] = $test_id;
-			// TODO: Add some validation.
+			$service_project_id = get_option( 'vrts_project_id' );
+			$click_selectors = vrts()->settings()->get_option( 'vrts_click_selectors' );
+			$args = wp_parse_args( $args, $defaults );
+			$post_id = $args['post_id'];
+			$request_url = 'tests';
+			$parameters = [
+				'project_id' => $service_project_id,
+				'url' => get_permalink( $post_id ),
+				'frequency' => 'daily',
+			];
+			$response_data = Service::rest_service_request( $request_url, $parameters, 'post' );
+			$response_body = json_decode( $response_data['response']['body'], true );
+			$response_code = $response_data['status_code'];
+			if ( 201 === $response_code ) {
+				$test_id = $response_body['id'];
+				$args['service_test_id'] = $test_id;
+				// TODO: Add some validation.
 
-			// Remove row and post id to determine if new or update.
-			$row_id = (int) $args['id'];
-			unset( $args['id'] );
-			if ( ! $row_id ) {
-				// Insert a new row.
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
-				if ( $wpdb->insert( $tests_table, $args ) ) {
-					Subscription::decrease_tests_count();
-					return $wpdb->insert_id;
+				// Remove row and post id to determine if new or update.
+				$row_id = (int) $args['id'];
+				unset( $args['id'] );
+				if ( ! $row_id ) {
+					// Insert a new row.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
+					if ( $wpdb->insert( $tests_table, $args ) ) {
+						Subscription::decrease_tests_count();
+						return $wpdb->insert_id;
+					}
+				} else {
+					// Update existing row.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+					if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
+						Subscription::decrease_tests_count();
+						return $row_id;
+					}
 				}
-			} else {
-				// Update existing row.
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-				if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
-					Subscription::decrease_tests_count();
-					return $row_id;
-				}
-			}
+			}//end if
 		}//end if
 
 		return new WP_Error(
@@ -473,26 +475,28 @@ class Test {
 	 * @return array
 	 */
 	public static function delete( $post_id = 0 ) {
-		global $wpdb;
+		if ( Service::is_connected() ) {
+			global $wpdb;
 
-		$tests_table = Tests_Table::get_table_name();
+			$tests_table = Tests_Table::get_table_name();
 
-		// Field value must set to 0 to be sure that a default value is compatible with gutenberg.
-		update_post_meta(
-			$post_id,
-			Metaboxes::get_post_meta_key_status(),
-			0
-		);
+			// Field value must set to 0 to be sure that a default value is compatible with gutenberg.
+			update_post_meta(
+				$post_id,
+				Metaboxes::get_post_meta_key_status(),
+				0
+			);
 
-		delete_post_meta(
-			$post_id,
-			Metaboxes::get_post_meta_key_is_new_test()
-		);
+			delete_post_meta(
+				$post_id,
+				Metaboxes::get_post_meta_key_is_new_test()
+			);
 
-		Service::delete_test( $post_id );
-		Subscription::increase_tests_count();
+			Service::delete_test( $post_id );
+			Subscription::increase_tests_count();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->delete( $tests_table, [ 'post_id' => $post_id ] );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->delete( $tests_table, [ 'post_id' => $post_id ] );
+		}//end if
 	}
 }

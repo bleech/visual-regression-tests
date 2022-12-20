@@ -36,6 +36,7 @@ class Tests_Page {
 		add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'add_assets' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_add_new_test' ] );
+		add_action( 'load-' . $submenu_page, [ $this, 'submit_retry_connection' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'process_column_actions' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
 	}
@@ -160,6 +161,29 @@ class Tests_Page {
 	}
 
 	/**
+	 * Handle the submit of the Retry connection button.
+	 */
+	public function submit_retry_connection() {
+		if ( ! isset( $_POST['submit_retry_connection'] ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'vrts_retry_connection_nonce' ) ) {
+			die( esc_html__( 'Are you cheating?', 'visual-regression-tests' ) );
+		}
+
+		if ( ! current_user_can( 'read' ) ) {
+			wp_die( esc_html__( 'Permission Denied!', 'visual-regression-tests' ) );
+		}
+
+		$response = Service::retry_connection();
+
+		$page_url = admin_url( 'admin.php?page=vrts' );
+		wp_safe_redirect( $page_url );
+		exit;
+	}
+
+	/**
 	 * Handle the submit of process_column_actions.
 	 */
 	public function process_column_actions() {
@@ -203,7 +227,7 @@ class Tests_Page {
 
 			$redirect_to = add_query_arg([
 				'message' => 'success',
-				'testing-disabled' => true,
+				'testing-disabled' => ( Service::is_connected() ? true : false ),
 				'post_id' => $item['post_id'],
 			], $page_url);
 		}
@@ -274,8 +298,11 @@ class Tests_Page {
 		$total_test_items = Test::get_total_items();
 		$frontpage_id = get_option( 'page_on_front' );
 		$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
+		$is_connected = Service::is_connected();
 
-		if ( ! Service::is_connected() ) {
+		if ( Service::urls_mismatch() ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_urls_mismatch' ] );
+		} elseif ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
 		} else {
 			if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
@@ -302,7 +329,7 @@ class Tests_Page {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$is_new_test_failed = isset( $_GET['new-test-failed'] ) ? sanitize_text_field( wp_unslash( $_GET['new-test-failed'] ) ) : false;
-		if ( $is_new_test_failed || '0' === $remaining_tests ) {
+		if ( ( $is_new_test_failed || '0' === $remaining_tests ) && $is_connected ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_new_test_failed' ] );
 		}
 	}
@@ -313,6 +340,14 @@ class Tests_Page {
 	public function render_notification_connection_failed() {
 		Admin_Notices::render_notification( 'connection_failed' );
 	}
+
+	/**
+	 * Render urls_mismatch Notification.
+	 */
+	public function render_notification_urls_mismatch() {
+		Admin_Notices::render_notification( 'urls_mismatch' );
+	}
+
 
 	/**
 	 * Render get_started Notification.
