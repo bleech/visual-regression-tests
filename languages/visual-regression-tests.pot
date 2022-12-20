@@ -382,6 +382,23 @@ msgstr ""
 msgid "The Visual Regression Test for the page %s has been added!"
 msgstr ""
 
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:2
+#: editor/components/metabox-notifications/index.js:50
+msgid "Unlock more tests"
+msgstr ""
+
+#. translators: %1$s, %2$s: number of tests.
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:9
+#: editor/components/metabox-notifications/index.js:60
+msgid "Good work! You have added %1$s of %2$s available tests."
+msgstr ""
+
+#. translators: %1$s, %2$s: link wrapper.
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:15
+#: editor/components/metabox-notifications/index.js:69
+msgid "Upgrade %1$shere%2$s to add more tests to your website!"
+msgstr ""
+
 #: components/tests-page/views/tests-page-list.php:3
 #: includes/features/class-admin.php:42
 #: includes/features/class-tests-page.php:27
