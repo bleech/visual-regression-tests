@@ -88,6 +88,10 @@ class Rest_Service_Controller {
 				$response = $this->test_updated_request( $data );
 				break;
 
+			case 'subscription_changed':
+				$response = $this->subscription_changed_request( $data );
+				break;
+
 			default:
 				$response = $this->unknown_action_request( $data );
 				break;
@@ -230,6 +234,20 @@ class Rest_Service_Controller {
 		}//end if
 
 		return new WP_Error( 'error', esc_html__( 'Test not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
+	}
+
+	/**
+	 * Subscription changed request
+	 *
+	 * @param array $data Rest api response body.
+	 */
+	private function subscription_changed_request( $data ) {
+		// When notified about subscription change from service, update the tests with the new status.
+		Subscription::get_latest_status();
+
+		return rest_ensure_response([
+			'message' => esc_html__( 'Subscription changed action was successful.', 'visual-regression-tests' ),
+		]);
 	}
 
 	/**
