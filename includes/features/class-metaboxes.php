@@ -140,6 +140,7 @@ class Metaboxes {
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
 			'is_connected' => Service::is_connected(),
+			'urls_mismatch' => Service::urls_mismatch(),
 		]);
 	}
 
