@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.1
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -153,14 +153,26 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 == Changelog ==
 
+= 1.2 =
+* Fixed license validations and notifications
+* Fixed alert pixel count
+* Fixed alert view metabox pixel count
+* Fixed status codes for admin ajax
+* Added notification messages if site is moved
+* Added notification inside metabox when service is not available
+* Improved license handling when license is added / removed
+* Improved data removal on plugin uninstall
+* Improved notifications logic inside metabox
+* Minor UI/UX adjustments and improvements
+
 = 1.1 =
-* Fix an issue with the add new test modal in specific cases
-* Fix notification email site url
-* Add admin-ajax fallback functionality
-* Add messages for error when connecting to external service
-* Improve plugin deactivation & activation
-* Improve test deletion
-* General ui/ux adjustments and improvements
+* Fixed an issue with the add new test modal in specific cases
+* Fixed notification email site url
+* Added admin-ajax fallback functionality
+* Added messages for error when connecting to external service
+* Improved plugin deactivation & activation
+* Improved test deletion
+* General UI/UX adjustments and improvements
 
 = 1.0 =
 * Initial Release
