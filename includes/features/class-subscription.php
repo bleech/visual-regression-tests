@@ -77,6 +77,8 @@ class Subscription {
 	 * Drop the keys for subscription.
 	 */
 	public static function delete_options() {
+		delete_option( 'vrts_email_notification_address' );
+		delete_option( 'vrts_click_selectors' );
 		delete_option( 'vrts_license_key' );
 		delete_option( 'vrts_remaining_tests' );
 		delete_option( 'vrts_total_tests' );
