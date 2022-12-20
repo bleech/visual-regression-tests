@@ -114,7 +114,7 @@ const NotificationUpgradeRequired = ( { upgradeUrl = '' } ) => {
 	);
 };
 
-const NotificationConnectionFailed = ( {} ) => {
+const NotificationConnectionFailed = ( { pluginUrl = '' } ) => {
 	return (
 		<>
 			<div className="vrts-metabox-notice vrts-metabox-notice-is-error">
@@ -125,16 +125,24 @@ const NotificationConnectionFailed = ( {} ) => {
 				</p>
 				<p>
 					{ __(
-						'Something went wrong while connecting to the external service. If you just installed the plugin, refresh this page in a bit.',
+						'Something went wrong while trying to connect to the external service.',
 						'visual-regression-tests'
 					) }
 				</p>
-				<p>
-					{ __(
-						'The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly.',
-						'visual-regression-tests'
-					) }
-				</p>
+				<p
+					dangerouslySetInnerHTML={ {
+						__html: DOMPurify.sanitize(
+							sprintf(
+								'<a href="%1$s" title="%2$s">%2$s</a>',
+								pluginUrl, //admin_url( 'admin.php?page=vrts' )
+								__(
+									'Go to plugin page',
+									'visual-regression-tests'
+								)
+							)
+						),
+					} }
+				></p>
 			</div>
 		</>
 	);
@@ -151,7 +159,7 @@ const NotificationUrlsMismatch = ( {} ) => {
 				</p>
 				<p>
 					{ __(
-						'The URLs of your websites seemed to have changed since the activation of the plugin. Please restore the original urls or contact support for alternative solutions.',
+						'Your website domain seemed to have changed since the plugin was activated. Please restore the original domain or uninstall and reinstall the plugin.',
 						'visual-regression-tests'
 					) }
 				</p>

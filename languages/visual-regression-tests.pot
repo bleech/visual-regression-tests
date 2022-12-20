@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-20T09:32:29+00:00\n"
+"POT-Creation-Date: 2022-12-20T13:04:21+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -39,23 +39,17 @@ msgstr ""
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:2
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-urls-mismatch.php:2
 #: editor/components/metabox-notifications/index.js:123
-#: editor/components/metabox-notifications/index.js:149
+#: editor/components/metabox-notifications/index.js:154
 msgid "Connection failed"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:3
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:3
 #: editor/components/metabox-notifications/index.js:127
-msgid "Something went wrong while connecting to the external service. If you just installed the plugin, refresh this page in a bit."
+msgid "Something went wrong while trying to connect to the external service."
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-connection-failed.php:4
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
-#: editor/components/metabox-notifications/index.js:133
-msgid "The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly."
-msgstr ""
-
-#: components/admin-notification/views/admin-notification-connection-failed.php:7
+#: components/admin-notification/views/admin-notification-connection-failed.php:6
 msgid "Retry connection"
 msgstr ""
 
@@ -163,8 +157,8 @@ msgstr ""
 
 #: components/admin-notification/views/admin-notification-urls-mismatch.php:3
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-urls-mismatch.php:3
-#: editor/components/metabox-notifications/index.js:153
-msgid "The URLs of your websites seemed to have changed since the activation of the plugin. Please restore the original urls or contact support for alternative solutions."
+#: editor/components/metabox-notifications/index.js:158
+msgid "Your website domain seemed to have changed since the plugin was activated. Please restore the original domain or uninstall and reinstall the plugin."
 msgstr ""
 
 #: components/alerts-page/views/alert-content.php:3
@@ -319,34 +313,34 @@ msgid "Run tests"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:20
-#: editor/components/metabox/index.js:124
+#: editor/components/metabox/index.js:125
 msgid "Activate tests to get alerted about visual differences in comparison to the snapshot."
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:44
 #: includes/features/class-admin-columns.php:48
 #: includes/list-tables/class-tests-list-table.php:140
-#: editor/components/metabox/index.js:140
+#: editor/components/metabox/index.js:141
 msgid "Status"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:49
 #: includes/list-tables/class-tests-list-table.php:77
 #: includes/list-tables/class-tests-list-table.php:272
-#: editor/components/metabox/index.js:115
+#: editor/components/metabox/index.js:116
 msgid "Paused"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:51
 #: includes/list-tables/class-tests-list-table.php:92
-#: editor/components/metabox/index.js:117
+#: editor/components/metabox/index.js:118
 msgid "Disabled"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:53
 #: includes/list-tables/class-tests-list-table.php:76
 #: includes/list-tables/class-tests-list-table.php:267
-#: editor/components/metabox/index.js:113
+#: editor/components/metabox/index.js:114
 msgid "Running"
 msgstr ""
 
@@ -368,6 +362,11 @@ msgstr ""
 #: components/metabox-classic-editor/index.php:79
 #: editor/components/screenshot/index.js:63
 msgid "Snapshot gets auto-generated upon publishing or updating the page."
+msgstr ""
+
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
+#: editor/components/metabox-notifications/index.js:138
+msgid "Go to plugin page"
 msgstr ""
 
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:2
@@ -776,7 +775,7 @@ msgstr ""
 msgid "The test does not exist."
 msgstr ""
 
-#: editor/components/metabox/index.js:123
+#: editor/components/metabox/index.js:124
 msgid "Run Tests"
 msgstr ""
 

@@ -30,6 +30,7 @@ const Metabox = () => {
 	const remainingTests = parseInt( window.vrts_editor_vars.remaining_tests );
 	const totalTests = parseInt( window.vrts_editor_vars.total_tests );
 	const upgradeUrl = window.vrts_editor_vars.upgrade_url;
+	const pluginUrl = window.vrts_editor_vars.plugin_url;
 	const isNewTest = window.vrts_editor_vars.is_new_test;
 
 	const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' );
@@ -107,7 +108,7 @@ const Metabox = () => {
 		return <NotificationUrlsMismatch />;
 	}
 	if ( ! isConnected ) {
-		return <NotificationConnectionFailed />;
+		return <NotificationConnectionFailed pluginUrl={ pluginUrl } />;
 	}
 
 	let testingStatusText = __( 'Running', 'visual-regression-tests' );
