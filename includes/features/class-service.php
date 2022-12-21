@@ -39,7 +39,7 @@ class Service {
 			return;
 		}
 		$time = current_time( 'mysql' );
-		$rest_base_url = get_rest_url();
+		$rest_base_url = self::get_rest_url();
 		$service_api_route = 'sites';
 		$create_token = md5( 'verysecret' . $time );
 		$access_token = self::generate_random_string( 50 );
@@ -52,7 +52,7 @@ class Service {
 			'create_token' => $create_token,
 			'home_url' => home_url(),
 			'site_url' => site_url(),
-			'rest_url' => $rest_base_url . 'vrts/v1/service',
+			'rest_url' => $rest_base_url,
 			'admin_ajax_url' => admin_url( 'admin-ajax.php' ),
 			'requested_at' => $time,
 			'access_token' => $access_token,
@@ -80,7 +80,7 @@ class Service {
 		if ( ! $site_urls ) {
 			if ( $on_activation ) {
 				$site_url = site_url();
-				$rest_url = get_rest_url() . 'vrts/v1/service';
+				$rest_url = rest_url( 'vrts/v1/service' );
 				$admin_ajax_url = admin_url( 'admin-ajax.php' );
 			}
 
@@ -247,6 +247,8 @@ class Service {
 	 * Check connection between plugin and service.
 	 */
 	public static function check_connection() {
+		global $sitepress;
+
 		$site_urls = get_option( 'vrts_site_urls' );
 		if ( ! $site_urls ) {
 			$service_project_id = get_option( 'vrts_project_id' );
@@ -278,7 +280,7 @@ class Service {
 			$comparison_admin_ajax_url = $stored_urls['admin_ajax_url'];
 		}//end if
 
-		$rest_url = get_rest_url() . 'vrts/v1/service';
+		$rest_url = self::get_rest_url();
 		$admin_ajax_url = admin_url( 'admin-ajax.php' );
 
 		if ( $rest_url !== $comparison_rest_url || $admin_ajax_url !== $comparison_admin_ajax_url ) {
@@ -286,6 +288,32 @@ class Service {
 		} else {
 			update_option( 'vrts_connection_inactive', false );
 		}
+	}
+
+	/**
+	 * Get rest url for default language if WPML is installed.
+	 */
+	private static function get_rest_url() {
+		// Exlusion for WPML installations.
+		global $sitepress;
+
+		$rest_url = rest_url( 'vrts/v1/service' );
+		if ( $sitepress ) {
+			// WPML Get languages.
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- It's ok.
+			$wpml_current_lang = apply_filters( 'wpml_current_language', null );
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- It's ok.
+			$wpml_default_lang = apply_filters( 'wpml_default_language', null );
+			// If current language is not default, switch to default language to get the rest url.
+			if ( $wpml_current_lang !== $wpml_default_lang ) {
+				$sitepress->switch_lang( $wpml_default_lang );
+				$rest_url = rest_url( 'vrts/v1/service' );
+				// Switch back to the current language.
+				$sitepress->switch_lang( $wpml_current_lang );
+			}
+		}
+
+		return $rest_url;
 	}
 
 	/**
