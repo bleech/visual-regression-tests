@@ -270,24 +270,21 @@ class Service {
 				$on_activation = true;
 				self::store_site_urls( $on_activation );
 			}
+		} else {
+			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
+			$stored_urls = json_decode( base64_decode( $site_urls ), true );
+
+			$comparison_rest_url = $stored_urls['rest_url'];
+			$comparison_admin_ajax_url = $stored_urls['admin_ajax_url'];
 		}//end if
-
-		$site_urls = get_option( 'vrts_site_urls' );
-		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
-		$stored_urls = json_decode( base64_decode( $site_urls ), true );
-
-		$comparison_rest_url = $stored_urls['rest_url'];
-		$comparison_admin_ajax_url = $stored_urls['admin_ajax_url'];
 
 		$rest_url = get_rest_url() . 'vrts/v1/service';
 		$admin_ajax_url = admin_url( 'admin-ajax.php' );
 
-		if ( $rest_url !== $comparison_rest_url ) {
+		if ( $rest_url !== $comparison_rest_url || $admin_ajax_url !== $comparison_admin_ajax_url ) {
 			update_option( 'vrts_connection_inactive', true );
-		}
-
-		if ( $admin_ajax_url !== $comparison_admin_ajax_url ) {
-			update_option( 'vrts_connection_inactive', true );
+		} else {
+			update_option( 'vrts_connection_inactive', false );
 		}
 	}
 
