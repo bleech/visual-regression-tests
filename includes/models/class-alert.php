@@ -43,7 +43,7 @@ class Alert {
 		if ( null !== $args['s'] ) {
 			$where .= $wpdb->prepare(
 				' AND title LIKE %s',
-				$wpdb->esc_like( $args['s'] )
+				'%' . $wpdb->esc_like( $args['s'] ) . '%'
 			);
 		}
 
