@@ -8,7 +8,6 @@ use Vrts\Features\Subscription;
 
 class Tests_Page {
 
-
 	/**
 	 * Constructor.
 	 */
@@ -16,6 +15,7 @@ class Tests_Page {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_filter( 'set-screen-option', [ $this, 'set_screen' ], 10, 3 );
 		add_action( 'wp_link_query', [ $this, 'wp_link_query' ], 10, 2 );
+		add_action( 'wp_ajax_vrts_test_quick_edit_save', [ $this, 'quick_edit_save' ] );
 	}
 
 	/**
@@ -238,6 +238,35 @@ class Tests_Page {
 
 		wp_safe_redirect( $redirect_to );
 		exit;
+	}
+
+	/**
+	 * This function is used to save hide css selectors in quick edit.
+	 * It will be called from quick_edit_save function.
+	 *
+	 * @return json_decode
+	 */
+	public function quick_edit_save() {
+		if ( isset( $_POST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'vrts_test_quick_edit' ) ) {
+			exit( 'No naughty business please' );
+		}
+
+		if ( ! isset( $_POST['test_id'] ) || ! (int) $_POST['test_id'] ) {
+			exit( 'No naughty business please' );
+		}
+
+		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
+		$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
+
+		$is_saved = Test::save_hide_css_selectors( $test_id, $hide_css_selectors );
+		$message = $is_saved ? __( 'Changes saved successfully.' ) : __( 'Error while saving the changes.' );
+		$response = [
+			'success' => $is_saved,
+			'message' => $message,
+			'hide_css_selectors' => $hide_css_selectors,
+		];
+
+		return wp_die( wp_json_encode( $response ) );
 	}
 
 	/**
