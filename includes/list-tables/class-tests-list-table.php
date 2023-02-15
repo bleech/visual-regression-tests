@@ -408,14 +408,14 @@ class Tests_List_Table extends \WP_List_Table {
 					<fieldset class="inline-edit-col-left">
 						<legend class="inline-edit-legend" id="quick-edit-legend"><?php esc_html_e( 'Quick Edit Test', 'visual-regression-tests' ); ?></legend>
 						<div class="inline-edit-col">
-							<label><?php esc_html_e( 'Hide Elements from VRTs' ); ?></label>
+							<label><?php esc_html_e( 'Hide elements from VRTs' ); ?></label>
 							<textarea name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .class, #id, [attribute]', 'visual-regression-tests' ); ?>" rows="4" cols="50"></textarea>
 							<p>
 							<?php
 							printf(
 								/* translators: %1$s, %2$s: link wrapper. */
-								esc_html__( 'Exclude elements on this page: Add CSS %1$selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created..', 'visual-regression-tests' ),
-							'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors" target="_blank">', '</a>');
+								esc_html__( 'Exclude elements on this page: Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.', 'visual-regression-tests' ),
+							'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">', '</a>');
 							?>
 							</p>
 						</div>
