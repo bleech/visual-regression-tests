@@ -17,6 +17,9 @@ class Install {
 		register_activation_hook( vrts()->get_plugin_file(), [ $this, 'install' ] );
 		register_activation_hook( vrts()->get_plugin_file(), [ $this, 'set_activation_admin_notice_transient' ] );
 		add_action( 'admin_notices', [ $this, 'activation_admin_notice' ] );
+
+		add_action( 'upgrader_process_complete', [ $this, 'on_upgrade' ], 10, 2 );
+		add_action( 'vrts_plugin_on_upgrade', [ $this, 'install' ], 10, 2 );
 	}
 
 	/**
@@ -30,7 +33,7 @@ class Install {
 
 			// Direct DB query and no caching are OK to use in this case.
 			// @codingStandardsIgnoreStart.
-			$blog_ids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
+			$blog_ids = $wpdb->get_col("SELECT blog_id FROM $wpdb->blogs");
 			// @codingStandardsIgnoreEnd.
 
 			foreach ( $blog_ids as $blog_id ) {
@@ -76,6 +79,30 @@ class Install {
 		if ( get_transient( self::ACTIVATION_TRANSIENT ) ) {
 			Admin_Notices::render_notification( 'plugin_activated' );
 			delete_transient( self::ACTIVATION_TRANSIENT );
+		}
+	}
+
+	/**
+	 * On upgrade.
+	 *
+	 * @param object $upgrader WP_Upgrader instance.
+	 * @param array  $options  Array of bulk item update data.
+	 */
+	public function on_upgrade( $upgrader, $options ) {
+		if ( 'update' !== $options['action'] ) {
+			return;
+		}
+
+		if ( 'core' === $options['type'] ) {
+			return;
+		}
+
+		if ( 'plugin' === $options['type'] && isset( $options['plugins'] ) ) {
+			foreach ( $options['plugins'] as $plugin ) {
+				if ( plugin_basename( vrts()->get_plugin_file() ) === $plugin ) {
+					do_action( 'vrts_plugin_on_upgrade' );
+				}
+			}
 		}
 	}
 }
