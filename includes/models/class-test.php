@@ -394,7 +394,7 @@ class Test {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
-
+		$hide_css_selectors = sanitize_text_field( $hide_css_selectors );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		$result = $wpdb->update(
 			$tests_table,
