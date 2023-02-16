@@ -66,7 +66,11 @@ window.wp = window.wp || {};
 			 * @return {boolean} The result of save.
 			 */
 			$( 'td', qeRow ).on( 'keydown', function ( e ) {
-				if ( e.which === 13 && ! $( e.target ).hasClass( 'cancel' ) ) {
+				if (
+					e.which === 13 &&
+					! e.shiftKey &&
+					! $( e.target ).hasClass( 'cancel' )
+				) {
 					return inlineEditTest.save( this );
 				}
 			} );
