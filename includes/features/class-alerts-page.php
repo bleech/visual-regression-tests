@@ -125,7 +125,7 @@ class Alerts_Page {
 			$base_link = admin_url( 'admin.php?page=vrts-alerts' );
 			$is_connected = Service::is_connected();
 
-			$test_id = Test::get_item_id( $alert->id );
+			$test_id = Test::get_item_id( $alert->post_id );
 			$test = (object) Test::get_item( $test_id );
 
 			vrts()->component('alerts-page', [
