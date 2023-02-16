@@ -63,14 +63,26 @@ $navigation-item-border-height: 3px;
 	}
 
 	.misc-pub-section {
-		padding-left: 36px;
 		position: relative;
+
+		&-icon {
+			padding-left: 36px;
+		}
 
 		.dashicons {
 			position: absolute;
 			left: 10px;
 			padding-right: 3px;
 			color: #8c8f94;
+		}
+
+		label {
+			margin-bottom: 1em;
+			display: block;
+		}
+
+		textarea {
+			width: 100%;
 		}
 	}
 

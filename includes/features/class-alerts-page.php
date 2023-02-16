@@ -72,6 +72,8 @@ class Alerts_Page {
 
 			add_action( 'load-' . $submenu_page, [ $this, 'process_column_actions' ] );
 			add_action( 'load-' . $submenu_page, [ $this, 'submit_edit_alert' ] );
+			add_action( 'load-' . $submenu_page, [ $this, 'submit_edit_alert_settings' ] );
+			add_action( 'load-' . $submenu_page, [ $this, 'reset_test_settings' ] );
 		}//end if
 	}
 
@@ -123,6 +125,9 @@ class Alerts_Page {
 			$base_link = admin_url( 'admin.php?page=vrts-alerts' );
 			$is_connected = Service::is_connected();
 
+			$test_id = Test::get_item_id( $alert->id );
+			$test = (object) Test::get_item( $test_id );
+
 			vrts()->component('alerts-page', [
 				'action' => $action,
 				'alert_id' => $alert_id,
@@ -141,6 +146,9 @@ class Alerts_Page {
 					'next_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
 				],
 				'is_connected'  => $is_connected,
+				'test_settings' => [
+					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
+				],
 			]);
 		} else {
 			// Render Lists page.
@@ -153,7 +161,7 @@ class Alerts_Page {
 	}
 
 	/**
-	 * Handle the submit of from the edit alert page.
+	 * Handle the submit from details on the edit alert page.
 	 */
 	public function submit_edit_alert() {
 		if ( ! isset( $_POST['submit_edit_alert'] ) ) {
@@ -213,6 +221,120 @@ class Alerts_Page {
 			$redirect_to = add_query_arg( [
 				'action' => 'edit',
 				'alert_id' => $next_open_alert_id,
+			], $page_url );
+		}
+
+		wp_safe_redirect( $redirect_to );
+		exit;
+	}
+
+	/**
+	 * Handle the submit from the settings on edit alert page.
+	 */
+	public function submit_edit_alert_settings() {
+		if ( ! isset( $_POST['submit_edit_alert_settings'] ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'vrts_page_alerts_nonce' ) ) {
+			die( esc_html__( 'Are you cheating?', 'visual-regression-tests' ) );
+		}
+
+		if ( ! current_user_can( 'read' ) ) {
+			wp_die( esc_html__( 'Permission Denied!', 'visual-regression-tests' ) );
+		}
+
+		$errors   = [];
+		$page_url = admin_url( 'admin.php?page=vrts-alerts' );
+
+		$alert_id = isset( $_POST['alert_id'] ) ? sanitize_text_field( wp_unslash( $_POST['alert_id'] ) ) : 0;
+
+		// Some basic validation.
+		if ( ! $alert_id ) {
+			$errors[] = esc_html__( 'Error: Alert ID is required.', 'visual-regression-tests' );
+		}
+
+		// Bail out if error found.
+		if ( $errors ) {
+			$first_error = reset( $errors );
+			$redirect_to = add_query_arg( [ 'error' => $first_error ], $page_url );
+			wp_safe_redirect( $redirect_to );
+			exit;
+		}
+
+		// Do the stuff.
+		if ( $alert_id ) {
+			$alert = (object) Alert::get_item( $alert_id );
+			$test_id = Test::get_item_id( $alert->post_id );
+			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : null;
+			$test_settings_saved = Test::save_hide_css_selectors( $test_id, $hide_css_selectors );
+		}//end if
+
+		if ( is_wp_error( $test_settings_saved ) ) {
+			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
+		} else {
+			$redirect_to = add_query_arg( [
+				'action' => 'edit',
+				'alert_id' => $alert_id,
+			], $page_url );
+		}
+
+		wp_safe_redirect( $redirect_to );
+		exit;
+	}
+
+	/**
+	 * Handle the the reset get request from the settings on edit alert page.
+	 */
+	public function reset_test_settings() {
+		if ( ! isset( $_GET['reset'] ) ) {
+			return;
+		}
+
+		$reset_value = sanitize_text_field( wp_unslash( $_GET['reset'] ) );
+		if ( 'test-settings' !== $reset_value ) {
+			die( esc_html__( 'Are you cheating?', 'visual-regression-tests' ) );
+		}
+
+		if ( isset( $_GET['_wpnonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ), 'vrts_page_alerts_settings_reset_nonce' ) ) {
+			die( esc_html__( 'Are you cheating?', 'visual-regression-tests' ) );
+		}
+
+		if ( ! current_user_can( 'read' ) ) {
+			wp_die( esc_html__( 'Permission Denied!', 'visual-regression-tests' ) );
+		}
+
+		$errors   = [];
+		$page_url = admin_url( 'admin.php?page=vrts-alerts' );
+
+		$alert_id = isset( $_GET['alert_id'] ) ? sanitize_text_field( wp_unslash( $_GET['alert_id'] ) ) : 0;
+
+		// Some basic validation.
+		if ( ! $alert_id ) {
+			$errors[] = esc_html__( 'Error: Alert ID is required.', 'visual-regression-tests' );
+		}
+
+		// Bail out if error found.
+		if ( $errors ) {
+			$first_error = reset( $errors );
+			$redirect_to = add_query_arg( [ 'error' => $first_error ], $page_url );
+			wp_safe_redirect( $redirect_to );
+			exit;
+		}
+
+		// Do the stuff.
+		if ( $alert_id ) {
+			$alert = (object) Alert::get_item( $alert_id );
+			$test_id = Test::get_item_id( $alert->post_id );
+			$settings_reset = Test::save_hide_css_selectors( $test_id, null );
+		}//end if
+
+		if ( is_wp_error( $settings_reset ) ) {
+			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
+		} else {
+			$redirect_to = add_query_arg( [
+				'action' => 'edit',
+				'alert_id' => $alert_id,
 			], $page_url );
 		}
 
