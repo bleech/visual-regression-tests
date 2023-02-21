@@ -5,13 +5,15 @@ namespace Vrts\Rest_Api;
 use WP_Error;
 use WP_REST_Request;
 use Vrts\Models\Test;
-use Vrts\Tables\Tests_Table;
-use Vrts\Tables\Alerts_Table;
-use Vrts\Features\Email_Notifications;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Services\Alert_Service;
+use Vrts\Services\Test_Service;
 
 class Rest_Service_Controller {
+
+	private $namespace;
+	private $resource_name;
 	/**
 	 * Constructor.
 	 */
@@ -164,73 +166,26 @@ class Rest_Service_Controller {
 		if ( ! array_key_exists( 'test_id', $data ) ) {
 			return new WP_Error( 'error', esc_html__( 'Test id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
-		global $wpdb;
 
-		$table_alert = Alerts_Table::get_table_name();
-		$table_test = Tests_Table::get_table_name();
-
-		$post_id = Test::get_post_id_by_service_test_id( $data['test_id'] );
+		$test_id = $data['test_id'];
+		$post_id = Test::get_post_id_by_service_test_id( $test_id );
 
 		if ( $post_id ) {
 			if ( array_key_exists( 'is_paused', $data ) && $data['is_paused'] ) {
 				if ( $data['comparison']['pixels_diff'] > 0 ) {
-					$prepare_alert = [];
-					$prepare_alert['post_id'] = $post_id;
-					$prepare_alert['screenshot_test_id'] = $data['test_id'];
-					$prepare_alert['target_screenshot_url'] = $data['comparison']['screenshot']['image_url'];
-					$prepare_alert['target_screenshot_finish_date'] = $data['comparison']['screenshot']['updated_at'];
-					$prepare_alert['base_screenshot_url'] = $data['comparison']['base_screenshot']['image_url'];
-					$prepare_alert['base_screenshot_finish_date'] = $data['comparison']['base_screenshot']['updated_at'];
-					$prepare_alert['comparison_screenshot_url'] = $data['comparison']['image_url'];
-					$prepare_alert['differences'] = $data['comparison']['pixels_diff'];
-
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
-					if ( $wpdb->insert( $table_alert, $prepare_alert ) ) {
-						$alert_id = $wpdb->insert_id;
-
-						// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-						$wpdb->update($table_alert,
-							[ 'title' => '#' . $alert_id ],
-							[ 'id' => $alert_id ]
-						);
-					}
-
-					// Update test row with new id foreign key and add latest screenshot.
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-					$wpdb->update( $table_test,
-						[
-							'current_alert_id' => $alert_id,
-							'target_screenshot_url' => $data['comparison']['screenshot']['image_url'],
-							'snapshot_date' => $data['comparison']['updated_at'],
-						],
-						[ 'service_test_id' => $data['test_id'] ]
-					);
-
-					// Send email only if alert was created.
-					if ( $alert_id ) {
-						// Send e-mail notification.
-						$email_notifications = new Email_Notifications();
-						$email_notifications->send_email( $data['comparison']['pixels_diff'], $post_id, $alert_id );
-					}
-				}//end if
+					$alert_service = new Alert_Service();
+					$alert_service->create_alert_from_comparison( $post_id, $test_id, $data['comparison'] );
+				} //end if
 			} elseif ( $data['schedule']['base_screenshot'] ) {
-				// Update test row with new id foreign key and add latest screenshot.
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-				$wpdb->update( $table_test,
-					[
-						'target_screenshot_url' => $data['schedule']['base_screenshot']['image_url'],
-						'snapshot_date' => $data['schedule']['base_screenshot']['updated_at'],
-					],
-					[ 'service_test_id' => $data['test_id'] ]
-				);
-			}//end if
+				$test_service = new Test_Service();
+				$test_service->update_test_from_schedule( $post_id, $test_id, $data['schedule']['base_screenshot'] );
+			} //end if
 
 			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 
 			return rest_ensure_response([
 				'message' => 'Action test_updated successful.',
 			]);
-
 		}//end if
 
 		return new WP_Error( 'error', esc_html__( 'Test not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
