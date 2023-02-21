@@ -146,14 +146,6 @@
 								</div>
 
 								<div id="major-publishing-actions">
-										<div id="delete-action">
-											<?php
-											$delete_link = admin_url( "admin.php?page=vrts-alerts&action=edit&alert_id={$data["alert_id"]}&reset=test-settings" );
-											// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- It's ok.
-											$action = 'vrts_page_alerts_settings_reset_nonce';
-											?>
-											<a class="submitdelete deletion" href="<?php echo esc_url( wp_nonce_url( $delete_link, $action ) ); ?>"> <?php esc_html_e( 'Reset', 'visual-regression-tests' ); ?> </a>
-										</div>
 										<div id="publishing-action">
 											<?php submit_button( esc_attr__( 'Save', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert_settings', false ); ?>
 										</div>
