@@ -1,8 +1,5 @@
 <?php
-if ( $data['urls_mismatch'] ) {
-	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-urls-mismatch.php';
-	return;
-} elseif ( ! $data['is_connected'] ) {
+if ( ! $data['is_connected'] ) {
 	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-connection-failed.php';
 	return;
 }

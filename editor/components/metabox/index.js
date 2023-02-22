@@ -12,7 +12,6 @@ import {
 	NotificationUnlockMoreTests,
 	NotificationUpgradeRequired,
 	NotificationConnectionFailed,
-	NotificationUrlsMismatch,
 } from 'editor/components/metabox-notifications';
 
 import apiFetch from '@wordpress/api-fetch';
@@ -103,10 +102,6 @@ const Metabox = () => {
 	}
 
 	const isConnected = window.vrts_editor_vars.is_connected;
-	const urlsMismatch = window.vrts_editor_vars.urls_mismatch;
-	if ( urlsMismatch ) {
-		return <NotificationUrlsMismatch />;
-	}
 	if ( ! isConnected ) {
 		return <NotificationConnectionFailed pluginUrl={ pluginUrl } />;
 	}

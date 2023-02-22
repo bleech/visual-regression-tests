@@ -104,69 +104,67 @@ class Service {
 	 */
 	public static function rest_service_request( $service_api_route, $parameters = [], $request_type = '' ) {
 
-		if ( ! static::urls_mismatch() ) {
-			$request_url = self::BASE_URL . $service_api_route;
-			$service_project_id = get_option( 'vrts_project_id' );
-			$service_project_token = get_option( 'vrts_project_token' );
-			$response = [];
+		$request_url = self::BASE_URL . $service_api_route;
+		$service_project_id = get_option( 'vrts_project_id' );
+		$service_project_token = get_option( 'vrts_project_token' );
+		$response = [];
 
-			$args = [
-				'project_id' => $service_project_id,
-				'headers'     => [
-					'Content-Type' => 'application/json; charset=utf-8',
-					'Authorization' => 'Bearer ' . $service_project_token,
-				],
-				'body'        => wp_json_encode( $parameters ),
-				'data_format' => 'body',
-			];
+		$args = [
+			'project_id' => $service_project_id,
+			'headers'     => [
+				'Content-Type' => 'application/json; charset=utf-8',
+				'Authorization' => 'Bearer ' . $service_project_token,
+			],
+			'body'        => wp_json_encode( $parameters ),
+			'data_format' => 'body',
+		];
 
-			// If project already created, attach project id and service token.
-			if ( $service_project_id && $service_project_token ) {
-				$args['project_id']  = $service_project_id;
-				$args['headers']['Authorization'] = 'Bearer ' . $service_project_token;
-			}
+		// If project already created, attach project id and service token.
+		if ( $service_project_id && $service_project_token ) {
+			$args['project_id']  = $service_project_id;
+			$args['headers']['Authorization'] = 'Bearer ' . $service_project_token;
+		}
 
-			switch ( $request_type ) {
-				case 'get':
-					$args = [
-						'method' => 'GET',
-						'project_id' => $service_project_id,
-						'headers'     => [
-							'Authorization' => 'Bearer ' . $service_project_token,
-						],
-						'body'        => $parameters,
-						'data_format' => 'body',
-					];
-					$data = wp_remote_post( $request_url, $args );
-					$response = [
-						'response' => json_decode( wp_remote_retrieve_body( $data ), true ),
-						'status_code' => wp_remote_retrieve_response_code( $data ),
-					];
-					break;
-
-				case 'delete':
-					$args['method'] = 'DELETE';
-					$data = wp_remote_post( $request_url, $args );
-					break;
-
-				case 'put':
-					$args['method'] = 'PUT';
-					$data = wp_remote_post( $request_url, $args );
-					break;
-
-				default:
-					$data = wp_remote_post( $request_url, $args );
-					break;
-			}//end switch
-
-			if ( empty( $response ) ) {
+		switch ( $request_type ) {
+			case 'get':
+				$args = [
+					'method' => 'GET',
+					'project_id' => $service_project_id,
+					'headers'     => [
+						'Authorization' => 'Bearer ' . $service_project_token,
+					],
+					'body'        => $parameters,
+					'data_format' => 'body',
+				];
+				$data = wp_remote_post( $request_url, $args );
 				$response = [
-					'response' => $data,
+					'response' => json_decode( wp_remote_retrieve_body( $data ), true ),
 					'status_code' => wp_remote_retrieve_response_code( $data ),
 				];
-			}
-			return $response;
-		}//end if
+				break;
+
+			case 'delete':
+				$args['method'] = 'DELETE';
+				$data = wp_remote_post( $request_url, $args );
+				break;
+
+			case 'put':
+				$args['method'] = 'PUT';
+				$data = wp_remote_post( $request_url, $args );
+				break;
+
+			default:
+				$data = wp_remote_post( $request_url, $args );
+				break;
+		}//end switch
+
+		if ( empty( $response ) ) {
+			$response = [
+				'response' => $data,
+				'status_code' => wp_remote_retrieve_response_code( $data ),
+			];
+		}
+		return $response;
 	}
 
 	/**
@@ -282,12 +280,6 @@ class Service {
 
 		$rest_url = self::get_rest_url();
 		$admin_ajax_url = admin_url( 'admin-ajax.php' );
-
-		if ( $rest_url !== $comparison_rest_url || $admin_ajax_url !== $comparison_admin_ajax_url ) {
-			update_option( 'vrts_connection_inactive', true );
-		} else {
-			update_option( 'vrts_connection_inactive', false );
-		}
 	}
 
 	/**
@@ -343,13 +335,6 @@ class Service {
 	 * Check if external service was able to connect
 	 */
 	public static function is_connected() {
-		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' ) && ! static::urls_mismatch();
-	}
-
-	/**
-	 * Check if local urls match the ones propagated to the service.
-	 */
-	public static function urls_mismatch() {
-		return (bool) get_option( 'vrts_connection_inactive' );
+		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
 	}
 }
