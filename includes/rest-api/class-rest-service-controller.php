@@ -101,9 +101,17 @@ class Rest_Service_Controller {
 	 * @param array $data Rest api response body.
 	 */
 	private function test_updated_request( $data ) {
-		if ( ! array_key_exists( 'test_id', $data ) ) {
+		if ( ! array_key_exists( 'project_id', $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Project id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		} elseif ( $data['project_id'] !== get_option( 'vrts_project_id' ) ) {
+			return new WP_Error( 'error', esc_html__( 'Project id does not match.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		} elseif ( ! array_key_exists( 'test_id', $data ) ) {
 			return new WP_Error( 'error', esc_html__( 'Test id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
+
+		if ( ! self::verify_signature( $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		};
 
 		$test_id = $data['test_id'];
 		$post_id = Test::get_post_id_by_service_test_id( $test_id );
@@ -127,6 +135,15 @@ class Rest_Service_Controller {
 		}//end if
 
 		return new WP_Error( 'error', esc_html__( 'Test not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
+	}
+
+	private function verify_signature( $data ) {
+		$signature = $data['signature'];
+		unset($data['signature']);
+
+		$secret = get_option( 'vrts_project_secret' ) || 'verysecret';
+
+		return hash_equals( $signature, hash_hmac( 'sha256', json_encode( $data ), $secret ) );
 	}
 
 	/**
