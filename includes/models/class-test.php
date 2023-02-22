@@ -343,11 +343,9 @@ class Test {
 				'url' => get_permalink( $post_id ),
 				'frequency' => 'daily',
 			];
-			$response_data = Service::rest_service_request( $request_url, $parameters, 'post' );
-			$response_body = json_decode( $response_data['response']['body'], true );
-			$response_code = $response_data['status_code'];
-			if ( 201 === $response_code ) {
-				$test_id = $response_body['id'];
+			$service_request = Service::rest_service_request( $request_url, $parameters, 'post' );
+			if ( 201 === $service_request['status_code'] ) {
+				$test_id = $service_request['response']['id'];
 				$args['service_test_id'] = $test_id;
 				// TODO: Add some validation.
 
