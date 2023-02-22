@@ -66,39 +66,11 @@ class Service {
 
 			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 
+			self::add_homepage_test();
+
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Store site urls locally.
-	 *
-	 * @param string $on_activation true only when plugin gets activated.
-	 * @param string $site_url the site url.
-	 * @param string $rest_url the rest url.
-	 * @param string $admin_ajax_url the admin ajax url.
-	 */
-	public static function store_site_urls( $on_activation = false, $site_url = null, $rest_url = null, $admin_ajax_url = null ) {
-		$site_urls = get_option( 'vrts_site_urls' );
-
-		// Update site urls only if it doesn't exist in the db.
-		if ( ! $site_urls ) {
-			if ( $on_activation ) {
-				$site_url = site_url();
-				$rest_url = rest_url( 'vrts/v1/service' );
-				$admin_ajax_url = admin_url( 'admin-ajax.php' );
-			}
-
-			$parameters = [
-				'site_url' => $site_url,
-				'rest_url' => $rest_url,
-				'admin_ajax_url' => $admin_ajax_url,
-			];
-
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- It's benign. Used to check if the installation moved from production to local.
-			update_option( 'vrts_site_urls', base64_encode( wp_json_encode( $parameters ) ) );
-		}
 	}
 
 	/**
@@ -178,21 +150,6 @@ class Service {
 	}
 
 	/**
-	 * Generate Random String.
-	 *
-	 * @param int $length the length of the string.
-	 */
-	public static function generate_random_string( $length = 50 ) {
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$characters_length = strlen( $characters );
-		$random_string = '';
-		for ( $i = 0; $i < $length; $i++ ) {
-			$random_string .= $characters[ wp_rand( 0, $characters_length - 1 ) ];
-		}
-		return $random_string;
-	}
-
-	/**
 	 * Send request to server to resume test.
 	 *
 	 * @param int $alert_id the alert id.
@@ -227,10 +184,10 @@ class Service {
 	 */
 	public static function add_homepage_test() {
 		$option_name = 'vrts_homepage_added';
-		$installed_version = get_option( $option_name );
+		$homepage_added = get_option( $option_name );
 
 		// If plugin was previously activated, don’t add homepage again.
-		if ( ! $installed_version ) {
+		if ( ! $homepage_added ) {
 			$homepage_id = get_option( 'page_on_front' );
 			$args = [
 				'id' => Test::get_item_id( $homepage_id ),
