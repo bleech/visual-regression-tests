@@ -17,9 +17,14 @@ class Service {
 		$installed_version = get_option( $option_name );
 
 		if ( self::DB_VERSION !== $installed_version ) {
-			self::create_site();
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
+		if ( ! self::is_connected()) {
+			self::create_site();
+		}
+		if ( self::is_connected() && ! self::has_secret()) {
+			self::create_secret();
+		}
 	}
 
 	/**
@@ -34,7 +39,7 @@ class Service {
 	 *
 	 * @param boolean $force Create site synchronously.
 	 */
-	private static function create_site( $force = false ) {
+	private static function create_site() {
 		if ( ! empty( get_option( 'vrts_project_id' ) ) || ! empty( get_option( 'vrts_project_token' ) ) ) {
 			return;
 		}
@@ -42,27 +47,28 @@ class Service {
 		$rest_base_url = self::get_rest_url();
 		$service_api_route = 'sites';
 		$create_token = md5( 'verysecret' . $time );
-		$access_token = self::generate_random_string( 50 );
-
-		// Save options temporarily for verification.
-		update_option( 'vrts_create_token', $create_token );
-		update_option( 'vrts_access_token', $access_token );
 
 		$parameters = [
 			'create_token' => $create_token,
-			'home_url' => home_url(),
-			'site_url' => site_url(),
 			'rest_url' => $rest_base_url,
 			'admin_ajax_url' => admin_url( 'admin-ajax.php' ),
 			'requested_at' => $time,
-			'access_token' => $access_token,
 		];
-		if ( $force ) {
-			$parameters['force'] = true;
-		}
 
-		self::store_site_urls( false, $parameters['site_url'], $parameters['rest_url'], $parameters['admin_ajax_url'] );
-		return self::rest_service_request( $service_api_route, $parameters, 'post' );
+		$service_request = self::rest_service_request( $service_api_route, $parameters, 'post' );
+
+		if ( $service_request['status_code'] === 201 ) {
+			$data = $service_request['response'];
+
+			update_option( 'vrts_project_id', $data['id'] );
+			update_option( 'vrts_project_token', $data['token'] );
+			update_option( 'vrts_project_secret', $data['secret'] );
+
+			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
+
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -155,6 +161,10 @@ class Service {
 
 			default:
 				$data = wp_remote_post( $request_url, $args );
+				$response = [
+					'response' => json_decode( wp_remote_retrieve_body( $data ), true ),
+					'status_code' => wp_remote_retrieve_response_code( $data ),
+				];
 				break;
 		}//end switch
 
@@ -242,47 +252,6 @@ class Service {
 	}
 
 	/**
-	 * Check connection between plugin and service.
-	 */
-	public static function check_connection() {
-		global $sitepress;
-
-		$site_urls = get_option( 'vrts_site_urls' );
-		if ( ! $site_urls ) {
-			$service_project_id = get_option( 'vrts_project_id' );
-			$service_api_route = 'sites/' . $service_project_id;
-			$response = self::rest_service_request( $service_api_route, [], 'get' );
-
-			if ( $response ) {
-				$parse_home_url = wp_parse_url( home_url() );
-				$parse_site_url = wp_parse_url( site_url() );
-
-				$comparison_base_url = $response['response']['base_url'];
-				$comparison_home_url = ( str_contains( $comparison_base_url, $parse_home_url['host'] ) ? $comparison_base_url : null );
-				$comparison_site_url = ( str_contains( $comparison_base_url, $parse_site_url['host'] ) ? $comparison_base_url : null );
-				$comparison_rest_url = $response['response']['rest_url'];
-				$comparison_admin_ajax_url = $response['response']['admin_ajax_url'];
-
-				// Store the site urls if not previously saved.
-				$on_activation = false;
-				self::store_site_urls( $on_activation, $comparison_site_url, $comparison_rest_url, $comparison_admin_ajax_url );
-			} else {
-				$on_activation = true;
-				self::store_site_urls( $on_activation );
-			}
-		} else {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode -- It's benign. Used to check if the installation moved from production to local.
-			$stored_urls = json_decode( base64_decode( $site_urls ), true );
-
-			$comparison_rest_url = $stored_urls['rest_url'];
-			$comparison_admin_ajax_url = $stored_urls['admin_ajax_url'];
-		}//end if
-
-		$rest_url = self::get_rest_url();
-		$admin_ajax_url = admin_url( 'admin-ajax.php' );
-	}
-
-	/**
 	 * Get rest url for default language if WPML is installed.
 	 */
 	private static function get_rest_url() {
@@ -323,6 +292,7 @@ class Service {
 	public static function delete_option() {
 		delete_option( 'vrts_project_id' );
 		delete_option( 'vrts_project_token' );
+		delete_option( 'vrts_project_secret' );
 		delete_option( 'vrts_create_token' );
 		delete_option( 'vrts_access_token' );
 		delete_option( 'vrts_homepage_added' );
@@ -336,5 +306,18 @@ class Service {
 	 */
 	public static function is_connected() {
 		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
+	}
+
+	public static function has_secret() {
+		return (bool) get_option( 'vrts_project_secret' );
+	}
+
+	private static function create_secret() {
+		$service_project_id = get_option( 'vrts_project_id' );
+		$service_api_route = 'sites/' . $service_project_id . '/secret';
+		$service_request = self::rest_service_request( $service_api_route, [], 'post' );
+		if ( $service_request['status_code'] === 200 ) {
+			update_option( 'vrts_project_secret', $service_request['response']['secret'] );
+		}
 	}
 }

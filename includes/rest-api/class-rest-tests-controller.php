@@ -8,6 +8,9 @@ use WP_REST_Server;
 use Vrts\Models\Test;
 
 class Rest_Tests_Controller {
+
+	private $namespace;
+	private $resource_name;
 	/**
 	 * Constructor.
 	 */

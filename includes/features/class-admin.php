@@ -11,7 +11,7 @@ class Admin {
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'add_main_menu' ] );
 		add_filter( 'plugin_action_links_' . plugin_basename( vrts()->get_plugin_file() ), [ $this, 'plugin_action_links' ] );
-		add_action( 'admin_init', 'Vrts\Features\Service::check_connection' );
+		add_action( 'admin_init', 'Vrts\Features\Service::connect_service' );
 	}
 
 	/**

@@ -78,13 +78,6 @@ class Rest_Service_Controller {
 		}
 
 		switch ( $data['action'] ) {
-			case 'verify':
-				$response = $this->verify_service_request( $data );
-				break;
-
-			case 'site_created':
-				$response = $this->site_created_request( $data );
-				break;
 
 			case 'test_updated':
 				$response = $this->test_updated_request( $data );
@@ -100,61 +93,6 @@ class Rest_Service_Controller {
 		}//end switch
 
 		return $response;
-	}
-
-	/**
-	 * Verify service request
-	 *
-	 * @param array $data Rest api response body.
-	 */
-	private function verify_service_request( $data ) {
-		$service_project_id = get_option( 'vrts_project_id' );
-
-		if ( $service_project_id ) {
-			return new WP_Error( 'error', esc_html__( 'Project already exists.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		if ( ! array_key_exists( 'token', $data ) ) {
-			return new WP_Error( 'error', esc_html__( 'Access token is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		update_option( 'vrts_project_token', $data['token'] );
-
-		return rest_ensure_response([
-			'create_token' => get_option( 'vrts_create_token' ),
-		]);
-	}
-
-	/**
-	 * Site created request
-	 *
-	 * @param array $data Rest api response body.
-	 */
-	private function site_created_request( $data ) {
-		$service_project_id = get_option( 'vrts_project_id' );
-
-		if ( $service_project_id ) {
-			return new WP_Error( 'error', esc_html__( 'Project already exists.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		if ( ! array_key_exists( 'id', $data ) ) {
-			return new WP_Error( 'error', esc_html__( 'Project id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		if ( ! array_key_exists( 'token', $data ) ) {
-			return new WP_Error( 'error', esc_html__( 'Access token is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		update_option( 'vrts_project_token', $data['token'] );
-		update_option( 'vrts_project_id', $data['id'] );
-		Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
-
-		// Add homepage as a test right after the service is linked to plugin.
-		Service::add_homepage_test();
-
-		return rest_ensure_response([
-			'create_token' => get_option( 'vrts_create_token' ),
-		]);
 	}
 
 	/**
