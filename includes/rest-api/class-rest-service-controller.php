@@ -4,10 +4,7 @@ namespace Vrts\Rest_Api;
 
 use WP_Error;
 use WP_REST_Request;
-use Vrts\Models\Test;
-use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use Vrts\Services\Alert_Service;
 use Vrts\Services\Test_Service;
 
 class Rest_Service_Controller {
@@ -113,19 +110,8 @@ class Rest_Service_Controller {
 			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		};
 
-		$test_id = $data['test_id'];
-		$post_id = Test::get_post_id_by_service_test_id( $test_id );
-
-		if ( $post_id ) {
-			if ( array_key_exists( 'is_paused', $data ) && $data['is_paused'] ) {
-				if ( $data['comparison']['pixels_diff'] > 0 ) {
-					$alert_service = new Alert_Service();
-					$alert_service->create_alert_from_comparison( $post_id, $test_id, $data['comparison'] );
-				} //end if
-			} elseif ( $data['schedule']['base_screenshot'] ) {
-				$test_service = new Test_Service();
-				$test_service->update_test_from_schedule( $post_id, $test_id, $data['schedule']['base_screenshot'] );
-			} //end if
+		$test_service = new Test_Service();
+		if ( $test_service->update_test_from_api_data( $data ) ) {
 
 			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 

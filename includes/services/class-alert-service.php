@@ -2,7 +2,6 @@
 
 namespace Vrts\Services;
 
-use Vrts\Features\Email_Notifications;
 use Vrts\Tables\Alerts_Table;
 
 class Alert_Service {
@@ -31,14 +30,6 @@ class Alert_Service {
 				[ 'title' => '#' . $alert_id ],
 				[ 'id' => $alert_id ]
 			);
-		}
-
-		if ( $alert_id ) {
-			$test_service = new Test_Service();
-			$test_service->update_test_from_comparison( $alert_id, $test_id, $comparison );
-			// Send e-mail notification.
-			$email_notifications = new Email_Notifications();
-			$email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
 		}
 
 		return $alert_id;

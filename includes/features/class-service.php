@@ -234,6 +234,12 @@ class Service {
 		return $rest_url;
 	}
 
+	public static function fetch_updates() {
+		$service_project_id = get_option( 'vrts_project_id' );
+		$service_api_route = 'sites/' . $service_project_id . '/updates';
+		return self::rest_service_request( $service_api_route, [], 'get' );
+	}
+
 	/**
 	 * Delete project from the service.
 	 */
