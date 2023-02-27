@@ -3,6 +3,7 @@
 namespace Vrts\Features;
 
 use Vrts\Models\Test;
+use Vrts\Services\Test_Service;
 
 class Service {
 	const DB_VERSION = '1.0';
@@ -196,7 +197,8 @@ class Service {
 			];
 
 			// Save data to custom database table.
-			Test::save( $args );
+			$testService = new Test_Service();
+			$testService->create_test( $args );
 
 			update_post_meta(
 				$homepage_id,

@@ -6,7 +6,6 @@ use Vrts\Features\Metaboxes;
 use Vrts\Tables\Tests_Table;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use WP_Error;
 
 /**
  * Model Tests Page.
@@ -92,7 +91,7 @@ class Test {
 	 *
 	 * @param int $id the id of the item.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public static function get_item( $id = 0 ) {
 		global $wpdb;
@@ -322,59 +321,24 @@ class Test {
 	 *
 	 * @param array $args The arguments to insert.
 	 */
-	public static function save( $args = [] ) {
-		if ( Service::is_connected() ) {
-			global $wpdb;
+	public static function save( $args = [], $row_id = null ) {
+		global $wpdb;
 
-			$tests_table = Tests_Table::get_table_name();
-			$defaults = [
-				'id' => null,
-				'status' => 0,
-				'post_id' => null,
-			];
+		$tests_table = Tests_Table::get_table_name();
 
-			$service_project_id = get_option( 'vrts_project_id' );
-			$click_selectors = vrts()->settings()->get_option( 'vrts_click_selectors' );
-			$args = wp_parse_args( $args, $defaults );
-			$post_id = $args['post_id'];
-			$request_url = 'tests';
-			$parameters = [
-				'project_id' => $service_project_id,
-				'url' => get_permalink( $post_id ),
-				'frequency' => 'daily',
-			];
-			$service_request = Service::rest_service_request( $request_url, $parameters, 'post' );
-			if ( 201 === $service_request['status_code'] ) {
-				$test_id = $service_request['response']['id'];
-				$args['service_test_id'] = $test_id;
-				// TODO: Add some validation.
-
-				// Remove row and post id to determine if new or update.
-				$row_id = (int) $args['id'];
-				unset( $args['id'] );
-				if ( ! $row_id ) {
-					// Insert a new row.
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
-					if ( $wpdb->insert( $tests_table, $args ) ) {
-						Subscription::decrease_tests_count();
-						return $wpdb->insert_id;
-					}
-				} else {
-					// Update existing row.
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-					if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
-						Subscription::decrease_tests_count();
-						return $row_id;
-					}
-				}
-			}//end if
-		}//end if
-
-		return new WP_Error(
-			'no_credits',
-			/* translators: %s: the id of the post. */
-			sprintf( esc_html__( 'Oops, we ran out of testing pages. Page id %s couln’t be added as a test.' ), $post_id )
-		);
+		if ( ! $row_id ) {
+			// Insert a new row.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
+			if ( $wpdb->insert( $tests_table, $args ) ) {
+				return $wpdb->insert_id;
+			}
+		} else {
+			// Update existing row.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
+				return $row_id;
+			}
+		}
 	}
 
 	/**

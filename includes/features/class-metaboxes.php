@@ -4,6 +4,7 @@ namespace Vrts\Features;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
+use Vrts\Services\Test_Service;
 use WP_Error;
 
 class Metaboxes {
@@ -490,7 +491,8 @@ class Metaboxes {
 					'status' => intval( $status ),
 				];
 				// Save data to custom database table.
-				Test::save( $args );
+				$testService = new Test_Service();
+				$testService->create_test( $args );
 
 				// Add post meta to display "New Test" added notification.
 				update_post_meta(

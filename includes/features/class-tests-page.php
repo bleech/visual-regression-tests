@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\List_Tables\Tests_List_Table;
 use Vrts\Models\Test;
 use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 class Tests_Page {
 
@@ -127,7 +128,8 @@ class Tests_Page {
 
 		// New or edit?
 		if ( $post_id ) {
-			$insert_test = Test::save( $fields );
+			$testService = new Test_Service();
+			$insert_test = $testService->create_test( $fields );
 		}
 
 		if ( is_wp_error( $insert_test ) ) {
