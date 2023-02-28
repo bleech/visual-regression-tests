@@ -320,6 +320,9 @@ class Test {
 	 * Insert or update test data
 	 *
 	 * @param array $args The arguments to insert.
+	 * @param int   $row_id The row id to update.
+	 *
+	 * @return int|void
 	 */
 	public static function save( $args = [], $row_id = null ) {
 		global $wpdb;

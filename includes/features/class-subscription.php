@@ -23,7 +23,7 @@ class Subscription {
 		}
 
 		if ( null !== $has_subscription ) {
-			update_option( 'vrts_has_subscription', (int)$has_subscription );
+			update_option( 'vrts_has_subscription', (int) $has_subscription );
 		}
 	}
 

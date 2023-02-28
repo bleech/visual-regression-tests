@@ -6,6 +6,13 @@ use Vrts\Tables\Alerts_Table;
 
 class Alert_Service {
 
+	/**
+	 * Create alert from comparison.
+	 *
+	 * @param int   $post_id Post ID.
+	 * @param int   $test_id Test ID.
+	 * @param array $comparison Comparison.
+	 */
 	public function create_alert_from_comparison( $post_id, $test_id, $comparison ) {
 		global $wpdb;
 		$table_alert = Alerts_Table::get_table_name();

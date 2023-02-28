@@ -12,6 +12,15 @@ use WP_Error;
 
 class Test_Service {
 
+	/**
+	 * Update tests from comparison.
+	 *
+	 * @param int   $alert_id Alert id.
+	 * @param int   $test_id Test id.
+	 * @param array $comparison Comparison.
+	 *
+	 * @return int|false
+	 */
 	public function update_test_from_comparison( $alert_id, $test_id, $comparison ) {
 		global $wpdb;
 		$table_test = Tests_Table::get_table_name();
@@ -28,6 +37,14 @@ class Test_Service {
 		);
 	}
 
+	/**
+	 * Update test from schedule.
+	 *
+	 * @param int   $test_id Test id.
+	 * @param array $screenshot Screenshot.
+	 *
+	 * @return void
+	 */
 	public function update_test_from_schedule( $test_id, $screenshot ) {
 		global $wpdb;
 		$table_test = Tests_Table::get_table_name();
@@ -43,6 +60,13 @@ class Test_Service {
 		);
 	}
 
+	/**
+	 * Create test from API data.
+	 *
+	 * @param array $data Data.
+	 *
+	 * @return int|false
+	 */
 	public function update_test_from_api_data( $data ) {
 		$test_id = $data['test_id'];
 		$post_id = Test::get_post_id_by_service_test_id( $test_id );
@@ -61,17 +85,22 @@ class Test_Service {
 						$email_notifications = new Email_Notifications();
 						$email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
 					}
-				} //end if
+				}//end if
 			} elseif ( $data['schedule']['base_screenshot'] ) {
 				$this->update_test_from_schedule( $post_id, $test_id, $data['schedule']['base_screenshot'] );
-			} //end if
+			}//end if
 			return true;
-		} //end if
+		}//end if
 	}
 
+	/**
+	 * Fetch and update tests.
+	 *
+	 * @return void
+	 */
 	public function fetch_and_update_tests() {
 		$service_request = Service::fetch_updates();
-		if ( $service_request['status_code'] === 200 ) {
+		if ( 200 === $service_request['status_code'] ) {
 			$response = $service_request['response'];
 			if ( array_key_exists( 'updates', $response ) ) {
 				$updates = $response['updates'];
@@ -89,6 +118,13 @@ class Test_Service {
 		}
 	}
 
+	/**
+	 * Create test.
+	 *
+	 * @param array $args Arguments.
+	 *
+	 * @return int|WP_Error
+	 */
 	public function create_test( $args = [] ) {
 		if ( Service::is_connected() ) {
 			$defaults = [

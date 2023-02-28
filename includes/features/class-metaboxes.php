@@ -491,8 +491,8 @@ class Metaboxes {
 					'status' => intval( $status ),
 				];
 				// Save data to custom database table.
-				$testService = new Test_Service();
-				$testService->create_test( $args );
+				$test_service = new Test_Service();
+				$test_service->create_test( $args );
 
 				// Add post meta to display "New Test" added notification.
 				update_post_meta(

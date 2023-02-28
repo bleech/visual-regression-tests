@@ -6,8 +6,23 @@ use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 
 class Cron_Jobs {
+	/**
+	 * Max tries.
+	 *
+	 * @var int
+	 */
 	private $max_tries = 10;
+	/**
+	 * Wait multiplicator.
+	 *
+	 * @var int
+	 */
 	private $wait_multiplicator = 2;
+	/**
+	 * Initial wait.
+	 *
+	 * @var int
+	 */
 	private $initial_wait = 20;
 	/**
 	 * Constructor.
@@ -28,11 +43,20 @@ class Cron_Jobs {
 		$service->fetch_and_update_tests();
 	}
 
+	/**
+	 * Remove jobs.
+	 */
 	public static function remove_jobs() {
 		wp_clear_scheduled_hook( 'vrts_connection_check_cron' );
 		wp_clear_scheduled_hook( 'vrts_fetch_updates_cron' );
 	}
 
+	/**
+	 * Fetch test updates.
+	 *
+	 * @param int $test_id Test id.
+	 * @param int $try_number Try number.
+	 */
 	public function fetch_test_updates( $test_id, $try_number = 1 ) {
 		$test = Test::get_item( $test_id );
 		if ( empty( $test ) || empty( $test->snapshot_date ) ) {
@@ -46,7 +70,12 @@ class Cron_Jobs {
 		}
 	}
 
-	public static function schedule_initial_fetch_test_updates( $test_id) {
+	/**
+	 * Schedule initial fetch test updates.
+	 *
+	 * @param int $test_id Test id.
+	 */
+	public static function schedule_initial_fetch_test_updates( $test_id ) {
 		wp_schedule_single_event( time(), 'vrts_fetch_test_updates', [ $test_id, 1 ] );
 	}
 }

@@ -128,8 +128,8 @@ class Tests_Page {
 
 		// New or edit?
 		if ( $post_id ) {
-			$testService = new Test_Service();
-			$insert_test = $testService->create_test( $fields );
+			$test_service = new Test_Service();
+			$insert_test = $test_service->create_test( $fields );
 		}
 
 		if ( is_wp_error( $insert_test ) ) {

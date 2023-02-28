@@ -9,7 +9,17 @@ use Vrts\Models\Test;
 
 class Rest_Tests_Controller {
 
+	/**
+	 * Namespace.
+	 *
+	 * @var string
+	 */
 	private $namespace;
+	/**
+	 * Resource name.
+	 *
+	 * @var string
+	 */
 	private $resource_name;
 	/**
 	 * Constructor.

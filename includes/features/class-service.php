@@ -20,10 +20,10 @@ class Service {
 		if ( self::DB_VERSION !== $installed_version ) {
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
-		if ( ! self::is_connected()) {
+		if ( ! self::is_connected() ) {
 			self::create_site();
 		}
-		if ( self::is_connected() && ! self::has_secret()) {
+		if ( self::is_connected() && ! self::has_secret() ) {
 			self::create_secret();
 		}
 	}
@@ -38,7 +38,7 @@ class Service {
 	/**
 	 * Helper to create site on service.
 	 *
-	 * @param boolean $force Create site synchronously.
+	 * @return bool
 	 */
 	private static function create_site() {
 		if ( ! empty( get_option( 'vrts_project_id' ) ) || ! empty( get_option( 'vrts_project_token' ) ) ) {
@@ -58,7 +58,7 @@ class Service {
 
 		$service_request = self::rest_service_request( $service_api_route, $parameters, 'post' );
 
-		if ( $service_request['status_code'] === 201 ) {
+		if ( 201 === $service_request['status_code'] ) {
 			$data = $service_request['response'];
 
 			update_option( 'vrts_project_id', $data['id'] );
@@ -197,8 +197,8 @@ class Service {
 			];
 
 			// Save data to custom database table.
-			$testService = new Test_Service();
-			$testService->create_test( $args );
+			$test_service = new Test_Service();
+			$test_service->create_test( $args );
 
 			update_post_meta(
 				$homepage_id,
@@ -236,6 +236,9 @@ class Service {
 		return $rest_url;
 	}
 
+	/**
+	 * Get project id from the service.
+	 */
 	public static function fetch_updates() {
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id . '/updates';
@@ -273,15 +276,21 @@ class Service {
 		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
 	}
 
+	/**
+	 * Check if secret was created
+	 */
 	public static function has_secret() {
 		return (bool) get_option( 'vrts_project_secret' );
 	}
 
+	/**
+	 * Create secret for the project
+	 */
 	private static function create_secret() {
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id . '/secret';
 		$service_request = self::rest_service_request( $service_api_route, [], 'post' );
-		if ( $service_request['status_code'] === 200 ) {
+		if ( 200 === $service_request['status_code'] ) {
 			update_option( 'vrts_project_secret', $service_request['response']['secret'] );
 		}
 	}
