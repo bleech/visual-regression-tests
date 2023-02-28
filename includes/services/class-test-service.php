@@ -87,7 +87,7 @@ class Test_Service {
 					}
 				}//end if
 			} elseif ( $data['schedule']['base_screenshot'] ) {
-				$this->update_test_from_schedule( $post_id, $test_id, $data['schedule']['base_screenshot'] );
+				$this->update_test_from_schedule( $test_id, $data['schedule']['base_screenshot'] );
 			}//end if
 			return true;
 		}//end if
