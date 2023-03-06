@@ -2,6 +2,7 @@
 
 namespace Vrts\Rest_Api;
 
+use Vrts\Features\Subscription;
 use WP_REST_Request;
 use WP_Error;
 use WP_REST_Server;
@@ -22,6 +23,12 @@ class Rest_Tests_Controller {
 	 * Register routes.
 	 */
 	public function register_routes() {
+		register_rest_route($this->namespace, $this->resource_name, [
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => [ $this, 'tests_remaining_total_callback' ],
+			'permission_callback' => '__return_true',
+		]);
+
 		register_rest_route($this->namespace, $this->resource_name . '/post/(?P<post_id>\d+)', [
 			'methods' => WP_REST_Server::READABLE,
 			'callback' => [ $this, 'tests_callback' ],
@@ -30,7 +37,7 @@ class Rest_Tests_Controller {
 	}
 
 	/**
-	 * Gets some data.
+	 * Gets some tests data.
 	 *
 	 * @param WP_REST_Request $request Current request.
 	 */
@@ -49,5 +56,16 @@ class Rest_Tests_Controller {
 			[ 'status' => 404 ] );
 			return rest_ensure_response( $error );
 		}
+	}
+
+	/**
+	 * Get remaining and total tests.
+	 */
+	public function tests_remaining_total_callback() {
+
+		return rest_ensure_response([
+			'remaining_tests' => Subscription::get_remaining_tests(),
+			'total_tests' => Subscription::get_total_tests(),
+		], 200);
 	}
 }
