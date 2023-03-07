@@ -4,6 +4,7 @@ namespace Vrts\Features;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
+use Vrts\Services\Test_Service;
 use WP_Error;
 
 class Metaboxes {
@@ -140,7 +141,6 @@ class Metaboxes {
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
 			'is_connected' => Service::is_connected(),
-			'urls_mismatch' => Service::urls_mismatch(),
 		]);
 	}
 
@@ -491,7 +491,8 @@ class Metaboxes {
 					'status' => intval( $status ),
 				];
 				// Save data to custom database table.
-				Test::save( $args );
+				$test_service = new Test_Service();
+				$test_service->create_test( $args );
 
 				// Add post meta to display "New Test" added notification.
 				update_post_meta(

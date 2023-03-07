@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\List_Tables\Tests_List_Table;
 use Vrts\Models\Test;
 use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 class Tests_Page {
 
@@ -127,7 +128,8 @@ class Tests_Page {
 
 		// New or edit?
 		if ( $post_id ) {
-			$insert_test = Test::save( $fields );
+			$test_service = new Test_Service();
+			$insert_test = $test_service->create_test( $fields );
 		}
 
 		if ( is_wp_error( $insert_test ) ) {
@@ -300,9 +302,7 @@ class Tests_Page {
 		$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 		$is_connected = Service::is_connected();
 
-		if ( Service::urls_mismatch() ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_urls_mismatch' ] );
-		} elseif ( ! Service::is_connected() ) {
+		if ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
 		} else {
 			if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
@@ -340,14 +340,6 @@ class Tests_Page {
 	public function render_notification_connection_failed() {
 		Admin_Notices::render_notification( 'connection_failed' );
 	}
-
-	/**
-	 * Render urls_mismatch Notification.
-	 */
-	public function render_notification_urls_mismatch() {
-		Admin_Notices::render_notification( 'urls_mismatch' );
-	}
-
 
 	/**
 	 * Render get_started Notification.

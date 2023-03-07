@@ -21,6 +21,7 @@ Vrts\Features\Metaboxes::delete_meta_keys();
 Vrts\Features\Service::disconnect_service();
 Vrts\Features\Service::delete_option();
 Vrts\Features\Subscription::delete_options();
+Vrts\Features\Cron_Jobs::remove_jobs();
 
 Vrts\Tables\Alerts_Table::uninstall_table();
 Vrts\Tables\Tests_Table::uninstall_table();

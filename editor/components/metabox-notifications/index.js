@@ -148,30 +148,9 @@ const NotificationConnectionFailed = ( { pluginUrl = '' } ) => {
 	);
 };
 
-const NotificationUrlsMismatch = ( {} ) => {
-	return (
-		<>
-			<div className="vrts-metabox-notice vrts-metabox-notice-is-error">
-				<p>
-					<strong>
-						{ __( 'Connection failed', 'visual-regression-tests' ) }
-					</strong>
-				</p>
-				<p>
-					{ __(
-						'Your website domain seemed to have changed since the plugin was activated. Please restore the original domain or uninstall and reinstall the plugin.',
-						'visual-regression-tests'
-					) }
-				</p>
-			</div>
-		</>
-	);
-};
-
 export {
 	NotificationNewTestAdded,
 	NotificationUnlockMoreTests,
 	NotificationUpgradeRequired,
 	NotificationConnectionFailed,
-	NotificationUrlsMismatch,
 };
