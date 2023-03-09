@@ -12,6 +12,7 @@ require_once 'includes/features/class-admin-notices.php';
 require_once 'includes/features/class-metaboxes.php';
 require_once 'includes/features/class-service.php';
 require_once 'includes/features/class-subscription.php';
+require_once 'includes/features/class-cron-jobs.php';
 
 require_once 'includes/tables/class-alerts-table.php';
 require_once 'includes/tables/class-tests-table.php';
