@@ -212,6 +212,11 @@ class Metaboxes {
 			if ( Test::get_item_id( $post_id ) ) {
 				Test::delete( $post_id );
 			}
+			update_post_meta(
+				$post_id,
+				self::$field_test_status_key,
+				0
+			);
 		}
 	}
 
@@ -492,13 +497,20 @@ class Metaboxes {
 				];
 				// Save data to custom database table.
 				$test_service = new Test_Service();
-				$test_service->create_test( $args );
+				$row_id = $test_service->create_test( $args );
 
 				// Add post meta to display "New Test" added notification.
+				if ( $row_id && ! is_wp_error( $row_id ) ) {
+					update_post_meta(
+						$post_id,
+						self::$field_is_new_test_key,
+						1
+					);
+				}
 				update_post_meta(
 					$post_id,
-					self::$field_is_new_test_key,
-					1
+					self::$field_test_status_key,
+					( $row_id && ! is_wp_error( $row_id ) ) ? 1 : 0
 				);
 			}
 		} elseif ( 0 === $status ) {
