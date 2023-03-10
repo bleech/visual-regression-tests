@@ -512,7 +512,7 @@ class Metaboxes {
 					self::$field_test_status_key,
 					( $row_id && ! is_wp_error( $row_id ) ) ? 1 : 0
 				);
-			}
+			}//end if
 		} elseif ( 0 === $status ) {
 			// Delete data from tests database table if "Run Tests" checkbox is not checked.
 			if ( Test::get_item_id( $post_id ) ) {
