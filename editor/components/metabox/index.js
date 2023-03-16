@@ -70,12 +70,7 @@ const Metabox = () => {
 	useEffect( async () => {
 		if ( isSavingProcess ) {
 			const postId = select( 'core/editor' ).getCurrentPostId();
-			const responseTestId = await apiFetch( {
-				path: `/vrts/v1/tests/post/${ postId }`,
-			} ).catch( ( error ) => {
-				console.log( error ); // eslint-disable-line no-console
-			} );
-			const testId = await responseTestId.test_id;
+			const testId = await getTestId( postId );
 
 			if ( true === runTestsIsChecked && null === testId ) {
 				window.vrts_editor_vars.is_new_test = true;
@@ -93,7 +88,18 @@ const Metabox = () => {
 		}
 	}, [ isSavingProcess ] );
 
-	const setRemaingAndTotalTestsFromApi = async () => {
+	const getTestId = async ( postId ) => {
+		try {
+			const responseTestId = await apiFetch( {
+				path: `/vrts/v1/tests/post/${ postId }`,
+			} );
+			const testId = await responseTestId.test_id;
+			return testId;
+		} catch ( error ) {
+			throw error;
+		}
+	};
+
 		const responseRemainingTotalTests = await apiFetch( {
 			path: `/vrts/v1/tests/`,
 		} ).catch( ( error ) => {
