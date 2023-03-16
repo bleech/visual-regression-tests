@@ -104,7 +104,7 @@ const Metabox = () => {
 		const responseRemainingTotalTests = await apiFetch( {
 			path: `/vrts/v1/tests/`,
 		} ).catch( ( error ) => {
-			console.log( error ); // eslint-disable-line no-console
+			throw error;
 		} );
 		const restApiRemainingTests =
 			await responseRemainingTotalTests.remaining_tests;
