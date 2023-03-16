@@ -81,7 +81,7 @@ const Metabox = () => {
 			}
 
 			setTimeout( () => {
-				setRemaingAndTotalTestsFromApi();
+				setRemainingAndTotalTestsFromApi();
 			}, 2000 ); // Set a delay of 2 seconds, to be sure that the data from api is updated.
 
 			setShowResults( runTestsIsChecked );
@@ -100,6 +100,7 @@ const Metabox = () => {
 		}
 	};
 
+	const setRemainingAndTotalTestsFromApi = async () => {
 		const responseRemainingTotalTests = await apiFetch( {
 			path: `/vrts/v1/tests/`,
 		} ).catch( ( error ) => {
