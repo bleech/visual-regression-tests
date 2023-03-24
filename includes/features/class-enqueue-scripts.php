@@ -116,7 +116,6 @@ class Enqueue_Scripts {
 					'snapshot_date' => Date_Time_Helpers::get_formatted_date_time( Test::get_snapshot_date( $post->ID ) ),
 					'testing_status_instructions' => $testing_status_instructions,
 					'placeholder_image_data_url' => vrts()->get_snapshot_placeholder_image(),
-					'is_new_test' => Metaboxes::is_new_test( $post->ID ),
 					'remaining_tests' => Subscription::get_remaining_tests(),
 					'total_tests' => Subscription::get_total_tests(),
 					'upgrade_url' => admin_url( 'admin.php?page=vrts-upgrade' ),

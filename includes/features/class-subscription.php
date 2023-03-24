@@ -59,6 +59,7 @@ class Subscription {
 			$remaining_tests++;
 			update_option( 'vrts_remaining_tests', $remaining_tests );
 		}
+		return true;
 	}
 
 	/**

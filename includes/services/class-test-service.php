@@ -24,17 +24,19 @@ class Test_Service {
 	public function update_test_from_comparison( $alert_id, $test_id, $comparison ) {
 		global $wpdb;
 		$table_test = Tests_Table::get_table_name();
-		// Update test row with new id foreign key and add latest screenshot.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->update(
-			$table_test,
-			[
-				'current_alert_id' => $alert_id,
-				'target_screenshot_url' => $comparison['screenshot']['image_url'],
-				'snapshot_date' => $comparison['updated_at'],
-			],
-			[ 'service_test_id' => $test_id ]
-		);
+		if ( $comparison['screenshot']['image_url'] ?? null ) {
+			// Update test row with new id foreign key and add latest screenshot.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->update(
+				$table_test,
+				[
+					'current_alert_id' => $alert_id,
+					'target_screenshot_url' => $comparison['screenshot']['image_url'],
+					'snapshot_date' => $comparison['updated_at'],
+				],
+				[ 'service_test_id' => $test_id ]
+			);
+		}
 	}
 
 	/**
@@ -48,16 +50,18 @@ class Test_Service {
 	public function update_test_from_schedule( $test_id, $screenshot ) {
 		global $wpdb;
 		$table_test = Tests_Table::get_table_name();
-		// Update test row with new id foreign key and add latest screenshot.
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		$wpdb->update(
-			$table_test,
-			[
-				'target_screenshot_url' => $screenshot['image_url'],
-				'snapshot_date' => $screenshot['updated_at'],
-			],
-			[ 'service_test_id' => $test_id ]
-		);
+		if ( $screenshot['image_url'] ?? null ) {
+			// Update test row with new id foreign key and add latest screenshot.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			$wpdb->update(
+				$table_test,
+				[
+					'target_screenshot_url' => $screenshot['image_url'],
+					'snapshot_date' => $screenshot['updated_at'],
+				],
+				[ 'service_test_id' => $test_id ]
+			);
+		}
 	}
 
 	/**
@@ -117,53 +121,124 @@ class Test_Service {
 			}
 		}
 	}
-
 	/**
 	 * Create test.
 	 *
-	 * @param array $args Arguments.
+	 * @param int $post_id Post id.
 	 *
 	 * @return int|WP_Error
 	 */
-	public function create_test( $args = [] ) {
+	public function create_test( $post_id ) {
 		if ( Service::is_connected() ) {
-			$defaults = [
-				'id' => null,
-				'status' => 0,
-				'post_id' => null,
-			];
+			$post = get_post( $post_id );
+			if ( ! $post ) {
+				return new WP_Error( 'vrts_post_error', __( 'Post not found.', 'visual-regression-testing-for-wp' ) );
+			}
+			$test = Test::get_item_by_post_id( $post_id );
+			if ( $test ) {
+				return $test;
+			}
+			if ( 'publish' === $post->post_status ) {
+				return $this->create_remote_test( $post );
+			} else {
+				$args = [
+					'post_id' => $post_id,
+					'status' => 0,
+				];
+				$new_row_id = Test::save( $args );
+				return Test::get_item( $new_row_id );
+			}
+		} else {
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+		}//end if
+		return new WP_Error( 'vrts_service_error', __( 'Error creating test.', 'visual-regression-testing-for-wp' ) );
+	}
+
+	/**
+	 * Create test remotely via service.
+	 *
+	 * @param WP_Post $post Post.
+	 * @param array   $test Test.
+	 *
+	 * @return object|WP_Error
+	 */
+	public function create_remote_test( $post, $test = [] ) {
+		if ( Service::is_connected() ) {
 			$service_project_id = get_option( 'vrts_project_id' );
-			$args = wp_parse_args( $args, $defaults );
-			$post_id = $args['post_id'];
 			$request_url = 'tests';
 			$parameters = [
 				'project_id' => $service_project_id,
-				'url' => get_permalink( $post_id ),
+				'url' => get_permalink( $post ),
 				'frequency' => 'daily',
 			];
 			$service_request = Service::rest_service_request( $request_url, $parameters, 'post' );
 			if ( 201 === $service_request['status_code'] ) {
 				$test_id = $service_request['response']['id'];
-				$args['service_test_id'] = $test_id;
+				$args = array_merge($test, [
+					'post_id' => $post->ID,
+					'service_test_id' => $test_id,
+					'status' => 1,
+				]);
+				unset( $args['id'] );
 				// TODO: Add some validation.
 
-				// Remove row and post id to determine if new or update.
-				$row_id = (int) $args['id'];
-				unset( $args['id'] );
-				$new_row_id = Test::save( $args, $row_id );
+				$new_row_id = Test::save( $args, $test['id'] ?? null );
 				if ( $new_row_id ) {
 					Subscription::decrease_tests_count();
 					Cron_Jobs::schedule_initial_fetch_test_updates( $new_row_id );
-					return $new_row_id;
+					return Test::get_item( $new_row_id );
 				}
-			}//end if
+			} else {
+				return new WP_Error( 'vrts_service_error', __( 'Service could not create test.', 'visual-regression-testing-for-wp' ) );
+			}
+		} else {
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
 		}//end if
+	}
 
-		// TODO: handle other errors as well.
-		return new WP_Error(
-			'no_credits',
-			/* translators: %s: the id of the post. */
-			sprintf( esc_html__( 'Oops, we ran out of testing pages. Page id %s couln’t be added as a test.' ), $post_id )
-		);
+	/**
+	 * Delete test.
+	 *
+	 * @param int|object $test_id Test id or test object.
+	 *
+	 * @return bool
+	 */
+	public function delete_test( $test_id ) {
+		$delete_locally = true;
+		$test = ( is_string( $test_id ) || is_int( $test_id ) )
+				? Test::get_item( (int) $test_id )
+				: $test_id;
+		if ( ! empty( $test->service_test_id ) ) {
+			$delete_locally = ! ! $this->delete_remote_test( $test_id );
+		}
+		return $delete_locally && Test::delete( $test->id );
+	}
+
+	/**
+	 * Delete test remotely via service.
+	 *
+	 * @param int|object $test_id Test id or test object.
+	 *
+	 * @return bool
+	 */
+	public function delete_remote_test( $test_id ) {
+		if ( Service::is_connected() ) {
+			$test = ( is_string( $test_id ) || is_int( $test_id ) )
+				? Test::get_item( (int) $test_id )
+				: $test_id;
+			if (
+				Service::delete_test( $test->service_test_id )
+				&& Subscription::increase_tests_count()
+			) {
+				$args = (array) $test;
+				$args['status'] = 0;
+				$args['service_test_id'] = null;
+				unset( $args['id'] );
+				Test::save( $args, $test->id );
+				return $test;
+			} else {
+				return false;
+			}
+		}
 	}
 }

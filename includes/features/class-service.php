@@ -63,7 +63,7 @@ class Service {
 
 			update_option( 'vrts_project_id', $data['id'] );
 			update_option( 'vrts_project_token', $data['token'] );
-			update_option( 'vrts_project_secret', $data['secret'] );
+			update_option( 'vrts_project_secret', $data['secret'] ?? null );
 
 			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 
@@ -168,16 +168,14 @@ class Service {
 	/**
 	 * Send request to server to delete test.
 	 *
-	 * @param int $alert_id the alert id.
+	 * @param int $service_test_id the service test id.
 	 */
-	public static function delete_test( $alert_id ) {
-		$service_test_id = Test::get_service_test_id_by_post_id( $alert_id );
+	public static function delete_test( $service_test_id ) {
+		$service_api_route = 'tests/' . $service_test_id;
 
-		if ( $service_test_id ) {
-			$service_api_route = 'tests/' . $service_test_id;
+		$response = self::rest_service_request( $service_api_route, [], 'delete' );
 
-			$response = self::rest_service_request( $service_api_route, [], 'delete' );
-		}
+		return 200 === $response['status_code'];
 	}
 
 	/**
@@ -190,21 +188,10 @@ class Service {
 		// If plugin was previously activated, don’t add homepage again.
 		if ( ! $homepage_added ) {
 			$homepage_id = get_option( 'page_on_front' );
-			$args = [
-				'id' => Test::get_item_id( $homepage_id ),
-				'post_id' => $homepage_id,
-				'status' => 1,
-			];
 
 			// Save data to custom database table.
 			$test_service = new Test_Service();
-			$test_service->create_test( $args );
-
-			update_post_meta(
-				$homepage_id,
-				Metaboxes::get_post_meta_key_status(),
-				1
-			);
+			$test_service->create_test( $homepage_id );
 
 			update_option( $option_name, 1 );
 		}
@@ -291,7 +278,7 @@ class Service {
 		$service_api_route = 'sites/' . $service_project_id . '/secret';
 		$service_request = self::rest_service_request( $service_api_route, [], 'post' );
 		if ( 200 === $service_request['status_code'] ) {
-			update_option( 'vrts_project_secret', $service_request['response']['secret'] );
+			update_option( 'vrts_project_secret', $service_request['response']['secret'] ?? null );
 		}
 	}
 }

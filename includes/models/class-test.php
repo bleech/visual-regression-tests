@@ -113,6 +113,28 @@ class Test {
 	 *
 	 * @param int $post_id the id of the post.
 	 *
+	 * @return object
+	 */
+	public static function get_item_by_post_id( $post_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE post_id = %d",
+				$post_id
+			)
+		);
+	}
+
+	/**
+	 * Get a single test from database
+	 *
+	 * @param int $post_id the id of the post.
+	 *
 	 * @return array
 	 */
 	public static function get_item_id( $post_id = 0 ) {
@@ -122,6 +144,28 @@ class Test {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT id FROM $tests_table WHERE post_id = %d",
+				$post_id
+			)
+		);
+	}
+
+	/**
+	 * Checks if post has a test
+	 *
+	 * @param int $post_id the id of the post.
+	 *
+	 * @return bool
+	 */
+	public static function exists_for_post( $post_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return ! ! $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT id FROM $tests_table WHERE post_id = %d",
@@ -433,35 +477,35 @@ class Test {
 	}
 
 	/**
-	 * Delete a test from database and update its post meta.
+	 * Delete a test from database.
 	 *
-	 * @param int $post_id the id of the item.
+	 * @param int $test_id the id of the item.
 	 *
-	 * @return array
+	 * @return int
 	 */
-	public static function delete( $post_id = 0 ) {
-		if ( Service::is_connected() ) {
-			global $wpdb;
+	public static function delete( $test_id = 0 ) {
+		global $wpdb;
 
-			$tests_table = Tests_Table::get_table_name();
+		$tests_table = Tests_Table::get_table_name();
 
-			// Field value must set to 0 to be sure that a default value is compatible with gutenberg.
-			update_post_meta(
-				$post_id,
-				Metaboxes::get_post_meta_key_status(),
-				0
-			);
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->delete( $tests_table, [ 'id' => $test_id ] );
+	}
 
-			delete_post_meta(
-				$post_id,
-				Metaboxes::get_post_meta_key_is_new_test()
-			);
+	/**
+	 * Convert values to correct type.
+	 *
+	 * @param object $test The test object.
+	 *
+	 * @return object
+	 */
+	public static function cast_values( $test ) {
+		$test->id = ! is_null( $test->id ) ? (int) $test->id : null;
+		$test->post_id = ! is_null( $test->post_id ) ? (int) $test->post_id : null;
+		$test->status = ! is_null( $test->status ) ? (int) $test->status : null;
+		$test->current_alert_id = ! is_null( $test->current_alert_id ) ? (int) $test->current_alert_id : null;
+		$test->snapshot_date = ! is_null( $test->snapshot_date ) ? mysql2date( 'c', $test->snapshot_date ) : null;
 
-			Service::delete_test( $post_id );
-			Subscription::increase_tests_count();
-
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-			return $wpdb->delete( $tests_table, [ 'post_id' => $post_id ] );
-		}//end if
+		return $test;
 	}
 }

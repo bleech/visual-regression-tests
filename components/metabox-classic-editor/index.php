@@ -7,10 +7,10 @@ if ( ! $data['is_connected'] ) {
 
 <?php wp_nonce_field( $data['nonce'], $data['nonce'] ); ?>
 <p>
-	<?php if ( 0 === intval( $data['remaining_tests'] ) && 0 === $data['run_tests_checked'] ) { ?>
+	<?php if ( 0 === intval( $data['remaining_tests'] ) && ! $data['run_tests_checked'] ) { ?>
 		<input class="widefat" type="checkbox" id="<?php echo esc_attr( $data['field_test_status_key'] ); ?>" value="0" disabled />
 	<?php } else { ?>
-		<input class="widefat" type="checkbox" name="<?php echo esc_attr( $data['field_test_status_key'] ); ?>" id="<?php echo esc_attr( $data['field_test_status_key'] ); ?>" <?php checked( $data['run_tests_checked'], 1 ); ?> value="1" />
+		<input class="widefat" type="checkbox" name="<?php echo esc_attr( $data['field_test_status_key'] ); ?>" id="<?php echo esc_attr( $data['field_test_status_key'] ); ?>" <?php checked( $data['run_tests_checked'] ); ?> value="1" />
 	<?php } ?>
 	<label for="<?php echo esc_attr( $data['field_test_status_key'] ); ?>"><strong><?php esc_html_e( 'Run tests', 'visual-regression-tests' ); ?></strong></label>
 	<br />
@@ -33,7 +33,7 @@ if ( true === $data['is_new_test'] ) {
 
 <?php
 // Display details only when "Run Tests" checkbox is active.
-if ( 1 === $data['run_tests_checked'] ) {
+if ( $data['run_tests_checked'] ) {
 	$status_class_name = ( true === $data['has_post_alert'] ) || (bool) ! $data['test_status'] ? 'testing-status--paused' : 'testing-status--running';
 	?>
 	<div class="testing-status-wrapper">
@@ -68,7 +68,7 @@ if ( 1 === $data['run_tests_checked'] ) {
 			<img class="figure-image" src="<?php echo esc_attr( $data['placeholder_image_data_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 		<?php } ?>
 		<figcaption class="howto">
-			<?php if ( $data['snapshot_date'] ) { ?>
+			<?php if ( $data['snapshot_date'] && $data['target_screenshot_url'] ) { ?>
 				<p><?php esc_html_e( 'Snapshot created on', 'visual-regression-tests' ); ?> <?php echo esc_html( $data['snapshot_date'] ); ?></p>
 			<?php } else { ?>
 				<p><?php esc_html_e( 'First Snapshot: in progress', 'visual-regression-tests' ); ?></p>

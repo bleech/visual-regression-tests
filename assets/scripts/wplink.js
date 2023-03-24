@@ -446,12 +446,12 @@
 					classes = alt ? 'alternate' : '';
 					classes += this.title ? '' : ' no-title';
 					classes +=
-						this.run_tests_status === 1
+						this.run_tests_status
 							? ' vrts-tests--active'
 							: '';
 					list += classes ? '<li class="' + classes + '">' : '<li>';
 
-					if ( this.run_tests_status !== 1 ) {
+					if ( ! this.run_tests_status ) {
 						list +=
 							'<input type="hidden" class="item-permalink" value="' +
 							this.permalink +

@@ -5,6 +5,7 @@ namespace Vrts\List_Tables;
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
+use Vrts\Services\Test_Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -226,10 +227,10 @@ class Tests_List_Table extends \WP_List_Table {
 			$test_ids = wp_unslash( $_POST['id'] ?? 0 );
 
 			foreach ( $test_ids as $test_id ) {
-				$item = (array) Test::get_item( $test_id );
+				$item = Test::get_item( $test_id );
 				if ( $item ) {
-					$post_id = intval( $item['post_id'] );
-					Test::delete( $post_id );
+					$service = new Test_Service();
+					$service->delete_test( (int) $item->id );
 				}
 			}
 		}

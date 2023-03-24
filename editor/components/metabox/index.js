@@ -1,7 +1,7 @@
 // Native
 import { ToggleControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
-import { select, dispatch, subscribe } from '@wordpress/data';
+import { select, subscribe } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import DOMPurify from 'dompurify';
 
@@ -17,110 +17,131 @@ import {
 import apiFetch from '@wordpress/api-fetch';
 
 const Metabox = () => {
-	const hasPostAlert = window.vrts_editor_vars.has_post_alert;
-	const targetScreenshotUrl = window.vrts_editor_vars.target_screenshot_url;
-	const testStatus = window.vrts_editor_vars.test_status;
-	const snapshotDate = window.vrts_editor_vars.snapshot_date;
+	const upgradeUrl = window.vrts_editor_vars.upgrade_url;
+	const pluginUrl = window.vrts_editor_vars.plugin_url;
 	const testingStatusInstructions =
 		window.vrts_editor_vars.testing_status_instructions;
 	const placeholderImageDataUrl =
 		window.vrts_editor_vars.placeholder_image_data_url;
 
-	const [ remainingTests, setRemainingTests ] = useState(
-		parseInt( window.vrts_editor_vars.remaining_tests )
-	);
-	const [ totalTests, setTotalTests ] = useState(
-		parseInt( window.vrts_editor_vars.total_tests )
+	const postId = select( 'core/editor' ).getCurrentPostId();
+	const [ postStatus, setPostStatus ] = useState(
+		select( 'core/editor' ).getEditedPostAttribute( 'status' )
 	);
 
-	const upgradeUrl = window.vrts_editor_vars.upgrade_url;
-	const pluginUrl = window.vrts_editor_vars.plugin_url;
-	const isNewTest = window.vrts_editor_vars.is_new_test;
+	const [ loading, setLoading ] = useState( true );
+	const [ disabled, setDisabled ] = useState( true );
+	const [ test, setTest ] = useState( {} );
+	const [ credits, setCredits ] = useState( {} );
+	const [ newTest, setNewTest ] = useState( false );
 
-	const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' );
-	const runTestsValue =
-		postMeta !== undefined && postMeta._vrts_testing_status
-			? postMeta._vrts_testing_status
-			: false;
-	const [ runTestsIsChecked, setRunTestsChecked ] = useState( runTestsValue );
-	const runTestsOnChange = ( value ) => {
-		setRunTestsChecked( function ( checkedValue ) {
-			return ! checkedValue;
-		} );
-
-		dispatch( 'core/editor' ).editPost( {
-			meta: {
-				_vrts_testing_status: value,
-			},
-		} );
-	};
-
-	const [ showResults, setShowResults ] = useState( runTestsValue );
-	const [ isSavingProcess, setSavingProcess ] = useState( false );
-	const { isSavingPost } = select( 'core/editor' );
-	subscribe( () => {
-		if ( isSavingPost() ) {
-			setSavingProcess( true );
-		} else {
-			setSavingProcess( false );
+	async function createTest() {
+		setLoading( true );
+		try {
+			const response = await apiFetch( {
+				path: `/vrts/v1/tests/post/${ postId }`,
+				method: 'POST',
+			} );
+			setTest( response );
+			if ( test.service_test_id ) {
+				setCredits( {
+					...credits,
+					remaining_tests: credits.remaining_tests - 1,
+				} );
+			}
+		} catch ( error ) {
+			console.log( error ); // eslint-disable-line no-console
 		}
-	} );
+		setLoading( false );
+		setNewTest( true );
+	}
+
+	async function deleteTest() {
+		setLoading( true );
+		try {
+			const previousServiceTestId = test.service_test_id;
+			const response = await apiFetch( {
+				path: `/vrts/v1/tests/post/${ postId }`,
+				method: 'DELETE',
+			} );
+			setTest( response || {} );
+			if ( previousServiceTestId ) {
+				setCredits( {
+					...credits,
+					remaining_tests: credits.remaining_tests + 1,
+				} );
+			}
+		} catch ( error ) {
+			console.log( error ); // eslint-disable-line no-console
+		}
+		setLoading( false );
+	}
+
+	useEffect( () => {
+		if ( 'auto-draft' === postStatus ) {
+			setDisabled( true );
+		} else {
+			setDisabled( false );
+		}
+	}, [ postStatus ] );
 
 	useEffect( async () => {
-		if ( isSavingProcess ) {
-			const postId = select( 'core/editor' ).getCurrentPostId();
-			const responseTestId = await apiFetch( {
+		setLoading( true );
+		try {
+			const response = await apiFetch( {
 				path: `/vrts/v1/tests/post/${ postId }`,
-			} ).catch( ( error ) => {
-				console.log( error ); // eslint-disable-line no-console
 			} );
-			const testId = await responseTestId.test_id;
-
-			if ( true === runTestsIsChecked && null === testId ) {
-				window.vrts_editor_vars.is_new_test = true;
-				window.vrts_editor_vars.has_post_alert = false;
-				window.vrts_editor_vars.test_status = true;
-			} else {
-				window.vrts_editor_vars.is_new_test = false;
-			}
-
-			setTimeout( () => {
-				setRemaingAndTotalTestsFromApi();
-			}, 2000 ); // Set a delay of 2 seconds, to be sure that the data from api is updated.
-
-			setShowResults( runTestsIsChecked );
-		}
-	}, [ isSavingProcess ] );
-
-	const setRemaingAndTotalTestsFromApi = async () => {
-		const responseRemainingTotalTests = await apiFetch( {
-			path: `/vrts/v1/tests/`,
-		} ).catch( ( error ) => {
+			setTest( response );
+		} catch ( error ) {
 			console.log( error ); // eslint-disable-line no-console
-		} );
-		const restApiRemainingTests =
-			await responseRemainingTotalTests.remaining_tests;
-		const restApiTotalTests = await responseRemainingTotalTests.total_tests;
-		if ( restApiRemainingTests !== null ) {
-			setRemainingTests( parseInt( restApiRemainingTests ) );
 		}
-		if ( restApiTotalTests !== null ) {
-			setTotalTests( parseInt( restApiTotalTests ) );
+		setLoading( false );
+	}, [ postStatus ] );
+
+	useEffect( async () => {
+		setLoading( true );
+		try {
+			const response = await apiFetch( {
+				path: `/vrts/v1/tests`,
+			} );
+			setCredits( response );
+		} catch ( error ) {
+			console.log( error ); // eslint-disable-line no-console
 		}
-	};
+	}, [ postStatus ] );
+
+	let wasSavingPost = select( 'core/editor' ).isSavingPost();
+
+	useEffect(
+		() =>
+			subscribe( () => {
+				const newPostStatus =
+					select( 'core/editor' ).getEditedPostAttribute( 'status' );
+				const isSavingPost = select( 'core/editor' ).isSavingPost();
+				if (
+					wasSavingPost &&
+					! isSavingPost &&
+					newPostStatus !== postStatus
+				) {
+					setPostStatus( newPostStatus );
+				}
+				wasSavingPost = isSavingPost;
+			} ),
+		[]
+	);
 
 	let metaboxNotification = null;
-	if ( true === isNewTest ) {
+	if ( true === newTest ) {
 		metaboxNotification = <NotificationNewTestAdded />;
-	} else if ( parseInt( remainingTests ) === 1 ) {
+	} else if ( credits.remaining_tests === 1 ) {
 		metaboxNotification = (
 			<NotificationUnlockMoreTests
 				upgradeUrl={ upgradeUrl }
-				remainingTests={ remainingTests }
-				totalTests={ totalTests }
+				remainingTests={ credits.remaining_tests }
+				totalTests={ credits.total_tests }
 			/>
 		);
-	} else if ( parseInt( remainingTests ) === 0 ) {
+	} else if ( credits.remaining_tests === 0 ) {
 		metaboxNotification = (
 			<NotificationUpgradeRequired upgradeUrl={ upgradeUrl } />
 		);
@@ -132,9 +153,9 @@ const Metabox = () => {
 	}
 
 	let testingStatusText = __( 'Running', 'visual-regression-tests' );
-	if ( hasPostAlert ) {
+	if ( test.current_alert_id ) {
 		testingStatusText = __( 'Paused', 'visual-regression-tests' );
-	} else if ( ! testStatus ) {
+	} else if ( ! test.status ) {
 		testingStatusText = __( 'Disabled', 'visual-regression-tests' );
 	}
 
@@ -146,16 +167,18 @@ const Metabox = () => {
 					'Activate tests to get alerted about visual differences in comparison to the snapshot.',
 					'visual-regression-tests'
 				) }
-				checked={ runTestsIsChecked }
-				onChange={ runTestsOnChange }
+				checked={ test.id }
+				onChange={ test.id ? deleteTest : createTest }
 				disabled={
-					parseInt( remainingTests ) === 0 && ! runTestsIsChecked
+					disabled ||
+					loading ||
+					( credits.remaining_tests === 0 && ! test.id )
 				}
 			/>
 
 			{ metaboxNotification }
 
-			{ showResults && (
+			{ test.id && (
 				<>
 					<div className="testing-status-wrapper">
 						<p className="testing-status">
@@ -165,7 +188,7 @@ const Metabox = () => {
 							<strong>
 								<span
 									className={
-										hasPostAlert || testStatus
+										test.current_alert_id || test.status
 											? 'testing-status--running'
 											: 'testing-status--paused'
 									}
@@ -185,11 +208,11 @@ const Metabox = () => {
 					</div>
 				</>
 			) }
-			{ showResults && (
+			{ test.target_screenshot_url && (
 				<Screenshot
-					url={ targetScreenshotUrl }
+					url={ test.target_screenshot_url }
 					placeholderUrl={ placeholderImageDataUrl }
-					finishDate={ snapshotDate }
+					finishDate={ test.snapshot_date }
 				/>
 			) }
 		</>
