@@ -140,7 +140,7 @@ class Test_Service {
 			}
 			if ( 'publish' === $post->post_status ) {
 				return $this->create_remote_test( $post );
-			} else {
+			} elseif ( 'revision' !== $post->post_type && 'auto-draft' !== $post->post_status ) {
 				$args = [
 					'post_id' => $post_id,
 					'status' => 0,
