@@ -56,9 +56,28 @@ const Metabox = () => {
 		} );
 	};
 
+	const { isSavingPost } = select( 'core/editor' );
 	const [ showResults, setShowResults ] = useState( runTestsValue );
 	const [ isSavingProcess, setSavingProcess ] = useState( false );
-	const { isSavingPost } = select( 'core/editor' );
+	const updatePost = async function () {
+		const postId = select( 'core/editor' ).getCurrentPostId();
+		const testId = await getTestId( postId );
+
+		if ( true === runTestsIsChecked && null === testId ) {
+			window.vrts_editor_vars.is_new_test = true;
+			window.vrts_editor_vars.has_post_alert = false;
+			window.vrts_editor_vars.test_status = true;
+		} else {
+			window.vrts_editor_vars.is_new_test = false;
+		}
+
+		setTimeout( () => {
+			setRemainingAndTotalTestsFromApi();
+		}, 2000 ); // Set a delay of 2 seconds, to be sure that the data from api is updated.
+
+		setShowResults( runTestsIsChecked );
+	};
+
 	subscribe( () => {
 		if ( isSavingPost() ) {
 			setSavingProcess( true );
@@ -67,24 +86,9 @@ const Metabox = () => {
 		}
 	} );
 
-	useEffect( async () => {
+	useEffect( () => {
 		if ( isSavingProcess ) {
-			const postId = select( 'core/editor' ).getCurrentPostId();
-			const testId = await getTestId( postId );
-
-			if ( true === runTestsIsChecked && null === testId ) {
-				window.vrts_editor_vars.is_new_test = true;
-				window.vrts_editor_vars.has_post_alert = false;
-				window.vrts_editor_vars.test_status = true;
-			} else {
-				window.vrts_editor_vars.is_new_test = false;
-			}
-
-			setTimeout( () => {
-				setRemainingAndTotalTestsFromApi();
-			}, 2000 ); // Set a delay of 2 seconds, to be sure that the data from api is updated.
-
-			setShowResults( runTestsIsChecked );
+			updatePost();
 		}
 	}, [ isSavingProcess ] );
 
