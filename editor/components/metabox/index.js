@@ -27,8 +27,13 @@ const Metabox = () => {
 	const placeholderImageDataUrl =
 		window.vrts_editor_vars.placeholder_image_data_url;
 
-	const remainingTests = parseInt( window.vrts_editor_vars.remaining_tests );
-	const totalTests = parseInt( window.vrts_editor_vars.total_tests );
+	const [ remainingTests, setRemainingTests ] = useState(
+		parseInt( window.vrts_editor_vars.remaining_tests )
+	);
+	const [ totalTests, setTotalTests ] = useState(
+		parseInt( window.vrts_editor_vars.total_tests )
+	);
+
 	const upgradeUrl = window.vrts_editor_vars.upgrade_url;
 	const pluginUrl = window.vrts_editor_vars.plugin_url;
 	const isNewTest = window.vrts_editor_vars.is_new_test;
@@ -44,12 +49,6 @@ const Metabox = () => {
 			return ! checkedValue;
 		} );
 
-		if ( value === true ) {
-			window.vrts_editor_vars.remaining_tests--;
-		} else {
-			window.vrts_editor_vars.remaining_tests++;
-		}
-
 		dispatch( 'core/editor' ).editPost( {
 			meta: {
 				_vrts_testing_status: value,
@@ -57,8 +56,28 @@ const Metabox = () => {
 		} );
 	};
 
-	const [ isSavingProcess, setSavingProcess ] = useState( false );
 	const { isSavingPost } = select( 'core/editor' );
+	const [ showResults, setShowResults ] = useState( runTestsValue );
+	const [ isSavingProcess, setSavingProcess ] = useState( false );
+	const updatePost = async function () {
+		const postId = select( 'core/editor' ).getCurrentPostId();
+		const testId = await getTestId( postId );
+
+		if ( true === runTestsIsChecked && null === testId ) {
+			window.vrts_editor_vars.is_new_test = true;
+			window.vrts_editor_vars.has_post_alert = false;
+			window.vrts_editor_vars.test_status = true;
+		} else {
+			window.vrts_editor_vars.is_new_test = false;
+		}
+
+		setTimeout( () => {
+			setRemainingAndTotalTestsFromApi();
+		}, 2000 ); // Set a delay of 2 seconds, to be sure that the data from api is updated.
+
+		setShowResults( runTestsIsChecked );
+	};
+
 	subscribe( () => {
 		if ( isSavingPost() ) {
 			setSavingProcess( true );
@@ -67,28 +86,45 @@ const Metabox = () => {
 		}
 	} );
 
-	useEffect( async () => {
+	useEffect( () => {
 		if ( isSavingProcess ) {
-			const postId = select( 'core/editor' ).getCurrentPostId();
-			const response = await apiFetch( {
-				path: `/vrts/v1/tests/post/${ postId }`,
-			} ).catch( ( error ) => {
-				console.log( error ); // eslint-disable-line no-console
-			} );
-			const testId = await response.test_id;
-
-			if ( true === runTestsIsChecked && null === testId ) {
-				window.vrts_editor_vars.is_new_test = true;
-			} else {
-				window.vrts_editor_vars.is_new_test = false;
-			}
+			updatePost();
 		}
 	}, [ isSavingProcess ] );
+
+	const getTestId = async ( postId ) => {
+		try {
+			const responseTestId = await apiFetch( {
+				path: `/vrts/v1/tests/post/${ postId }`,
+			} );
+			const testId = await responseTestId.test_id;
+			return testId;
+		} catch ( error ) {
+			throw error;
+		}
+	};
+
+	const setRemainingAndTotalTestsFromApi = async () => {
+		const responseRemainingTotalTests = await apiFetch( {
+			path: `/vrts/v1/tests/`,
+		} ).catch( ( error ) => {
+			throw error;
+		} );
+		const restApiRemainingTests =
+			await responseRemainingTotalTests.remaining_tests;
+		const restApiTotalTests = await responseRemainingTotalTests.total_tests;
+		if ( restApiRemainingTests !== null ) {
+			setRemainingTests( parseInt( restApiRemainingTests ) );
+		}
+		if ( restApiTotalTests !== null ) {
+			setTotalTests( parseInt( restApiTotalTests ) );
+		}
+	};
 
 	let metaboxNotification = null;
 	if ( true === isNewTest ) {
 		metaboxNotification = <NotificationNewTestAdded />;
-	} else if ( remainingTests === 1 ) {
+	} else if ( parseInt( remainingTests ) === 1 ) {
 		metaboxNotification = (
 			<NotificationUnlockMoreTests
 				upgradeUrl={ upgradeUrl }
@@ -96,7 +132,7 @@ const Metabox = () => {
 				totalTests={ totalTests }
 			/>
 		);
-	} else if ( remainingTests === 0 ) {
+	} else if ( parseInt( remainingTests ) === 0 ) {
 		metaboxNotification = (
 			<NotificationUpgradeRequired upgradeUrl={ upgradeUrl } />
 		);
@@ -128,12 +164,14 @@ const Metabox = () => {
 				) }
 				checked={ runTestsIsChecked }
 				onChange={ runTestsOnChange }
-				disabled={ remainingTests === 0 && runTestsIsChecked === false }
+				disabled={
+					parseInt( remainingTests ) === 0 && ! runTestsIsChecked
+				}
 			/>
 
 			{ metaboxNotification }
 
-			{ runTestsIsChecked && (
+			{ showResults && (
 				<>
 					<div className="testing-status-wrapper">
 						<p className="testing-status">
@@ -163,7 +201,7 @@ const Metabox = () => {
 					</div>
 				</>
 			) }
-			{ runTestsIsChecked && (
+			{ showResults && (
 				<Screenshot
 					url={ targetScreenshotUrl }
 					placeholderUrl={ placeholderImageDataUrl }
