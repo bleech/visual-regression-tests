@@ -71,7 +71,7 @@ class Test {
 
 		$query = "
 			SELECT
-				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id,
+				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id, tests.service_test_id,
 				posts.post_title
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
@@ -84,6 +84,23 @@ class Test {
 		$items = $wpdb->get_results( $query );
 
 		return $items;
+	}
+
+	/**
+	 * Get all inactive test items from database
+	 *
+	 * @return array
+	 */
+	public static function get_all_inactive() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT * FROM $tests_table WHERE status = 0"
+		);
 	}
 
 	/**
@@ -507,5 +524,31 @@ class Test {
 		$test->snapshot_date = ! is_null( $test->snapshot_date ) ? mysql2date( 'c', $test->snapshot_date ) : null;
 
 		return $test;
+	}
+
+	/**
+	 * Get test by service test id.
+	 *
+	 * @param array $service_test_ids The local only service test ids.
+	 *
+	 * @return object
+	 */
+	public static function clear_remote_test_ids( $service_test_ids ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"UPDATE $tests_table
+					SET
+						service_test_id = NULL,
+						status = 0
+					WHERE service_test_id IN ( %s )",
+				implode( ',', $service_test_ids )
+			)
+		);
 	}
 }

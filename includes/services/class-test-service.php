@@ -211,6 +211,9 @@ class Test_Service {
 		if ( ! empty( $test->service_test_id ) ) {
 			$delete_locally = ! ! $this->delete_remote_test( $test_id );
 		}
+		if ( ! $delete_locally ) {
+			Subscription::get_latest_status();
+		}
 		return $delete_locally && Test::delete( $test->id );
 	}
 
@@ -238,6 +241,32 @@ class Test_Service {
 				return $test;
 			} else {
 				return false;
+			}
+		}
+	}
+
+	/**
+	 * Resume stale tests.
+	 */
+	public function resume_stale_tests() {
+		$stale_tests = Test::get_all_inactive();
+		foreach ( $stale_tests as $stale_test ) {
+			if ( Subscription::get_remaining_tests() > 0 ) {
+				$this->resume_test( $stale_test );
+			}
+		}
+	}
+
+	/**
+	 * Resume test.
+	 *
+	 * @param object $test Test.
+	 */
+	private function resume_test( $test ) {
+		if ( empty( $test->service_test_id ) ) {
+			$post = get_post( $test->post_id );
+			if ( 'publish' === $post->post_status ) {
+				$this->create_remote_test( $post, (array) $test );
 			}
 		}
 	}
