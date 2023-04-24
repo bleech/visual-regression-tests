@@ -85,50 +85,54 @@ const Metabox = () => {
 		}
 	}, [ postStatus ] );
 
-	useEffect( async () => {
+	useEffect( () => {
 		setLoading( true );
-		try {
-			const response = await apiFetch( {
-				path: `/vrts/v1/tests/post/${ postId }`,
-			} );
-			setTest( response );
-		} catch ( error ) {
-			console.log( error ); // eslint-disable-line no-console
+		async function fetchAndSetTest() {
+			try {
+				const response = await apiFetch( {
+					path: `/vrts/v1/tests/post/${ postId }`,
+				} );
+				setTest( response );
+			} catch ( error ) {
+				console.log( error ); // eslint-disable-line no-console
+			}
+			setLoading( false );
 		}
-		setLoading( false );
+		fetchAndSetTest();
 	}, [ postStatus ] );
 
-	useEffect( async () => {
-		setLoading( true );
-		try {
-			const response = await apiFetch( {
-				path: `/vrts/v1/tests`,
-			} );
-			setCredits( response );
-		} catch ( error ) {
-			console.log( error ); // eslint-disable-line no-console
+	useEffect( () => {
+		async function fetchAndSetCredits() {
+			try {
+				const response = await apiFetch( {
+					path: `/vrts/v1/tests`,
+				} );
+				setCredits( response );
+			} catch ( error ) {
+				console.log( error ); // eslint-disable-line no-console
+			}
 		}
+		setLoading( true );
+		fetchAndSetCredits();
 	}, [ postStatus ] );
 
 	let wasSavingPost = select( 'core/editor' ).isSavingPost();
 
-	useEffect(
-		() =>
-			subscribe( () => {
-				const newPostStatus =
-					select( 'core/editor' ).getEditedPostAttribute( 'status' );
-				const isSavingPost = select( 'core/editor' ).isSavingPost();
-				if (
-					wasSavingPost &&
-					! isSavingPost &&
-					newPostStatus !== postStatus
-				) {
-					setPostStatus( newPostStatus );
-				}
-				wasSavingPost = isSavingPost;
-			} ),
-		[]
-	);
+	useEffect( () => {
+		subscribe( () => {
+			const newPostStatus =
+				select( 'core/editor' ).getEditedPostAttribute( 'status' );
+			const isSavingPost = select( 'core/editor' ).isSavingPost();
+			if (
+				wasSavingPost &&
+				! isSavingPost &&
+				newPostStatus !== postStatus
+			) {
+				setPostStatus( newPostStatus );
+			}
+			wasSavingPost = isSavingPost;
+		} );
+	}, [] );
 
 	let metaboxNotification = null;
 	if ( true === newTest ) {
@@ -167,7 +171,7 @@ const Metabox = () => {
 					'Activate tests to get alerted about visual differences in comparison to the snapshot.',
 					'visual-regression-tests'
 				) }
-				checked={ test.id }
+				checked={ test.id ? true : false }
 				onChange={ test.id ? deleteTest : createTest }
 				disabled={
 					disabled ||
