@@ -23,7 +23,7 @@ class Subscription {
 		}
 
 		if ( null !== $has_subscription ) {
-			update_option( 'vrts_has_subscription', $has_subscription );
+			update_option( 'vrts_has_subscription', (int) $has_subscription );
 		}
 	}
 
@@ -59,6 +59,7 @@ class Subscription {
 			$remaining_tests++;
 			update_option( 'vrts_remaining_tests', $remaining_tests );
 		}
+		return true;
 	}
 
 	/**
@@ -102,6 +103,7 @@ class Subscription {
 		$active_test_ids = $response['response']['active_test_ids'];
 		$paused_test_ids = $response['response']['paused_test_ids'];
 
+		$local_only_test_ids = [];
 		foreach ( $local_test_ids as $test_id ) {
 			if ( ! $has_subscription ) {
 				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- This is a loose comparison by design.
@@ -117,6 +119,14 @@ class Subscription {
 					Test::unpause( $test_id );
 				}
 			}
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- This is a loose comparison by design.
+			if ( $test_id && ! in_array( $test_id, $active_test_ids ) && ! in_array( $test_id, $paused_test_ids ) ) {
+				$local_only_test_ids[] = $test_id;
+			}
+		}
+
+		if ( ! empty( $local_only_test_ids ) ) {
+			Test::clear_remote_test_ids( $local_only_test_ids );
 		}
 
 		if ( array_key_exists( 'status_code', $response ) && 200 === $response['status_code'] ) {

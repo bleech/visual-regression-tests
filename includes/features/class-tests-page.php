@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\List_Tables\Tests_List_Table;
 use Vrts\Models\Test;
 use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 class Tests_Page {
 
@@ -119,15 +120,10 @@ class Tests_Page {
 			exit;
 		}
 
-		$fields = [
-			'id' => Test::get_item_id( $post_id ),
-			'status' => 1,
-			'post_id' => $post_id,
-		];
-
 		// New or edit?
 		if ( $post_id ) {
-			$insert_test = Test::save( $fields );
+			$test_service = new Test_Service();
+			$insert_test = $test_service->create_test( $post_id );
 		}
 
 		if ( is_wp_error( $insert_test ) ) {
@@ -135,20 +131,7 @@ class Tests_Page {
 				'new-test-failed' => true,
 				'post_id' => $post_id,
 			], $page_url);
-			// Update post meta.
-			// Field value must set to 0 to be sure that a default value is compatible with gutenberg.
-			update_post_meta(
-				$post_id,
-				Metaboxes::get_post_meta_key_status(),
-				0
-			);
 		} else {
-			// Update post meta.
-			update_post_meta(
-				$post_id,
-				Metaboxes::get_post_meta_key_status(),
-				1
-			);
 			$redirect_to = add_query_arg([
 				'message' => 'success',
 				'new-test-added' => true,
@@ -220,19 +203,18 @@ class Tests_Page {
 
 		// Disable Testing.
 		if ( $test_id && 'disable-testing' === $action ) {
-			$item = (array) Test::get_item( $test_id );
-			if ( $item ) {
-				$set_alert = Test::delete( $item['post_id'] );
-			}
+			$test = Test::get_item( $test_id );
+			$service = new Test_Service();
+			$deleted = $service->delete_test( $test_id );
 
 			$redirect_to = add_query_arg([
 				'message' => 'success',
 				'testing-disabled' => ( Service::is_connected() ? true : false ),
-				'post_id' => $item['post_id'],
+				'post_id' => $test->post_id,
 			], $page_url);
 		}
 
-		if ( is_wp_error( $set_alert ) ) {
+		if ( ! $deleted ) {
 			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
 		}
 
@@ -280,11 +262,8 @@ class Tests_Page {
 		$is_vrts_filter_query = isset( $_POST['vrts_filter_query'] ) ? filter_var( wp_unslash( $_POST['vrts_filter_query'] ), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) : false;
 
 		if ( true === $is_vrts_filter_query ) {
-			$meta_key = Metaboxes::get_post_meta_key_status();
-
 			foreach ( $results as &$result ) {
-				$run_tests_status = intval( get_post_meta( $result['ID'], $meta_key, true ) );
-				$result['run_tests_status'] = $run_tests_status;
+				$result['run_tests_status'] = Test::exists_for_post( $result['ID'] );
 			}
 		}
 
@@ -300,9 +279,7 @@ class Tests_Page {
 		$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 		$is_connected = Service::is_connected();
 
-		if ( Service::urls_mismatch() ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_urls_mismatch' ] );
-		} elseif ( ! Service::is_connected() ) {
+		if ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
 		} else {
 			if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
@@ -340,14 +317,6 @@ class Tests_Page {
 	public function render_notification_connection_failed() {
 		Admin_Notices::render_notification( 'connection_failed' );
 	}
-
-	/**
-	 * Render urls_mismatch Notification.
-	 */
-	public function render_notification_urls_mismatch() {
-		Admin_Notices::render_notification( 'urls_mismatch' );
-	}
-
 
 	/**
 	 * Render get_started Notification.

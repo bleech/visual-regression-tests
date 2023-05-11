@@ -4,14 +4,23 @@ namespace Vrts\Rest_Api;
 
 use WP_Error;
 use WP_REST_Request;
-use Vrts\Models\Test;
-use Vrts\Tables\Tests_Table;
-use Vrts\Tables\Alerts_Table;
-use Vrts\Features\Email_Notifications;
-use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 class Rest_Service_Controller {
+
+	/**
+	 * Namespace.
+	 *
+	 * @var string
+	 */
+	private $namespace;
+	/**
+	 * Resource name.
+	 *
+	 * @var string
+	 */
+	private $resource_name;
 	/**
 	 * Constructor.
 	 */
@@ -76,13 +85,6 @@ class Rest_Service_Controller {
 		}
 
 		switch ( $data['action'] ) {
-			case 'verify':
-				$response = $this->verify_service_request( $data );
-				break;
-
-			case 'site_created':
-				$response = $this->site_created_request( $data );
-				break;
 
 			case 'test_updated':
 				$response = $this->test_updated_request( $data );
@@ -101,139 +103,50 @@ class Rest_Service_Controller {
 	}
 
 	/**
-	 * Verify service request
-	 *
-	 * @param array $data Rest api response body.
-	 */
-	private function verify_service_request( $data ) {
-		$service_project_id = get_option( 'vrts_project_id' );
-
-		if ( $service_project_id ) {
-			return new WP_Error( 'error', esc_html__( 'Project already exists.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		if ( ! array_key_exists( 'token', $data ) ) {
-			return new WP_Error( 'error', esc_html__( 'Access token is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		update_option( 'vrts_project_token', $data['token'] );
-
-		return rest_ensure_response([
-			'create_token' => get_option( 'vrts_create_token' ),
-		]);
-	}
-
-	/**
-	 * Site created request
-	 *
-	 * @param array $data Rest api response body.
-	 */
-	private function site_created_request( $data ) {
-		$service_project_id = get_option( 'vrts_project_id' );
-
-		if ( $service_project_id ) {
-			return new WP_Error( 'error', esc_html__( 'Project already exists.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		if ( ! array_key_exists( 'id', $data ) ) {
-			return new WP_Error( 'error', esc_html__( 'Project id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		if ( ! array_key_exists( 'token', $data ) ) {
-			return new WP_Error( 'error', esc_html__( 'Access token is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		}
-
-		update_option( 'vrts_project_token', $data['token'] );
-		update_option( 'vrts_project_id', $data['id'] );
-		Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
-
-		// Add homepage as a test right after the service is linked to plugin.
-		Service::add_homepage_test();
-
-		return rest_ensure_response([
-			'create_token' => get_option( 'vrts_create_token' ),
-		]);
-	}
-
-	/**
 	 * Test updated request
 	 *
 	 * @param array $data Rest api response body.
 	 */
 	private function test_updated_request( $data ) {
-		if ( ! array_key_exists( 'test_id', $data ) ) {
+		if ( ! array_key_exists( 'project_id', $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Project id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		} elseif ( get_option( 'vrts_project_id' ) !== $data['project_id'] ) {
+			return new WP_Error( 'error', esc_html__( 'Project id does not match.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		} elseif ( ! array_key_exists( 'test_id', $data ) ) {
 			return new WP_Error( 'error', esc_html__( 'Test id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 		}
-		global $wpdb;
 
-		$table_alert = Alerts_Table::get_table_name();
-		$table_test = Tests_Table::get_table_name();
+		if ( ! self::verify_signature( $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		};
 
-		$post_id = Test::get_post_id_by_service_test_id( $data['test_id'] );
-
-		if ( $post_id ) {
-			if ( array_key_exists( 'is_paused', $data ) && $data['is_paused'] ) {
-				if ( $data['comparison']['pixels_diff'] > 0 ) {
-					$prepare_alert = [];
-					$prepare_alert['post_id'] = $post_id;
-					$prepare_alert['screenshot_test_id'] = $data['test_id'];
-					$prepare_alert['target_screenshot_url'] = $data['comparison']['screenshot']['image_url'];
-					$prepare_alert['target_screenshot_finish_date'] = $data['comparison']['screenshot']['updated_at'];
-					$prepare_alert['base_screenshot_url'] = $data['comparison']['base_screenshot']['image_url'];
-					$prepare_alert['base_screenshot_finish_date'] = $data['comparison']['base_screenshot']['updated_at'];
-					$prepare_alert['comparison_screenshot_url'] = $data['comparison']['image_url'];
-					$prepare_alert['differences'] = $data['comparison']['pixels_diff'];
-
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
-					if ( $wpdb->insert( $table_alert, $prepare_alert ) ) {
-						$alert_id = $wpdb->insert_id;
-
-						// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-						$wpdb->update($table_alert,
-							[ 'title' => '#' . $alert_id ],
-							[ 'id' => $alert_id ]
-						);
-					}
-
-					// Update test row with new id foreign key and add latest screenshot.
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-					$wpdb->update( $table_test,
-						[
-							'current_alert_id' => $alert_id,
-							'target_screenshot_url' => $data['comparison']['screenshot']['image_url'],
-							'snapshot_date' => $data['comparison']['updated_at'],
-						],
-						[ 'service_test_id' => $data['test_id'] ]
-					);
-
-					// Send email only if alert was created.
-					if ( $alert_id ) {
-						// Send e-mail notification.
-						$email_notifications = new Email_Notifications();
-						$email_notifications->send_email( $data['comparison']['pixels_diff'], $post_id, $alert_id );
-					}
-				}//end if
-			} elseif ( $data['schedule']['base_screenshot'] ) {
-				// Update test row with new id foreign key and add latest screenshot.
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-				$wpdb->update( $table_test,
-					[
-						'target_screenshot_url' => $data['schedule']['base_screenshot']['image_url'],
-						'snapshot_date' => $data['schedule']['base_screenshot']['updated_at'],
-					],
-					[ 'service_test_id' => $data['test_id'] ]
-				);
-			}//end if
+		$test_service = new Test_Service();
+		if ( $test_service->update_test_from_api_data( $data ) ) {
 
 			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
 
 			return rest_ensure_response([
 				'message' => 'Action test_updated successful.',
 			]);
-
 		}//end if
 
 		return new WP_Error( 'error', esc_html__( 'Test not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
+	}
+
+	/**
+	 * Verify signature
+	 *
+	 * @param array $data Rest api response body.
+	 *
+	 * @return bool
+	 */
+	private function verify_signature( $data ) {
+		$signature = $data['signature'];
+		unset( $data['signature'] );
+
+		$secret = get_option( 'vrts_project_secret' ) || 'verysecret';
+
+		return hash_equals( $signature, hash_hmac( 'sha256', wp_json_encode( $data ), $secret ) );
 	}
 
 	/**

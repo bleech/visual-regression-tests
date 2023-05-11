@@ -1,6 +1,18 @@
 import { __ } from '@wordpress/i18n';
+import { useMemo, useState } from '@wordpress/element';
 
 const Screenshot = ( { url = '', finishDate = '', placeholderUrl = '' } ) => {
+	const [ datetime, setDatetime ] = useState( '' );
+	useMemo( () => {
+		if ( finishDate.length ) {
+			const date = new Date( finishDate );
+			setDatetime(
+				date.toLocaleDateString() +
+					' at ' +
+					date.toLocaleTimeString( undefined, { timeStyle: 'short' } )
+			);
+		}
+	}, [ finishDate ] );
 	return (
 		<>
 			<p className="figure-title">
@@ -41,22 +53,22 @@ const Screenshot = ( { url = '', finishDate = '', placeholderUrl = '' } ) => {
 				) }
 
 				<figcaption className="howto">
-					{ finishDate && (
+					{ datetime && (
 						<p>
 							{ __(
 								'Snapshot created on',
 								'visual-regression-tests'
 							) }{ ' ' }
-							{ finishDate }
+							{ datetime }
 						</p>
 					) }
-					{ ! finishDate && (
+					{ ! datetime && (
 						<p>
 							{ __(
 								'First Snapshot: in progress',
 								'visual-regression-tests'
 							) }{ ' ' }
-							{ finishDate }
+							{ datetime }
 						</p>
 					) }
 					<p>

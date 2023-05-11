@@ -33,10 +33,6 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-license-not-added.php';
 		break;
 
-	case 'urls_mismatch':
-		$template = dirname( __FILE__ ) . '/views/admin-notification-urls-mismatch.php';
-		break;
-
 	case 'test_disabled':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-test-disabled.php';
 		break;

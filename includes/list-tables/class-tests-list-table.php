@@ -5,6 +5,8 @@ namespace Vrts\List_Tables;
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
+use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -71,8 +73,10 @@ class Tests_List_Table extends \WP_List_Table {
 
 			case 'status':
 				$is_connected = Service::is_connected();
+				$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
 				$class = ( null === $item->current_alert_id ) && true === (bool) $item->status && true === (bool) $is_connected ? 'testing-status--running' : 'testing-status--paused';
-				$text = null === $item->current_alert_id
+				$has_remote_test = ! empty( $item->service_test_id );
+				$text = ( null === $item->current_alert_id || $has_remote_test )
 					? esc_html__( 'Running', 'visual-regression-tests' )
 					: esc_html__( 'Paused', 'visual-regression-tests' );
 				$instructions = '';
@@ -88,7 +92,7 @@ class Tests_List_Table extends \WP_List_Table {
 						'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'Edit the alert', 'visual-regression-tests' ) . '">',
 						'</a>'
 					);
-				} elseif ( false === (bool) $item->status ) {
+				} elseif ( false === (bool) $item->status && ( $no_tests_left || $has_remote_test ) ) {
 					$text = esc_html__( 'Disabled', 'visual-regression-tests' );
 					$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
 					$instructions = '<br>';
@@ -98,6 +102,10 @@ class Tests_List_Table extends \WP_List_Table {
 						'<a href="' . $base_link . '" title="' . esc_attr__( 'Upgrade plugin', 'visual-regression-tests' ) . '">',
 						'</a>'
 					);
+				} elseif ( ! $has_remote_test ) {
+					$text = esc_html__( 'Disabled', 'visual-regression-tests' );
+					$instructions = '<br>';
+					$instructions .= esc_html__( 'Publish post to resume testing', 'visual-regression-tests' );
 				}//end if
 
 				return sprintf(
@@ -110,15 +118,19 @@ class Tests_List_Table extends \WP_List_Table {
 			case 'snapshot_date':
 				$status = esc_html__( 'In progress', 'visual-regression-tests' );
 				$date_time = '';
-				if ( $item->snapshot_date ) {
-					$status = sprintf(
-						'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a><br>',
-						Test::get_target_screenshot_url( $item->post_id ),
-						$item->id,
-						esc_html__( 'View this snapshot', 'visual-regression-tests' ),
-						esc_html__( 'View Snapshot', 'visual-regression-tests' )
-					);
-					$date_time = Date_Time_Helpers::get_formatted_date_time( $item->snapshot_date );
+				if ( false === (bool) $item->status ) {
+					$status = esc_html__( 'On hold', 'visual-regression-tests' );
+				} else {
+					if ( $item->snapshot_date ) {
+						$status = sprintf(
+							'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a><br>',
+							Test::get_target_screenshot_url( $item->post_id ),
+							$item->id,
+							esc_html__( 'View this snapshot', 'visual-regression-tests' ),
+							esc_html__( 'View Snapshot', 'visual-regression-tests' )
+						);
+						$date_time = Date_Time_Helpers::get_formatted_date_time( $item->snapshot_date );
+					}
 				}
 				return $status . $date_time;
 
@@ -226,10 +238,10 @@ class Tests_List_Table extends \WP_List_Table {
 			$test_ids = wp_unslash( $_POST['id'] ?? 0 );
 
 			foreach ( $test_ids as $test_id ) {
-				$item = (array) Test::get_item( $test_id );
+				$item = Test::get_item( $test_id );
 				if ( $item ) {
-					$post_id = intval( $item['post_id'] );
-					Test::delete( $post_id );
+					$service = new Test_Service();
+					$service->delete_test( (int) $item->id );
 				}
 			}
 		}

@@ -6,7 +6,6 @@ use Vrts\Features\Metaboxes;
 use Vrts\Tables\Tests_Table;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use WP_Error;
 
 /**
  * Model Tests Page.
@@ -72,7 +71,7 @@ class Test {
 
 		$query = "
 			SELECT
-				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id,
+				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id, tests.service_test_id,
 				posts.post_title
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
@@ -88,11 +87,28 @@ class Test {
 	}
 
 	/**
+	 * Get all inactive test items from database
+	 *
+	 * @return array
+	 */
+	public static function get_all_inactive() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT * FROM $tests_table WHERE status = 0"
+		);
+	}
+
+	/**
 	 * Get a single test from database
 	 *
 	 * @param int $id the id of the item.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public static function get_item( $id = 0 ) {
 		global $wpdb;
@@ -114,6 +130,28 @@ class Test {
 	 *
 	 * @param int $post_id the id of the post.
 	 *
+	 * @return object
+	 */
+	public static function get_item_by_post_id( $post_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_row(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE post_id = %d",
+				$post_id
+			)
+		);
+	}
+
+	/**
+	 * Get a single test from database
+	 *
+	 * @param int $post_id the id of the post.
+	 *
 	 * @return array
 	 */
 	public static function get_item_id( $post_id = 0 ) {
@@ -123,6 +161,28 @@ class Test {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT id FROM $tests_table WHERE post_id = %d",
+				$post_id
+			)
+		);
+	}
+
+	/**
+	 * Checks if post has a test
+	 *
+	 * @param int $post_id the id of the post.
+	 *
+	 * @return bool
+	 */
+	public static function exists_for_post( $post_id = 0 ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return ! ! $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT id FROM $tests_table WHERE post_id = %d",
@@ -321,62 +381,28 @@ class Test {
 	 * Insert or update test data
 	 *
 	 * @param array $args The arguments to insert.
+	 * @param int   $row_id The row id to update.
+	 *
+	 * @return int|void
 	 */
-	public static function save( $args = [] ) {
-		if ( Service::is_connected() ) {
-			global $wpdb;
+	public static function save( $args = [], $row_id = null ) {
+		global $wpdb;
 
-			$tests_table = Tests_Table::get_table_name();
-			$defaults = [
-				'id' => null,
-				'status' => 0,
-				'post_id' => null,
-			];
+		$tests_table = Tests_Table::get_table_name();
 
-			$service_project_id = get_option( 'vrts_project_id' );
-			$click_selectors = vrts()->settings()->get_option( 'vrts_click_selectors' );
-			$args = wp_parse_args( $args, $defaults );
-			$post_id = $args['post_id'];
-			$request_url = 'tests';
-			$parameters = [
-				'project_id' => $service_project_id,
-				'url' => get_permalink( $post_id ),
-				'frequency' => 'daily',
-			];
-			$response_data = Service::rest_service_request( $request_url, $parameters, 'post' );
-			$response_body = json_decode( $response_data['response']['body'], true );
-			$response_code = $response_data['status_code'];
-			if ( 201 === $response_code ) {
-				$test_id = $response_body['id'];
-				$args['service_test_id'] = $test_id;
-				// TODO: Add some validation.
-
-				// Remove row and post id to determine if new or update.
-				$row_id = (int) $args['id'];
-				unset( $args['id'] );
-				if ( ! $row_id ) {
-					// Insert a new row.
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
-					if ( $wpdb->insert( $tests_table, $args ) ) {
-						Subscription::decrease_tests_count();
-						return $wpdb->insert_id;
-					}
-				} else {
-					// Update existing row.
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-					if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
-						Subscription::decrease_tests_count();
-						return $row_id;
-					}
-				}
-			}//end if
-		}//end if
-
-		return new WP_Error(
-			'no_credits',
-			/* translators: %s: the id of the post. */
-			sprintf( esc_html__( 'Oops, we ran out of testing pages. Page id %s couln’t be added as a test.' ), $post_id )
-		);
+		if ( ! $row_id ) {
+			// Insert a new row.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
+			if ( $wpdb->insert( $tests_table, $args ) ) {
+				return $wpdb->insert_id;
+			}
+		} else {
+			// Update existing row.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
+				return $row_id;
+			}
+		}
 	}
 
 	/**
@@ -468,35 +494,61 @@ class Test {
 	}
 
 	/**
-	 * Delete a test from database and update its post meta.
+	 * Delete a test from database.
 	 *
-	 * @param int $post_id the id of the item.
+	 * @param int $test_id the id of the item.
 	 *
-	 * @return array
+	 * @return int
 	 */
-	public static function delete( $post_id = 0 ) {
-		if ( Service::is_connected() ) {
-			global $wpdb;
+	public static function delete( $test_id = 0 ) {
+		global $wpdb;
 
-			$tests_table = Tests_Table::get_table_name();
+		$tests_table = Tests_Table::get_table_name();
 
-			// Field value must set to 0 to be sure that a default value is compatible with gutenberg.
-			update_post_meta(
-				$post_id,
-				Metaboxes::get_post_meta_key_status(),
-				0
-			);
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->delete( $tests_table, [ 'id' => $test_id ] );
+	}
 
-			delete_post_meta(
-				$post_id,
-				Metaboxes::get_post_meta_key_is_new_test()
-			);
+	/**
+	 * Convert values to correct type.
+	 *
+	 * @param object $test The test object.
+	 *
+	 * @return object
+	 */
+	public static function cast_values( $test ) {
+		$test->id = ! is_null( $test->id ) ? (int) $test->id : null;
+		$test->post_id = ! is_null( $test->post_id ) ? (int) $test->post_id : null;
+		$test->status = ! is_null( $test->status ) ? (int) $test->status : null;
+		$test->current_alert_id = ! is_null( $test->current_alert_id ) ? (int) $test->current_alert_id : null;
+		$test->snapshot_date = ! is_null( $test->snapshot_date ) ? mysql2date( 'c', $test->snapshot_date ) : null;
 
-			Service::delete_test( $post_id );
-			Subscription::increase_tests_count();
+		return $test;
+	}
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-			return $wpdb->delete( $tests_table, [ 'post_id' => $post_id ] );
-		}//end if
+	/**
+	 * Get test by service test id.
+	 *
+	 * @param array $service_test_ids The local only service test ids.
+	 *
+	 * @return object
+	 */
+	public static function clear_remote_test_ids( $service_test_ids ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"UPDATE $tests_table
+					SET
+						service_test_id = NULL,
+						status = 0
+					WHERE service_test_id IN ( %s )",
+				implode( ',', $service_test_ids )
+			)
+		);
 	}
 }
