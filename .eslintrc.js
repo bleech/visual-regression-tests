@@ -2,6 +2,7 @@ const path = require( 'path' );
 
 module.exports = {
 	extends: [ 'plugin:@wordpress/eslint-plugin/recommended' ],
+	ignorePatterns: [ 'svn/*' ],
 	settings: {
 		'import/resolver': {
 			alias: {
