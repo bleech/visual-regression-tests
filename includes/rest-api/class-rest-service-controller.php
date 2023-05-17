@@ -123,7 +123,7 @@ class Rest_Service_Controller {
 		$test_service = new Test_Service();
 		if ( $test_service->update_test_from_api_data( $data ) ) {
 
-			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
+			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'], $data['tier_id'] );
 
 			return rest_ensure_response([
 				'message' => 'Action test_updated successful.',

@@ -65,7 +65,7 @@ class Service {
 			update_option( 'vrts_project_token', $data['token'] );
 			update_option( 'vrts_project_secret', $data['secret'] ?? null );
 
-			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'] );
+			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'], $data['tier_id'] );
 
 			self::add_homepage_test();
 

@@ -116,8 +116,9 @@ class Test_Service {
 				array_key_exists( 'remaining_credits', $response )
 				&& array_key_exists( 'total_credits', $response )
 				&& array_key_exists( 'has_subscription', $response )
+				&& array_key_exists( 'tier_id', $response )
 			) {
-				Subscription::update_available_tests( $response['remaining_credits'], $response['total_credits'], $response['has_subscription'] );
+				Subscription::update_available_tests( $response['remaining_credits'], $response['total_credits'], $response['has_subscription'], $response['tier_id'] );
 			}
 		}
 	}
