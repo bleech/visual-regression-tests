@@ -195,22 +195,7 @@ class Alerts_Page {
 
 		// Do the stuff.
 		if ( $alert_id ) {
-			global $wpdb;
-
-			$new_alert_state = 1;
-			$insert_alert = Alert::set_alert_state( $alert_id, $new_alert_state );
-			$table_test = $wpdb->prefix . Tests_Table::TABLE_NAME;
-
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-			$wpdb->update(
-				$table_test,
-				[
-					'current_alert_id' => null,
-				],
-				[
-					'current_alert_id' => $alert_id,
-				]
-			);
+			$insert_alert = static::resolve_alert( $alert_id );
 		}//end if
 
 		if ( is_wp_error( $insert_alert ) ) {
@@ -361,11 +346,12 @@ class Alerts_Page {
 	public static function resolve_alert( $alert_id = null ) {
 		// Set the alert state.
 		$new_alert_state = 1;
-		Alert::set_alert_state( $alert_id, $new_alert_state );
+		$alert_result = Alert::set_alert_state( $alert_id, $new_alert_state );
 
 		// Add the alert from tests table -> this should stop testing.
 		$alert = (object) Alert::get_item( $alert_id );
 		Test::set_alert( $alert->post_id, null );
+		return $alert_result;
 	}
 
 	/**
@@ -396,12 +382,5 @@ class Alerts_Page {
 
 		// Remove the alert from the database.
 		Alert::delete( $alert_id );
-
-		// Field value must set to 0 to be sure that a default value is compatible with gutenberg.
-		update_post_meta(
-			$alert->post_id,
-			Metaboxes::get_post_meta_key_status(),
-			0
-		);
 	}
 }

@@ -40,6 +40,7 @@ class Upgrade_Page {
 		vrts()->component( 'upgrade-page', [
 			'title' => esc_html__( 'Upgrade', 'visual-regression-tests' ),
 			'has_subscription' => Subscription::get_subscription_status(),
+			'tier_id' => Subscription::get_subscription_tier_id(),
 		] );
 	}
 }

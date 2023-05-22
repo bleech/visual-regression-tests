@@ -2,8 +2,8 @@
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
-Tested up to: 6.1
-Stable tag: 1.2.3
+Tested up to: 6.2
+Stable tag: 1.3.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -103,6 +103,10 @@ You can do visual testing either manually or with automated tools. Checking your
 
 Screenshots and comparisons are performed on an external server and sent to your WordPress website. Only required meta data is stored in your database.
 
+= Why are email notifications not working properly? =
+
+If our external screenshot service can not access your WordPress installation directly, test status updates and sending emails will be handled by the WP-Cron system. In order to be notified by the plugin about new alerts, please make sure that your WordPress instance can send emails and that the WordPress cron system is set up correctly. The default configuration of the WordPress cron system does not work reliably if you cache your site heavily, do not have frequent visitors or do not use wp-admin regularly. In this case, you should hook the WP-Cron into the system task scheduler, or use an external cron job scheduling service.
+
 = Does the plugin work with cookie consent banners? =
 
 Yes, cookie banners are not an issue. Before taking a snapshot, the tool can automatically trigger the Accept button to hide the banner. This option can be configured with CSS selectors in the plugin settings.
@@ -152,6 +156,19 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.3.0 =
+* Changed initial validation logic
+* Made functionality work with protected websites
+* Added cron job to fetch test results
+* Allowed adding of tests for unpublished posts
+* Improved code structure
+* Improved communication with external service
+* Improved block editor compatibility and functionality with rest api
+
+= 1.2.4 =
+* Fixed an issue that crashes the Gutenberg editor after upgrading to WordPress 6.2
+* Improved metabox behaviour inside the Gutenberg editor
 
 = 1.2.3 =
 * Fixed tests and alerts search

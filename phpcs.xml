@@ -13,6 +13,7 @@
 
 	<exclude-pattern>*/build/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/svn/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>includes/core/libraries/*</exclude-pattern>
 
