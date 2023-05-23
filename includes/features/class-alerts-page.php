@@ -6,8 +6,8 @@ use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\List_Tables\Alerts_List_Table;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
-use Vrts\Tables\Tests_Table;
 use Vrts\Features\Service;
+use Vrts\Services\Test_Service;
 
 class Alerts_Page {
 
@@ -251,7 +251,8 @@ class Alerts_Page {
 			$alert = (object) Alert::get_item( $alert_id );
 			$test_id = Test::get_item_id( $alert->post_id );
 			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : null;
-			$test_settings_saved = Test::save_hide_css_selectors( $test_id, $hide_css_selectors );
+			$test_service = new Test_Service();
+			$test_settings_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
 		}//end if
 
 		if ( is_wp_error( $test_settings_saved ) ) {

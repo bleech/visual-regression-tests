@@ -179,6 +179,20 @@ class Service {
 	}
 
 	/**
+	 * Send request to server to update test.
+	 *
+	 * @param int   $service_test_id the service test id.
+	 * @param array $data the data.
+	 */
+	public static function update_test( $service_test_id, $data ) {
+		$service_api_route = 'tests/' . $service_test_id;
+
+		$response = self::rest_service_request( $service_api_route, $data, 'put' );
+
+		return 200 === $response['status_code'];
+	}
+
+	/**
 	 * Add homepage as a default test.
 	 */
 	public static function add_homepage_test() {

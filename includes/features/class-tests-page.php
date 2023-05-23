@@ -240,7 +240,8 @@ class Tests_Page {
 		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
 		$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
 
-		$is_saved = Test::save_hide_css_selectors( $test_id, $hide_css_selectors );
+		$test_service = new Test_Service();
+		$is_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
 		$message = $is_saved ? __( 'Changes saved successfully.' ) : __( 'Error while saving the changes.' );
 		$response = [
 			'success' => $is_saved,

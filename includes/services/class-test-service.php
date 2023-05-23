@@ -271,4 +271,33 @@ class Test_Service {
 			}
 		}
 	}
+
+	/**
+	 * Update test.
+	 *
+	 * @param int    $test_id Test id.
+	 * @param string $css_hide_selector CSS selector to hide.
+	 *
+	 * @return int|WP_Error
+	 */
+	public function update_css_hide_selector( $test_id, $css_hide_selector ) {
+		if ( Service::is_connected() ) {
+			$test = Test::get_item( $test_id );
+			if ( ! $test ) {
+				return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-testing-for-wp' ) );
+			}
+
+			$updated = Service::update_test(
+				$test->service_test_id,
+				[ 'options' => [ 'hideSelectors' => $css_hide_selector ] ]
+			);
+			if ( $updated ) {
+				return Test::save_hide_css_selectors( $test_id, $css_hide_selector );
+			} else {
+				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-testing-for-wp' ) );
+			}
+		} else {
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+		}
+	}
 }
