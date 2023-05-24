@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -159,6 +159,10 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.3.1 =
+* Improved functionality to create alerts only if pixel difference is > 1
+* Show the current plan on the update page
 
 = 1.3.0 =
 * Changed initial validation logic
