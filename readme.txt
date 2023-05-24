@@ -57,14 +57,14 @@ In which cases can visual regression testing help you spot issues?
 = GO PRO =
 
 Do you like VRTs and want to run more tests?
-Unlock more features with VRTs Pro:
+Unlock more features with our paid plans:
 
 * test up to **500 pages** in total
 * on **multiple** domains
 * with **automatic daily** test
 * add **multiple alert** recipients
 * get **e-mail** support
-* and access to **new featurest**
+* and access to **new features**
 
 [See all pricing plans](https://bleech.de/en/products/visual-regression-tests/#pricing)
 
