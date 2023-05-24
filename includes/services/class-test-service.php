@@ -77,7 +77,7 @@ class Test_Service {
 
 		if ( $post_id ) {
 			if ( array_key_exists( 'is_paused', $data ) && $data['is_paused'] ) {
-				if ( $data['comparison']['pixels_diff'] > 0 ) {
+				if ( $data['comparison']['pixels_diff'] > 1 ) {
 					$comparison = $data['comparison'];
 					$alert_service = new Alert_Service();
 					$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison );
