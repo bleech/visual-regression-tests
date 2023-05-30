@@ -3,6 +3,7 @@
 namespace Vrts\Features;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 use WP_Error;
@@ -111,6 +112,9 @@ class Metaboxes {
 			);
 		}
 
+		$test_id = Test::get_item_id( $post_id );
+		$test = (object) Test::get_item( $test_id );
+
 		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
@@ -126,6 +130,10 @@ class Metaboxes {
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
 			'is_connected' => Service::is_connected(),
+			'test_settings' => [
+				'test_id' => isset( $test->id ) ? $test->id : null,
+				'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
+			],
 		]);
 	}
 
@@ -161,6 +169,17 @@ class Metaboxes {
 				$service->delete_test( (int) $test_id );
 			}
 		}
+
+		// Save Settings of the test.
+		$test = (object) Test::get_item_by_post_id( $post_id );
+		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
+
+		if ( ! empty( $test ) && ! empty( $test->id ) && (int) $test->id === (int) $test_id ) {
+			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
+			$test_service = new Test_Service();
+			$test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
+		}
+
 	}
 
 	/**
