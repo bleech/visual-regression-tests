@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -49,21 +49,24 @@ In which cases can visual regression testing help you spot issues?
 
 
 = FREE FOREVER =
-* Test up to **3 pages**
-* **Daily testing** interval
-* **30 days** alert history
+* test up to **3 pages**
+* on **one** domain
+* **automatic daily** tests
 
 
 = GO PRO =
 
-Do you like VRTs and want to run more tests? Unlock more features with VRTs Pro:
+Do you like VRTs and want to run more tests?
+Unlock more features with our paid plans:
 
-* Test up to **25 pages**
-* **Daily testing** interval
-* **90 days alert** history
-* **Multiple alert** recipients
-* **E-mail support**
+* test up to **500 pages** in total
+* on **multiple** domains
+* with **automatic daily** test
+* add **multiple alert** recipients
+* get **e-mail** support
+* and access to **new features**
 
+[See all pricing plans](https://bleech.de/en/products/visual-regression-tests/#pricing)
 
 
 = BUG-REPORT =
@@ -105,7 +108,7 @@ Screenshots and comparisons are performed on an external server and sent to your
 
 = Why are email notifications not working properly? =
 
-If our external screenshot service can not access your WordPress installation directly, test status updates and sending emails will be handled by the WP-Cron system. In order to be notified by the plugin about new alerts, please make sure that your WordPress instance can send emails and that the WordPress cron system is set up correctly. The default configuration of the WordPress cron system does not work reliably if you cache your site heavily, do not have frequent visitors or do not use wp-admin regularly. In this case, you should hook the WP-Cron into the system task scheduler, or use an external cron job scheduling service.
+If our external screenshot service can not access your WordPress installation directly, test status updates and sending emails will be handled by the WP-Cron system. In order to be notified by the plugin about new alerts, please make sure that your WordPress instance can send emails and that the WordPress cron system is set up correctly. The default configuration of the WordPress cron system does not work reliably if you cache your site heavily, do not have frequent visitors or do not use wp-admin regularly. In this case, you should [hook the WP-Cron into the system task scheduler](https://developer.wordpress.org/plugins/cron/hooking-wp-cron-into-the-system-task-scheduler/), or use an external cron job scheduling service.
 
 = Does the plugin work with cookie consent banners? =
 
@@ -156,6 +159,10 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.3.1 =
+* Improved functionality to create alerts only if pixel difference is > 1
+* Show the current plan on the update page
 
 = 1.3.0 =
 * Changed initial validation logic
