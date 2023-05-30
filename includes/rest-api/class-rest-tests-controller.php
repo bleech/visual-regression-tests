@@ -60,6 +60,12 @@ class Rest_Tests_Controller {
 			'callback' => [ $this, 'delete_test_callback' ],
 			'permission_callback' => [ $this, 'user_can_create' ],
 		]);
+
+		register_rest_route($this->namespace, $this->resource_name . '/post/(?P<post_id>\d+)', [
+			'methods' => WP_REST_Server::EDITABLE,
+			'callback' => [ $this, 'update_test_callback' ],
+			'permission_callback' => [ $this, 'user_can_create' ],
+		]);
 	}
 
 	/**
@@ -135,6 +141,29 @@ class Rest_Tests_Controller {
 		$error = new WP_Error(
 			'rest_delete_test_failed',
 			esc_html__( 'The test could not be deleted.', 'visual-regression-tests' ),
+		[ 'status' => 400 ] );
+		return rest_ensure_response( $error );
+	}
+
+	/**
+	 * Updates a test.
+	 *
+	 * @param WP_REST_Request $request Current request.
+	 */
+	public function update_test_callback( WP_REST_Request $request ) {
+		$data = $request->get_params();
+		$post_id = $data['post_id'] ?? 0;
+		$test_id = $data['test_id'] ?? 0;
+		$hide_css_selectors = $data['hide_css_selectors'] ?? [];
+
+		if ( 0 !== $post_id && 0 !== $test_id && ! empty( $hide_css_selectors ) ) {
+			$service = new Test_Service();
+			$service->update_css_hide_selector( $test_id, $hide_css_selectors );
+			return rest_ensure_response( [], 200 );
+		}
+		$error = new WP_Error(
+			'rest_update_test_failed',
+			esc_html__( 'The test could not be updated.', 'visual-regression-tests' ),
 		[ 'status' => 400 ] );
 		return rest_ensure_response( $error );
 	}

@@ -13,6 +13,7 @@ import {
 	NotificationUpgradeRequired,
 	NotificationConnectionFailed,
 } from 'editor/components/metabox-notifications';
+import Settings from 'editor/components/settings';
 
 import apiFetch from '@wordpress/api-fetch';
 
@@ -179,9 +180,7 @@ const Metabox = () => {
 					( credits.remaining_tests === 0 && ! test.id )
 				}
 			/>
-
 			{ metaboxNotification }
-
 			{ test.id && (
 				<>
 					<div className="testing-status-wrapper">
@@ -218,6 +217,11 @@ const Metabox = () => {
 					placeholderUrl={ placeholderImageDataUrl }
 					finishDate={ test.snapshot_date }
 				/>
+			) }
+			{ test.id && (
+				<>
+					<Settings test={ test } />
+				</>
 			) }
 		</>
 	);

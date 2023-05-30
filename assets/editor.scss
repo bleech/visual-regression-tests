@@ -71,4 +71,23 @@
 			margin-top: 0.5rem;
 		}
 	}
+
+	.settings {
+		margin: 1.5rem 0;
+
+		&-title {
+			margin-bottom: 0.5rem;
+		}
+
+		label {
+			text-transform: none;
+			color: rgb(117, 117, 117);
+			font-size: 12px;
+		}
+
+		textarea {
+			width: 100%;
+			margin-top: 0.5rem;
+		}
+	}
 }

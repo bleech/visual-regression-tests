@@ -6,6 +6,8 @@ use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Metaboxes;
 use Vrts\Features\Subscription;
+use Vrts\Models\Alert;
+
 class Enqueue_Scripts {
 	/**
 	 * Constructor.
@@ -104,6 +106,9 @@ class Enqueue_Scripts {
 				);
 			}
 
+			$test_id = Test::get_item_id( $post->ID );
+			$test = (object) Test::get_item( $test_id );
+
 			wp_localize_script(
 				'vrts-editor',
 				'vrts_editor_vars',
@@ -121,6 +126,10 @@ class Enqueue_Scripts {
 					'upgrade_url' => admin_url( 'admin.php?page=vrts-upgrade' ),
 					'plugin_url' => admin_url( 'admin.php?page=vrts' ),
 					'is_connected' => Service::is_connected(),
+					'test_settings' => [
+						'test_id' => isset( $test->id ) ? $test->id : null,
+						'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
+					],
 				]
 			);
 		}//end if
