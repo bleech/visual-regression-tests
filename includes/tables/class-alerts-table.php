@@ -43,8 +43,10 @@ class Alerts_Table {
 				PRIMARY KEY (id)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
 			dbDelta( $sql );
 			update_option( $option_name, self::DB_VERSION );
+
 		}//end if
 	}
 
