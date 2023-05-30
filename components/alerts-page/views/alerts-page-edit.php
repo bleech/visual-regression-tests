@@ -153,10 +153,10 @@
 								</div>
 
 								<div id="major-publishing-actions">
-										<div id="publishing-action">
-											<?php submit_button( esc_attr__( 'Save', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert_settings', false ); ?>
-										</div>
-										<div class="clear"></div>
+									<div id="publishing-action">
+										<?php submit_button( esc_attr__( 'Save', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert_settings', false ); ?>
+									</div>
+									<div class="clear"></div>
 								</div>
 
 							</div>
