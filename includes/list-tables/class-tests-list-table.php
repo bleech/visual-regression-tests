@@ -425,9 +425,17 @@ class Tests_List_Table extends \WP_List_Table {
 							<p>
 							<?php
 							printf(
+								/* translators: %1$s, %2$s: strong element wrapper. */
+								esc_html__( '%1$sExclude elements on this page:%2$s ', 'visual-regression-tests' ),
+								'<strong>',
+								'</strong>'
+							);
+							printf(
 								/* translators: %1$s, %2$s: link wrapper. */
-								esc_html__( 'Add %1$sCSS selectors%2$s to exclude elements from screenshots and comparisons.', 'visual-regression-tests' ),
-							'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">', '</a>');
+								esc_html__( 'Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.', 'visual-regression-tests' ),
+								'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
+								'</a>'
+							);
 							?>
 							</p>
 						</div>
