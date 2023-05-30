@@ -59,3 +59,21 @@
 		}
 	}
 }
+
+.vrts_list_table_page {
+
+	.quick-edit-row-test {
+
+		label {
+			pointer-events: none;
+		}
+
+		textarea {
+			width: 100%;
+		}
+
+		.inline-edit-col {
+			max-width: 485px;
+		}
+	}
+}

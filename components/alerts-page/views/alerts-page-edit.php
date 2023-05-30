@@ -58,7 +58,7 @@
 								<div id="minor-publishing">
 
 									<div id="misc-publishing-actions">
-										<div class="misc-pub-section">
+										<div class="misc-pub-section misc-pub-section-icon">
 											<i class="dashicons dashicons-calendar"></i>
 											<?php esc_html_e( 'Detected:', 'visual-regression-tests' ); ?>
 											<strong>
@@ -66,7 +66,7 @@
 											</strong>
 										</div>
 
-										<div class="misc-pub-section">
+										<div class="misc-pub-section misc-pub-section-icon">
 											<i class="dashicons dashicons-image-flip-horizontal"></i>
 											<?php esc_html_e( 'Visual Difference:', 'visual-regression-tests' ); ?>
 											<strong>
@@ -75,7 +75,7 @@
 											</strong>
 										</div>
 
-										<div class="misc-pub-section">
+										<div class="misc-pub-section misc-pub-section-icon">
 											<i class="dashicons dashicons-info-outline"></i>
 											<?php esc_html_e( 'Info:', 'visual-regression-tests' ); ?>
 											<strong class="testing-status--paused">
@@ -114,6 +114,49 @@
 										<?php
 									}
 									?>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<div id="submitdiv" class="postbox">
+						<div class="postbox-header">
+							<h2><?php esc_html_e( 'Settings', 'visual-regression-tests' ); ?></h2>
+						</div>
+						<div class="inside">
+							<div class="submitbox" id="submitpost">
+
+								<div id="minor-publishing">
+
+									<div id="misc-publishing-actions">
+										<div class="misc-pub-section">
+										<label>
+										<?php
+										printf(
+											/* translators: %1$s, %2$s: strong element wrapper. */
+											esc_html__( '%1$sExclude elements on this page:%2$s ', 'visual-regression-tests' ),
+											'<strong>', '</strong>'
+										);
+										printf(
+											/* translators: %1$s, %2$s: link wrapper. */
+											esc_html__( 'Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.', 'visual-regression-tests' ),
+											'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
+											'</a>'
+										);
+										?>
+										</label>
+										<textarea name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>
+										</div>
+									</div>
+									<div class="clear"></div>
+								</div>
+
+								<div id="major-publishing-actions">
+									<div id="publishing-action">
+										<?php submit_button( esc_attr__( 'Save', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert_settings', false ); ?>
+									</div>
+									<div class="clear"></div>
 								</div>
 
 							</div>

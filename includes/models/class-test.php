@@ -71,7 +71,7 @@ class Test {
 
 		$query = "
 			SELECT
-				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id, tests.service_test_id,
+				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id, tests.service_test_id, tests.hide_css_selectors,
 				posts.post_title
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
@@ -403,6 +403,40 @@ class Test {
 				return $row_id;
 			}
 		}
+	}
+
+	/**
+	 * Save hide CSS selectors for a test.
+	 *
+	 * @param int    $id Test ID.
+	 * @param string $hide_css_selectors Hide CSS selectors.
+	 * @return bool
+	 */
+	public static function save_hide_css_selectors( $id = 0, $hide_css_selectors = '' ) {
+		if ( ! $id ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+		$hide_css_selectors = sanitize_text_field( $hide_css_selectors );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$result = $wpdb->update(
+			$tests_table,
+			[
+				'hide_css_selectors' => '' === $hide_css_selectors ? null : $hide_css_selectors,
+			],
+			[
+				'id' => $id,
+			]
+		);
+
+		if ( false === $result ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

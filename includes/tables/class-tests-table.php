@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Tests_Table {
 
-	const DB_VERSION = '1.1';
+	const DB_VERSION = '1.2';
 	const TABLE_NAME = 'vrts_tests';
 
 	/**
@@ -36,10 +36,21 @@ class Tests_Table {
 				snapshot_date datetime,
 				service_test_id varchar(40),
 				target_screenshot_url varchar(2048),
+				hide_css_selectors longtext,
 				PRIMARY KEY (id)
 			) $charset_collate;";
+
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
+
+			if ( version_compare( $installed_version, '1.2', '<=' ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					$wpdb->prepare( 'ALTER TABLE %s ADD hide_css_selectors longtext;', $table_name )
+				);
+			}
+
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
 	}

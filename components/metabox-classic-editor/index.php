@@ -76,5 +76,22 @@ if ( $data['run_tests_checked'] ) {
 			<p><?php esc_html_e( 'Snapshot gets auto-generated upon publishing or updating the page.', 'visual-regression-tests' ); ?></p>
 		</figcaption>
 	</figure>
+
+	<div class="settings">
+		<input name="test_id" type="hidden" value="<?php echo esc_html( $data['test_settings']['test_id'] ); ?>"/>
+		<p class="settings-title"><strong><?php esc_html_e( 'Settings', 'visual-regression-tests' ); ?></strong></p>
+		<label class="howto">
+		<?php
+		esc_html_e( 'Exclude elements on this page: ', 'visual-regression-tests' );
+		printf(
+			/* translators: %1$s, %2$s: link wrapper. */
+			esc_html__( 'Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.', 'visual-regression-tests' ),
+			'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
+			'</a>'
+		);
+		?>
+		</label>
+		<textarea name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>
+	</div>
 <?php }//end if
 ?>

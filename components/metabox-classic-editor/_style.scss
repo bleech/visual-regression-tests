@@ -78,4 +78,16 @@
 		font-size: 0.75rem;
 		color: $gray-700;
 	}
+
+	.settings {
+
+		&-title {
+			margin-bottom: 0.5rem;
+		}
+
+		textarea {
+			width: 100%;
+			margin-top: 0.5rem;
+		}
+	}
 }
