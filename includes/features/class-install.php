@@ -18,6 +18,7 @@ class Install {
 		register_activation_hook( vrts()->get_plugin_file(), [ $this, 'set_activation_admin_notice_transient' ] );
 		add_action( 'admin_notices', [ $this, 'activation_admin_notice' ] );
 
+		add_action( 'init', [ $this, 'install' ], 10, 2 );
 		add_action( 'upgrader_process_complete', [ $this, 'on_upgrade' ], 10, 2 );
 		add_action( 'vrts_plugin_on_upgrade', [ $this, 'install' ], 10, 2 );
 	}
