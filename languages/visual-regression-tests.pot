@@ -1,15 +1,15 @@
-# Copyright (C) 2022 Bleech
+# Copyright (C) 2023 Bleech
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.1.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.3.1.1\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-12-20T13:04:21+00:00\n"
+"POT-Creation-Date: 2023-06-01T20:01:29+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -35,145 +35,180 @@ msgid "https://bleech.de"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:2
-#: components/admin-notification/views/admin-notification-urls-mismatch.php:2
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:2
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-urls-mismatch.php:2
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-connection-failed.php:2
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:2
 #: editor/components/metabox-notifications/index.js:123
-#: editor/components/metabox-notifications/index.js:154
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:123
 msgid "Connection failed"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:3
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-connection-failed.php:3
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:3
 #: editor/components/metabox-notifications/index.js:127
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:127
 msgid "Something went wrong while trying to connect to the external service."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:6
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-connection-failed.php:6
 msgid "Retry connection"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-get-started.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-get-started.php:3
 msgid "Let’s get started!"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-get-started.php:4
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-get-started.php:4
 msgid "Click “Add New“ to create a Visual Regression Test for your Website and find issues before others do."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-license-added.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-license-added.php:3
 msgid "Thank you for Upgrading!"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-license-added.php:4
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-license-added.php:4
 msgid "You have successfully upgraded your plan."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-license-not-added.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-license-not-added.php:3
 msgid "Invalid License Key"
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
 #: components/admin-notification/views/admin-notification-license-not-added.php:8
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-license-not-added.php:8
 msgid "We could not verify the license key you entered. Please check the entry for typos and try again. A license key can only be used on one website at a time. If you are already using the license key on another website, you need to remove it there first. Please don't hesitate to %1$scontact us%2$s for assistance."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-added.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-new-test-added.php:3
 msgid "Test added successfully"
 msgstr ""
 
 #. translators: %s: the title of the page.
 #: components/admin-notification/views/admin-notification-new-test-added.php:8
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-new-test-added.php:8
 msgid "Tests will be run for the following page: %s"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-failed.php:2
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:2
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-new-test-failed.php:2
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:2
 #: editor/components/metabox-notifications/index.js:91
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:91
 msgid "Ready for an Upgrade?"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-failed.php:7
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:7
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-new-test-failed.php:7
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:7
 #: editor/components/metabox-notifications/index.js:102
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:102
 msgid "Looks like you need a bigger plan to add more tests."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-failed.php:9
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:9
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-new-test-failed.php:9
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:9
 #: editor/components/metabox-notifications/index.js:107
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:107
 msgid "Upgrade here!"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-plugin-activated.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-plugin-activated.php:3
 msgid "VRTs Plugin successfully activated!"
 msgstr ""
 
 #. translators: %1$s, %2$s and %3$s, %4$s: link wrapper.
 #: components/admin-notification/views/admin-notification-plugin-activated.php:7
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-plugin-activated.php:7
 msgid "Start to %1$sconfigure tests%2$s, or check the customization options in the %3$splugin settings%4$s."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-settings-saved.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-settings-saved.php:3
 msgid "Settings saved"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-settings-saved.php:4
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-settings-saved.php:4
 msgid "Changes have been saved successfully."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-test-disabled.php:3
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-test-disabled.php:3
 msgid "Test disabled successfully"
 msgstr ""
 
 #. translators: %s: the title of the page.
 #: components/admin-notification/views/admin-notification-test-disabled.php:8
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-test-disabled.php:8
 msgid "No more tests will be run for the following page: %s"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-test-disabled.php:16
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-test-disabled.php:16
 msgid "Undo"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-unlock-more-tests.php:2
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:2
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-unlock-more-tests.php:2
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:2
 #: editor/components/metabox-notifications/index.js:50
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:50
 msgid "Unlock more tests"
 msgstr ""
 
 #. translators: %1$s, %2$s: number of tests.
 #: components/admin-notification/views/admin-notification-unlock-more-tests.php:9
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:9
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-unlock-more-tests.php:9
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:9
 #: editor/components/metabox-notifications/index.js:60
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:60
 msgid "Good work! You have added %1$s of %2$s available tests."
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
 #: components/admin-notification/views/admin-notification-unlock-more-tests.php:15
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:15
+#: svn/visual-regression-tests/components/admin-notification/views/admin-notification-unlock-more-tests.php:15
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:15
 #: editor/components/metabox-notifications/index.js:69
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:69
 msgid "Upgrade %1$shere%2$s to add more tests to your website!"
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-urls-mismatch.php:3
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-urls-mismatch.php:3
-#: editor/components/metabox-notifications/index.js:158
-msgid "Your website domain seemed to have changed since the plugin was activated. Please restore the original domain or uninstall and reinstall the plugin."
-msgstr ""
-
 #: components/alerts-page/views/alert-content.php:3
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:3
 msgid "Snapshot vs. Alert"
 msgstr ""
 
 #: components/alerts-page/views/alert-content.php:6
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:6
 msgid "Difference"
 msgstr ""
 
 #: components/alerts-page/views/alert-content.php:9
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:9
 msgid "Split"
 msgstr ""
 
 #: components/alerts-page/views/alert-content.php:12
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:12
 msgid "Side by Side"
 msgstr ""
 
@@ -182,67 +217,98 @@ msgstr ""
 #: components/alerts-page/views/alert-content.php:25
 #: components/alerts-page/views/alert-content.php:40
 #: components/alerts-page/views/alert-content.php:41
-#: components/metabox-classic-editor/index.php:64
+#: components/metabox-classic-editor/index.php:61
+#: components/metabox-classic-editor/index.php:65
 #: components/metabox-classic-editor/index.php:68
-#: components/metabox-classic-editor/index.php:71
-#: includes/list-tables/class-tests-list-table.php:141
-#: editor/components/screenshot/index.js:7
+#: includes/list-tables/class-tests-list-table.php:153
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:18
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:24
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:25
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:40
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:41
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:61
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:65
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:68
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:153
+#: editor/components/screenshot/index.js:19
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:19
 msgid "Snapshot"
 msgstr ""
 
 #: components/alerts-page/views/alert-content.php:28
 #: components/alerts-page/views/alert-content.php:45
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:28
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:45
 msgid "Screenshot"
 msgstr ""
 
 #: components/alerts-page/views/alert-content.php:29
 #: components/alerts-page/views/alert-content.php:46
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:29
+#: svn/visual-regression-tests/components/alerts-page/views/alert-content.php:46
 msgid "Alert"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:3
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:3
 msgid "Edit Alert"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:10
 #: components/alerts-page/views/alerts-page-view.php:10
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:10
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:10
 msgid "Permalink:"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:14
 #: components/alerts-page/views/alerts-page-view.php:14
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:14
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:14
 msgid "Current Page"
 msgstr ""
 
 #. translators: %d: pages.
 #: components/alerts-page/views/alerts-page-edit.php:19
 #: components/alerts-page/views/alerts-page-view.php:19
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:19
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:19
 msgctxt "e.g. 1 of 2"
 msgid "%1$d of %2$d"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:28
 #: components/alerts-page/views/alerts-page-view.php:28
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:28
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:28
 msgid "Previous alert"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:34
 #: components/alerts-page/views/alerts-page-view.php:34
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:34
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:34
 msgid "Next alert"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:53
 #: components/alerts-page/views/alerts-page-view.php:53
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:53
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:53
 msgid "Details"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:63
 #: components/alerts-page/views/alerts-page-view.php:63
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:63
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:63
 msgid "Detected:"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:71
 #: components/alerts-page/views/alerts-page-view.php:71
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:71
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:71
 msgid "Visual Difference:"
 msgstr ""
 
@@ -253,345 +319,525 @@ msgstr ""
 #: includes/list-tables/class-alerts-list-table.php:193
 #: includes/list-tables/class-alerts-list-table.php:201
 #: includes/list-tables/class-alerts-list-table.php:215
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:74
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:74
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:76
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:193
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:201
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:215
 msgid "%s pixel"
 msgid_plural "%s pixels"
 msgstr[0] ""
 msgstr[1] ""
 
 #: components/alerts-page/views/alerts-page-edit.php:80
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:80
 msgid "Info:"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:84
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:84
 msgid "Testing is paused until alert gets resolved."
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:86
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:86
 msgid "Testing is disconnected until connection with the service is fixed."
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:100
 #: components/alerts-page/views/alerts-page-edit.php:111
 #: components/alerts-page/views/alerts-page-view.php:83
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:100
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:111
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:83
 msgid "Go Back"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:103
 #: includes/list-tables/class-alerts-list-table.php:164
 #: includes/list-tables/class-alerts-list-table.php:261
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:103
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:164
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:261
 msgid "Resolve"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:106
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:106
 msgid "Resolving the alert will resume testing."
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:125
+#: components/metabox-classic-editor/index.php:82
+#: includes/features/class-admin.php:43
+#: includes/features/class-settings-page.php:33
+#: includes/features/class-settings-page.php:34
+#: includes/features/class-settings-page.php:48
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:125
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:82
+#: svn/visual-regression-tests/includes/features/class-admin.php:43
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:33
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:34
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:48
+#: editor/components/settings/index.js:46
+#: svn/visual-regression-tests/editor/components/settings/index.js:46
+msgid "Settings"
+msgstr ""
+
+#. translators: %1$s, %2$s: strong element wrapper.
+#: components/alerts-page/views/alerts-page-edit.php:138
+#: includes/list-tables/class-tests-list-table.php:429
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:138
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:429
+msgid "%1$sExclude elements on this page:%2$s "
+msgstr ""
+
+#. translators: %1$s, %2$s: link wrapper.
+#. translators: %s name of the page
+#: components/alerts-page/views/alerts-page-edit.php:143
+#: components/metabox-classic-editor/index.php:88
+#: includes/list-tables/class-tests-list-table.php:435
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:143
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:88
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:435
+#: editor/components/settings/index.js:69
+#: svn/visual-regression-tests/editor/components/settings/index.js:69
+msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:149
+#: components/metabox-classic-editor/index.php:94
+#: includes/list-tables/class-tests-list-table.php:424
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:149
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:94
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:424
+#: editor/components/settings/index.js:50
+#: svn/visual-regression-tests/editor/components/settings/index.js:50
+msgid "e.g.: .lottie, #ads"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:157
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-edit.php:157
+msgid "Save"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-list.php:3
 #: includes/features/class-alerts-page.php:30
 #: includes/features/class-alerts-page.php:31
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-list.php:3
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:30
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:31
 msgid "Alerts"
 msgstr ""
 
 #. translators: %s: search query.
 #: components/alerts-page/views/alerts-page-list.php:11
 #: components/tests-page/views/tests-page-list.php:19
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-list.php:11
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:19
 msgid "Search results for: %s"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-list.php:28
 #: components/tests-page/views/tests-page-list.php:35
-#: components/tests-page/views/tests-page-list.php:56
+#: components/tests-page/views/tests-page-list.php:60
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-list.php:28
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:35
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:60
 msgid "Search"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-view.php:3
+#: svn/visual-regression-tests/components/alerts-page/views/alerts-page-view.php:3
 msgid "View Alert"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:18
+#: components/metabox-classic-editor/index.php:15
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:15
 msgid "Run tests"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:20
-#: editor/components/metabox/index.js:125
+#: components/metabox-classic-editor/index.php:17
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:17
+#: editor/components/metabox/index.js:171
+#: svn/visual-regression-tests/editor/components/metabox/index.js:171
 msgid "Activate tests to get alerted about visual differences in comparison to the snapshot."
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:44
+#: components/metabox-classic-editor/index.php:41
 #: includes/features/class-admin-columns.php:48
-#: includes/list-tables/class-tests-list-table.php:140
-#: editor/components/metabox/index.js:141
+#: includes/list-tables/class-tests-list-table.php:152
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:41
+#: svn/visual-regression-tests/includes/features/class-admin-columns.php:48
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:152
+#: editor/components/metabox/index.js:189
+#: svn/visual-regression-tests/editor/components/metabox/index.js:189
 msgid "Status"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:49
-#: includes/list-tables/class-tests-list-table.php:77
-#: includes/list-tables/class-tests-list-table.php:272
-#: editor/components/metabox/index.js:116
+#: components/metabox-classic-editor/index.php:46
+#: includes/list-tables/class-tests-list-table.php:81
+#: includes/list-tables/class-tests-list-table.php:298
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:46
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:81
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:298
+#: editor/components/metabox/index.js:162
+#: svn/visual-regression-tests/editor/components/metabox/index.js:162
 msgid "Paused"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:51
-#: includes/list-tables/class-tests-list-table.php:92
-#: editor/components/metabox/index.js:118
+#: components/metabox-classic-editor/index.php:48
+#: includes/list-tables/class-tests-list-table.php:96
+#: includes/list-tables/class-tests-list-table.php:106
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:48
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:96
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:106
+#: editor/components/metabox/index.js:164
+#: svn/visual-regression-tests/editor/components/metabox/index.js:164
 msgid "Disabled"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:53
-#: includes/list-tables/class-tests-list-table.php:76
-#: includes/list-tables/class-tests-list-table.php:267
-#: editor/components/metabox/index.js:114
+#: components/metabox-classic-editor/index.php:50
+#: includes/list-tables/class-tests-list-table.php:80
+#: includes/list-tables/class-tests-list-table.php:293
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:50
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:80
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:293
+#: editor/components/metabox/index.js:160
+#: svn/visual-regression-tests/editor/components/metabox/index.js:160
 msgid "Running"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:67
-#: editor/components/screenshot/index.js:16
+#: components/metabox-classic-editor/index.php:64
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:64
+#: editor/components/screenshot/index.js:28
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:28
 msgid "View full snapshot image in new tab"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:75
-#: editor/components/screenshot/index.js:46
+#: components/metabox-classic-editor/index.php:72
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:72
+#: editor/components/screenshot/index.js:58
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:58
 msgid "Snapshot created on"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:77
-#: editor/components/screenshot/index.js:55
+#: components/metabox-classic-editor/index.php:74
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:74
+#: editor/components/screenshot/index.js:67
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:67
 msgid "First Snapshot: in progress"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:79
-#: editor/components/screenshot/index.js:63
+#: components/metabox-classic-editor/index.php:76
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:76
+#: editor/components/screenshot/index.js:75
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:75
 msgid "Snapshot gets auto-generated upon publishing or updating the page."
 msgstr ""
 
+#: components/metabox-classic-editor/index.php:85
+#: svn/visual-regression-tests/components/metabox-classic-editor/index.php:85
+#: editor/components/settings/index.js:60
+#: svn/visual-regression-tests/editor/components/settings/index.js:60
+msgid "Exclude elements on this page: "
+msgstr ""
+
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
 #: editor/components/metabox-notifications/index.js:138
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:138
 msgid "Go to plugin page"
 msgstr ""
 
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:2
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:2
 #: editor/components/metabox-notifications/index.js:11
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:11
 msgid "You have added a new test"
 msgstr ""
 
 #. translators: %s: page title.
 #. translators: %s name of the page
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:7
+#: svn/visual-regression-tests/components/metabox-classic-editor/metabox-notifications/metabox-notification-new-test-added.php:7
 #: editor/components/metabox-notifications/index.js:22
+#: svn/visual-regression-tests/editor/components/metabox-notifications/index.js:22
 msgid "The Visual Regression Test for the page %s has been added!"
 msgstr ""
 
 #: components/tests-page/views/tests-page-list.php:3
 #: includes/features/class-admin.php:42
-#: includes/features/class-tests-page.php:27
 #: includes/features/class-tests-page.php:28
+#: includes/features/class-tests-page.php:29
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:3
+#: svn/visual-regression-tests/includes/features/class-admin.php:42
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:28
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:29
 msgid "Tests"
 msgstr ""
 
 #: components/tests-page/views/tests-page-list.php:11
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:11
 msgid "Add New"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:46
-#: components/tests-page/views/tests-page-list.php:87
+#: components/tests-page/views/tests-page-list.php:50
+#: components/tests-page/views/tests-page-list.php:91
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:50
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:91
 msgid "Add New Test"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:47
+#: components/tests-page/views/tests-page-list.php:51
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:51
 msgid "Close"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:50
+#: components/tests-page/views/tests-page-list.php:54
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:54
 msgid "Destination URL"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:70
+#: components/tests-page/views/tests-page-list.php:74
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:74
 msgid "No search term specified. Showing recent items."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:71
+#: components/tests-page/views/tests-page-list.php:75
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:75
 msgid "Search or use up and down arrow keys to select an item."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:82
+#: components/tests-page/views/tests-page-list.php:86
+#: svn/visual-regression-tests/components/tests-page/views/tests-page-list.php:86
 msgid "Cancel"
 msgstr ""
 
 #. translators: 1: Date, 2: Time.
 #: includes/core/utilities/class-date-time-helpers.php:22
+#: svn/visual-regression-tests/includes/core/utilities/class-date-time-helpers.php:22
 msgctxt "date at time"
 msgid "%1$s at %2$s"
 msgstr ""
 
 #. translators: Date format. See https://www.php.net/manual/datetime.format.php
 #: includes/core/utilities/class-date-time-helpers.php:24
+#: svn/visual-regression-tests/includes/core/utilities/class-date-time-helpers.php:24
 msgctxt "date format"
 msgid "Y/m/d"
 msgstr ""
 
 #. translators: Time format. See https://www.php.net/manual/datetime.format.php
 #: includes/core/utilities/class-date-time-helpers.php:26
+#: svn/visual-regression-tests/includes/core/utilities/class-date-time-helpers.php:26
 msgctxt "time format"
 msgid "g:i a"
 msgstr ""
 
 #: includes/features/class-admin-columns.php:68
+#: svn/visual-regression-tests/includes/features/class-admin-columns.php:68
 msgid "Status: Running"
 msgstr ""
 
 #: includes/features/class-admin-columns.php:69
+#: svn/visual-regression-tests/includes/features/class-admin-columns.php:69
 msgid "Status: Paused"
 msgstr ""
 
 #: includes/features/class-admin-columns.php:82
 #: includes/features/class-admin-columns.php:83
+#: svn/visual-regression-tests/includes/features/class-admin-columns.php:82
+#: svn/visual-regression-tests/includes/features/class-admin-columns.php:83
 msgid "Status: Testing not activated"
 msgstr ""
 
-#: includes/features/class-admin.php:43
-#: includes/features/class-settings-page.php:33
-#: includes/features/class-settings-page.php:34
-#: includes/features/class-settings-page.php:48
-msgid "Settings"
-msgstr ""
-
-#: includes/features/class-alerts-page.php:164
-#: includes/features/class-alerts-page.php:232
-#: includes/features/class-tests-page.php:97
-#: includes/features/class-tests-page.php:172
-#: includes/features/class-tests-page.php:195
+#: includes/features/class-alerts-page.php:171
+#: includes/features/class-alerts-page.php:224
+#: includes/features/class-alerts-page.php:280
+#: includes/features/class-tests-page.php:98
+#: includes/features/class-tests-page.php:155
+#: includes/features/class-tests-page.php:178
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:171
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:224
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:280
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:98
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:155
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:178
 msgid "Are you cheating?"
 msgstr ""
 
-#: includes/features/class-alerts-page.php:168
-#: includes/features/class-alerts-page.php:236
-#: includes/features/class-tests-page.php:101
-#: includes/features/class-tests-page.php:176
-#: includes/features/class-tests-page.php:199
+#: includes/features/class-alerts-page.php:175
+#: includes/features/class-alerts-page.php:228
+#: includes/features/class-alerts-page.php:284
+#: includes/features/class-tests-page.php:102
+#: includes/features/class-tests-page.php:159
+#: includes/features/class-tests-page.php:182
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:175
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:228
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:284
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:102
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:159
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:182
 msgid "Permission Denied!"
 msgstr ""
 
-#: includes/features/class-alerts-page.php:178
-#: includes/features/class-alerts-page.php:247
+#: includes/features/class-alerts-page.php:185
+#: includes/features/class-alerts-page.php:238
+#: includes/features/class-alerts-page.php:295
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:185
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:238
+#: svn/visual-regression-tests/includes/features/class-alerts-page.php:295
 msgid "Error: Alert ID is required."
 msgstr ""
 
 #. translators: %1$s: the id of the alert, %2$s: the home url
 #: includes/features/class-email-notifications.php:25
+#: svn/visual-regression-tests/includes/features/class-email-notifications.php:25
 msgctxt "notification email subject"
 msgid "VRTs: Alert %1$s (%2$s)"
 msgstr ""
 
 #: includes/features/class-email-notifications.php:30
+#: svn/visual-regression-tests/includes/features/class-email-notifications.php:30
 msgctxt "notification email"
 msgid "Howdy,"
 msgstr ""
 
 #: includes/features/class-email-notifications.php:31
+#: svn/visual-regression-tests/includes/features/class-email-notifications.php:31
 msgctxt "notification email"
 msgid "New visual differences have been detected on a page."
 msgstr ""
 
 #: includes/features/class-email-notifications.php:32
+#: svn/visual-regression-tests/includes/features/class-email-notifications.php:32
 msgctxt "notification email"
 msgid "Review and resolve the alert to resume testing:"
 msgstr ""
 
 #. translators: %1$s: the home url
 #: includes/features/class-email-notifications.php:36
+#: svn/visual-regression-tests/includes/features/class-email-notifications.php:36
 msgctxt "notification email"
 msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/features/class-enqueue-scripts.php:101
-#: includes/features/class-metaboxes.php:122
-#: includes/list-tables/class-tests-list-table.php:87
+#: includes/features/class-enqueue-scripts.php:103
+#: includes/features/class-metaboxes.php:109
+#: includes/list-tables/class-tests-list-table.php:91
+#: svn/visual-regression-tests/includes/features/class-enqueue-scripts.php:103
+#: svn/visual-regression-tests/includes/features/class-metaboxes.php:109
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:91
 msgid "Resolve %1$salert%2$s to resume testing"
 msgstr ""
 
 #: includes/features/class-settings-page.php:73
 #: includes/features/class-settings-page.php:79
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:73
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:79
 msgid "Add a single email address."
 msgstr ""
 
 #: includes/features/class-settings-page.php:74
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:74
 msgid "Want to add more email addresses?"
 msgstr ""
 
 #: includes/features/class-settings-page.php:76
 #: includes/features/class-settings-page.php:158
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:76
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:158
 msgid "Upgrade here."
 msgstr ""
 
 #: includes/features/class-settings-page.php:85
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:85
 msgid "Notification Email Address"
 msgstr ""
 
 #: includes/features/class-settings-page.php:92
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:92
 msgid "Email address"
 msgstr ""
 
 #: includes/features/class-settings-page.php:105
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:105
 msgid "Notification Email CC Address(es)"
 msgstr ""
 
 #: includes/features/class-settings-page.php:106
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:106
 msgid "Add a single email address, or separate multiple email addresses with commas, i.e. info@example.com, admin@example.com."
 msgstr ""
 
 #: includes/features/class-settings-page.php:112
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:112
 msgid "Email address(es)"
 msgstr ""
 
 #: includes/features/class-settings-page.php:125
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:125
 msgid "Click an element before creating a snapshot"
 msgstr ""
 
 #. translators: %s: link wrapper.
 #: includes/features/class-settings-page.php:130
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:130
 msgid "Add a %1$sCSS selector%2$s to click on the first element found before creating a new snapshot."
 msgstr ""
 
 #: includes/features/class-settings-page.php:134
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:134
 msgid "Useful to accept cookie banners or anything else that should be clicked after page load."
 msgstr ""
 
 #: includes/features/class-settings-page.php:141
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:141
 msgid "e.g.: [data-cookie-accept]"
 msgstr ""
 
 #: includes/features/class-settings-page.php:153
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:153
 msgid "License Key"
 msgstr ""
 
 #: includes/features/class-settings-page.php:156
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:156
 msgid "No license key yet?"
 msgstr ""
 
 #: includes/features/class-settings-page.php:165
+#: svn/visual-regression-tests/includes/features/class-settings-page.php:165
 msgctxt "license key placeholder"
 msgid "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
 msgstr ""
 
-#: includes/features/class-tests-page.php:111
+#: includes/features/class-tests-page.php:112
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:112
 msgid "Error: Post ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:210
+#: includes/features/class-tests-page.php:193
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:193
 msgid "Error: Test ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:261
+#: includes/features/class-tests-page.php:281
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:281
 msgid "(no title)"
 msgstr ""
 
-#: includes/features/class-tests-page.php:262
+#: includes/features/class-tests-page.php:282
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:282
 msgid "No results to enable visual regression testing found."
 msgstr ""
 
 #. translators: Minimum input length in characters to start searching posts in the "Insert/edit link" modal.
-#: includes/features/class-tests-page.php:264
+#: includes/features/class-tests-page.php:284
+#: svn/visual-regression-tests/includes/features/class-tests-page.php:284
 msgctxt "minimum input length for searching post links"
 msgid "3"
 msgstr ""
@@ -599,191 +845,297 @@ msgstr ""
 #: includes/features/class-upgrade-page.php:28
 #: includes/features/class-upgrade-page.php:29
 #: includes/features/class-upgrade-page.php:41
+#: svn/visual-regression-tests/includes/features/class-upgrade-page.php:28
+#: svn/visual-regression-tests/includes/features/class-upgrade-page.php:29
+#: svn/visual-regression-tests/includes/features/class-upgrade-page.php:41
 msgid "Upgrade"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:45
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:45
 msgid "No alerts found."
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:67
-#: includes/list-tables/class-tests-list-table.php:68
+#: includes/list-tables/class-tests-list-table.php:70
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:67
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:70
 msgid "Open the page in a new tab"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:80
-#: includes/list-tables/class-tests-list-table.php:111
+#: includes/list-tables/class-tests-list-table.php:119
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:80
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:119
 msgid "In progress"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:83
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:83
 msgid "Detected"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:101
-#: includes/list-tables/class-tests-list-table.php:138
+#: includes/list-tables/class-tests-list-table.php:150
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:101
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:150
 msgid "Title"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:102
-#: includes/list-tables/class-tests-list-table.php:139
+#: includes/list-tables/class-tests-list-table.php:151
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:102
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:151
 msgid "Path"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:103
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:103
 msgid "Visual Difference"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:104
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:104
 msgid "Date"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:130
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:130
 msgid "View this alert"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:131
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:131
 msgid "View"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:138
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:138
 msgid "Delete this alert permanently"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:139
 #: includes/list-tables/class-alerts-list-table.php:256
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:139
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:256
 msgid "Delete permanently"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:154
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:154
 msgid "Edit this alert"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:155
 #: includes/list-tables/class-alerts-list-table.php:171
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:155
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:171
 msgid "Edit"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:163
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:163
 msgid "Resolve this alert"
 msgstr ""
 
 #. translators: %s: link wrapper
 #: includes/list-tables/class-alerts-list-table.php:204
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:204
 msgid "Tests on %1$spage%2$s are %3$spaused%4$s"
 msgstr ""
 
 #. translators: %s: link wrapper
 #: includes/list-tables/class-alerts-list-table.php:218
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:218
 msgid "Tests on %1$spage%2$s are %3$snot running until connection with the service is fixed.%4$s"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:325
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:325
 msgid "Open"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:330
+#: svn/visual-regression-tests/includes/list-tables/class-alerts-list-table.php:330
 msgid "Resolved"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:43
+#: includes/list-tables/class-tests-list-table.php:45
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:45
 msgid "No tests found."
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:80
+#: includes/list-tables/class-tests-list-table.php:84
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:84
 msgid "Disconnected"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:88
+#: includes/list-tables/class-tests-list-table.php:92
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:92
 msgid "Edit the alert"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/list-tables/class-tests-list-table.php:97
+#: includes/list-tables/class-tests-list-table.php:101
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:101
 msgid "%1$sUpgrade plugin%2$s to resume testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:98
+#: includes/list-tables/class-tests-list-table.php:102
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:102
 msgid "Upgrade plugin"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:118
+#: includes/list-tables/class-tests-list-table.php:108
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:108
+msgid "Publish post to resume testing"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:122
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:122
+msgid "On hold"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:129
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:129
 msgid "View this snapshot"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:119
+#: includes/list-tables/class-tests-list-table.php:130
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:130
 msgid "View Snapshot"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:162
-#: includes/list-tables/class-tests-list-table.php:179
+#: includes/list-tables/class-tests-list-table.php:174
+#: includes/list-tables/class-tests-list-table.php:198
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:174
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:198
 msgid "Edit this page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:163
+#: includes/list-tables/class-tests-list-table.php:175
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:175
 msgid "Edit Page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:171
+#: includes/list-tables/class-tests-list-table.php:190
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:190
 msgid "Disable testing for this page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:172
-#: includes/list-tables/class-tests-list-table.php:207
+#: includes/list-tables/class-tests-list-table.php:191
+#: includes/list-tables/class-tests-list-table.php:233
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:191
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:233
 msgid "Disable testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:262
+#: includes/list-tables/class-tests-list-table.php:288
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:288
 msgid "All"
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:75
+#: includes/list-tables/class-tests-list-table.php:421
+#: svn/visual-regression-tests/includes/list-tables/class-tests-list-table.php:421
+msgid "Quick Edit"
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:84
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:84
 msgid "Action parameter is missing."
 msgstr ""
 
 #: includes/rest-api/class-rest-service-controller.php:112
-#: includes/rest-api/class-rest-service-controller.php:135
-msgid "Project already exists."
-msgstr ""
-
-#: includes/rest-api/class-rest-service-controller.php:116
-#: includes/rest-api/class-rest-service-controller.php:143
-msgid "Access token is missing."
-msgstr ""
-
-#: includes/rest-api/class-rest-service-controller.php:139
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:112
 msgid "Project id is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:165
+#: includes/rest-api/class-rest-service-controller.php:114
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:114
+msgid "Project id does not match."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:116
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:116
 msgid "Test id is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:236
+#: includes/rest-api/class-rest-service-controller.php:120
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:120
+msgid "Signature is not valid."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:133
+#: includes/services/class-test-service.php:287
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:133
 msgid "Test not found."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:249
+#: includes/rest-api/class-rest-service-controller.php:162
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:162
 msgid "Subscription changed action was successful."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:259
+#: includes/rest-api/class-rest-service-controller.php:172
+#: svn/visual-regression-tests/includes/rest-api/class-rest-service-controller.php:172
 msgid "Unknown action."
 msgstr ""
 
-#: includes/rest-api/class-rest-tests-controller.php:48
+#: includes/rest-api/class-rest-tests-controller.php:90
+#: svn/visual-regression-tests/includes/rest-api/class-rest-tests-controller.php:90
 msgid "The test does not exist."
 msgstr ""
 
-#: editor/components/metabox/index.js:124
+#: includes/rest-api/class-rest-tests-controller.php:122
+#: svn/visual-regression-tests/includes/rest-api/class-rest-tests-controller.php:122
+msgid "The test could not be created."
+msgstr ""
+
+#: includes/rest-api/class-rest-tests-controller.php:144
+#: svn/visual-regression-tests/includes/rest-api/class-rest-tests-controller.php:144
+msgid "The test could not be deleted."
+msgstr ""
+
+#: includes/rest-api/class-rest-tests-controller.php:170
+#: svn/visual-regression-tests/includes/rest-api/class-rest-tests-controller.php:170
+msgid "The test could not be updated."
+msgstr ""
+
+#: includes/services/class-test-service.php:136
+msgid "Post not found."
+msgstr ""
+
+#: includes/services/class-test-service.php:153
+#: includes/services/class-test-service.php:196
+#: includes/services/class-test-service.php:300
+msgid "Service is not connected."
+msgstr ""
+
+#: includes/services/class-test-service.php:155
+msgid "Error creating test."
+msgstr ""
+
+#: includes/services/class-test-service.php:193
+msgid "Service could not create test."
+msgstr ""
+
+#: includes/services/class-test-service.php:297
+msgid "Service could not update test."
+msgstr ""
+
+#: editor/components/metabox/index.js:170
+#: svn/visual-regression-tests/editor/components/metabox/index.js:170
 msgid "Run Tests"
 msgstr ""
 
-#: editor/components/screenshot/index.js:25
-#: editor/components/screenshot/index.js:36
+#: editor/components/screenshot/index.js:37
+#: editor/components/screenshot/index.js:48
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:37
+#: svn/visual-regression-tests/editor/components/screenshot/index.js:48
 msgid "Visual Regression current state"
 msgstr ""
 
 #: editor/plugins/index.js:50
+#: svn/visual-regression-tests/editor/plugins/index.js:50
 msgid "Options"
 msgstr ""
