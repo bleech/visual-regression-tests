@@ -242,9 +242,17 @@ class Tests_Page {
 
 		$test_service = new Test_Service();
 		$is_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
-		$message = $is_saved ? __( 'Changes saved successfully.' ) : __( 'Error while saving the changes.' );
+		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
+			$success = true;
+			$message = __( 'Changes saved successfully.' );
+			$post_id = Test::get_item( $test_id )->post_id;
+			Service::resume_test( $post_id );
+		} else {
+			$success = false;
+			$message = __( 'Error while saving the changes.' );
+		}
 		$response = [
-			'success' => $is_saved,
+			'success' => $success,
 			'message' => $message,
 			'hide_css_selectors' => $hide_css_selectors,
 		];
