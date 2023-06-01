@@ -133,7 +133,7 @@ class Test_Service {
 		if ( Service::is_connected() ) {
 			$post = get_post( $post_id );
 			if ( ! $post ) {
-				return new WP_Error( 'vrts_post_error', __( 'Post not found.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_post_error', __( 'Post not found.', 'visual-regression-tests' ) );
 			}
 			$test = Test::get_item_by_post_id( $post_id );
 			if ( $test ) {
@@ -150,9 +150,9 @@ class Test_Service {
 				return Test::get_item( $new_row_id );
 			}
 		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}//end if
-		return new WP_Error( 'vrts_service_error', __( 'Error creating test.', 'visual-regression-testing-for-wp' ) );
+		return new WP_Error( 'vrts_service_error', __( 'Error creating test.', 'visual-regression-tests' ) );
 	}
 
 	/**
@@ -190,10 +190,10 @@ class Test_Service {
 					return Test::get_item( $new_row_id );
 				}
 			} else {
-				return new WP_Error( 'vrts_service_error', __( 'Service could not create test.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_service_error', __( 'Service could not create test.', 'visual-regression-tests' ) );
 			}
 		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}//end if
 	}
 
@@ -284,7 +284,7 @@ class Test_Service {
 		if ( Service::is_connected() ) {
 			$test = Test::get_item( $test_id );
 			if ( ! $test ) {
-				return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-tests' ) );
 			}
 
 			$updated = Service::update_test(
@@ -294,10 +294,10 @@ class Test_Service {
 			if ( $updated ) {
 				return Test::save_hide_css_selectors( $test_id, $css_hide_selector );
 			} else {
-				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-tests' ) );
 			}
 		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}
 	}
 }
