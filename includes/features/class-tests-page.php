@@ -244,12 +244,12 @@ class Tests_Page {
 		$is_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
 		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
 			$success = true;
-			$message = __( 'Changes saved successfully.' );
+			$message = __( 'Changes saved successfully.', 'visual-regression-tests' );
 			$post_id = Test::get_item( $test_id )->post_id;
 			Service::resume_test( $post_id );
 		} else {
 			$success = false;
-			$message = __( 'Error while saving the changes.' );
+			$message = __( 'Error while saving the changes.', 'visual-regression-tests' );
 		}
 		$response = [
 			'success' => $success,

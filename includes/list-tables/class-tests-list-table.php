@@ -178,8 +178,8 @@ class Tests_List_Table extends \WP_List_Table {
 		$actions['inline hide-if-no-js'] = sprintf(
 			'<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>',
 			/* translators: %s: Page Title. */
-			esc_attr( sprintf( __( 'Quick edit &#8220;%s&#8221; inline' ), $item->post_title ) ),
-			__( 'Quick&nbsp;Edit' )
+			esc_attr( sprintf( __( 'Quick edit &#8220;%s&#8221; inline', 'visual-regression-tests' ), $item->post_title ) ),
+			__( 'Quick&nbsp;Edit', 'visual-regression-tests' )
 		);
 
 		if ( $is_connected ) {
