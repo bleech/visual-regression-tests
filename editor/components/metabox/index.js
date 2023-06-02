@@ -220,7 +220,7 @@ const Metabox = () => {
 			) }
 			{ test.id && (
 				<>
-					<Settings test={ test } />
+					<Settings test={ test } setTest={ setTest } />
 				</>
 			) }
 		</>

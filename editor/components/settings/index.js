@@ -5,7 +5,7 @@ import { debounce } from '@wordpress/compose';
 import apiFetch from '@wordpress/api-fetch';
 import DOMPurify from 'dompurify';
 
-const Settings = ( { test = {} } ) => {
+const Settings = ( { test = {}, setTest } ) => {
 	const [ testState, setTestState ] = useState( {
 		hide_css_selectors: '',
 		...test,
@@ -21,7 +21,7 @@ const Settings = ( { test = {} } ) => {
 	async function saveTestValue() {
 		const { hide_css_selectors: hideCssSelectors } = test;
 		try {
-			await apiFetch( {
+			const response = await apiFetch( {
 				path: `/vrts/v1/tests/post/${ test.post_id }`,
 				method: 'PUT',
 				data: {
@@ -29,6 +29,7 @@ const Settings = ( { test = {} } ) => {
 					hide_css_selectors: hideCssSelectors,
 				},
 			} );
+			setTest( response );
 		} catch ( error ) {
 			console.log( error ); // eslint-disable-line no-console
 		}

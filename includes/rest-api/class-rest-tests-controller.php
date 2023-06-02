@@ -161,7 +161,10 @@ class Rest_Tests_Controller {
 			$updated = $service->update_css_hide_selector( $test_id, $hide_css_selectors );
 			if ( $updated && ! is_wp_error( $updated ) ) {
 				$service->resume_test( $post_id );
-				return rest_ensure_response( [], 200 );
+				$test = Test::get_item_by_post_id( $post_id );
+				if ( ! empty($test) ) {
+					return rest_ensure_response( Test::cast_values( $test ), 200 );
+				}
 			};
 		}
 		$error = new WP_Error(
