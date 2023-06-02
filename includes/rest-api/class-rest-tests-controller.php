@@ -162,7 +162,7 @@ class Rest_Tests_Controller {
 			if ( $updated && ! is_wp_error( $updated ) ) {
 				$service->resume_test( $post_id );
 				$test = Test::get_item_by_post_id( $post_id );
-				if ( ! empty($test) ) {
+				if ( ! empty( $test ) ) {
 					return rest_ensure_response( Test::cast_values( $test ), 200 );
 				}
 			};

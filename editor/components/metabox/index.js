@@ -211,7 +211,7 @@ const Metabox = () => {
 					</div>
 				</>
 			) }
-			{ test.target_screenshot_url && (
+			{ test.id && !! test.status && (
 				<Screenshot
 					url={ test.target_screenshot_url }
 					placeholderUrl={ placeholderImageDataUrl }

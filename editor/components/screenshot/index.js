@@ -4,7 +4,7 @@ import { useMemo, useState } from '@wordpress/element';
 const Screenshot = ( { url = '', finishDate = '', placeholderUrl = '' } ) => {
 	const [ datetime, setDatetime ] = useState( '' );
 	useMemo( () => {
-		if ( finishDate.length ) {
+		if ( finishDate && finishDate.length ) {
 			const date = new Date( finishDate );
 			setDatetime(
 				date.toLocaleDateString() +
@@ -65,7 +65,7 @@ const Screenshot = ( { url = '', finishDate = '', placeholderUrl = '' } ) => {
 					{ ! datetime && (
 						<p>
 							{ __(
-								'First Snapshot: in progress',
+								'Snapshot: in progress',
 								'visual-regression-tests'
 							) }{ ' ' }
 							{ datetime }
