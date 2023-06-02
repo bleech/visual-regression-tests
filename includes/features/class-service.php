@@ -153,10 +153,10 @@ class Service {
 	/**
 	 * Send request to server to resume test.
 	 *
-	 * @param int $alert_id the alert id.
+	 * @param int $post_id the post id.
 	 */
-	public static function resume_test( $alert_id ) {
-		$service_test_id = Test::get_service_test_id_by_post_id( $alert_id );
+	public static function resume_test( $post_id ) {
+		$service_test_id = Test::get_service_test_id_by_post_id( $post_id );
 
 		if ( $service_test_id ) {
 			$service_api_route = 'tests/' . $service_test_id . '/resume';

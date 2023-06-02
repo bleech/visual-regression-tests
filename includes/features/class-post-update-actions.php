@@ -27,7 +27,8 @@ class Post_Update_Actions {
 	public function on_save_post_action( $post_id, $post ) {
 		// If post has test and no active alerts, update the screenshot to the latest version.
 		if ( Test::get_item_id( $post_id ) && ! Test::has_post_alert( $post_id ) ) {
-			Service::resume_test( $post_id );
+			$service = new Test_Service();
+			$service->resume_test( $post_id );
 		}
 	}
 

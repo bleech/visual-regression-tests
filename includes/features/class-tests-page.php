@@ -246,7 +246,7 @@ class Tests_Page {
 			$success = true;
 			$message = __( 'Changes saved successfully.', 'visual-regression-tests' );
 			$post_id = Test::get_item( $test_id )->post_id;
-			Service::resume_test( $post_id );
+			$test_service->resume_test( $post_id );
 		} else {
 			$success = false;
 			$message = __( 'Error while saving the changes.', 'visual-regression-tests' );

@@ -2,7 +2,6 @@
 
 namespace Vrts\Rest_Api;
 
-use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use WP_REST_Request;
 use WP_Error;
@@ -161,7 +160,7 @@ class Rest_Tests_Controller {
 			$service = new Test_Service();
 			$updated = $service->update_css_hide_selector( $test_id, $hide_css_selectors );
 			if ( $updated && ! is_wp_error( $updated ) ) {
-				Service::resume_test( $post_id );
+				$service->resume_test( $post_id );
 				return rest_ensure_response( [], 200 );
 			};
 		}

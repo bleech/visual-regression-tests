@@ -165,6 +165,10 @@ class Test_Service {
 	 */
 	public function create_remote_test( $post, $test = [] ) {
 		if ( Service::is_connected() ) {
+			$existing_test = Test::get_item_by_post_id( $post->ID );
+			if ( $existing_test ) {
+				return $existing_test;
+			}
 			$service_project_id = get_option( 'vrts_project_id' );
 			$request_url = 'tests';
 			$parameters = [
@@ -253,17 +257,17 @@ class Test_Service {
 		$stale_tests = Test::get_all_inactive();
 		foreach ( $stale_tests as $stale_test ) {
 			if ( Subscription::get_remaining_tests() > 0 ) {
-				$this->resume_test( $stale_test );
+				$this->resume_stale_test( $stale_test );
 			}
 		}
 	}
 
 	/**
-	 * Resume test.
+	 * Resume stale test.
 	 *
 	 * @param object $test Test.
 	 */
-	private function resume_test( $test ) {
+	private function resume_stale_test( $test ) {
 		if ( empty( $test->service_test_id ) ) {
 			$post = get_post( $test->post_id );
 			if ( 'publish' === $post->post_status ) {
@@ -298,6 +302,21 @@ class Test_Service {
 			}
 		} else {
 			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
+		}
+	}
+
+	/**
+	 * Resume test.
+	 *
+	 * @param int $post_id Post id.
+	 */
+	public function resume_test( $post_id ) {
+		$test = Test::get_item_by_post_id( $post_id );
+		if ( ! $test ) {
+			return false;
+		} else {
+			Test::reset_base_screenshot( $test->id );
+			Service::resume_test( $post_id );
 		}
 	}
 }

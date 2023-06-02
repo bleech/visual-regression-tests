@@ -2,7 +2,7 @@
 namespace Vrts\Models;
 
 use Vrts\Tables\Alerts_Table;
-use Vrts\Features\Service;
+use Vrts\Services\Test_Service;
 
 /**
  * Model Alert Page.
@@ -170,7 +170,8 @@ class Alert {
 			// Resume test after alert is resolved.
 			if ( 1 === $new_alert_state ) {
 				$alert = (object) self::get_item( $id );
-				Service::resume_test( $alert->post_id );
+				$service = new Test_Service();
+				$service->resume_test( $alert->post_id );
 			}
 
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
