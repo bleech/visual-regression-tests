@@ -240,6 +240,18 @@ class Tests_Page {
 		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
 		$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
 
+		$current_hide_css_selectors = TEST::get_item( $test_id )->hide_css_selectors ?? '';
+
+		if ( $current_hide_css_selectors === $hide_css_selectors ) {
+			$response = [
+				'success' => true,
+				'message' => __( 'No changes made.', 'visual-regression-tests' ),
+				'hide_css_selectors' => $hide_css_selectors,
+			];
+
+			return wp_die( wp_json_encode( $response ) );
+		}
+
 		$test_service = new Test_Service();
 		$is_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
 		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
