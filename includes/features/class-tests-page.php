@@ -263,10 +263,14 @@ class Tests_Page {
 			$success = false;
 			$message = __( 'Error while saving the changes.', 'visual-regression-tests' );
 		}
+
+		$test = Test::get_item( $test_id );
+		$snapshot_status = ! $test->target_screenshot_finish_date ? esc_html__( 'In progress', 'visual-regression-tests' ) : null;
 		$response = [
 			'success' => $success,
 			'message' => $message,
 			'hide_css_selectors' => $hide_css_selectors,
+			'snapshot_status' => $snapshot_status,
 		];
 
 		return wp_die( wp_json_encode( $response ) );
