@@ -284,7 +284,7 @@ class Test_Service {
 	 *
 	 * @return int|WP_Error
 	 */
-	public function update_css_hide_selector( $test_id, $css_hide_selector ) {
+	public function update_css_hide_selectors( $test_id, $css_hide_selector ) {
 		if ( Service::is_connected() ) {
 			$test = Test::get_item( $test_id );
 			if ( ! $test ) {

@@ -1,11 +1,10 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { TextareaControl } from '@wordpress/components';
-import { useCallback, useState } from '@wordpress/element';
-import { debounce } from '@wordpress/compose';
-import apiFetch from '@wordpress/api-fetch';
+import { useState } from '@wordpress/element';
+import { dispatch } from '@wordpress/data';
 import DOMPurify from 'dompurify';
 
-const Settings = ( { test = {}, setTest } ) => {
+const Settings = ( { test = {} } ) => {
 	const [ testState, setTestState ] = useState( {
 		hide_css_selectors: '',
 		...test,
@@ -15,30 +14,10 @@ const Settings = ( { test = {}, setTest } ) => {
 		const updatedTest = { ...testState, hide_css_selectors: value };
 		test.hide_css_selectors = value;
 		setTestState( updatedTest );
-		debouncedSaveTestValue();
+		return dispatch( 'core/editor' ).editPost( {
+			vrts: { hide_css_selectors: value },
+		} );
 	};
-
-	async function saveTestValue() {
-		const { hide_css_selectors: hideCssSelectors } = test;
-		try {
-			const response = await apiFetch( {
-				path: `/vrts/v1/tests/post/${ test.post_id }`,
-				method: 'PUT',
-				data: {
-					test_id: test.id,
-					hide_css_selectors: hideCssSelectors,
-				},
-			} );
-			setTest( response );
-		} catch ( error ) {
-			console.log( error ); // eslint-disable-line no-console
-		}
-	}
-
-	const debouncedSaveTestValue = useCallback(
-		debounce( saveTestValue, 250 ),
-		[]
-	);
 
 	return (
 		<>

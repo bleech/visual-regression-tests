@@ -38,6 +38,7 @@ class Metaboxes {
 	 */
 	public function __construct() {
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
+		add_action( 'rest_api_init', [ $this, 'add_rest_actions' ] );
 		add_action( 'save_post', [ $this, 'save_meta_boxes_data' ], 10, 2 );
 	}
 
@@ -85,6 +86,21 @@ class Metaboxes {
 				'default',
 				[ '__back_compat_meta_box' => true ]
 			);
+		}
+	}
+
+	/**
+	 * Add rest actions.
+	 */
+	public function add_rest_actions() {
+		if ( current_user_can( 'manage_options' ) ) {
+			$custom_post_types = get_post_types([
+				'public' => true,
+				'_builtin' => false,
+			]);
+			foreach ( array_merge( [ 'post', 'page' ], $custom_post_types ) as $custom_post_type ) {
+				add_action( 'rest_after_insert_' . $custom_post_type, [ $this, 'update_rest_data' ], 10, 2 );
+			}
 		}
 	}
 
@@ -177,7 +193,7 @@ class Metaboxes {
 		if ( ! empty( $test ) && ! empty( $test->id ) && (int) $test->id === (int) $test_id ) {
 			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
 			$test_service = new Test_Service();
-			$test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
+			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
 		}
 
 	}
@@ -205,5 +221,21 @@ class Metaboxes {
 				'meta_key' => self::get_post_meta_key_is_new_test(),
 			]
 		);
+	}
+
+	/**
+	 * Update rest data.
+	 *
+	 * @param WP_Post         $post Post object.
+	 * @param WP_REST_Request $request Request object.
+	 */
+	public function update_rest_data( $post, $request ) {
+		$vrts_params = $request->get_param( 'vrts' );
+		if ( array_key_exists( 'hide_css_selectors', $vrts_params ) ) {
+			$hide_css_selectors = $vrts_params['hide_css_selectors'] ? sanitize_text_field( $vrts_params['hide_css_selectors'] ) : '';
+			$test_id = Test::get_item_id( $post->ID );
+			$test_service = new Test_Service();
+			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
+		}
 	}
 }

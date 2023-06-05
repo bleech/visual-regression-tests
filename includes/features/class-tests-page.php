@@ -253,7 +253,7 @@ class Tests_Page {
 		}
 
 		$test_service = new Test_Service();
-		$is_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
+		$is_saved = $test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
 		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
 			$success = true;
 			$message = __( 'Changes saved successfully.', 'visual-regression-tests' );
