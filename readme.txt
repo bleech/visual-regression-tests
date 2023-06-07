@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -159,6 +159,11 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.4.0 =
+* Fixed text domains for translation usage.
+* Added ability to hide elements on the page during screenshot with a css selector. Editable per test via quick edit or on the post's edit page.
+* Improved outdated base screenshots are removed after fixing an alert or changing a posts content.
 
 = 1.3.1 =
 * Improved functionality to create alerts only if pixel difference is > 1
