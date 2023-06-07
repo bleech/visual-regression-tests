@@ -252,7 +252,7 @@ class Alerts_Page {
 			$test_id = Test::get_item_id( $alert->post_id );
 			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : null;
 			$test_service = new Test_Service();
-			$test_settings_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
+			$test_settings_saved = $test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
 		}//end if
 
 		if ( is_wp_error( $test_settings_saved ) ) {

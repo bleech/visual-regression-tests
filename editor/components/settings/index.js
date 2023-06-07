@@ -1,33 +1,23 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { TextareaControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
+import { dispatch } from '@wordpress/data';
 import DOMPurify from 'dompurify';
 
-const Settings = ( { test = false } ) => {
-	const [ testState, setTestState ] = useState( test );
+const Settings = ( { test = {} } ) => {
+	const [ testState, setTestState ] = useState( {
+		hide_css_selectors: '',
+		...test,
+	} );
 
 	const updateTest = ( value ) => {
 		const updatedTest = { ...testState, hide_css_selectors: value };
 		test.hide_css_selectors = value;
 		setTestState( updatedTest );
-		saveTestValue();
+		return dispatch( 'core/editor' ).editPost( {
+			vrts: { hide_css_selectors: value },
+		} );
 	};
-
-	async function saveTestValue() {
-		try {
-			await apiFetch( {
-				path: `/vrts/v1/tests/post/${ test.post_id }`,
-				method: 'PUT',
-				data: {
-					test_id: test.id,
-					hide_css_selectors: test.hide_css_selectors,
-				},
-			} );
-		} catch ( error ) {
-			console.log( error ); // eslint-disable-line no-console
-		}
-	}
 
 	return (
 		<>

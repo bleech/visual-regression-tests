@@ -240,13 +240,37 @@ class Tests_Page {
 		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
 		$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
 
+		$current_hide_css_selectors = TEST::get_item( $test_id )->hide_css_selectors ?? '';
+
+		if ( $current_hide_css_selectors === $hide_css_selectors ) {
+			$response = [
+				'success' => true,
+				'message' => __( 'No changes made.', 'visual-regression-tests' ),
+				'hide_css_selectors' => $hide_css_selectors,
+			];
+
+			return wp_die( wp_json_encode( $response ) );
+		}
+
 		$test_service = new Test_Service();
-		$is_saved = $test_service->update_css_hide_selector( $test_id, $hide_css_selectors );
-		$message = $is_saved ? __( 'Changes saved successfully.' ) : __( 'Error while saving the changes.' );
+		$is_saved = $test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
+		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
+			$success = true;
+			$message = __( 'Changes saved successfully.', 'visual-regression-tests' );
+			$post_id = Test::get_item( $test_id )->post_id;
+			$test_service->resume_test( $post_id );
+		} else {
+			$success = false;
+			$message = __( 'Error while saving the changes.', 'visual-regression-tests' );
+		}
+
+		$test = Test::get_item( $test_id );
+		$snapshot_status = ! $test->target_screenshot_finish_date ? esc_html__( 'In progress', 'visual-regression-tests' ) : null;
 		$response = [
-			'success' => $is_saved,
+			'success' => $success,
 			'message' => $message,
 			'hide_css_selectors' => $hide_css_selectors,
+			'snapshot_status' => $snapshot_status,
 		];
 
 		return wp_die( wp_json_encode( $response ) );

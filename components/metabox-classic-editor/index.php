@@ -71,7 +71,7 @@ if ( $data['run_tests_checked'] ) {
 			<?php if ( $data['snapshot_date'] && $data['target_screenshot_url'] ) { ?>
 				<p><?php esc_html_e( 'Snapshot created on', 'visual-regression-tests' ); ?> <?php echo esc_html( $data['snapshot_date'] ); ?></p>
 			<?php } else { ?>
-				<p><?php esc_html_e( 'First Snapshot: in progress', 'visual-regression-tests' ); ?></p>
+				<p><?php esc_html_e( 'Snapshot: in progress', 'visual-regression-tests' ); ?></p>
 			<?php } ?>
 			<p><?php esc_html_e( 'Snapshot gets auto-generated upon publishing or updating the page.', 'visual-regression-tests' ); ?></p>
 		</figcaption>

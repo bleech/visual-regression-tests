@@ -158,12 +158,12 @@ window.wp = window.wp || {};
 
 			// Populate fields in the quick edit window.
 			const rowData = $( '#inline_' + id );
-			const hideInputSelecorsText = $(
+			const hideInputSelectorsText = $(
 				'.hide_css_selectors',
 				rowData
 			).text();
 			$( ':input[name="hide_css_selectors"]', editRow ).val(
-				hideInputSelecorsText
+				hideInputSelectorsText
 			);
 
 			$( editRow )
@@ -252,6 +252,19 @@ window.wp = window.wp || {};
 					}
 
 					wp.a11y.speak( response.message );
+
+					// Update the snapshot column in the table and set the status of the snapshot.
+					const snapshotStatus = response.snapshot_status;
+					const $snapshotColumn = $(
+						'#test-' + id + ' .snapshot_date'
+					);
+					if (
+						null !== snapshotStatus &&
+						undefined !== snapshotStatus &&
+						'' !== snapshotStatus
+					) {
+						$snapshotColumn.text( snapshotStatus );
+					}
 				},
 				'html'
 			);

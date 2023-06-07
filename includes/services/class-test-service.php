@@ -133,7 +133,7 @@ class Test_Service {
 		if ( Service::is_connected() ) {
 			$post = get_post( $post_id );
 			if ( ! $post ) {
-				return new WP_Error( 'vrts_post_error', __( 'Post not found.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_post_error', __( 'Post not found.', 'visual-regression-tests' ) );
 			}
 			$test = Test::get_item_by_post_id( $post_id );
 			if ( $test ) {
@@ -150,9 +150,9 @@ class Test_Service {
 				return Test::get_item( $new_row_id );
 			}
 		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}//end if
-		return new WP_Error( 'vrts_service_error', __( 'Error creating test.', 'visual-regression-testing-for-wp' ) );
+		return new WP_Error( 'vrts_service_error', __( 'Error creating test.', 'visual-regression-tests' ) );
 	}
 
 	/**
@@ -165,6 +165,10 @@ class Test_Service {
 	 */
 	public function create_remote_test( $post, $test = [] ) {
 		if ( Service::is_connected() ) {
+			$existing_test = Test::get_item_by_post_id( $post->ID );
+			if ( $existing_test ) {
+				return $existing_test;
+			}
 			$service_project_id = get_option( 'vrts_project_id' );
 			$request_url = 'tests';
 			$parameters = [
@@ -190,10 +194,10 @@ class Test_Service {
 					return Test::get_item( $new_row_id );
 				}
 			} else {
-				return new WP_Error( 'vrts_service_error', __( 'Service could not create test.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_service_error', __( 'Service could not create test.', 'visual-regression-tests' ) );
 			}
 		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}//end if
 	}
 
@@ -253,17 +257,17 @@ class Test_Service {
 		$stale_tests = Test::get_all_inactive();
 		foreach ( $stale_tests as $stale_test ) {
 			if ( Subscription::get_remaining_tests() > 0 ) {
-				$this->resume_test( $stale_test );
+				$this->resume_stale_test( $stale_test );
 			}
 		}
 	}
 
 	/**
-	 * Resume test.
+	 * Resume stale test.
 	 *
 	 * @param object $test Test.
 	 */
-	private function resume_test( $test ) {
+	private function resume_stale_test( $test ) {
 		if ( empty( $test->service_test_id ) ) {
 			$post = get_post( $test->post_id );
 			if ( 'publish' === $post->post_status ) {
@@ -280,11 +284,11 @@ class Test_Service {
 	 *
 	 * @return int|WP_Error
 	 */
-	public function update_css_hide_selector( $test_id, $css_hide_selector ) {
+	public function update_css_hide_selectors( $test_id, $css_hide_selector ) {
 		if ( Service::is_connected() ) {
 			$test = Test::get_item( $test_id );
 			if ( ! $test ) {
-				return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-tests' ) );
 			}
 
 			$updated = Service::update_test(
@@ -294,10 +298,25 @@ class Test_Service {
 			if ( $updated ) {
 				return Test::save_hide_css_selectors( $test_id, $css_hide_selector );
 			} else {
-				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-testing-for-wp' ) );
+				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-tests' ) );
 			}
 		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-testing-for-wp' ) );
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
+		}
+	}
+
+	/**
+	 * Resume test.
+	 *
+	 * @param int $post_id Post id.
+	 */
+	public function resume_test( $post_id ) {
+		$test = Test::get_item_by_post_id( $post_id );
+		if ( ! $test ) {
+			return false;
+		} else {
+			Test::reset_base_screenshot( $test->id );
+			Service::resume_test( $post_id );
 		}
 	}
 }

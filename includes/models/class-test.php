@@ -2,10 +2,7 @@
 
 namespace Vrts\Models;
 
-use Vrts\Features\Metaboxes;
 use Vrts\Tables\Tests_Table;
-use Vrts\Features\Service;
-use Vrts\Features\Subscription;
 
 /**
  * Model Tests Page.
@@ -583,6 +580,28 @@ class Test {
 					WHERE service_test_id IN ( %s )",
 				implode( ',', $service_test_ids )
 			)
+		);
+	}
+
+	/**
+	 * Unset alert and screenshot for a test.
+	 *
+	 * @param int $test_id The test id.
+	 */
+	public static function reset_base_screenshot( $test_id ) {
+		global $wpdb;
+
+		$table_test = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->update(
+			$table_test,
+			[
+				'current_alert_id' => null,
+				'target_screenshot_url' => null,
+				'snapshot_date' => null,
+			],
+			[ 'id' => $test_id ]
 		);
 	}
 }

@@ -158,8 +158,14 @@ class Rest_Tests_Controller {
 
 		if ( 0 !== $post_id && 0 !== $test_id && ! empty( $hide_css_selectors ) ) {
 			$service = new Test_Service();
-			$service->update_css_hide_selector( $test_id, $hide_css_selectors );
-			return rest_ensure_response( [], 200 );
+			$updated = $service->update_css_hide_selectors( $test_id, $hide_css_selectors );
+			if ( $updated && ! is_wp_error( $updated ) ) {
+				$service->resume_test( $post_id );
+				$test = Test::get_item_by_post_id( $post_id );
+				if ( ! empty( $test ) ) {
+					return rest_ensure_response( Test::cast_values( $test ), 200 );
+				}
+			};
 		}
 		$error = new WP_Error(
 			'rest_update_test_failed',

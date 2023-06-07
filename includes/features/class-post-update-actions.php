@@ -12,7 +12,7 @@ class Post_Update_Actions {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'save_post', [ $this, 'on_save_post_action' ], 10, 2 );
+		add_action( 'wp_after_insert_post', [ $this, 'resume_test' ] );
 		add_action( 'trashed_post', [ $this, 'on_trash_post_action' ], 10, 2 );
 		add_action( 'transition_post_status', [ $this, 'on_transition_post_status_action' ], 10, 3 );
 		add_action( 'update_option_vrts_remaining_tests', [ $this, 'on_update_option_vrts_remaining_tests_action' ], 10, 2 );
@@ -21,13 +21,13 @@ class Post_Update_Actions {
 	/**
 	 * Add meta boxes.
 	 *
-	 * @param int     $post_id Post ID.
-	 * @param WP_Post $post Post object.
+	 * @param int $post_id Post ID.
 	 */
-	public function on_save_post_action( $post_id, $post ) {
+	public function resume_test( $post_id ) {
 		// If post has test and no active alerts, update the screenshot to the latest version.
 		if ( Test::get_item_id( $post_id ) && ! Test::has_post_alert( $post_id ) ) {
-			Service::resume_test( $post_id );
+			$service = new Test_Service();
+			$service->resume_test( $post_id );
 		}
 	}
 
