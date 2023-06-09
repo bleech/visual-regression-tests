@@ -58,7 +58,7 @@
 								<div id="minor-publishing">
 
 									<div id="misc-publishing-actions">
-										<div class="misc-pub-section">
+										<div class="misc-pub-section misc-pub-section-icon">
 											<i class="dashicons dashicons-calendar"></i>
 											<?php esc_html_e( 'Detected:', 'visual-regression-tests' ); ?>
 											<strong>
@@ -66,7 +66,7 @@
 											</strong>
 										</div>
 
-										<div class="misc-pub-section">
+										<div class="misc-pub-section misc-pub-section-icon">
 											<i class="dashicons dashicons-image-flip-horizontal"></i>
 											<?php esc_html_e( 'Visual Difference:', 'visual-regression-tests' ); ?>
 											<strong>
