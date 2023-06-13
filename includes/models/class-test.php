@@ -32,14 +32,14 @@ class Test {
 
 		$where = 'WHERE 1=1';
 
-		if ( null !== $args['s'] ) {
+		if ( isset( $args['s'] ) && null !== $args['s'] ) {
 			$where .= $wpdb->prepare(
 				' AND posts.post_title LIKE %s',
 				'%' . $wpdb->esc_like( $args['s'] ) . '%'
 			);
 		}
 
-		if ( null !== $args['filter_status'] ) {
+		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
 			// current_alert_id IS NOT NULL = Pause.
 			if ( 'paused' === $args['filter_status'] ) {
 				$where .= ' AND tests.current_alert_id IS NOT NULL';

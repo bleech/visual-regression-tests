@@ -6,6 +6,7 @@ use Vrts\List_Tables\Tests_List_Table;
 use Vrts\Models\Test;
 use Vrts\Features\Subscription;
 use Vrts\Services\Test_Service;
+use Vrts\Features\Run_Manual_Test;
 
 class Tests_Page {
 
@@ -37,6 +38,7 @@ class Tests_Page {
 		add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'add_assets' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_add_new_test' ] );
+		add_action( 'load-' . $submenu_page, [ $this, 'submit_run_manual_test' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_retry_connection' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'process_column_actions' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
@@ -107,16 +109,14 @@ class Tests_Page {
 
 		$post_id = isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : 0;
 
-		// some basic validation.
+		// Some basic validation.
 		if ( ! $post_id ) {
 			$errors[] = esc_html__( 'Error: Post ID is required.', 'visual-regression-tests' );
 		}
 
-		// bail out if error found.
+		// Bail out if error found.
 		if ( $errors ) {
-			$first_error = reset( $errors );
-			$redirect_to = add_query_arg( [ 'error' => $first_error ], $page_url );
-			wp_safe_redirect( $redirect_to );
+			wp_safe_redirect( $page_url );
 			exit;
 		}
 
@@ -141,6 +141,33 @@ class Tests_Page {
 
 		wp_safe_redirect( $redirect_to );
 		exit;
+	}
+
+	/**
+	 * Handle the submit of the Run Manual Tests button.
+	 */
+	public function submit_run_manual_test() {
+		if ( ! isset( $_POST['submit_run_manual_test'] ) ) {
+			return;
+		}
+
+		if ( isset( $_POST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'submit_run_manual_test' ) ) {
+			die( esc_html__( 'Are you cheating?', 'visual-regression-tests' ) );
+		}
+
+		if ( ! current_user_can( 'read' ) ) {
+			wp_die( esc_html__( 'Permission Denied!', 'visual-regression-tests' ) );
+		}
+
+		$tests = Test::get_items();
+		if ( $tests ) {
+			Run_Manual_Test::create( $tests, true );
+
+			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+				wp_safe_redirect( wp_unslash( $_SERVER['REQUEST_URI'] ) );
+			}
+			exit;
+		}
 	}
 
 	/**

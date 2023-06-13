@@ -3,6 +3,7 @@
 namespace Vrts\List_Tables;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Features\Run_Manual_Test;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
@@ -16,7 +17,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  * List table class.
  */
 class Tests_List_Table extends \WP_List_Table {
-
 
 	/**
 	 * Parent construct.
@@ -230,6 +230,7 @@ class Tests_List_Table extends \WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		$actions = [
+			'run-manual-test' => esc_html__( 'Run Manual Test', 'visual-regression-tests' ),
 			'set-status-disable' => esc_html__( 'Disable testing', 'visual-regression-tests' ),
 		];
 		return $actions;
@@ -247,10 +248,22 @@ class Tests_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		if ( 'set-status-disable' === $this->current_action() ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Should be okay for now.
-			$test_ids = wp_unslash( $_POST['id'] ?? 0 );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Should be okay for now.
+		$test_ids = wp_unslash( $_POST['id'] ?? 0 );
+		if ( 0 === $test_ids ) {
+			return;
+		}
 
+		if ( 'run-manual-test' === $this->current_action() ) {
+			foreach ( $test_ids as $test_id ) {
+				$tests[] = (object) Test::get_item( $test_id );
+			}
+
+			Run_Manual_Test::create( $tests );
+			return;
+		}
+
+		if ( 'set-status-disable' === $this->current_action() ) {
 			foreach ( $test_ids as $test_id ) {
 				$item = Test::get_item( $test_id );
 				if ( $item ) {

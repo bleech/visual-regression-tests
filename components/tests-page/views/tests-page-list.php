@@ -1,15 +1,32 @@
+<?php
+use Vrts\Features\Admin_Notices;
+use Vrts\Features\Run_Manual_Test;
+?>
+
 <div class="wrap vrts_list_table_page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Tests', 'visual-regression-tests' ); ?>
 	</h1>
 
-	<?php if ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) { ?>
-		<button type="button" class="page-title-action" id="modal-add-new-disabled" disabled>
-	<?php } else { ?>
-		<button type="button" class="page-title-action" id="show-modal-add-new">
-	<?php } ?>
-			<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
-	</button>
+	<menu class="page-title-actions">
+		<li>
+			<button type="button" class="page-title-action button-primary"
+				id="<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? 'modal-add-new-disabled' : 'show-modal-add-new'; ?>"
+				<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? ' disabled' : ''; ?>>
+				<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
+			</button>
+		</li>
+		<li>
+			<form method="post" id="form-run-manual-test">
+				<?php wp_nonce_field( 'submit_run_manual_test', '_wpnonce' ); ?>
+				<input type="submit" name="submit_run_manual_test" value="<?php esc_attr_e( 'Run Manual Test', 'visual-regression-tests' ); ?>"
+					class="page-title-action button-secondary"
+					id="<?php echo ( ! $data['is_connected'] ) ? 'run-manual-test-disabled' : 'run-manual-test'; ?>"
+					<?php echo ( ! $data['is_connected'] ) ? ' disabled' : ''; ?>
+				>
+			</form>
+		</li>
+	</menu>
 
 	<?php if ( isset( $data['search_query'] ) && '' !== $data['search_query'] ) { ?>
 		<span class="subtitle">
@@ -37,6 +54,10 @@
 
 		if ( $list_table->has_items() ) {
 			$list_table->inline_edit();
+		}
+
+		if ( Run_Manual_Test::is_active() ) {
+			Admin_Notices::render_notification( 'run_manual_test', false, [] );
 		}
 		?>
 	</form>

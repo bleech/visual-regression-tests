@@ -59,7 +59,7 @@ class Admin_Notices {
 	}
 
 	/**
-	 * Remove all dismissed status of notifications from options .
+	 * Remove all dismissed status of notifications from options.
 	 */
 	public static function delete_dismissed_options() {
 		global $wpdb;
