@@ -62,6 +62,9 @@ class Enqueue_Scripts {
 	public function enqueue_block_editor_assets() {
 		if ( current_user_can( 'manage_options' ) ) {
 			global $post;
+			if ( ! $post ) {
+				return;
+			}
 			$custom_post_types = get_post_types([
 				'public' => true,
 				'_builtin' => false,
