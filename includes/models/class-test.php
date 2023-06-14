@@ -84,6 +84,23 @@ class Test {
 	}
 
 	/**
+	 * Get all running test items from database
+	 *
+	 * @return array
+	 */
+	public static function get_all_running() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT * FROM $tests_table WHERE status != 0 AND current_alert_id IS NULL"
+		);
+	}
+
+	/**
 	 * Get all inactive test items from database
 	 *
 	 * @return array
@@ -118,6 +135,28 @@ class Test {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT * FROM $tests_table WHERE id = %d",
 				$id
+			)
+		);
+	}
+
+	/**
+	 * Get multiple tests from database by id
+	 *
+	 * @param array $ids the ids of the items.
+	 *
+	 * @return object
+	 */
+	public static function get_items_by_ids( $ids = [] ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE id IN (" . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) . ')',
+				$ids
 			)
 		);
 	}
@@ -437,11 +476,11 @@ class Test {
 	}
 
 	/**
-	 * Get active test ids
+	 * Get all service test ids
 	 *
 	 * @return array
 	 */
-	public static function get_active_test_ids() {
+	public static function get_all_service_test_ids() {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();

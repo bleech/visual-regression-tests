@@ -3,10 +3,10 @@
 namespace Vrts\List_Tables;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
-use Vrts\Features\Run_Manual_Test;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Services\Manual_Test_Service;
 use Vrts\Services\Test_Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -255,11 +255,8 @@ class Tests_List_Table extends \WP_List_Table {
 		}
 
 		if ( 'run-manual-test' === $this->current_action() ) {
-			foreach ( $test_ids as $test_id ) {
-				$tests[] = (object) Test::get_item( $test_id );
-			}
-
-			Run_Manual_Test::create( $tests );
+			$manual_test_service = new Manual_Test_Service();
+			$manual_test_service->run_tests( $test_ids );
 			return;
 		}
 

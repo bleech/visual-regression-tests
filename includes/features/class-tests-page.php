@@ -6,7 +6,7 @@ use Vrts\List_Tables\Tests_List_Table;
 use Vrts\Models\Test;
 use Vrts\Features\Subscription;
 use Vrts\Services\Test_Service;
-use Vrts\Features\Run_Manual_Test;
+use Vrts\Services\Manual_Test_Service;
 
 class Tests_Page {
 
@@ -159,15 +159,13 @@ class Tests_Page {
 			wp_die( esc_html__( 'Permission Denied!', 'visual-regression-tests' ) );
 		}
 
-		$tests = Test::get_items();
-		if ( $tests ) {
-			Run_Manual_Test::create( $tests, true );
+		$service = new Manual_Test_Service();
+		$service->run_tests();
 
-			if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-				wp_safe_redirect( wp_unslash( $_SERVER['REQUEST_URI'] ) );
-			}
-			exit;
+		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
+			wp_safe_redirect( wp_unslash( $_SERVER['REQUEST_URI'] ) );
 		}
+		exit;
 	}
 
 	/**
