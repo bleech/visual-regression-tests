@@ -103,7 +103,7 @@ class Subscription {
 	 * Send request to server to get the subscription and tests status.
 	 */
 	public static function get_latest_status() {
-		$local_test_ids = Test::get_active_test_ids();
+		$local_test_ids = Test::get_all_service_test_ids();
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id;
 		$response = Service::rest_service_request( $service_api_route, [], 'get' );

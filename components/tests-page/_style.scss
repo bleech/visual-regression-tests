@@ -1,10 +1,31 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 @import "@wordpress/base-styles/breakpoints";
 
-#modal-add-new-disabled,
-#modal-add-new-disabled:hover {
-	pointer-events: none;
-	opacity: 0.6;
+.page-title-actions {
+	list-style: none;
+	display: inline-flex;
+	padding: 0 0 4px;
+	margin: 0;
+	gap: 1ch;
+
+	li {
+		margin: 0;
+	}
+
+	button,
+	[type="submit"] {
+
+		&:disabled {
+			pointer-events: none;
+			opacity: 0.6;
+		}
+
+		&:active {
+			padding: 0 10px !important;
+			border-radius: 3px !important;
+			margin: 0 !important;
+		}
+	}
 }
 
 .vrts_tests_page_wp_link {

@@ -1,15 +1,35 @@
+<?php
+use Vrts\Features\Admin_Notices;
+use Vrts\Features\Subscription;
+use Vrts\Services\Manual_Test_Service;
+?>
+
 <div class="wrap vrts_list_table_page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Tests', 'visual-regression-tests' ); ?>
 	</h1>
 
-	<?php if ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) { ?>
-		<button type="button" class="page-title-action" id="modal-add-new-disabled" disabled>
-	<?php } else { ?>
-		<button type="button" class="page-title-action" id="show-modal-add-new">
-	<?php } ?>
-			<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
-	</button>
+	<menu class="page-title-actions">
+		<li>
+			<button type="button" class="page-title-action button-primary"
+				id="<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? 'modal-add-new-disabled' : 'show-modal-add-new'; ?>"
+				<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? ' disabled' : ''; ?>>
+				<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
+			</button>
+		</li>
+		<?php if ( Subscription::get_subscription_status() ) : ?>
+			<li>
+				<form method="post" id="form-run-manual-tests">
+					<?php wp_nonce_field( 'submit_run_manual_tests', '_wpnonce' ); ?>
+					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run Manual Tests', 'visual-regression-tests' ); ?>"
+						class="page-title-action button-secondary"
+						id="<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? 'run-manual-tests-disabled' : 'run-manual-tests'; ?>"
+						<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? ' disabled' : ''; ?>
+					>
+				</form>
+			</li>
+		<?php endif; ?>
+	</menu>
 
 	<?php if ( isset( $data['search_query'] ) && '' !== $data['search_query'] ) { ?>
 		<span class="subtitle">
@@ -37,6 +57,12 @@
 
 		if ( $list_table->has_items() ) {
 			$list_table->inline_edit();
+		}
+
+		$vrts_manual_test_service = new Manual_Test_Service();
+		if ( $vrts_manual_test_service->is_active() ) {
+			$vrts_manual_test_service->delete_option();
+			Admin_Notices::render_notification( 'run_manual_test', false, [] );
 		}
 		?>
 	</form>

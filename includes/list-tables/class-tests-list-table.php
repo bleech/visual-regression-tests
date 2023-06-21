@@ -6,6 +6,7 @@ use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Services\Manual_Test_Service;
 use Vrts\Services\Test_Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -16,7 +17,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  * List table class.
  */
 class Tests_List_Table extends \WP_List_Table {
-
 
 	/**
 	 * Parent construct.
@@ -76,7 +76,7 @@ class Tests_List_Table extends \WP_List_Table {
 				$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
 				$class = ( null === $item->current_alert_id ) && true === (bool) $item->status && true === (bool) $is_connected ? 'testing-status--running' : 'testing-status--paused';
 				$has_remote_test = ! empty( $item->service_test_id );
-				$text = ( null === $item->current_alert_id || $has_remote_test )
+				$text = ( null === $item->current_alert_id )
 					? esc_html__( 'Running', 'visual-regression-tests' )
 					: esc_html__( 'Paused', 'visual-regression-tests' );
 				$instructions = '';
@@ -188,7 +188,7 @@ class Tests_List_Table extends \WP_List_Table {
 				admin_url( 'admin.php?page=vrts&action=disable-testing&test_id=' ) . $item->id,
 				$item->id,
 				esc_html__( 'Disable testing for this page', 'visual-regression-tests' ),
-				esc_html__( 'Disable testing', 'visual-regression-tests' )
+				esc_html__( 'Disable Testing', 'visual-regression-tests' )
 			);
 		}
 
@@ -230,8 +230,14 @@ class Tests_List_Table extends \WP_List_Table {
 	 */
 	public function get_bulk_actions() {
 		$actions = [
-			'set-status-disable' => esc_html__( 'Disable testing', 'visual-regression-tests' ),
+			'set-status-disable' => esc_html__( 'Disable Testing', 'visual-regression-tests' ),
 		];
+		if ( Subscription::get_subscription_status() && count( Test::get_all_running() ) > 0 ) {
+			$actions = array_merge(
+				[ 'run-manual-test' => esc_html__( 'Run Manual Test', 'visual-regression-tests' ) ],
+				$actions
+			);
+		}
 		return $actions;
 	}
 
@@ -247,10 +253,19 @@ class Tests_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		if ( 'set-status-disable' === $this->current_action() ) {
-			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Should be okay for now.
-			$test_ids = wp_unslash( $_POST['id'] ?? 0 );
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Should be okay for now.
+		$test_ids = wp_unslash( $_POST['id'] ?? 0 );
+		if ( 0 === $test_ids ) {
+			return;
+		}
 
+		if ( 'run-manual-test' === $this->current_action() ) {
+			$manual_test_service = new Manual_Test_Service();
+			$manual_test_service->run_tests( $test_ids );
+			return;
+		}
+
+		if ( 'set-status-disable' === $this->current_action() ) {
 			foreach ( $test_ids as $test_id ) {
 				$item = Test::get_item( $test_id );
 				if ( $item ) {
