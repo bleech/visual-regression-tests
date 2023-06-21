@@ -58,7 +58,9 @@ class Alerts_List_Table extends \WP_List_Table {
 				return $item->title;
 
 			case 'tested_url':
-				$tested_url = '/' . get_page_uri( $item->post_id );
+				$parsed_tested_url = wp_parse_url( get_permalink( $item->post_id ) );
+				$tested_url = $parsed_tested_url['path'];
+
 				return sprintf(
 					'<strong><a href="%1$s" title="%2$s" target="_blank">%3$s</a></strong>',
 					get_post_permalink( $item->post_id ),
