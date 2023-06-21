@@ -1,5 +1,6 @@
 <?php
 use Vrts\Features\Admin_Notices;
+use Vrts\Features\Subscription;
 use Vrts\Services\Manual_Test_Service;
 ?>
 
@@ -16,16 +17,18 @@ use Vrts\Services\Manual_Test_Service;
 				<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
 			</button>
 		</li>
-		<li>
-			<form method="post" id="form-run-manual-test">
-				<?php wp_nonce_field( 'submit_run_manual_test', '_wpnonce' ); ?>
-				<input type="submit" name="submit_run_manual_test" value="<?php esc_attr_e( 'Run Manual Test', 'visual-regression-tests' ); ?>"
-					class="page-title-action button-secondary"
-					id="<?php echo ( ! $data['is_connected'] ) ? 'run-manual-test-disabled' : 'run-manual-test'; ?>"
-					<?php echo ( ! $data['is_connected'] ) ? ' disabled' : ''; ?>
-				>
-			</form>
-		</li>
+		<?php if ( Subscription::get_subscription_status() ) : ?>
+			<li>
+				<form method="post" id="form-run-manual-tests">
+					<?php wp_nonce_field( 'submit_run_manual_tests', '_wpnonce' ); ?>
+					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run Manual Tests', 'visual-regression-tests' ); ?>"
+						class="page-title-action button-secondary"
+						id="<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? 'run-manual-tests-disabled' : 'run-manual-tests'; ?>"
+						<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? ' disabled' : ''; ?>
+					>
+				</form>
+			</li>
+		<?php endif; ?>
 	</menu>
 
 	<?php if ( isset( $data['search_query'] ) && '' !== $data['search_query'] ) { ?>

@@ -3,6 +3,7 @@
 namespace Vrts\Services;
 
 use Vrts\Features\Service;
+use Vrts\Features\Subscription;
 use Vrts\Models\Test;
 
 class Manual_Test_Service {
@@ -37,6 +38,10 @@ class Manual_Test_Service {
 	 * @param array|null $test_ids Array of test ids.
 	 */
 	public function run_tests( $test_ids = null ) {
+		$has_subscription = Subscription::get_subscription_status();
+		if ( ! $has_subscription ) {
+			return false;
+		}
 		if ( empty( $test_ids ) ) {
 			$tests = Test::get_all_running();
 		} else {

@@ -38,7 +38,7 @@ class Tests_Page {
 		add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'add_assets' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_add_new_test' ] );
-		add_action( 'load-' . $submenu_page, [ $this, 'submit_run_manual_test' ] );
+		add_action( 'load-' . $submenu_page, [ $this, 'submit_run_manual_tests' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_retry_connection' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'process_column_actions' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
@@ -85,6 +85,7 @@ class Tests_Page {
 			'list_table' => new Tests_List_Table(),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'is_connected' => Service::is_connected(),
+			'running_tests_count' => count( Test::get_all_running() ),
 		]);
 	}
 
@@ -146,12 +147,12 @@ class Tests_Page {
 	/**
 	 * Handle the submit of the Run Manual Tests button.
 	 */
-	public function submit_run_manual_test() {
-		if ( ! isset( $_POST['submit_run_manual_test'] ) ) {
+	public function submit_run_manual_tests() {
+		if ( ! isset( $_POST['submit_run_manual_tests'] ) ) {
 			return;
 		}
 
-		if ( isset( $_POST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'submit_run_manual_test' ) ) {
+		if ( isset( $_POST['_wpnonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'submit_run_manual_tests' ) ) {
 			die( esc_html__( 'Are you cheating?', 'visual-regression-tests' ) );
 		}
 
