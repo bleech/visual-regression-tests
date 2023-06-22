@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 1.5.0
+Stable tag: 1.5.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -159,6 +159,9 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.5.1 =
+* Fixed issues with empty rest data on post update
 
 = 1.5.0 =
 * Fixed test status display
