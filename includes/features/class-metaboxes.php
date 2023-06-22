@@ -231,7 +231,7 @@ class Metaboxes {
 	 */
 	public function update_rest_data( $post, $request ) {
 		$vrts_params = $request->get_param( 'vrts' );
-		if ( array_key_exists( 'hide_css_selectors', $vrts_params ) ) {
+		if ( array_key_exists( 'hide_css_selectors', $vrts_params ?? [] ) ) {
 			$hide_css_selectors = $vrts_params['hide_css_selectors'] ? sanitize_text_field( $vrts_params['hide_css_selectors'] ) : '';
 			$test_id = Test::get_item_id( $post->ID );
 			$test_service = new Test_Service();
