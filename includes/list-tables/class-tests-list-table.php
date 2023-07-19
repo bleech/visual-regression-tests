@@ -353,7 +353,7 @@ class Tests_List_Table extends \WP_List_Table {
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = [ $columns, $hidden, $sortable ];
 
-		$per_page = $this->get_items_per_page( 'actions_per_page', 20 );
+		$per_page = $this->get_items_per_page( 'vrts_tests_per_page', 20 );
 		$current_page = $this->get_pagenum();
 		$offset = ( $current_page - 1 ) * $per_page;
 

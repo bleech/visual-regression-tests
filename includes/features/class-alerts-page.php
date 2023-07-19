@@ -85,7 +85,7 @@ class Alerts_Page {
 		$option = 'per_page';
 		$args   = [
 			'default' => 20,
-			'option' => 'actions_per_page',
+			'option' => 'vrts_alerts_per_page',
 		];
 
 		// screen_option are user meta.
