@@ -23,7 +23,8 @@ How do you usually check your website after updates and code changes? Do you go 
 1. **Activate daily tests for any page or post:** Upon activation, a reference screenshot is taken. This will be renewed when a post is saved or updated.
 2. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will create an alert and notify you via email. The daily test will be paused, until the alert is resolved.
 3. **Compare two screenshots:** Detect differences between the two snapshots with the difference, split screen or side-by-side view.
-4. **Resolve tests:** After fixing an issue, mark the alert as resolved. A new snapshot will be generated and the test will start running again.
+4. **Exclude elements:** Prevent false positives by excluding dynamic elements, ads and animations from snapshots.
+5. **Resolve tests:** After fixing an issue, mark the alert as resolved. A new snapshot will be generated and the test will start running again.
 
 
 = USE CASES =
@@ -62,6 +63,7 @@ Unlock more features with our paid plans:
 * test up to **500 pages** in total
 * on **multiple** domains
 * with **automatic daily** test
+* and **unlimited manual tests**
 * add **multiple alert** recipients
 * get **e-mail** support
 * and access to **new features**
@@ -156,6 +158,7 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 4. The **difference view** merges the reference snapshot and the newly created screenshot. Differences between them are highlighted in red.
 5. In the **split view** you can compare two snapshots with a vertical slider.
 6. The **side by side view** displays two snapshots next to each other.
+7. Run unlimited manual tests.
 
 
 == Changelog ==
