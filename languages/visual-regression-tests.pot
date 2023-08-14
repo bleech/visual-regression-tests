@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.4.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.5.2\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-06-21T07:30:26+00:00\n"
+"POT-Creation-Date: 2023-08-14T09:59:15+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -252,10 +252,10 @@ msgstr ""
 #. translators: %s: the count of pixels with a visual difference.
 #: components/alerts-page/views/alerts-page-edit.php:74
 #: components/alerts-page/views/alerts-page-view.php:74
-#: includes/list-tables/class-alerts-list-table.php:74
-#: includes/list-tables/class-alerts-list-table.php:191
-#: includes/list-tables/class-alerts-list-table.php:199
-#: includes/list-tables/class-alerts-list-table.php:213
+#: includes/list-tables/class-alerts-list-table.php:76
+#: includes/list-tables/class-alerts-list-table.php:193
+#: includes/list-tables/class-alerts-list-table.php:201
+#: includes/list-tables/class-alerts-list-table.php:215
 msgid "%s pixel"
 msgid_plural "%s pixels"
 msgstr[0] ""
@@ -280,8 +280,8 @@ msgid "Go Back"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:103
-#: includes/list-tables/class-alerts-list-table.php:162
-#: includes/list-tables/class-alerts-list-table.php:259
+#: includes/list-tables/class-alerts-list-table.php:164
+#: includes/list-tables/class-alerts-list-table.php:261
 msgid "Resolve"
 msgstr ""
 
@@ -642,7 +642,7 @@ msgid "Error while saving the changes."
 msgstr ""
 
 #: includes/features/class-tests-page.php:294
-#: includes/list-tables/class-alerts-list-table.php:78
+#: includes/list-tables/class-alerts-list-table.php:80
 #: includes/list-tables/class-tests-list-table.php:119
 msgid "In progress"
 msgstr ""
@@ -671,78 +671,78 @@ msgstr ""
 msgid "No alerts found."
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:65
+#: includes/list-tables/class-alerts-list-table.php:67
 #: includes/list-tables/class-tests-list-table.php:70
 msgid "Open the page in a new tab"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:81
+#: includes/list-tables/class-alerts-list-table.php:83
 msgid "Detected"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:99
+#: includes/list-tables/class-alerts-list-table.php:101
 #: includes/list-tables/class-tests-list-table.php:150
 msgid "Title"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:100
+#: includes/list-tables/class-alerts-list-table.php:102
 #: includes/list-tables/class-tests-list-table.php:151
 msgid "Path"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:101
+#: includes/list-tables/class-alerts-list-table.php:103
 msgid "Visual Difference"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:102
+#: includes/list-tables/class-alerts-list-table.php:104
 msgid "Date"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:128
+#: includes/list-tables/class-alerts-list-table.php:130
 msgid "View this alert"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:129
+#: includes/list-tables/class-alerts-list-table.php:131
 msgid "View"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:136
+#: includes/list-tables/class-alerts-list-table.php:138
 msgid "Delete this alert permanently"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:137
-#: includes/list-tables/class-alerts-list-table.php:254
+#: includes/list-tables/class-alerts-list-table.php:139
+#: includes/list-tables/class-alerts-list-table.php:256
 msgid "Delete permanently"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:152
+#: includes/list-tables/class-alerts-list-table.php:154
 msgid "Edit this alert"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:153
-#: includes/list-tables/class-alerts-list-table.php:169
+#: includes/list-tables/class-alerts-list-table.php:155
+#: includes/list-tables/class-alerts-list-table.php:171
 msgid "Edit"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:161
+#: includes/list-tables/class-alerts-list-table.php:163
 msgid "Resolve this alert"
 msgstr ""
 
 #. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:202
+#: includes/list-tables/class-alerts-list-table.php:204
 msgid "Tests on %1$spage%2$s are %3$spaused%4$s"
 msgstr ""
 
 #. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:216
+#: includes/list-tables/class-alerts-list-table.php:218
 msgid "Tests on %1$spage%2$s are %3$snot running until connection with the service is fixed.%4$s"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:323
+#: includes/list-tables/class-alerts-list-table.php:325
 msgid "Open"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:328
+#: includes/list-tables/class-alerts-list-table.php:330
 msgid "Resolved"
 msgstr ""
 
