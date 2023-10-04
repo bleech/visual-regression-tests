@@ -8,7 +8,7 @@ use Vrts\Services\Test_Service;
 class Service {
 	const DB_VERSION = '1.0';
 	const SERVICE = 'vrts_service';
-	const BASE_URL = 'https://bleech-vrts-app.blee.ch/api/v1/';
+	const BASE_URL = VRTS_SERVICE_ENDPOINT;
 
 	/**
 	 * Connect current website to VRTs Service.
