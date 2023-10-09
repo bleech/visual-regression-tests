@@ -22,7 +22,7 @@ if ( ! defined( 'VRTS_PLUGIN_FILE' ) ) {
 }
 
 if ( ! defined( 'VRTS_SERVICE_ENDPOINT' ) ) {
-	define( 'VRTS_SERVICE_ENDPOINT', getenv('VRTS_SERVICE_ENDPOINT') ?? 'https://bleech-vrts-app.blee.ch/api/v1/' );
+	define( 'VRTS_SERVICE_ENDPOINT', getenv( 'VRTS_SERVICE_ENDPOINT' ) ?? 'https://bleech-vrts-app.blee.ch/api/v1/' );
 }
 
 // Autoloader via Composer if exists.
