@@ -21,6 +21,10 @@ if ( ! defined( 'VRTS_PLUGIN_FILE' ) ) {
 	define( 'VRTS_PLUGIN_FILE', __FILE__ );
 }
 
+if ( ! defined( 'VRTS_SERVICE_ENDPOINT' ) ) {
+	define( 'VRTS_SERVICE_ENDPOINT', getenv( 'VRTS_SERVICE_ENDPOINT' ) ?? 'https://bleech-vrts-app.blee.ch/api/v1/' );
+}
+
 // Autoloader via Composer if exists.
 if ( file_exists( plugin_dir_path( VRTS_PLUGIN_FILE ) . 'vendor/autoload.php' ) ) {
 	require plugin_dir_path( VRTS_PLUGIN_FILE ) . 'vendor/autoload.php';
