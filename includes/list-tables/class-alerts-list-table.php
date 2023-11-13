@@ -374,9 +374,6 @@ class Alerts_List_Table extends \WP_List_Table {
 		$current_page = $this->get_pagenum();
 		$offset = ( $current_page - 1 ) * $per_page;
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list table status.
-		$this->page_status = isset( $_GET['status'] ) ? sanitize_text_field( wp_unslash( $_GET['status'] ) ) : '2';
-
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list order parameter.
 		$order = isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ? 'ASC' : 'DESC';
 
