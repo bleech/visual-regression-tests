@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.5.2\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.6.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-14T09:59:15+00:00\n"
+"POT-Creation-Date: 2023-11-24T13:15:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -112,15 +112,15 @@ msgid "Start to %1$sconfigure tests%2$s, or check the customization options in t
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-run-manual-test.php:2
-msgid "Manual testing has started"
+msgid "Testing has started"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-run-manual-test.php:3
-msgid "Manual tests have started for all running tests."
+msgid "Tests have started for all running tests."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-run-manual-test.php:4
-msgid "If the manual testing detects any visual differences, we will notify you via e-mail alerts."
+msgid "If the testing detects any visual differences, we will notify you via e-mail alerts."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-settings-saved.php:3
@@ -301,7 +301,7 @@ msgstr ""
 
 #. translators: %1$s, %2$s: strong element wrapper.
 #: components/alerts-page/views/alerts-page-edit.php:138
-#: includes/list-tables/class-tests-list-table.php:444
+#: includes/list-tables/class-tests-list-table.php:441
 msgid "%1$sExclude elements on this page:%2$s "
 msgstr ""
 
@@ -309,14 +309,14 @@ msgstr ""
 #. translators: %s name of the page
 #: components/alerts-page/views/alerts-page-edit.php:143
 #: components/metabox-classic-editor/index.php:88
-#: includes/list-tables/class-tests-list-table.php:450
+#: includes/list-tables/class-tests-list-table.php:447
 #: editor/components/settings/index.js:49
 msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:149
 #: components/metabox-classic-editor/index.php:94
-#: includes/list-tables/class-tests-list-table.php:439
+#: includes/list-tables/class-tests-list-table.php:436
 #: editor/components/settings/index.js:30
 msgid "e.g.: .lottie, #ads"
 msgstr ""
@@ -438,7 +438,8 @@ msgid "Add New"
 msgstr ""
 
 #: components/tests-page/views/tests-page-list.php:24
-msgid "Run Manual Tests"
+#: editor/components/metabox/index.js:170
+msgid "Run Tests"
 msgstr ""
 
 #: components/tests-page/views/tests-page-list.php:76
@@ -523,7 +524,7 @@ msgstr ""
 msgid "Error: Alert ID is required."
 msgstr ""
 
-#. translators: %1$s: the id of the alert, %2$s: the home url
+#. translators: %1$s: the id of the alert, %2$s: the test url
 #: includes/features/class-email-notifications.php:25
 msgctxt "notification email subject"
 msgid "VRTs: Alert %1$s (%2$s)"
@@ -536,16 +537,16 @@ msgstr ""
 
 #: includes/features/class-email-notifications.php:31
 msgctxt "notification email"
-msgid "New visual differences have been detected on a page."
+msgid "New visual differences have been detected on the following page:"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:32
+#: includes/features/class-email-notifications.php:33
 msgctxt "notification email"
 msgid "Review and resolve the alert to resume testing:"
 msgstr ""
 
 #. translators: %1$s: the home url
-#: includes/features/class-email-notifications.php:36
+#: includes/features/class-email-notifications.php:37
 msgctxt "notification email"
 msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
@@ -818,7 +819,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:436
+#: includes/list-tables/class-tests-list-table.php:433
 msgid "Quick Edit"
 msgstr ""
 
@@ -891,10 +892,6 @@ msgstr ""
 
 #: includes/services/class-test-service.php:301
 msgid "Service could not update test."
-msgstr ""
-
-#: editor/components/metabox/index.js:170
-msgid "Run Tests"
 msgstr ""
 
 #: editor/components/screenshot/index.js:37
