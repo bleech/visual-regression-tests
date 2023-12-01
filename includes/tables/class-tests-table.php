@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Tests_Table {
 
-	const DB_VERSION = '1.2';
+	const DB_VERSION = '1.3';
 	const TABLE_NAME = 'vrts_tests';
 
 	/**
@@ -21,7 +21,6 @@ class Tests_Table {
 	public static function install_table() {
 		$option_name = self::TABLE_NAME . '_db_version';
 		$installed_version = get_option( $option_name );
-
 		if ( self::DB_VERSION !== $installed_version ) {
 			global $wpdb;
 
@@ -43,11 +42,38 @@ class Tests_Table {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 
-			if ( version_compare( $installed_version, '1.2', '<=' ) ) {
+			if ( version_compare( $installed_version, '1.2', '<' ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
 				$wpdb->query(
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
-					$wpdb->prepare( 'ALTER TABLE %s ADD hide_css_selectors longtext;', $table_name )
+					"ALTER TABLE {$table_name} ADD hide_css_selectors longtext;"
+				);
+			}
+			if ( version_compare( $installed_version, '1.3', '<' ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					"ALTER TABLE {$table_name} RENAME COLUMN target_screenshot_url TO base_screenshot_url;"
+				);
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					"ALTER TABLE {$table_name} RENAME COLUMN snapshot_date TO base_screenshot_date;"
+				);
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					"ALTER TABLE {$table_name} ADD last_comparison_date datetime;"
+				);
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					"ALTER TABLE {$table_name} ADD next_run_date datetime;"
+				);
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					"ALTER TABLE {$table_name} ADD is_running boolean;"
 				);
 			}
 

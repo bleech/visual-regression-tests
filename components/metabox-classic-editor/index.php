@@ -60,16 +60,16 @@ if ( $data['run_tests_checked'] ) {
 
 	<p class="figure-title"><strong><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></strong></p>
 	<figure class="figure">
-		<?php if ( $data['target_screenshot_url'] ) { ?>
-			<a class="figure-link" href="<?php echo esc_url( $data['target_screenshot_url'] ); ?>" target="_blank" rel="noreferrer" title="<?php esc_html_e( 'View full snapshot image in new tab', 'visual-regression-tests' ); ?>">
-				<img class="figure-image" src="<?php echo esc_url( $data['target_screenshot_url'] ); ?>" loading="lazy" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+		<?php if ( $data['base_screenshot_url'] ) { ?>
+			<a class="figure-link" href="<?php echo esc_url( $data['base_screenshot_url'] ); ?>" target="_blank" rel="noreferrer" title="<?php esc_html_e( 'View full snapshot image in new tab', 'visual-regression-tests' ); ?>">
+				<img class="figure-image" src="<?php echo esc_url( $data['base_screenshot_url'] ); ?>" loading="lazy" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 			</a>
 		<?php } else { ?>
 			<img class="figure-image" src="<?php echo esc_attr( $data['placeholder_image_data_url'] ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 		<?php } ?>
 		<figcaption class="howto">
-			<?php if ( $data['snapshot_date'] && $data['target_screenshot_url'] ) { ?>
-				<p><?php esc_html_e( 'Snapshot created on', 'visual-regression-tests' ); ?> <?php echo esc_html( $data['snapshot_date'] ); ?></p>
+			<?php if ( $data['base_screenshot_date'] && $data['base_screenshot_url'] ) { ?>
+				<p><?php esc_html_e( 'Snapshot created on', 'visual-regression-tests' ); ?> <?php echo esc_html( $data['base_screenshot_date'] ); ?></p>
 			<?php } else { ?>
 				<p><?php esc_html_e( 'Snapshot: in progress', 'visual-regression-tests' ); ?></p>
 			<?php } ?>

@@ -51,6 +51,13 @@ class Manual_Test_Service {
 			return $test->service_test_id;
 		}, $tests );
 		self::set_option();
-		return Service::run_manual_tests( $service_test_ids );
+		$request = Service::run_manual_tests( $service_test_ids );
+		if ( 200 === $request['status_code'] ) {
+			$response = $request['response'];
+			if ( array_key_exists('triggered_ids', $response) ) {
+				$triggered_ids = $response['triggered_ids'];
+				Test::set_tests_running( $triggered_ids );
+			}
+		}
 	}
 }

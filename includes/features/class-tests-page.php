@@ -238,11 +238,26 @@ class Tests_Page {
 				'testing-disabled' => ( Service::is_connected() ? true : false ),
 				'post_id' => $test->post_id,
 			], $page_url);
+
+			if ( ! $deleted ) {
+				$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
+			}
+		} elseif ( $test_id && 'run-manual-test' === $action ) {
+			$service = new Manual_Test_Service();
+			$service->run_tests([ $test_id ]);
+			$test = Test::get_item( $test_id );
+
+			$redirect_to = add_query_arg([
+				'message' => 'success',
+				'run-manual-test' => true,
+				'post_id' => $test->post_id,
+			], $page_url);
 		}
 
-		if ( ! $deleted ) {
+		if ( empty( $redirect_to ) ) {
 			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
 		}
+
 
 		wp_safe_redirect( $redirect_to );
 		exit;
@@ -384,6 +399,10 @@ class Tests_Page {
 			add_action( 'admin_notices', [ $this, 'render_notification_unlock_more_tests' ] );
 		}
 
+		if ( isset( $_GET['run-manual-test'] ) ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_run_manual_test' ] );
+		}
+
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$is_new_test_failed = isset( $_GET['new-test-failed'] ) ? sanitize_text_field( wp_unslash( $_GET['new-test-failed'] ) ) : false;
 		if ( ( $is_new_test_failed || '0' === $remaining_tests ) && $is_connected ) {
@@ -434,6 +453,18 @@ class Tests_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$post_id = isset( $_GET['post_id'] ) ? intval( $_GET['post_id'] ) : false;
 		Admin_Notices::render_notification('test_disabled', false, [
+			'page_title' => get_the_title( $post_id ),
+			'post_id' => intval( $post_id ),
+		]);
+	}
+
+	/**
+	 * Render run_manual_test Notification.
+	 */
+	public function render_notification_run_manual_test() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
+		$post_id = isset( $_GET['post_id'] ) ? intval( $_GET['post_id'] ) : false;
+		Admin_Notices::render_notification('run_manual_test', true, [
 			'page_title' => get_the_title( $post_id ),
 			'post_id' => intval( $post_id ),
 		]);

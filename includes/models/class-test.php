@@ -50,7 +50,7 @@ class Test {
 			}
 		}
 
-		$whitelist_orderby = [ 'id', 'post_title', 'status', 'snapshot_date' ];
+		$whitelist_orderby = [ 'id', 'post_title', 'status', 'base_screenshot_date' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];
 
 		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'id';
@@ -68,7 +68,16 @@ class Test {
 
 		$query = "
 			SELECT
-				tests.id, tests.status, tests.snapshot_date, tests.post_id, tests.current_alert_id, tests.service_test_id, tests.hide_css_selectors,
+				tests.id,
+				tests.status,
+				tests.base_screenshot_date,
+				tests.post_id,
+				tests.current_alert_id,
+				tests.service_test_id,
+				tests.hide_css_selectors,
+				tests.next_run_date,
+				tests.last_comparison_date,
+				tests.is_running,
 				posts.post_title
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
@@ -348,7 +357,7 @@ class Test {
 	 *
 	 * @return string
 	 */
-	public static function get_target_screenshot_url( $post_id = 0 ) {
+	public static function get_base_screenshot_url( $post_id = 0 ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
@@ -357,7 +366,7 @@ class Test {
 		return $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT target_screenshot_url FROM $tests_table WHERE post_id = %d",
+				"SELECT base_screenshot_url FROM $tests_table WHERE post_id = %d",
 				$post_id
 			)
 		);
@@ -370,7 +379,7 @@ class Test {
 	 *
 	 * @return string
 	 */
-	public static function get_snapshot_date( $post_id = 0 ) {
+	public static function get_base_screenshot_date( $post_id = 0 ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
@@ -379,7 +388,7 @@ class Test {
 		return $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT snapshot_date FROM $tests_table WHERE post_id = %d",
+				"SELECT base_screenshot_date FROM $tests_table WHERE post_id = %d",
 				$post_id
 			)
 		);
@@ -591,7 +600,10 @@ class Test {
 		$test->post_id = ! is_null( $test->post_id ) ? (int) $test->post_id : null;
 		$test->status = ! is_null( $test->status ) ? (int) $test->status : null;
 		$test->current_alert_id = ! is_null( $test->current_alert_id ) ? (int) $test->current_alert_id : null;
-		$test->snapshot_date = ! is_null( $test->snapshot_date ) ? mysql2date( 'c', $test->snapshot_date ) : null;
+		$test->base_screenshot_date = ! is_null( $test->base_screenshot_date ) ? mysql2date( 'c', $test->base_screenshot_date ) : null;
+		$test->next_run_date = ! is_null( $test->next_run_date ) ? mysql2date( 'c', $test->next_run_date ) : null;
+		$test->last_comparison_date = ! is_null( $test->last_comparison_date ) ? mysql2date( 'c', $test->last_comparison_date ) : null;
+		$test->is_running = ! is_null( $test->is_running ) ? (bool) $test->is_running : null;
 
 		return $test;
 	}
@@ -637,10 +649,33 @@ class Test {
 			$table_test,
 			[
 				'current_alert_id' => null,
-				'target_screenshot_url' => null,
-				'snapshot_date' => null,
+				'base_screenshot_url' => null,
+				'base_screenshot_date' => null,
+				'last_comparison_date' => null,
+				'next_run_date' => null,
+				'is_running' => null,
 			],
 			[ 'id' => $test_id ]
+		);
+	}
+
+	public static function set_tests_running( $test_ids ) {
+		global $wpdb;
+
+		$table_test = Tests_Table::get_table_name();
+
+		$placeholders = implode(', ', array_fill(0, count($test_ids), '%s'));
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"UPDATE $table_test
+					SET
+						is_running = 1
+					WHERE service_test_id IN ( $placeholders )",
+				$test_ids
+			)
 		);
 	}
 }

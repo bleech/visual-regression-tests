@@ -256,7 +256,7 @@ window.wp = window.wp || {};
 					// Update the snapshot column in the table and set the status of the snapshot.
 					const snapshotStatus = response.snapshot_status;
 					const $snapshotColumn = $(
-						'#test-' + id + ' .snapshot_date'
+						'#test-' + id + ' .base_screenshot_date'
 					);
 					if (
 						null !== snapshotStatus &&

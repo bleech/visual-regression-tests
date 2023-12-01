@@ -213,9 +213,9 @@ const Metabox = () => {
 			) }
 			{ test.id && !! test.status && (
 				<Screenshot
-					url={ test.target_screenshot_url }
+					url={ test.base_screenshot_url }
 					placeholderUrl={ placeholderImageDataUrl }
-					finishDate={ test.snapshot_date }
+					finishDate={ test.base_screenshot_date }
 				/>
 			) }
 			{ test.id && (

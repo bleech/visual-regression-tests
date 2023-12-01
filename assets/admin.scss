@@ -11,6 +11,10 @@
 		&--running {
 			color: $alert-green;
 		}
+
+		&--waiting {
+			color: $alert-yellow;
+		}
 	}
 }
 
