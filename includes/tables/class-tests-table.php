@@ -43,39 +43,39 @@ class Tests_Table {
 			dbDelta( $sql );
 
 			if ( version_compare( $installed_version, '1.2', '<' ) ) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} ADD hide_css_selectors longtext;"
 				);
 			}
 			if ( version_compare( $installed_version, '1.3', '<' ) ) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} RENAME COLUMN target_screenshot_url TO base_screenshot_url;"
 				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} RENAME COLUMN snapshot_date TO base_screenshot_date;"
 				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} ADD last_comparison_date datetime;"
 				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} ADD next_run_date datetime;"
 				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange -- It's OK.
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} ADD is_running boolean;"
 				);
-			}
+			}//end if
 
 			update_option( $option_name, self::DB_VERSION );
 		}//end if

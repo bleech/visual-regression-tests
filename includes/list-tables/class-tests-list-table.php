@@ -73,10 +73,10 @@ class Tests_List_Table extends \WP_List_Table {
 				);
 
 			case 'status':
-				return $this->render_column_status($item);
+				return $this->render_column_status( $item );
 
 			case 'base_screenshot_date':
-				return $this->render_column_snapshot($item);
+				return $this->render_column_snapshot( $item );
 
 			default:
 				return isset( $item->$column_name ) ? $item->$column_name : '';
@@ -415,8 +415,14 @@ class Tests_List_Table extends \WP_List_Table {
 		<?php
 	}
 
-	private function render_column_status($item) {
-		// var_dump($item);die();
+	/**
+	 * Render the status column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
+	private function render_column_status( $item ) {
 		$is_connected = Service::is_connected();
 		$has_subscription = Subscription::get_subscription_status();
 		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
@@ -426,7 +432,6 @@ class Tests_List_Table extends \WP_List_Table {
 		$is_running = (bool) $item->is_running;
 
 		$test_status = 'passed';
-		// var_dump($item);die();
 		if ( ! (bool) $is_connected ) {
 			$test_status = 'disconnected';
 		} elseif ( $item->current_alert_id ) {
@@ -443,20 +448,19 @@ class Tests_List_Table extends \WP_List_Table {
 			$test_status = 'scheduled';
 		}//end if
 
-		switch ($test_status) {
+		switch ( $test_status ) {
 			case 'disconnected':
 				$class = 'testing-status--paused';
 				$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
 				$instructions = '';
 				break;
 			case 'has-alert':
-				$alert = Alert::get_item($item->current_alert_id);
-				// var_dump($alert);die();
+				$alert = Alert::get_item( $item->current_alert_id );
 				$class = 'testing-status--paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
 				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
 				$instructions = '<br>';
-				$instructions .= Date_Time_Helpers::get_formatted_date_time( $alert->target_screenshot_finish_date );
+				$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
 				$instructions .= '<br>';
 				$instructions .= '<i class="dashicons dashicons-image-flip-horizontal"></i> ';
 				$instructions .= sprintf(
@@ -485,33 +489,19 @@ class Tests_List_Table extends \WP_List_Table {
 				$instructions .= esc_html__( 'Publish post to resume testing', 'visual-regression-tests' );
 				break;
 			case 'waiting':
-				$class = 'testing-status--waiting';
-				$text = esc_html__( 'Waiting', 'visual-regression-tests' );
-				$instructions = '<br>';
-				if ( $item->next_run_date ) {
-					$instructions .= Date_Time_Helpers::get_formatted_date_time( $item->next_run_date );
-					$instructions .= '<br>';
-				}
-				$instructions .= '<span class="wp-ui-text-highlight">';
-				$instructions .= '<i class="dashicons dashicons-clock"></i> ';
-				$instructions .= esc_html__( 'Waiting for reference', 'visual-regression-tests' );
-				$instructions .= '</span>';
 				break;
 			case 'running':
-				$class = 'testing-status--running';
-				$text = esc_html__( 'Running', 'visual-regression-tests' );
+				$class = 'testing-status--waiting';
+				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
 				$instructions = '<br>';
-				$instructions .= '<span class="wp-ui-text-highlight">';
-				$instructions .= '<i class="dashicons dashicons-clock"></i> ';
-				$instructions .= esc_html__( 'Waiting for screenshot', 'visual-regression-tests' );
-				$instructions .= '</span>';
+				$instructions .= esc_html__( 'Refesh this page to see results', 'visual-regression-tests' );
 				break;
 			case 'scheduled':
 				$class = 'testing-status--waiting';
 				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
 				$instructions = '<br>';
 				if ( $item->next_run_date ) {
-					$instructions .= Date_Time_Helpers::get_formatted_date_time( $item->next_run_date );
+					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $item->next_run_date );
 					$instructions .= '<br>';
 				}
 				if ( $has_subscription ) {
@@ -530,7 +520,7 @@ class Tests_List_Table extends \WP_List_Table {
 				$text = esc_html__( 'Passed', 'visual-regression-tests' );
 				$instructions = '<br>';
 				if ( $item->last_comparison_date ) {
-					$instructions .= Date_Time_Helpers::get_formatted_date_time( $item->last_comparison_date );
+					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $item->last_comparison_date );
 					$instructions .= '<br>';
 				}
 				if ( $has_subscription ) {
@@ -543,7 +533,7 @@ class Tests_List_Table extends \WP_List_Table {
 					);
 				}
 				break;
-		}
+		}//end switch
 
 		return sprintf(
 			'<span class="%s">%s</span>%s',
@@ -553,7 +543,14 @@ class Tests_List_Table extends \WP_List_Table {
 		);
 	}
 
-	private function render_column_snapshot ($item) {
+	/**
+	 * Render the snapshot column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
+	private function render_column_snapshot( $item ) {
 		$base_screenshot_status = 'taken';
 		if ( false === (bool) $item->status ) {
 			$base_screenshot_status = 'paused';
@@ -561,7 +558,7 @@ class Tests_List_Table extends \WP_List_Table {
 			$base_screenshot_status = 'waiting';
 		}//end if
 
-		switch ($base_screenshot_status) {
+		switch ( $base_screenshot_status ) {
 			case 'paused':
 				$output = esc_html__( 'On hold', 'visual-regression-tests' );
 				break;
@@ -571,7 +568,7 @@ class Tests_List_Table extends \WP_List_Table {
 					'<span class="%s">%s</span><br>%s',
 					'testing-status--waiting',
 					$status,
-					esc_html__(' Refresh this page to see the created snapshot ', 'visual-regression-tests')
+					esc_html__( ' Refresh this page to see the created snapshot ', 'visual-regression-tests' )
 				);
 				break;
 			case 'taken':
@@ -583,10 +580,10 @@ class Tests_List_Table extends \WP_List_Table {
 					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
 					esc_html__( 'View Snapshot', 'visual-regression-tests' )
 				);
-				$date_time = Date_Time_Helpers::get_formatted_date_time( $item->base_screenshot_date );
+				$date_time = Date_Time_Helpers::get_formatted_relative_date_time( $item->base_screenshot_date );
 				$output = $status . $date_time;
 				break;
-		}
+		}//end switch
 		return $output;
 	}
 }

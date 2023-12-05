@@ -17,7 +17,7 @@ class Test_Service {
 	 *
 	 * @param int   $alert_id Alert id.
 	 * @param int   $test_id Test id.
-	 * @param array $comparison Comparison.
+	 * @param array $data Comparison data.
 	 *
 	 * @return int|false
 	 */
@@ -45,7 +45,7 @@ class Test_Service {
 	 * Update test from schedule.
 	 *
 	 * @param int   $test_id Test id.
-	 * @param array $screenshot Screenshot.
+	 * @param array $data Screenshot data.
 	 *
 	 * @return void
 	 */

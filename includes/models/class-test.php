@@ -659,12 +659,17 @@ class Test {
 		);
 	}
 
+	/**
+	 * Set tests running.
+	 *
+	 * @param array $test_ids The test ids.
+	 */
 	public static function set_tests_running( $test_ids ) {
 		global $wpdb;
 
 		$table_test = Tests_Table::get_table_name();
 
-		$placeholders = implode(', ', array_fill(0, count($test_ids), '%s'));
+		$placeholders = implode( ', ', array_fill( 0, count( $test_ids ), '%s' ) );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		$wpdb->query(
@@ -672,8 +677,9 @@ class Test {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"UPDATE $table_test
 					SET
-						is_running = 1
-					WHERE service_test_id IN ( $placeholders )",
+						is_running = 1 "
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				. "WHERE service_test_id IN ( $placeholders )",
 				$test_ids
 			)
 		);

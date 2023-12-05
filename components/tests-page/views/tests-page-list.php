@@ -1,7 +1,5 @@
 <?php
-use Vrts\Features\Admin_Notices;
 use Vrts\Features\Subscription;
-use Vrts\Services\Manual_Test_Service;
 ?>
 
 <div class="wrap vrts_list_table_page">
@@ -57,12 +55,6 @@ use Vrts\Services\Manual_Test_Service;
 
 		if ( $list_table->has_items() ) {
 			$list_table->inline_edit();
-		}
-
-		$vrts_manual_test_service = new Manual_Test_Service();
-		if ( $vrts_manual_test_service->is_active() && ! isset( $_GET['run-manual-test']) ) {
-			$vrts_manual_test_service->delete_option();
-			Admin_Notices::render_notification( 'run_manual_test', true, [] );
 		}
 		?>
 	</form>
