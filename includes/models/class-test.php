@@ -184,6 +184,28 @@ class Test {
 	}
 
 	/**
+	 * Get multiple tests from database by post ids
+	 *
+	 * @param array $post_ids Post ids.
+	 *
+	 * @return object
+	 */
+	public static function get_items_by_post_ids( $post_ids = [] ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE post_id IN (" . implode( ',', array_fill( 0, count( $post_ids ), '%d' ) ) . ')',
+				$post_ids
+			)
+		);
+	}
+
+	/**
 	 * Get a single test from database
 	 *
 	 * @param int $post_id the id of the post.
@@ -439,6 +461,47 @@ class Test {
 				return $row_id;
 			}
 		}
+	}
+
+	/**
+	 * Insert multiple test data
+	 *
+	 * @param array $data Data to update (in multi array column => value pairs).
+	 *
+	 * @return int|false The number of rows affected, or false on error.
+	 */
+	public static function save_multiple( $data = [] ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// If there is no data, return false.
+		if ( ! isset( $data[0] ) ) {
+			return false;
+		}
+
+		$fields  = '`' . implode( '`, `', array_keys( $data[0] ) ) . '`';
+		$formats = implode( ', ', array_map(function( $row ) {
+			return '(' . implode( ', ', array_fill( 0, count( $row ), '%s' ) ) . ')';
+		}, $data ) );
+		$values  = [];
+
+		foreach ( $data as $row ) {
+			foreach ( $row as $value ) {
+				$values[] = $value;
+			}
+		}
+
+		// TODO: add support for update.
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				"INSERT INTO `$tests_table` ($fields) VALUES $formats",
+				$values
+			)
+		);
 	}
 
 	/**

@@ -17,6 +17,10 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-new-test-failed.php';
 		break;
 
+	case 'new_tests_added':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-new-tests-added.php';
+		break;
+
 	case 'plugin_activated':
 		$template = dirname( __FILE__ ) . '/views/admin-notification-plugin-activated.php';
 		break;

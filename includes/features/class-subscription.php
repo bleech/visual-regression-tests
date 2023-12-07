@@ -62,27 +62,31 @@ class Subscription {
 
 	/**
 	 * Increase number of tests until server updates the number of available tests.
+	 *
+	 * @param int $number Number of tests to increase.
 	 */
-	public static function increase_tests_count() {
+	public static function increase_tests_count( $number = 1 ) {
 		$remaining_tests = get_option( 'vrts_remaining_tests' );
 		$total_tests = get_option( 'vrts_total_tests' );
 
 		if ( $remaining_tests < $total_tests ) {
-			$remaining_tests++;
-			update_option( 'vrts_remaining_tests', $remaining_tests );
+			$remaining_tests += $number;
+			update_option( 'vrts_remaining_tests', min( $total_tests, $remaining_tests ) );
 		}
 		return true;
 	}
 
 	/**
 	 * Decrease number of tests until server updates the number of available tests.
+	 *
+	 * @param int $number Number of tests to decrease.
 	 */
-	public static function decrease_tests_count() {
+	public static function decrease_tests_count( $number = 1 ) {
 		$remaining_tests = get_option( 'vrts_remaining_tests' );
 
 		if ( $remaining_tests >= 1 ) {
-			$remaining_tests--;
-			update_option( 'vrts_remaining_tests', $remaining_tests );
+			$remaining_tests -= $number;
+			update_option( 'vrts_remaining_tests', max( 0, $remaining_tests ) );
 		}
 	}
 

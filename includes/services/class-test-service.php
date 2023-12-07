@@ -122,6 +122,7 @@ class Test_Service {
 			}
 		}
 	}
+
 	/**
 	 * Create test.
 	 *
@@ -149,6 +150,84 @@ class Test_Service {
 				$new_row_id = Test::save( $args );
 				return Test::get_item( $new_row_id );
 			}
+		} else {
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
+		}//end if
+		return new WP_Error( 'vrts_service_error', __( 'Error creating test.', 'visual-regression-tests' ) );
+	}
+
+	/**
+	 * Create tests.
+	 *
+	 * @param array $post_ids Post ids.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function create_tests( $post_ids ) {
+		if ( Service::is_connected() ) {
+			$created_tests = [];
+			$post_types = vrts()->get_public_post_types();
+			$posts = get_posts( [
+				'post__in' => $post_ids,
+				'post_type' => $post_types,
+				'post_status' => 'any',
+				'posts_per_page' => -1,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			] );
+
+			if ( ! $posts ) {
+				return new WP_Error( 'vrts_posts_error', __( 'Posts not found.', 'visual-regression-tests' ) );
+			}
+
+			$post_ids = wp_list_pluck( $posts, 'ID' );
+			$remaining_tests = get_option( 'vrts_remaining_tests' );
+			$existing_tests = Test::get_items_by_post_ids( $post_ids );
+			$existing_tests_posts_ids = array_map( 'intval', wp_list_pluck( $existing_tests, 'post_id' ) );
+
+			// Remove posts that already have tests.
+			$posts = array_filter( $posts, function( $post ) use ( $existing_tests_posts_ids ) {
+				return ! in_array( $post->ID, $existing_tests_posts_ids, true );
+			} );
+
+			if ( ! $posts ) {
+				return $existing_tests;
+			}
+
+			// Only try to create as many remote tests as we have remaining.
+			$published_posts = array_slice( array_filter( $posts, function( $post ) {
+				return 'publish' === $post->post_status;
+			} ), 0, $remaining_tests );
+
+			$not_published_posts = array_filter( $posts, function( $post ) {
+				return 'publish' !== $post->post_status && 'revision' !== $post->post_type && 'auto-draft' !== $post->post_status;
+			} );
+
+			if ( $published_posts ) {
+				$published_posts_ids = wp_list_pluck( $published_posts, 'ID' );
+				$remote_tests = $this->create_remote_tests( $published_posts_ids );
+				if ( ! is_wp_error( $remote_tests ) ) {
+					$created_tests = $remote_tests;
+				}
+			}
+
+			if ( $not_published_posts ) {
+				$args = array_values( array_map(function( $post ) {
+					return [
+						'post_id' => $post->ID,
+						'status' => 0,
+					];
+				}, $not_published_posts) );
+
+				$is_saved = Test::save_multiple( $args );
+
+				if ( $is_saved ) {
+					$not_published_posts_ids = wp_list_pluck( $not_published_posts, 'ID' );
+					$created_tests = array_merge( $created_tests, Test::get_items_by_post_ids( $not_published_posts_ids ) );
+				}
+			}
+
+			return $created_tests;
 		} else {
 			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}//end if
@@ -196,6 +275,65 @@ class Test_Service {
 			} else {
 				return new WP_Error( 'vrts_service_error', __( 'Service could not create test.', 'visual-regression-tests' ) );
 			}
+		} else {
+			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
+		}//end if
+	}
+
+	/**
+	 * Create tests remotely via service.
+	 *
+	 * @param array $post_ids Post IDs.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function create_remote_tests( $post_ids ) {
+		if ( Service::is_connected() ) {
+			$service_project_id = get_option( 'vrts_project_id' );
+			$request_url = 'tests';
+
+			$urls = array_combine( $post_ids, array_map( function( $post_id ) {
+				return get_permalink( $post_id );
+			}, $post_ids ) );
+
+			$parameters = [
+				'project_id' => $service_project_id,
+				'urls' => array_values( $urls ),
+				'frequency' => 'daily',
+			];
+
+			$service_request = Service::rest_service_request( $request_url, $parameters, 'post' );
+
+			if ( 201 === $service_request['status_code'] ) {
+				$args = [];
+
+				foreach ( $service_request['response'] as $test ) {
+					$args[] = [
+						'post_id' => array_search( $test['url'], $urls, true ),
+						'service_test_id' => $test['id'],
+						'status' => 1,
+					];
+				}
+
+				$saved_tests_number = Test::save_multiple( $args );
+
+				if ( $saved_tests_number ) {
+					Subscription::decrease_tests_count( $saved_tests_number );
+
+					$post_ids = wp_list_pluck( $args, 'post_id' );
+					$created_tests = Test::get_items_by_post_ids( $post_ids );
+
+					foreach ( $created_tests as $test ) {
+						Cron_Jobs::schedule_initial_fetch_test_updates( $test->id );
+					}
+
+					return $created_tests;
+				} else {
+					return new WP_Error( 'vrts_test_error', __( 'Plugin could not save tests.', 'visual-regression-tests' ) );
+				}
+			} else {
+				return new WP_Error( 'vrts_service_error', __( 'Service could not create tests.', 'visual-regression-tests' ) );
+			}//end if
 		} else {
 			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}//end if
