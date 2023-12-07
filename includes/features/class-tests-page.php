@@ -428,11 +428,13 @@ class Tests_Page {
 	public function render_notification_new_tests_added() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$post_ids = isset( $_GET['post_ids'] ) ? array_map( 'intval', $_GET['post_ids'] ) : false;
-		Admin_Notices::render_notification( 'new_tests_added', false, [
-			'page_titles' => implode( ', ', array_reverse( array_map( function( $post_id ) {
-				return get_the_title( $post_id );
-			}, $post_ids ) ) ),
-		]);
+		if ( $post_ids ) {
+			Admin_Notices::render_notification( 'new_tests_added', false, [
+				'page_titles' => implode( ', ', array_reverse( array_map( function( $post_id ) {
+					return get_the_title( $post_id );
+				}, $post_ids ) ) ),
+			]);
+		}
 	}
 
 	/**
