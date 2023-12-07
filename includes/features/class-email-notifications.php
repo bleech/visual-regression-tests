@@ -27,6 +27,12 @@ class Email_Notifications {
 			esc_url( get_the_permalink( $post_id ) )
 		);
 
+		/**
+		 * It replaces common plain text characters with formatted entities
+		 * so we remove it as in plain text emails it displays it as e.g. &#8217;s
+		 */
+		remove_filter( 'the_title', 'wptexturize' );
+
 		$message = esc_html_x( 'Howdy,', 'notification email', 'visual-regression-tests' ) . "\n\n" .
 			esc_html_x( 'New visual differences have been detected on the following page:', 'notification email', 'visual-regression-tests' ) . "\n\n" .
 			get_the_title( $post_id ) . "\n\n" .
