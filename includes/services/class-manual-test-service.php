@@ -56,7 +56,9 @@ class Manual_Test_Service {
 			$response = $request['response'];
 			if ( array_key_exists( 'triggered_ids', $response ) ) {
 				$triggered_ids = $response['triggered_ids'];
-				Test::set_tests_running( $triggered_ids );
+				if ( ! empty( $triggered_ids ) ) {
+					Test::set_tests_running( $triggered_ids );
+				}
 			}
 		}
 	}

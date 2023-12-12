@@ -489,6 +489,9 @@ class Tests_List_Table extends \WP_List_Table {
 				$instructions .= esc_html__( 'Publish post to resume testing', 'visual-regression-tests' );
 				break;
 			case 'waiting':
+				$class = 'testing-status--waiting';
+				$text = esc_html__( 'Waiting', 'visual-regression-tests' );
+				$instructions = '';
 				break;
 			case 'running':
 				$class = 'testing-status--waiting';

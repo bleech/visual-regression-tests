@@ -642,6 +642,10 @@ class Test {
 	public static function reset_base_screenshot( $test_id ) {
 		global $wpdb;
 
+		if ( ! $test_id ) {
+			return;
+		}
+
 		$table_test = Tests_Table::get_table_name();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
@@ -666,6 +670,10 @@ class Test {
 	 */
 	public static function set_tests_running( $test_ids ) {
 		global $wpdb;
+
+		if ( empty( $test_ids ) ) {
+			return;
+		}
 
 		$table_test = Tests_Table::get_table_name();
 
