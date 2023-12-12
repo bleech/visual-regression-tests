@@ -94,7 +94,7 @@ class Tests_List_Table extends \WP_List_Table {
 			'post_title' => esc_html__( 'Title', 'visual-regression-tests' ),
 			'internal_url' => esc_html__( 'Path', 'visual-regression-tests' ),
 			'base_screenshot_date' => esc_html__( 'Snapshot', 'visual-regression-tests' ),
-			'status' => esc_html__( 'Status', 'visual-regression-tests' ),
+			'status' => esc_html__( 'Test Status', 'visual-regression-tests' ),
 		];
 
 		return $columns;
@@ -462,11 +462,11 @@ class Tests_List_Table extends \WP_List_Table {
 				$instructions = '<br>';
 				$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
 				$instructions .= '<br>';
-				$instructions .= '<i class="dashicons dashicons-image-flip-horizontal"></i> ';
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
-					esc_html__( '%1$sResolve alert%2$s to resume test', 'visual-regression-tests' ),
+					esc_html__( '%1$s%2$s Resolve alert%3$s to resume test', 'visual-regression-tests' ),
 					'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'Edit the alert', 'visual-regression-tests' ) . '">',
+					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
 					'</a>'
 				);
 				break;
@@ -497,7 +497,7 @@ class Tests_List_Table extends \WP_List_Table {
 				$class = 'testing-status--waiting';
 				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
 				$instructions = '<br>';
-				$instructions .= esc_html__( 'Refesh this page to see results', 'visual-regression-tests' );
+				$instructions .= esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
 				break;
 			case 'scheduled':
 				$class = 'testing-status--waiting';
@@ -571,7 +571,7 @@ class Tests_List_Table extends \WP_List_Table {
 					'<span class="%s">%s</span><br>%s',
 					'testing-status--waiting',
 					$status,
-					esc_html__( ' Refresh this page to see the created snapshot ', 'visual-regression-tests' )
+					esc_html__( 'Refresh page to see snapshot', 'visual-regression-tests' )
 				);
 				break;
 			case 'taken':
