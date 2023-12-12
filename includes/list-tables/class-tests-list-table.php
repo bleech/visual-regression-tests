@@ -178,7 +178,7 @@ class Tests_List_Table extends \WP_List_Table {
 		];
 		if ( Subscription::get_subscription_status() && count( Test::get_all_running() ) > 0 ) {
 			$actions = array_merge(
-				[ 'run-manual-test' => esc_html__( 'Run Manual Test', 'visual-regression-tests' ) ],
+				[ 'run-manual-test' => esc_html__( 'Run Test', 'visual-regression-tests' ) ],
 				$actions
 			);
 		}

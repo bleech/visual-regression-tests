@@ -253,6 +253,21 @@ class Plugin {
 	}
 
 	/**
+	 * Get public post types.
+	 *
+	 * @return array public post types.
+	 */
+	public function get_public_post_types() {
+		$default_post_types = [ 'post', 'page' ];
+		$custom_post_types = get_post_types( [
+			'public' => true,
+			'_builtin' => false,
+		] );
+
+		return array_merge( $default_post_types, $custom_post_types );
+	}
+
+	/**
 	 * Get snapshot placeholder image.
 	 *
 	 * @param boolean $base64 return base 64 encoded or not.

@@ -10,14 +10,14 @@ class Tests {
 	 * Constructor.
 	 */
 	public function __construct() {
-		// Allows developers to rerun tests by calling `do_action( 'vrts_rerun_tests' )`.
-		add_action( 'vrts_rerun_tests', [ $this, 'rerun_tests' ] );
+		// Allows developers to run tests by calling `do_action( 'vrts_run_tests' )`.
+		add_action( 'vrts_run_tests', [ $this, 'run_tests' ] );
 	}
 
 	/**
-	 * Rerun all running tests if a subscription is active.
+	 * Run all tests if a subscription is active.
 	 */
-	public static function rerun_tests() {
+	public static function run_tests() {
 		$has_subscription = Subscription::get_subscription_status();
 
 		if ( ! $has_subscription ) {

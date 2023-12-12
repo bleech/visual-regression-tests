@@ -2,8 +2,8 @@
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 1.5.2
+Tested up to: 6.4
+Stable tag: 1.6.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -64,6 +64,7 @@ Unlock more features with our paid plans:
 * on **multiple** domains
 * with **automatic daily** test
 * and **unlimited manual tests**
+* run tests programmatically with **do_action( 'vrts_run_tests' )**
 * add **multiple alert** recipients
 * get **e-mail** support
 * and access to **new features**
@@ -162,6 +163,11 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.6.0 =
+* Fixed WordPress 6.4 deprecated notices for list tables.
+* Added hook allowing developers to run tests by calling `do_action( 'vrts_run_tests' )`.
+* Added test page title and url to email notifications.
 
 = 1.5.2 =
 * Changed internal option name.

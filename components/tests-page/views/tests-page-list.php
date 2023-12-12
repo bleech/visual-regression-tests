@@ -19,7 +19,7 @@ use Vrts\Features\Subscription;
 			<li>
 				<form method="post" id="form-run-manual-tests">
 					<?php wp_nonce_field( 'submit_run_manual_tests', '_wpnonce' ); ?>
-					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run Manual Tests', 'visual-regression-tests' ); ?>"
+					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run Tests', 'visual-regression-tests' ); ?>"
 						class="page-title-action button-secondary"
 						id="<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? 'run-manual-tests-disabled' : 'run-manual-tests'; ?>"
 						<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? ' disabled' : ''; ?>

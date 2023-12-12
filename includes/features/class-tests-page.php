@@ -388,6 +388,12 @@ class Tests_Page {
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
+		$is_new_tests_added = isset( $_GET['new-tests-added'] ) ? sanitize_text_field( wp_unslash( $_GET['new-tests-added'] ) ) : false;
+		if ( $is_new_tests_added ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_new_tests_added' ] );
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$is_testing_disabled = isset( $_GET['testing-disabled'] ) ? sanitize_text_field( wp_unslash( $_GET['testing-disabled'] ) ) : false;
 		if ( $is_testing_disabled ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_test_disabled' ] );
@@ -425,9 +431,24 @@ class Tests_Page {
 	public function render_notification_new_test_added() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$post_id = isset( $_GET['post_id'] ) ? intval( $_GET['post_id'] ) : false;
-		Admin_Notices::render_notification('new_test_added', false, [
+		Admin_Notices::render_notification( 'new_test_added', false, [
 			'page_title' => get_the_title( $post_id ),
 		]);
+	}
+
+	/**
+	 * Render new_tests_added Notification.
+	 */
+	public function render_notification_new_tests_added() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
+		$post_ids = isset( $_GET['post_ids'] ) ? array_map( 'intval', $_GET['post_ids'] ) : false;
+		if ( $post_ids ) {
+			Admin_Notices::render_notification( 'new_tests_added', false, [
+				'page_titles' => implode( ', ', array_reverse( array_map( function( $post_id ) {
+					return get_the_title( $post_id );
+				}, $post_ids ) ) ),
+			]);
+		}
 	}
 
 	/**
@@ -436,7 +457,7 @@ class Tests_Page {
 	public function render_notification_new_test_failed() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$post_id = isset( $_GET['post_id'] ) ? intval( $_GET['post_id'] ) : false;
-		Admin_Notices::render_notification('new_test_failed', false, [
+		Admin_Notices::render_notification( 'new_test_failed', false, [
 			'page_title' => get_the_title( $post_id ),
 		]);
 	}
@@ -447,7 +468,7 @@ class Tests_Page {
 	public function render_notification_test_disabled() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
 		$post_id = isset( $_GET['post_id'] ) ? intval( $_GET['post_id'] ) : false;
-		Admin_Notices::render_notification('test_disabled', false, [
+		Admin_Notices::render_notification( 'test_disabled', false, [
 			'page_title' => get_the_title( $post_id ),
 			'post_id' => intval( $post_id ),
 		]);
@@ -458,7 +479,7 @@ class Tests_Page {
 	 */
 	public function render_notification_unlock_more_tests() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
-		Admin_Notices::render_notification('unlock_more_tests', false, [
+		Admin_Notices::render_notification( 'unlock_more_tests', false, [
 			'total_tests' => Subscription::get_total_tests(),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 		]);
