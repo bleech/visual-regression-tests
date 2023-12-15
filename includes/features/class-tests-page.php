@@ -399,12 +399,6 @@ class Tests_Page {
 			add_action( 'admin_notices', [ $this, 'render_notification_test_disabled' ] );
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
-		$test_started = isset( $_GET['run-manual-test'] );
-		if ( $test_started ) {
-			add_action( 'admin_notices', [ $this, 'render_notification_test_started' ] );
-		}
-
 		$remaining_tests = Subscription::get_remaining_tests();
 		if ( '1' === $remaining_tests ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_unlock_more_tests' ] );
@@ -478,13 +472,6 @@ class Tests_Page {
 			'page_title' => get_the_title( $post_id ),
 			'post_id' => intval( $post_id ),
 		]);
-	}
-
-	/**
-	 * Render test_started Notification.
-	 */
-	public function render_notification_test_started() {
-		Admin_Notices::render_notification( 'test_started', false, []);
 	}
 
 	/**
