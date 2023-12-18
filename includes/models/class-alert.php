@@ -81,7 +81,7 @@ class Alert {
 	 *
 	 * @param int $id the id of the item.
 	 *
-	 * @return array
+	 * @return object
 	 */
 	public static function get_item( $id = 0 ) {
 		global $wpdb;
@@ -169,7 +169,7 @@ class Alert {
 
 			// Resume test after alert is resolved.
 			if ( 1 === $new_alert_state ) {
-				$alert = (object) self::get_item( $id );
+				$alert = self::get_item( $id );
 				$service = new Test_Service();
 				$service->resume_test( $alert->post_id );
 			}

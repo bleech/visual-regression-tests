@@ -111,9 +111,9 @@ class Metaboxes {
 		global $post;
 		$post_id = $post->ID ? $post->ID : 0;
 		$run_tests_checked = ! empty( Test::get_item_id( $post_id ) );
-		$snapshot_date = Test::get_snapshot_date( $post_id );
-		if ( $snapshot_date ) {
-			$snapshot_date = Date_Time_Helpers::get_formatted_date_time( $snapshot_date );
+		$base_screenshot_date = Test::get_base_screenshot_date( $post_id );
+		if ( $base_screenshot_date ) {
+			$base_screenshot_date = Date_Time_Helpers::get_formatted_date_time( $base_screenshot_date );
 		}
 
 		$alert_id = Test::get_alert_id( $post_id );
@@ -138,8 +138,8 @@ class Metaboxes {
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
 			'test_status' => (bool) Test::get_status( $post_id ),
-			'target_screenshot_url' => Test::get_target_screenshot_url( $post_id ),
-			'snapshot_date' => $snapshot_date,
+			'base_screenshot_url' => Test::get_base_screenshot_url( $post_id ),
+			'base_screenshot_date' => $base_screenshot_date,
 			'testing_status_instructions' => $testing_status_instructions,
 			'placeholder_image_data_url' => vrts()->get_snapshot_placeholder_image(),
 			'is_new_test' => self::is_new_test( $post_id ),

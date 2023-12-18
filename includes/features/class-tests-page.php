@@ -238,9 +238,23 @@ class Tests_Page {
 				'testing-disabled' => ( Service::is_connected() ? true : false ),
 				'post_id' => $test->post_id,
 			], $page_url);
-		}
 
-		if ( ! $deleted ) {
+			if ( ! $deleted ) {
+				$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
+			}
+		} elseif ( $test_id && 'run-manual-test' === $action ) {
+			$service = new Manual_Test_Service();
+			$service->run_tests( [ $test_id ] );
+			$test = Test::get_item( $test_id );
+
+			$redirect_to = add_query_arg([
+				'message' => 'success',
+				'run-manual-test' => true,
+				'post_id' => $test->post_id,
+			], $page_url);
+		}//end if
+
+		if ( empty( $redirect_to ) ) {
 			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
 		}
 

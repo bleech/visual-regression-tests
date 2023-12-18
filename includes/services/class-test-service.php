@@ -17,13 +17,14 @@ class Test_Service {
 	 *
 	 * @param int   $alert_id Alert id.
 	 * @param int   $test_id Test id.
-	 * @param array $comparison Comparison.
+	 * @param array $data Comparison data.
 	 *
 	 * @return int|false
 	 */
-	public function update_test_from_comparison( $alert_id, $test_id, $comparison ) {
+	public function update_test_from_comparison( $alert_id, $test_id, $data ) {
 		global $wpdb;
 		$table_test = Tests_Table::get_table_name();
+		$comparison = $data['comparison'];
 		if ( $comparison['screenshot']['image_url'] ?? null ) {
 			// Update test row with new id foreign key and add latest screenshot.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
@@ -31,8 +32,9 @@ class Test_Service {
 				$table_test,
 				[
 					'current_alert_id' => $alert_id,
-					'target_screenshot_url' => $comparison['screenshot']['image_url'],
-					'snapshot_date' => $comparison['updated_at'],
+					'next_run_date' => $data['next_run_at'] ?? '',
+					'last_comparison_date' => $comparison['updated_at'],
+					'is_running' => false,
 				],
 				[ 'service_test_id' => $test_id ]
 			);
@@ -43,21 +45,23 @@ class Test_Service {
 	 * Update test from schedule.
 	 *
 	 * @param int   $test_id Test id.
-	 * @param array $screenshot Screenshot.
+	 * @param array $data Screenshot data.
 	 *
 	 * @return void
 	 */
-	public function update_test_from_schedule( $test_id, $screenshot ) {
+	public function update_test_from_schedule( $test_id, $data ) {
 		global $wpdb;
 		$table_test = Tests_Table::get_table_name();
+		$screenshot = $data['schedule']['base_screenshot'];
 		if ( $screenshot['image_url'] ?? null ) {
 			// Update test row with new id foreign key and add latest screenshot.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			$wpdb->update(
 				$table_test,
 				[
-					'target_screenshot_url' => $screenshot['image_url'],
-					'snapshot_date' => $screenshot['updated_at'],
+					'base_screenshot_url' => $screenshot['image_url'],
+					'base_screenshot_date' => $screenshot['updated_at'],
+					'next_run_date' => $data['next_run_at'] ?? '',
 				],
 				[ 'service_test_id' => $test_id ]
 			);
@@ -76,22 +80,22 @@ class Test_Service {
 		$post_id = Test::get_post_id_by_service_test_id( $test_id );
 
 		if ( $post_id ) {
-			if ( array_key_exists( 'is_paused', $data ) && $data['is_paused'] ) {
-				if ( $data['comparison']['pixels_diff'] > 1 ) {
+			if ( $data['schedule']['base_screenshot'] ?? null ) {
+				$this->update_test_from_schedule( $test_id, $data );
+			} elseif ( $data['comparison'] ?? null ) {
+				$alert_id = null;
+				if ( $data['is_paused'] ?? null && $data['comparison']['pixels_diff'] > 1 ) {
 					$comparison = $data['comparison'];
 					$alert_service = new Alert_Service();
 					$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison );
-
-					if ( $alert_id ) {
-						$test_service = new Test_Service();
-						$test_service->update_test_from_comparison( $alert_id, $test_id, $comparison );
-						// Send e-mail notification.
-						$email_notifications = new Email_Notifications();
-						$email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
-					}
 				}//end if
-			} elseif ( $data['schedule']['base_screenshot'] ) {
-				$this->update_test_from_schedule( $test_id, $data['schedule']['base_screenshot'] );
+				$test_service = new Test_Service();
+				$test_service->update_test_from_comparison( $alert_id, $test_id, $data );
+				if ( $alert_id ) {
+					// Send e-mail notification.
+					$email_notifications = new Email_Notifications();
+					$email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
+				}//end if
 			}//end if
 			return true;
 		}//end if

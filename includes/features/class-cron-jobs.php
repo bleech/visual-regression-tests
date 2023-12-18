@@ -59,7 +59,7 @@ class Cron_Jobs {
 	 */
 	public function fetch_test_updates( $test_id, $try_number = 1 ) {
 		$test = Test::get_item( $test_id );
-		if ( empty( $test ) || empty( $test->snapshot_date ) ) {
+		if ( empty( $test ) || empty( $test->base_screenshot_date ) ) {
 			$service = new Test_Service();
 			$service->fetch_and_update_tests();
 

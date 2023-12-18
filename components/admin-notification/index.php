@@ -41,12 +41,12 @@ switch ( $data['view'] ) {
 		$template = dirname( __FILE__ ) . '/views/admin-notification-test-disabled.php';
 		break;
 
-	case 'unlock_more_tests':
-		$template = dirname( __FILE__ ) . '/views/admin-notification-unlock-more-tests.php';
+	case 'test_started':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-test-started.php';
 		break;
 
-	case 'run_manual_test':
-		$template = dirname( __FILE__ ) . '/views/admin-notification-run-manual-test.php';
+	case 'unlock_more_tests':
+		$template = dirname( __FILE__ ) . '/views/admin-notification-unlock-more-tests.php';
 		break;
 
 	default:

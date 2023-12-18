@@ -1,7 +1,9 @@
 <?php
+
 use Vrts\Features\Admin_Notices;
 use Vrts\Features\Subscription;
 use Vrts\Services\Manual_Test_Service;
+
 ?>
 
 <div class="wrap vrts_list_table_page">
@@ -21,7 +23,7 @@ use Vrts\Services\Manual_Test_Service;
 			<li>
 				<form method="post" id="form-run-manual-tests">
 					<?php wp_nonce_field( 'submit_run_manual_tests', '_wpnonce' ); ?>
-					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run Tests', 'visual-regression-tests' ); ?>"
+					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run All Tests', 'visual-regression-tests' ); ?>"
 						class="page-title-action button-secondary"
 						id="<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? 'run-manual-tests-disabled' : 'run-manual-tests'; ?>"
 						<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? ' disabled' : ''; ?>
@@ -62,7 +64,7 @@ use Vrts\Services\Manual_Test_Service;
 		$vrts_manual_test_service = new Manual_Test_Service();
 		if ( $vrts_manual_test_service->is_active() ) {
 			$vrts_manual_test_service->delete_option();
-			Admin_Notices::render_notification( 'run_manual_test', false, [] );
+			Admin_Notices::render_notification( 'test_started', false, [] );
 		}
 		?>
 	</form>
