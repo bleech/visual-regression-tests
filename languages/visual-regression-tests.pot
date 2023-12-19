@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.6.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.7.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-24T13:15:51+00:00\n"
+"POT-Creation-Date: 2023-12-18T12:10:23+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -102,6 +102,15 @@ msgstr ""
 msgid "Upgrade here!"
 msgstr ""
 
+#: components/admin-notification/views/admin-notification-new-tests-added.php:3
+msgid "Tests added successfully"
+msgstr ""
+
+#. translators: %s: the title of the page.
+#: components/admin-notification/views/admin-notification-new-tests-added.php:8
+msgid "Tests will be run for the following pages: %s"
+msgstr ""
+
 #: components/admin-notification/views/admin-notification-plugin-activated.php:3
 msgid "VRTs Plugin successfully activated!"
 msgstr ""
@@ -109,18 +118,6 @@ msgstr ""
 #. translators: %1$s, %2$s and %3$s, %4$s: link wrapper.
 #: components/admin-notification/views/admin-notification-plugin-activated.php:7
 msgid "Start to %1$sconfigure tests%2$s, or check the customization options in the %3$splugin settings%4$s."
-msgstr ""
-
-#: components/admin-notification/views/admin-notification-run-manual-test.php:2
-msgid "Testing has started"
-msgstr ""
-
-#: components/admin-notification/views/admin-notification-run-manual-test.php:3
-msgid "Tests have started for all running tests."
-msgstr ""
-
-#: components/admin-notification/views/admin-notification-run-manual-test.php:4
-msgid "If the testing detects any visual differences, we will notify you via e-mail alerts."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-settings-saved.php:3
@@ -142,6 +139,14 @@ msgstr ""
 
 #: components/admin-notification/views/admin-notification-test-disabled.php:16
 msgid "Undo"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-test-started.php:3
+msgid "Testing has started"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-test-started.php:5
+msgid "If the testing detects any visual differences, we will notify you via e-mail alerts."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-unlock-more-tests.php:2
@@ -188,7 +193,7 @@ msgstr ""
 #: components/metabox-classic-editor/index.php:61
 #: components/metabox-classic-editor/index.php:65
 #: components/metabox-classic-editor/index.php:68
-#: includes/list-tables/class-tests-list-table.php:153
+#: includes/list-tables/class-tests-list-table.php:96
 #: editor/components/screenshot/index.js:19
 msgid "Snapshot"
 msgstr ""
@@ -301,7 +306,7 @@ msgstr ""
 
 #. translators: %1$s, %2$s: strong element wrapper.
 #: components/alerts-page/views/alerts-page-edit.php:138
-#: includes/list-tables/class-tests-list-table.php:441
+#: includes/list-tables/class-tests-list-table.php:385
 msgid "%1$sExclude elements on this page:%2$s "
 msgstr ""
 
@@ -309,14 +314,14 @@ msgstr ""
 #. translators: %s name of the page
 #: components/alerts-page/views/alerts-page-edit.php:143
 #: components/metabox-classic-editor/index.php:88
-#: includes/list-tables/class-tests-list-table.php:447
+#: includes/list-tables/class-tests-list-table.php:391
 #: editor/components/settings/index.js:49
 msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:149
 #: components/metabox-classic-editor/index.php:94
-#: includes/list-tables/class-tests-list-table.php:436
+#: includes/list-tables/class-tests-list-table.php:380
 #: editor/components/settings/index.js:30
 msgid "e.g.: .lottie, #ads"
 msgstr ""
@@ -333,13 +338,13 @@ msgstr ""
 
 #. translators: %s: search query.
 #: components/alerts-page/views/alerts-page-list.php:11
-#: components/tests-page/views/tests-page-list.php:39
+#: components/tests-page/views/tests-page-list.php:41
 msgid "Search results for: %s"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-list.php:28
-#: components/tests-page/views/tests-page-list.php:55
-#: components/tests-page/views/tests-page-list.php:86
+#: components/tests-page/views/tests-page-list.php:57
+#: components/tests-page/views/tests-page-list.php:88
 msgid "Search"
 msgstr ""
 
@@ -358,28 +363,25 @@ msgstr ""
 
 #: components/metabox-classic-editor/index.php:41
 #: includes/features/class-admin-columns.php:48
-#: includes/list-tables/class-tests-list-table.php:152
 #: editor/components/metabox/index.js:189
 msgid "Status"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:46
-#: includes/list-tables/class-tests-list-table.php:81
-#: includes/list-tables/class-tests-list-table.php:313
+#: includes/list-tables/class-tests-list-table.php:257
 #: editor/components/metabox/index.js:162
 msgid "Paused"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:48
-#: includes/list-tables/class-tests-list-table.php:96
-#: includes/list-tables/class-tests-list-table.php:106
+#: includes/list-tables/class-tests-list-table.php:475
+#: includes/list-tables/class-tests-list-table.php:487
 #: editor/components/metabox/index.js:164
 msgid "Disabled"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:50
-#: includes/list-tables/class-tests-list-table.php:80
-#: includes/list-tables/class-tests-list-table.php:308
+#: includes/list-tables/class-tests-list-table.php:252
 #: editor/components/metabox/index.js:160
 msgid "Running"
 msgstr ""
@@ -426,61 +428,63 @@ msgstr ""
 msgid "The Visual Regression Test for the page %s has been added!"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:9
+#: components/tests-page/views/tests-page-list.php:11
 #: includes/features/class-admin.php:42
 #: includes/features/class-tests-page.php:29
 #: includes/features/class-tests-page.php:30
 msgid "Tests"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:17
+#: components/tests-page/views/tests-page-list.php:19
 msgid "Add New"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:24
-#: editor/components/metabox/index.js:170
-msgid "Run Tests"
+#: components/tests-page/views/tests-page-list.php:26
+msgid "Run All Tests"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:76
-#: components/tests-page/views/tests-page-list.php:117
+#: components/tests-page/views/tests-page-list.php:78
+#: components/tests-page/views/tests-page-list.php:119
 msgid "Add New Test"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:77
+#: components/tests-page/views/tests-page-list.php:79
 msgid "Close"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:80
+#: components/tests-page/views/tests-page-list.php:82
 msgid "Destination URL"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:100
+#: components/tests-page/views/tests-page-list.php:102
 msgid "No search term specified. Showing recent items."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:101
+#: components/tests-page/views/tests-page-list.php:103
 msgid "Search or use up and down arrow keys to select an item."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:112
+#: components/tests-page/views/tests-page-list.php:114
 msgid "Cancel"
 msgstr ""
 
 #. translators: 1: Date, 2: Time.
-#: includes/core/utilities/class-date-time-helpers.php:22
+#: includes/core/utilities/class-date-time-helpers.php:23
+#: includes/core/utilities/class-date-time-helpers.php:47
 msgctxt "date at time"
 msgid "%1$s at %2$s"
 msgstr ""
 
 #. translators: Date format. See https://www.php.net/manual/datetime.format.php
-#: includes/core/utilities/class-date-time-helpers.php:24
+#: includes/core/utilities/class-date-time-helpers.php:25
+#: includes/core/utilities/class-date-time-helpers.php:49
 msgctxt "date format"
 msgid "Y/m/d"
 msgstr ""
 
 #. translators: Time format. See https://www.php.net/manual/datetime.format.php
-#: includes/core/utilities/class-date-time-helpers.php:26
+#: includes/core/utilities/class-date-time-helpers.php:27
+#: includes/core/utilities/class-date-time-helpers.php:51
 msgctxt "time format"
 msgid "g:i a"
 msgstr ""
@@ -530,23 +534,23 @@ msgctxt "notification email subject"
 msgid "VRTs: Alert %1$s (%2$s)"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:30
+#: includes/features/class-email-notifications.php:36
 msgctxt "notification email"
 msgid "Howdy,"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:31
+#: includes/features/class-email-notifications.php:37
 msgctxt "notification email"
 msgid "New visual differences have been detected on the following page:"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:33
+#: includes/features/class-email-notifications.php:39
 msgctxt "notification email"
 msgid "Review and resolve the alert to resume testing:"
 msgstr ""
 
 #. translators: %1$s: the home url
-#: includes/features/class-email-notifications.php:37
+#: includes/features/class-email-notifications.php:43
 msgctxt "notification email"
 msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
@@ -554,7 +558,6 @@ msgstr ""
 #. translators: %1$s and %2$s: link wrapper.
 #: includes/features/class-enqueue-scripts.php:106
 #: includes/features/class-metaboxes.php:125
-#: includes/list-tables/class-tests-list-table.php:91
 msgid "Resolve %1$salert%2$s to resume testing"
 msgstr ""
 
@@ -630,34 +633,34 @@ msgstr ""
 msgid "Error: Test ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:274
+#: includes/features/class-tests-page.php:288
 msgid "No changes made."
 msgstr ""
 
-#: includes/features/class-tests-page.php:285
+#: includes/features/class-tests-page.php:299
 msgid "Changes saved successfully."
 msgstr ""
 
-#: includes/features/class-tests-page.php:290
+#: includes/features/class-tests-page.php:304
 msgid "Error while saving the changes."
 msgstr ""
 
-#: includes/features/class-tests-page.php:294
+#: includes/features/class-tests-page.php:308
 #: includes/list-tables/class-alerts-list-table.php:80
-#: includes/list-tables/class-tests-list-table.php:119
+#: includes/list-tables/class-tests-list-table.php:569
 msgid "In progress"
 msgstr ""
 
-#: includes/features/class-tests-page.php:323
+#: includes/features/class-tests-page.php:337
 msgid "(no title)"
 msgstr ""
 
-#: includes/features/class-tests-page.php:324
+#: includes/features/class-tests-page.php:338
 msgid "No results to enable visual regression testing found."
 msgstr ""
 
 #. translators: Minimum input length in characters to start searching posts in the "Insert/edit link" modal.
-#: includes/features/class-tests-page.php:326
+#: includes/features/class-tests-page.php:340
 msgctxt "minimum input length for searching post links"
 msgid "3"
 msgstr ""
@@ -673,7 +676,7 @@ msgid "No alerts found."
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:67
-#: includes/list-tables/class-tests-list-table.php:70
+#: includes/list-tables/class-tests-list-table.php:71
 msgid "Open the page in a new tab"
 msgstr ""
 
@@ -682,12 +685,12 @@ msgid "Detected"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:101
-#: includes/list-tables/class-tests-list-table.php:150
+#: includes/list-tables/class-tests-list-table.php:94
 msgid "Title"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:102
-#: includes/list-tables/class-tests-list-table.php:151
+#: includes/list-tables/class-tests-list-table.php:95
 msgid "Path"
 msgstr ""
 
@@ -747,80 +750,124 @@ msgstr ""
 msgid "Resolved"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:45
+#: includes/list-tables/class-tests-list-table.php:46
 msgid "No tests found."
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:84
-msgid "Disconnected"
+#: includes/list-tables/class-tests-list-table.php:97
+msgid "Test Status"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:92
-msgid "Edit the alert"
-msgstr ""
-
-#. translators: %1$s and %2$s: link wrapper.
-#: includes/list-tables/class-tests-list-table.php:101
-msgid "%1$sUpgrade plugin%2$s to resume testing"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:102
-msgid "Upgrade plugin"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:108
-msgid "Publish post to resume testing"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:122
-msgid "On hold"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:129
-msgid "View this snapshot"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:130
-msgid "View Snapshot"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:174
-#: includes/list-tables/class-tests-list-table.php:198
+#: includes/list-tables/class-tests-list-table.php:118
+#: includes/list-tables/class-tests-list-table.php:142
 msgid "Edit this page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:175
+#: includes/list-tables/class-tests-list-table.php:119
 msgid "Edit Page"
 msgstr ""
 
 #. translators: %s: Page Title.
-#: includes/list-tables/class-tests-list-table.php:181
+#: includes/list-tables/class-tests-list-table.php:125
 msgid "Quick edit &#8220;%s&#8221; inline"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:182
+#: includes/list-tables/class-tests-list-table.php:126
 msgid "Quick&nbsp;Edit"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:190
+#: includes/list-tables/class-tests-list-table.php:134
 msgid "Disable testing for this page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:191
-#: includes/list-tables/class-tests-list-table.php:233
+#: includes/list-tables/class-tests-list-table.php:135
+#: includes/list-tables/class-tests-list-table.php:177
 msgid "Disable Testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:237
-msgid "Run Manual Test"
+#: includes/list-tables/class-tests-list-table.php:181
+msgid "Run Test"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:303
+#: includes/list-tables/class-tests-list-table.php:247
 msgid "All"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:433
+#: includes/list-tables/class-tests-list-table.php:377
 msgid "Quick Edit"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:454
+msgid "Disconnected"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:460
+msgid "Changes detected"
+msgstr ""
+
+#. translators: %1$s and %2$s: link wrapper.
+#: includes/list-tables/class-tests-list-table.php:467
+msgid "%1$s%2$s Resolve alert%3$s to resume test"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:468
+msgid "Edit the alert"
+msgstr ""
+
+#. translators: %1$s and %2$s: link wrapper.
+#: includes/list-tables/class-tests-list-table.php:480
+msgid "%1$sUpgrade plugin%2$s to resume testing"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:481
+msgid "Upgrade plugin"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:489
+msgid "Publish post to resume testing"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:493
+msgid "Waiting"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:498
+msgid "In Progress"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:500
+msgid "Refresh page to see result"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:504
+msgid "Scheduled"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:515
+#: includes/list-tables/class-tests-list-table.php:516
+#: includes/list-tables/class-tests-list-table.php:534
+#: includes/list-tables/class-tests-list-table.php:535
+msgid "Run test now"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:523
+msgid "Passed"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:566
+msgid "On hold"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:574
+msgid "Refresh page to see snapshot"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:583
+msgid "View this snapshot"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:584
+msgid "View Snapshot"
 msgstr ""
 
 #: includes/rest-api/class-rest-service-controller.php:84
@@ -844,7 +891,7 @@ msgid "Signature is not valid."
 msgstr ""
 
 #: includes/rest-api/class-rest-service-controller.php:133
-#: includes/services/class-test-service.php:291
+#: includes/services/class-test-service.php:433
 msgid "Test not found."
 msgstr ""
 
@@ -872,26 +919,45 @@ msgstr ""
 msgid "The test could not be updated."
 msgstr ""
 
-#: includes/services/class-test-service.php:136
+#: includes/services/class-test-service.php:141
 msgid "Post not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:153
-#: includes/services/class-test-service.php:200
-#: includes/services/class-test-service.php:304
+#: includes/services/class-test-service.php:158
+#: includes/services/class-test-service.php:236
+#: includes/services/class-test-service.php:283
+#: includes/services/class-test-service.php:342
+#: includes/services/class-test-service.php:446
 msgid "Service is not connected."
 msgstr ""
 
-#: includes/services/class-test-service.php:155
+#: includes/services/class-test-service.php:160
+#: includes/services/class-test-service.php:238
 msgid "Error creating test."
 msgstr ""
 
-#: includes/services/class-test-service.php:197
+#: includes/services/class-test-service.php:184
+msgid "Posts not found."
+msgstr ""
+
+#: includes/services/class-test-service.php:280
 msgid "Service could not create test."
 msgstr ""
 
-#: includes/services/class-test-service.php:301
+#: includes/services/class-test-service.php:336
+msgid "Plugin could not save tests."
+msgstr ""
+
+#: includes/services/class-test-service.php:339
+msgid "Service could not create tests."
+msgstr ""
+
+#: includes/services/class-test-service.php:443
 msgid "Service could not update test."
+msgstr ""
+
+#: editor/components/metabox/index.js:170
+msgid "Run Tests"
 msgstr ""
 
 #: editor/components/screenshot/index.js:37

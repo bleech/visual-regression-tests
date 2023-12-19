@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 1.6.0
+Stable tag: 1.7.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -117,7 +117,13 @@ If our external screenshot service can not access your WordPress installation di
 
 Yes, cookie banners are not an issue. Before taking a snapshot, the tool can automatically trigger the Accept button to hide the banner. This option can be configured with CSS selectors in the plugin settings.
 
+= Can I test custom post type archives with VRTs? =
 
+The VRTs plugin primarily supports WordPress pages and posts. Automated visual testing of pages with dynamically changing content can lead to false positives. However, you can test such pages by following these steps:
+
+* Create a new blank page or post in WordPress.
+* Set up a redirect from this page to your desired URL.
+* Configure a test for this page. The screenshotter will follow the redirect.
 
 == Installation ==
 
@@ -163,6 +169,11 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 
 == Changelog ==
+
+= 1.7.0 =
+* Fixed issue with formatted entities for page title inside email notifications.
+* Added bulk action "Add to VRTs" for all public post types.
+* Improved test status display flow.
 
 = 1.6.0 =
 * Fixed WordPress 6.4 deprecated notices for list tables.
