@@ -8,6 +8,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+if ( ! defined( 'VRTS_SERVICE_ENDPOINT' ) ) {
+	define( 'VRTS_SERVICE_ENDPOINT', getenv( 'VRTS_SERVICE_ENDPOINT' ) ?: 'https://bleech-vrts-app.blee.ch/api/v1/' );
+}
+
 require_once 'includes/features/class-admin-notices.php';
 require_once 'includes/features/class-metaboxes.php';
 require_once 'includes/features/class-service.php';
