@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.4
-Stable tag: 1.7.0
+Stable tag: 1.7.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +169,9 @@ The VRTs plugin primarily supports WordPress pages and posts. Automated visual t
 
 
 == Changelog ==
+
+= 1.7.1 =
+* Fixed issue with uninstalling the plugin.
 
 = 1.7.0 =
 * Fixed issue with formatted entities for page title inside email notifications.
