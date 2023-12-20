@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Tests_Table {
 
-	const DB_VERSION = '1.3';
+	const DB_VERSION = '1.4';
 	const TABLE_NAME = 'vrts_tests';
 
 	/**
@@ -27,29 +27,7 @@ class Tests_Table {
 			$table_name = self::get_table_name();
 			$charset_collate = $wpdb->get_charset_collate();
 
-			$sql = "CREATE TABLE {$table_name} (
-				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-				status boolean NOT NULL,
-				post_id bigint(20),
-				current_alert_id bigint(20),
-				snapshot_date datetime,
-				service_test_id varchar(40),
-				target_screenshot_url varchar(2048),
-				hide_css_selectors longtext,
-				PRIMARY KEY (id)
-			) $charset_collate;";
-
-			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-			dbDelta( $sql );
-
-			if ( version_compare( $installed_version, '1.2', '<' ) ) {
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
-				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
-					"ALTER TABLE {$table_name} ADD hide_css_selectors longtext;"
-				);
-			}
-			if ( version_compare( $installed_version, '1.3', '<' ) ) {
+			if ( $installed_version && version_compare( $installed_version, '1.3', '<' ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
@@ -60,22 +38,25 @@ class Tests_Table {
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
 					"ALTER TABLE {$table_name} RENAME COLUMN snapshot_date TO base_screenshot_date;"
 				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
-				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
-					"ALTER TABLE {$table_name} ADD last_comparison_date datetime;"
-				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
-				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
-					"ALTER TABLE {$table_name} ADD next_run_date datetime;"
-				);
-				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
-				$wpdb->query(
-					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
-					"ALTER TABLE {$table_name} ADD is_running boolean;"
-				);
-			}//end if
+			}
+
+			$sql = "CREATE TABLE {$table_name} (
+				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+				status boolean NOT NULL,
+				post_id bigint(20),
+				current_alert_id bigint(20),
+				service_test_id varchar(40),
+				base_screenshot_url varchar(2048),
+				base_screenshot_date datetime,
+				last_comparison_date datetime,
+				next_run_date datetime,
+				is_running boolean,
+				hide_css_selectors longtext,
+				PRIMARY KEY (id)
+			) $charset_collate;";
+
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
 
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
