@@ -6,17 +6,14 @@ VRTs - Visual Regression Tests is a plugin to test your website for unwanted vis
 - Node 16
 - PHP 7.4
 
-## Installation
-1. Clone the repository and place it in ``wp-content/plugins/`` folder.
-
 ## Development
 
-1. Perform [Installation](#Installation)
-3. Make sure you have the correct [requirements](#Requirements)
-2. Run ``composer i`` to install composer dependency.
+1. Clone the repository and place it in ``wp-content/plugins/`` folder.
+2. Make sure you have the correct [requirements](#Requirements)
+3. Run ``composer i`` to install composer dependency.
 4. Run ``npm i`` to install node dependency.
 5. Run ``npm run build`` to build.
-7. Run ``npm run start`` for starting development.
+6. Run ``npm run start`` for starting development.
 
 ## License
 GPLv2
