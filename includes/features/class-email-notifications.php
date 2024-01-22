@@ -32,6 +32,7 @@ class Email_Notifications {
 		 * so we remove it as in plain text emails it displays it as e.g. &#8217;s
 		 */
 		remove_filter( 'the_title', 'wptexturize' );
+		remove_filter( 'the_title', 'convert_chars' );
 
 		$message = esc_html_x( 'Howdy,', 'notification email', 'visual-regression-tests' ) . "\n\n" .
 			esc_html_x( 'New visual differences have been detected on the following page:', 'notification email', 'visual-regression-tests' ) . "\n\n" .
