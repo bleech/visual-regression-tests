@@ -2,6 +2,8 @@
 
 namespace Vrts\Models;
 
+use Vrts\Features\Service;
+use Vrts\Features\Subscription;
 use Vrts\Tables\Tests_Table;
 
 /**
@@ -56,6 +58,7 @@ class Test {
 		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'id';
 		$order = in_array( $args['order'], $whitelist_order, true ) ? $args['order'] : 'DESC';
 
+		$orderby = 'status' === $orderby ? 'calculated_status' : $orderby;
 		$orderby = "ORDER BY $orderby $order";
 
 		$limit = $args['number'] > 100 ? 100 : $args['number'];
@@ -65,6 +68,9 @@ class Test {
 			$args['offset'],
 			$limit
 		);
+
+		$is_connected = Service::is_connected() ? 'true' : 'false';
+		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0 ? 'true' : 'false';
 
 		$query = "
 			SELECT
@@ -78,7 +84,17 @@ class Test {
 				tests.next_run_date,
 				tests.last_comparison_date,
 				tests.is_running,
-				posts.post_title
+				posts.post_title,
+				CASE
+					WHEN $is_connected is not true THEN 'disconnected'
+					WHEN tests.current_alert_id is not null THEN 'has-alert'
+					WHEN tests.status > 0 and $no_tests_left THEN 'no_credit_left'
+					WHEN tests.service_test_id is null THEN 'post_not_published'
+					WHEN tests.base_screenshot_date is null THEN 'waiting'
+					WHEN tests.is_running > 0 THEN 'running'
+					WHEN tests.last_comparison_date is null THEN 'scheduled'
+					else 'passed'
+				END as calculated_status
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
 			$where
