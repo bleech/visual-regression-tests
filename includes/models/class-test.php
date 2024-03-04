@@ -4,6 +4,7 @@ namespace Vrts\Models;
 
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Tables\Alerts_Table;
 use Vrts\Tables\Tests_Table;
 
 /**
@@ -22,6 +23,7 @@ class Test {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
+		$alerts_table = Alerts_Table::get_table_name();
 
 		$defaults = [
 			'number' => 20,
@@ -58,8 +60,11 @@ class Test {
 		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'id';
 		$order = in_array( $args['order'], $whitelist_order, true ) ? $args['order'] : 'DESC';
 
-		$orderby = 'status' === $orderby ? 'calculated_status' : $orderby;
-		$orderby = "ORDER BY $orderby $order";
+		if ( 'status' === $orderby ) {
+			$orderby = "ORDER BY calculated_status $order, calculated_date $order";
+		} else {
+			$orderby = "ORDER BY $orderby $order";
+		}
 
 		$limit = $args['number'] > 100 ? 100 : $args['number'];
 
@@ -86,18 +91,30 @@ class Test {
 				tests.is_running,
 				posts.post_title,
 				CASE
-					WHEN $is_connected is not true THEN 'disconnected'
-					WHEN tests.current_alert_id is not null THEN 'has-alert'
-					WHEN tests.status > 0 and $no_tests_left THEN 'no_credit_left'
-					WHEN tests.service_test_id is null THEN 'post_not_published'
-					WHEN tests.base_screenshot_date is null THEN 'waiting'
-					WHEN tests.is_running > 0 THEN 'running'
-					WHEN tests.last_comparison_date is null THEN 'scheduled'
-					else 'passed'
-				END as calculated_status
+					WHEN $is_connected is not true THEN '0-disconnected'
+					WHEN tests.current_alert_id is not null THEN '7-has-alert'
+					WHEN tests.status > 0 and $no_tests_left THEN '1-no_credit_left'
+					WHEN tests.service_test_id is null THEN '2-post_not_published'
+					WHEN tests.base_screenshot_date is null THEN '3-waiting'
+					WHEN tests.is_running > 0 THEN '4-running'
+					WHEN tests.last_comparison_date is null THEN '5-scheduled'
+					else '6-passed'
+				END as calculated_status,
+				alerts.target_screenshot_finish_date,
+				CASE
+					WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
+					WHEN tests.status > 0 and $no_tests_left THEN tests.base_screenshot_date
+					WHEN tests.service_test_id is null THEN tests.base_screenshot_date
+					WHEN tests.base_screenshot_date is null THEN tests.base_screenshot_date
+					WHEN tests.is_running > 0 THEN tests.base_screenshot_date
+					WHEN tests.last_comparison_date is null THEN tests.next_run_date
+					else tests.last_comparison_date
+				END as calculated_date
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
+			LEFT JOIN $alerts_table as alerts ON alerts.post_id = tests.post_id
 			$where
+			GROUP BY tests.id
 			$orderby
 			$limits
 		";

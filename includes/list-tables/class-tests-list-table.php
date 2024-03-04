@@ -302,7 +302,7 @@ class Tests_List_Table extends \WP_List_Table {
 		$offset = ( $current_page - 1 ) * $per_page;
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list order parameter.
-		$order = isset( $_REQUEST['order'] ) && 'desc' === $_REQUEST['order'] ? 'ASC' : 'DESC';
+		$order = isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ? 'ASC' : 'DESC';
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list order by parameter.
 		$order_by = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) : 'id';
