@@ -8,6 +8,17 @@ $breakpoint-mobile-horizontal: $break-mobile;
 $breakpoint-tablet: $break-medium; /* adminbar goes big */
 $navigation-item-border-height: 3px;
 
+.vrts_list_table_page {
+	.alert-status {
+		display: block;
+		margin-top: 4px;
+
+		&--false-positive {
+			color: $alert-red;
+		}
+	}
+}
+
 .vrts_edit_alert_page {
 
 	.isSticky {
@@ -87,6 +98,19 @@ $navigation-item-border-height: 3px;
 	}
 
 	#major-publishing-actions {
+
+		.submitdelete {
+			cursor: pointer;
+			appearance: none;
+			border: 0;
+			background: transparent;
+			padding: 2px 0;
+			text-decoration: underline;
+
+			&.revert {
+				color: $blue-50;
+			}
+		}
 
 		> :last-child {
 			margin-bottom: 0;

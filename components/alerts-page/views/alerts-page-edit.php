@@ -97,13 +97,16 @@
 									if ( $data['is_connected'] ) {
 										?>
 										<div id="delete-action">
-											<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>"> <?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?> </a>
+											<?php if ( $data['comparison_id'] ) : ?>
+												<button type="submit" class="submitdelete deletion" name="submit_alert_false_positive"><?php esc_html_e( 'Mark as false positive', 'visual-regression-tests' ); ?></button>
+											<?php else : ?>
+												<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>"><?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?></a>
+											<?php endif; ?>
 										</div>
 										<div id="publishing-action">
-											<?php submit_button( esc_attr__( 'Resolve', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert', false ); ?>
+											<?php submit_button( esc_attr__( 'Archive', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert', false ); ?>
 										</div>
 										<div class="clear"></div>
-										<p><?php esc_html_e( 'Resolving the alert will resume testing.', 'visual-regression-tests' ); ?></p>
 										<?php
 									} else {
 										?>
@@ -112,7 +115,7 @@
 										</div>
 										<div class="clear"></div>
 										<?php
-									}
+									}//end if
 									?>
 								</div>
 

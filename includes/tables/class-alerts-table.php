@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Alerts_Table {
 
-	const DB_VERSION = '1.0';
+	const DB_VERSION = '1.1';
 	const TABLE_NAME = 'vrts_alerts';
 
 	/**
@@ -28,6 +28,14 @@ class Alerts_Table {
 			$table_name = self::get_table_name();
 			$charset_collate = $wpdb->get_charset_collate();
 
+			if ( $installed_version && version_compare( $installed_version, '1.1', '<' ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
+					"ALTER TABLE {$table_name} MODIFY alert_state tinyint NOT NULL DEFAULT 0"
+				);
+			}
+
 			$sql = "CREATE TABLE {$table_name} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				title text,
@@ -38,8 +46,9 @@ class Alerts_Table {
 				base_screenshot_url varchar(2048),
 				base_screenshot_finish_date datetime,
 				comparison_screenshot_url varchar(2048),
+				comparison_id varchar(40),
 				differences int(4),
-				alert_state boolean NOT NULL DEFAULT 0,
+				alert_state tinyint NOT NULL DEFAULT 0,
 				PRIMARY KEY (id)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';

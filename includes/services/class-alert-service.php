@@ -25,6 +25,7 @@ class Alert_Service {
 		$prepare_alert['base_screenshot_url'] = $comparison['base_screenshot']['image_url'];
 		$prepare_alert['base_screenshot_finish_date'] = $comparison['base_screenshot']['updated_at'];
 		$prepare_alert['comparison_screenshot_url'] = $comparison['image_url'];
+		$prepare_alert['comparison_id'] = $comparison['id'];
 		$prepare_alert['differences'] = $comparison['pixels_diff'];
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.

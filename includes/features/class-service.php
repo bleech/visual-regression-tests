@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 
@@ -248,6 +249,30 @@ class Service {
 		return self::rest_service_request( $service_api_route, [
 			'ids' => $service_test_ids,
 		], 'post' );
+	}
+
+	/**
+	 * Mark alert as false positive.
+	 *
+	 * @param int $alert_id Alert id.
+	 */
+	public static function mark_alert_as_false_positive( $alert_id ) {
+		$alert = Alert::get_item( $alert_id );
+		$service_api_route = 'tests/' . $alert->screenshot_test_id . '/false-positives';
+		return self::rest_service_request( $service_api_route, [
+			'comparison_id' => $alert->comparison_id,
+		], 'post' );
+	}
+
+	/**
+	 * Unmark alert as false positive.
+	 *
+	 * @param int $alert_id Alert id.
+	 */
+	public static function unmark_alert_as_false_positive( $alert_id ) {
+		$alert = Alert::get_item( $alert_id );
+		$service_api_route = 'tests/' . $alert->screenshot_test_id . '/false-positives/' . $alert->comparison_id;
+		return self::rest_service_request( $service_api_route, [], 'delete' );
 	}
 
 	/**

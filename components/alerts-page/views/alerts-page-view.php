@@ -79,8 +79,15 @@
 								</div>
 
 								<div id="major-publishing-actions">
+									<div id="delete-action">
+										<?php if ( $data['is_false_positive'] ) : ?>
+											<button type="submit" class="submitdelete revert" name="submit_alert_remove_false_positive"><?php esc_html_e( 'Unmark as false positive', 'visual-regression-tests' ); ?></button>
+										<?php elseif ( $data['comparison_id'] ) : ?>
+											<button type="submit" class="submitdelete deletion" name="submit_alert_false_positive"><?php esc_html_e( 'Mark as false positive', 'visual-regression-tests' ); ?></button>
+										<?php endif; ?>
+									</div>
 									<div id="publishing-action">
-										<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts&status=resolved' ) ); ?>"> <?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?> </a>
+										<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts&status=resolved' ) ); ?>"><?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?></a>
 									</div>
 									<div class="clear"></div>
 								</div>

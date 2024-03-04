@@ -50,7 +50,7 @@ class Alerts_Page {
 				$alert = (object) Alert::get_item( $alert_id );
 				$new_action = false;
 
-				if ( isset( $alert->alert_state ) && intval( $alert->alert_state ) === 1 && 'edit' === $action ) {
+				if ( isset( $alert->alert_state ) && in_array( intval( $alert->alert_state ), [ 1, 2 ], true ) && 'edit' === $action ) {
 					$new_action = 'view';
 				} elseif ( isset( $alert->alert_state ) && intval( $alert->alert_state ) === 0 && 'view' === $action ) {
 					$new_action = 'edit';
@@ -136,13 +136,15 @@ class Alerts_Page {
 				'target_screenshot_url' => $alert->target_screenshot_url,
 				'target_screenshot_finish_date' => Date_Time_Helpers::get_formatted_date_time( $alert->target_screenshot_finish_date ),
 				'comparison_screenshot_url' => $alert->comparison_screenshot_url,
+				'comparison_id' => $alert->comparison_id,
+				'is_false_positive' => isset( $alert->alert_state ) && intval( $alert->alert_state ) === 2,
 				'pagination' => [
-					'next_alert_id' => Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
-					'prev_next_alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
-					'current' => Alert::get_pagination_current_position( $alert_id, 'edit' === $action ? 0 : 1 ),
+					'next_alert_id' => Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
+					'prev_next_alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
+					'current' => Alert::get_pagination_current_position( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
 					'total' => Alert::get_total_items( 'edit' === $action ? null : 'resolved' ),
-					'prev_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
-					'next_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? 0 : 1 ),
+					'prev_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
+					'next_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
 				],
 				'is_connected'  => $is_connected,
 				'test_settings' => [
@@ -163,7 +165,9 @@ class Alerts_Page {
 	 * Handle the submit from details on the edit alert page.
 	 */
 	public function submit_edit_alert() {
-		if ( ! isset( $_POST['submit_edit_alert'] ) ) {
+		if ( ! isset( $_POST['submit_edit_alert'] ) &&
+			! isset( $_POST['submit_alert_false_positive'] ) &&
+			! isset( $_POST['submit_alert_remove_false_positive'] ) ) {
 			return;
 		}
 
@@ -195,17 +199,29 @@ class Alerts_Page {
 
 		// Do the stuff.
 		if ( $alert_id ) {
-			$insert_alert = static::resolve_alert( $alert_id );
+			if ( isset( $_POST['submit_alert_remove_false_positive'] ) ) {
+				$insert_alert = static::unmark_as_false_positive( $alert_id );
+			} else {
+				$is_false_positive = isset( $_POST['submit_alert_false_positive'] );
+				$insert_alert = static::resolve_alert( $alert_id, $is_false_positive );
+			}
 		}//end if
 
 		if ( is_wp_error( $insert_alert ) ) {
 			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
 		} else {
-			$next_open_alert_id = Alert::get_next_open_alert_id();
-			$redirect_to = add_query_arg( [
-				'action' => 'edit',
-				'alert_id' => $next_open_alert_id,
-			], $page_url );
+			if ( isset( $_POST['submit_edit_alert'] ) ) {
+				$next_open_alert_id = Alert::get_next_open_alert_id();
+				$redirect_to = add_query_arg( [
+					'action' => 'edit',
+					'alert_id' => $next_open_alert_id,
+				], $page_url );
+			} else {
+				$redirect_to = add_query_arg( [
+					'action' => 'edit',
+					'alert_id' => $alert_id,
+				], $page_url );
+			}
 		}
 
 		wp_safe_redirect( $redirect_to );
@@ -342,16 +358,39 @@ class Alerts_Page {
 	/**
 	 * Resolve alert.
 	 *
-	 * @param int $alert_id the id of the alert.
+	 * @param int  $alert_id the id of the alert.
+	 * @param bool $is_false_positive is the alert a false positive.
 	 */
-	public static function resolve_alert( $alert_id = null ) {
+	public static function resolve_alert( $alert_id = null, $is_false_positive = false ) {
 		// Set the alert state.
-		$new_alert_state = 1;
+		$new_alert_state = $is_false_positive ? 2 : 1;
 		$alert_result = Alert::set_alert_state( $alert_id, $new_alert_state );
 
 		// Add the alert from tests table -> this should stop testing.
 		$alert = (object) Alert::get_item( $alert_id );
 		Test::set_alert( $alert->post_id, null );
+
+		if ( $is_false_positive ) {
+			$service = new Service();
+			$service->mark_alert_as_false_positive( $alert_id );
+		}
+
+		return $alert_result;
+	}
+
+	/**
+	 * Unmark as false positive.
+	 *
+	 * @param int $alert_id Id of the alert.
+	 */
+	public static function unmark_as_false_positive( $alert_id = null ) {
+		// Set the alert state.
+		$new_alert_state = 1;
+		$alert_result = Alert::set_alert_state( $alert_id, $new_alert_state );
+
+		$service = new Service();
+		$service->unmark_alert_as_false_positive( $alert_id );
+
 		return $alert_result;
 	}
 
@@ -369,7 +408,6 @@ class Alerts_Page {
 		$alert = (object) Alert::get_item( $alert_id );
 		Test::set_alert( $alert->post_id, $alert_id );
 	}
-
 
 	/**
 	 * Delete alert.

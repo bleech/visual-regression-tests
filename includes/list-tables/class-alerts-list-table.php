@@ -141,7 +141,8 @@ class Alerts_List_Table extends \WP_List_Table {
 
 			return sprintf(
 				'<strong>%1$s</strong> %2$s',
-				$item->title,
+				/* translators: %s: the title of the alert. */
+				sprintf( __( 'Alert %s', 'visual-regression-tests' ), $item->title ),
 				$this->row_actions( $actions )
 			);
 
@@ -169,7 +170,8 @@ class Alerts_List_Table extends \WP_List_Table {
 				'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',
 				$base_link . '&action=edit&alert_id=' . $item->id,
 				__( 'Edit', 'visual-regression-tests' ),
-				$item->title,
+				/* translators: %s: the title of the alert. */
+				sprintf( __( 'Alert %s', 'visual-regression-tests' ), $item->title ),
 				$this->row_actions( $actions )
 			);
 		}//end if
@@ -189,8 +191,13 @@ class Alerts_List_Table extends \WP_List_Table {
 		if ( 'resolved' === $filter_status_query ) {
 			// Status "Resolved".
 			$differences = ceil( $item->differences / 4 );
-			/* translators: %s: the count of pixels with a visual difference. */
-			return esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) );
+			$is_false_positive = 2 === (int) $item->alert_state;
+			return sprintf(
+				'%s %s',
+				/* translators: %s: the count of pixels with a visual difference. */
+				esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
+				$is_false_positive ? '<span class="alert-status alert-status--false-positive">' . esc_html__( 'False Positive', 'visual-regression-tests' ) . '</span>' : ''
+			);
 		} else {
 			// Status "Open".
 			$differences = ceil( $item->differences / 4 );
