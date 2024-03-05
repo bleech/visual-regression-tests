@@ -34,6 +34,13 @@ $navigation-item-border-height: 3px;
 		}
 	}
 
+	.vrts_logo_link {
+		display: flex;
+		align-items: center;
+		text-decoration: none;
+		margin: 0 2em 0 0;
+	}
+
 	.vrts_logo {
 		display: inline-block;
 		width: 20px;
@@ -55,8 +62,6 @@ $navigation-item-border-height: 3px;
 	h2 {
 		display: inline-block;
 		font-size: 16px;
-		margin: 0 2em 0 0;
-		padding: 0.95em 0;
 	}
 
 	.vrts_navigation {

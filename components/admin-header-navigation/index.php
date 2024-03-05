@@ -1,25 +1,27 @@
 <nav class="vrts_admin_header_menu">
-	<h2>
-		<span class="vrts_logo">
-			<?php
-				echo wp_kses( vrts()->get_plugin_logo_icon( false ), [
-					'svg' => [
-						'xmlns' => [],
-						'width' => [],
-						'height' => [],
-						'viewbox' => [],
-						'style' => [],
-						'xml:space' => [],
-					],
-					'path' => [
-						'fill' => [],
-						'd' => [],
-					],
-				]);
-				?>
-		</span>
-		<?php echo esc_html( $data['plugin_name'] ); ?>
-	</h2>
+	<a class="vrts_logo_link" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts' ) ); ?>">
+		<h2>
+			<span class="vrts_logo">
+				<?php
+					echo wp_kses( vrts()->get_plugin_logo_icon( false ), [
+						'svg' => [
+							'xmlns' => [],
+							'width' => [],
+							'height' => [],
+							'viewbox' => [],
+							'style' => [],
+							'xml:space' => [],
+						],
+						'path' => [
+							'fill' => [],
+							'd' => [],
+						],
+					]);
+					?>
+			</span>
+			<?php echo esc_html( $data['plugin_name'] ); ?>
+		</h2>
+	</a>
 	<ul class="vrts_navigation">
 		<?php
 		$allowed_html_into_text = [
