@@ -265,7 +265,7 @@ class Alerts_List_Table extends \WP_List_Table {
 		} else {
 			// Actions Status "Open".
 			$actions = [
-				'set-status-resolved' => esc_html__( 'Resolve', 'visual-regression-tests' ),
+				'set-status-resolved' => esc_html__( 'Archive', 'visual-regression-tests' ),
 			];
 		}
 		return $actions;
@@ -329,12 +329,12 @@ class Alerts_List_Table extends \WP_List_Table {
 
 		$links = [
 			'all' => [
-				'title' => esc_html__( 'Open', 'visual-regression-tests' ),
+				'title' => esc_html__( 'New', 'visual-regression-tests' ),
 				'link' => $base_link,
 				'count' => Alert::get_total_items(),
 			],
 			'resolved' => [
-				'title' => esc_html__( 'Resolved', 'visual-regression-tests' ),
+				'title' => esc_html__( 'Viewed', 'visual-regression-tests' ),
 				'link' => "{$base_link}&status=resolved",
 				'count' => Alert::get_total_items( 'resolved' ),
 			],

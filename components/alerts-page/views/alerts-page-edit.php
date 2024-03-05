@@ -1,7 +1,10 @@
 <div class="wrap vrts_edit_alert_page">
 	<h1 class="wp-heading-inline">
-		<?php esc_html_e( 'Edit Alert', 'visual-regression-tests' ); ?>
-		<?php echo esc_attr( $data['alert']->title ); ?>
+		<?php
+			// phpcs:ignore Squiz.Commenting.FileComment.WrongStyle -- It's not file comment
+			/* translators: %s: the alert title. */
+			echo esc_html( sprintf( __( 'View Alert %s', 'visual-regression-tests' ), $data['alert']->title ) );
+		?>
 	</h1>
 	<hr class="wp-header-end">
 
