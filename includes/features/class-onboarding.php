@@ -78,39 +78,14 @@ class Onboarding {
 	public function get_onboardings() {
 		return [
 			[
-				'id' => 'alerts',
+				'id' => 'false-positives',
 				'permission_callback' => [ $this, 'should_display_alerts_onboarding' ],
 				'steps' => [
-					[
-						'side' => 'top',
-						'align' => 'center',
-						'element' => '#post-body-content',
-						'title' => wp_kses_post( __( 'Compare Changes', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'Explore detected changes between versions.', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'right',
-						'element' => '#post-body .navigation',
-						'title' => wp_kses_post( __( 'Choose your view', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'To check the alert, utilize our <strong>difference, split</strong>, and <strong>side-by-side views</strong> to pinpoint the visual difference accurately.', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'left',
-						'element' => '.vrts-alert-settings-postbox',
-						'title' => wp_kses_post( __( 'Fine-tune test', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( '<strong>If the alert is not accurate</strong>, you can <strong>adjust the test setup by excluding elements</strong> from the page when the snapshot is created.', 'visual-regression-tests' ) ),
-					],
 					[
 						'side' => 'left',
 						'element' => '#delete-action',
 						'title' => wp_kses_post( __( 'Mark as false positive', 'visual-regression-tests' ) ),
 						'description' => wp_kses_post( __( 'If this alert was <strong>triggered by a harmless visual change.</strong> <br><br><strong>Once flagged, this alert will not reappear.</strong>', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'left',
-						'element' => '#publishing-action',
-						'title' => wp_kses_post( __( 'Archive your Alerts', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( "Organize your alerts by <strong>archiving</strong> them once you've reviewed them, for easy access and later review.", 'visual-regression-tests' ) ),
 					],
 				],
 			],

@@ -19,7 +19,7 @@
 		padding: 15px;
 		border-radius: 2px;
 		min-width: 250px;
-		max-width: 340px;
+		max-width: 350px;
 		box-shadow: 4px 4px 4px 0 rgba(30, 30, 30, 0.12);
 		z-index: 1000000000;
 		position: fixed;
@@ -72,6 +72,7 @@
 	&-popover-navigation-btns {
 		display: flex;
 		gap: 10px;
+		margin-left: auto;
 
 		.button-secondary[disabled] {
 			border-color: #2271b1 !important;
@@ -90,6 +91,10 @@
 		display: flex !important;
 		align-items: center;
 		gap: 4px;
+
+		&[hidden] {
+			display: none !important;
+		}
 	}
 
 	&-popover-prev-btn::before,

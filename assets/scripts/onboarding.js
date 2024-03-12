@@ -6,12 +6,15 @@ import { __ } from '@wordpress/i18n';
 import '../styles/onboarding.scss';
 
 if ( window.vrts_admin_vars.onboarding ) {
+	const isHighlight = window.vrts_admin_vars.onboarding.steps.length === 1;
 	const onboarding = driver( {
 		overlayColor: 'rgba(44, 51, 56, 0.35)',
 		stageRadius: 0,
+		animate: false,
 		stagePadding: 10,
 		popoverOffset: 20,
 		allowClose: false,
+		showProgress: ! isHighlight,
 		progressText: __(
 			'{{current}} of {{total}}',
 			'visual-regression-tests'
@@ -19,7 +22,6 @@ if ( window.vrts_admin_vars.onboarding ) {
 		nextBtnText: __( 'Next', 'visual-regression-tests' ),
 		prevBtnText: __( 'Previous', 'visual-regression-tests' ),
 		doneBtnText: __( 'Got it!', 'visual-regression-tests' ),
-		showProgress: true,
 		onPopoverRender: ( popover, { config, state } ) => {
 			const steps = config.steps;
 			const hasNextStep = steps[ state.activeIndex + 1 ];
@@ -29,6 +31,7 @@ if ( window.vrts_admin_vars.onboarding ) {
 				'button-secondary',
 				'button-large'
 			);
+
 			popover.nextButton.classList.add(
 				'button',
 				'button-primary',
@@ -39,6 +42,10 @@ if ( window.vrts_admin_vars.onboarding ) {
 				popover.nextButton.classList.add(
 					'driver-popover-success-btn'
 				);
+			}
+
+			if ( isHighlight ) {
+				popover.previousButton.setAttribute( 'hidden', true );
 			}
 		},
 		onNextClick: ( element, step, { config, state } ) => {
