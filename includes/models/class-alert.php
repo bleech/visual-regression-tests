@@ -174,8 +174,8 @@ class Alert {
 			$alerts_table = Alerts_Table::get_table_name();
 			$data = [ 'alert_state' => $new_alert_state ];
 
-			// Resume test after alert is resolved.
-			if ( 1 === $new_alert_state ) {
+			// Resume test after alert is resolved or marked false positive.
+			if ( in_array( $new_alert_state, [ 1, 2 ], true ) ) {
 				$alert = self::get_item( $id );
 				$service = new Test_Service();
 				$service->resume_test( $alert->post_id );
