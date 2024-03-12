@@ -51,6 +51,8 @@ class Enqueue_Scripts {
 				'vrts_admin_vars',
 				[
 					'rest_url' => esc_url_raw( rest_url() ),
+					'currentUserId' => get_current_user_id(),
+					'onboarding' => apply_filters( 'vrts_onboarding', null ),
 				]
 			);
 		}//end if

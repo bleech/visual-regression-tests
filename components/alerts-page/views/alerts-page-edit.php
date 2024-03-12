@@ -126,7 +126,7 @@
 						</div>
 					</div>
 
-					<div id="submitdiv" class="postbox">
+					<div id="submitdiv" class="postbox vrts-alert-settings-postbox">
 						<div class="postbox-header">
 							<h2><?php esc_html_e( 'Settings', 'visual-regression-tests' ); ?></h2>
 						</div>
