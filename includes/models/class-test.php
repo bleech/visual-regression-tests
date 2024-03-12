@@ -100,7 +100,6 @@ class Test {
 					WHEN tests.last_comparison_date is null THEN '5-scheduled'
 					else '6-passed'
 				END as calculated_status,
-				alerts.target_screenshot_finish_date,
 				CASE
 					WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
 					WHEN tests.status > 0 and $no_tests_left THEN tests.base_screenshot_date
@@ -112,7 +111,7 @@ class Test {
 				END as calculated_date
 			FROM $tests_table as tests
 			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
-			LEFT JOIN $alerts_table as alerts ON alerts.post_id = tests.post_id
+			LEFT JOIN $alerts_table as alerts ON alerts.id = tests.current_alert_id
 			$where
 			GROUP BY tests.id
 			$orderby
