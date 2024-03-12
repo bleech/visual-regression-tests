@@ -123,10 +123,11 @@ class Onboarding {
 	 * @return bool
 	 */
 	public function should_display_alerts_onboarding() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-		if ( 'vrts-alerts' === $_GET['page'] ?? '' && 'edit' === $_GET['action'] ?? '' && isset( $_GET['alert_id'] ) ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-			$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ) );
+		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+		$action = sanitize_text_field( wp_unslash( $_GET['action'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+		$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+
+		if ( 'vrts-alerts' === $page && 'edit' === $action && '' !== $alert_id ) {
 			$alert = Alert::get_item( $alert_id );
 
 			// only if the alert has option to mark as false positive.
