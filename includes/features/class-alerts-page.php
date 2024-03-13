@@ -181,7 +181,7 @@ class Alerts_Page {
 
 		$errors   = [];
 		$page_url = admin_url( 'admin.php?page=vrts-alerts' );
-
+		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 		$alert_id = isset( $_POST['alert_id'] ) ? sanitize_text_field( wp_unslash( $_POST['alert_id'] ) ) : 0;
 
 		// Some basic validation.
@@ -210,7 +210,9 @@ class Alerts_Page {
 		if ( is_wp_error( $insert_alert ) ) {
 			$redirect_to = add_query_arg( [ 'message' => 'error' ], $page_url );
 		} else {
-			if ( isset( $_POST['submit_edit_alert'] ) ) {
+			if ( isset( $_POST['submit_edit_alert'] ) ||
+				( isset( $_POST['submit_alert_false_positive'] ) && 'edit' === $action )
+			) {
 				$next_open_alert_id = Alert::get_next_open_alert_id();
 				$redirect_to = add_query_arg( [
 					'action' => 'edit',
