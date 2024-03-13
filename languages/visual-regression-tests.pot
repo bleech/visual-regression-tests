@@ -1,15 +1,15 @@
-# Copyright (C) 2023 Bleech
+# Copyright (C) 2024 Bleech
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.7.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.8.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-18T12:10:23+00:00\n"
+"POT-Creation-Date: 2024-03-13T10:11:06+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -208,93 +208,97 @@ msgstr ""
 msgid "Alert"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:3
-msgid "Edit Alert"
+#. translators: %s: the alert title.
+#: components/alerts-page/views/alerts-page-edit.php:6
+#: components/alerts-page/views/alerts-page-view.php:6
+msgid "View Alert %s"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:10
-#: components/alerts-page/views/alerts-page-view.php:10
+#: components/alerts-page/views/alerts-page-edit.php:13
+#: components/alerts-page/views/alerts-page-view.php:13
 msgid "Permalink:"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:14
-#: components/alerts-page/views/alerts-page-view.php:14
+#: components/alerts-page/views/alerts-page-edit.php:17
+#: components/alerts-page/views/alerts-page-view.php:17
 msgid "Current Page"
 msgstr ""
 
 #. translators: %d: pages.
-#: components/alerts-page/views/alerts-page-edit.php:19
-#: components/alerts-page/views/alerts-page-view.php:19
+#: components/alerts-page/views/alerts-page-edit.php:22
+#: components/alerts-page/views/alerts-page-view.php:22
 msgctxt "e.g. 1 of 2"
 msgid "%1$d of %2$d"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:28
-#: components/alerts-page/views/alerts-page-view.php:28
+#: components/alerts-page/views/alerts-page-edit.php:31
+#: components/alerts-page/views/alerts-page-view.php:31
 msgid "Previous alert"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:34
-#: components/alerts-page/views/alerts-page-view.php:34
+#: components/alerts-page/views/alerts-page-edit.php:37
+#: components/alerts-page/views/alerts-page-view.php:37
 msgid "Next alert"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:53
-#: components/alerts-page/views/alerts-page-view.php:53
+#: components/alerts-page/views/alerts-page-edit.php:56
+#: components/alerts-page/views/alerts-page-view.php:56
 msgid "Details"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:63
-#: components/alerts-page/views/alerts-page-view.php:63
+#: components/alerts-page/views/alerts-page-edit.php:66
+#: components/alerts-page/views/alerts-page-view.php:66
 msgid "Detected:"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:71
-#: components/alerts-page/views/alerts-page-view.php:71
+#: components/alerts-page/views/alerts-page-edit.php:74
+#: components/alerts-page/views/alerts-page-view.php:74
 msgid "Visual Difference:"
 msgstr ""
 
 #. translators: %s: the count of pixels with a visual difference.
-#: components/alerts-page/views/alerts-page-edit.php:74
-#: components/alerts-page/views/alerts-page-view.php:74
+#: components/alerts-page/views/alerts-page-edit.php:77
+#: components/alerts-page/views/alerts-page-view.php:77
 #: includes/list-tables/class-alerts-list-table.php:76
-#: includes/list-tables/class-alerts-list-table.php:193
-#: includes/list-tables/class-alerts-list-table.php:201
-#: includes/list-tables/class-alerts-list-table.php:215
+#: includes/list-tables/class-alerts-list-table.php:198
+#: includes/list-tables/class-alerts-list-table.php:208
+#: includes/list-tables/class-alerts-list-table.php:222
 msgid "%s pixel"
 msgid_plural "%s pixels"
 msgstr[0] ""
 msgstr[1] ""
 
-#: components/alerts-page/views/alerts-page-edit.php:80
+#: components/alerts-page/views/alerts-page-edit.php:83
 msgid "Info:"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:84
+#: components/alerts-page/views/alerts-page-edit.php:87
 msgid "Testing is paused until alert gets resolved."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:86
+#: components/alerts-page/views/alerts-page-edit.php:89
 msgid "Testing is disconnected until connection with the service is fixed."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:100
-#: components/alerts-page/views/alerts-page-edit.php:111
-#: components/alerts-page/views/alerts-page-view.php:83
-msgid "Go Back"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:103
-#: includes/list-tables/class-alerts-list-table.php:164
-#: includes/list-tables/class-alerts-list-table.php:261
-msgid "Resolve"
+#: components/alerts-page/views/alerts-page-edit.php:104
+#: components/alerts-page/views/alerts-page-view.php:89
+#: includes/features/class-onboarding.php:88
+msgid "Mark as false positive"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:106
-msgid "Resolving the alert will resume testing."
+#: components/alerts-page/views/alerts-page-edit.php:117
+#: components/alerts-page/views/alerts-page-view.php:93
+msgid "Go Back"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:125
+#: components/alerts-page/views/alerts-page-edit.php:110
+#: includes/list-tables/class-alerts-list-table.php:165
+#: includes/list-tables/class-alerts-list-table.php:268
+msgid "Resolve"
+msgstr ""
+
+#: components/alerts-page/views/alerts-page-edit.php:131
 #: components/metabox-classic-editor/index.php:82
 #: includes/features/class-admin.php:43
 #: includes/features/class-settings-page.php:33
@@ -305,28 +309,28 @@ msgid "Settings"
 msgstr ""
 
 #. translators: %1$s, %2$s: strong element wrapper.
-#: components/alerts-page/views/alerts-page-edit.php:138
+#: components/alerts-page/views/alerts-page-edit.php:144
 #: includes/list-tables/class-tests-list-table.php:385
 msgid "%1$sExclude elements on this page:%2$s "
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
 #. translators: %s name of the page
-#: components/alerts-page/views/alerts-page-edit.php:143
+#: components/alerts-page/views/alerts-page-edit.php:149
 #: components/metabox-classic-editor/index.php:88
 #: includes/list-tables/class-tests-list-table.php:391
 #: editor/components/settings/index.js:49
 msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:149
+#: components/alerts-page/views/alerts-page-edit.php:155
 #: components/metabox-classic-editor/index.php:94
 #: includes/list-tables/class-tests-list-table.php:380
 #: editor/components/settings/index.js:30
 msgid "e.g.: .lottie, #ads"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:157
+#: components/alerts-page/views/alerts-page-edit.php:163
 msgid "Save"
 msgstr ""
 
@@ -348,8 +352,8 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-view.php:3
-msgid "View Alert"
+#: components/alerts-page/views/alerts-page-view.php:87
+msgid "Unmark as false positive"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:15
@@ -502,9 +506,9 @@ msgstr ""
 msgid "Status: Testing not activated"
 msgstr ""
 
-#: includes/features/class-alerts-page.php:171
-#: includes/features/class-alerts-page.php:224
-#: includes/features/class-alerts-page.php:280
+#: includes/features/class-alerts-page.php:175
+#: includes/features/class-alerts-page.php:242
+#: includes/features/class-alerts-page.php:298
 #: includes/features/class-tests-page.php:101
 #: includes/features/class-tests-page.php:156
 #: includes/features/class-tests-page.php:181
@@ -512,9 +516,9 @@ msgstr ""
 msgid "Are you cheating?"
 msgstr ""
 
-#: includes/features/class-alerts-page.php:175
-#: includes/features/class-alerts-page.php:228
-#: includes/features/class-alerts-page.php:284
+#: includes/features/class-alerts-page.php:179
+#: includes/features/class-alerts-page.php:246
+#: includes/features/class-alerts-page.php:302
 #: includes/features/class-tests-page.php:105
 #: includes/features/class-tests-page.php:160
 #: includes/features/class-tests-page.php:185
@@ -522,9 +526,9 @@ msgstr ""
 msgid "Permission Denied!"
 msgstr ""
 
-#: includes/features/class-alerts-page.php:185
-#: includes/features/class-alerts-page.php:238
-#: includes/features/class-alerts-page.php:295
+#: includes/features/class-alerts-page.php:189
+#: includes/features/class-alerts-page.php:256
+#: includes/features/class-alerts-page.php:313
 msgid "Error: Alert ID is required."
 msgstr ""
 
@@ -534,31 +538,35 @@ msgctxt "notification email subject"
 msgid "VRTs: Alert %1$s (%2$s)"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:36
+#: includes/features/class-email-notifications.php:37
 msgctxt "notification email"
 msgid "Howdy,"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:37
+#: includes/features/class-email-notifications.php:38
 msgctxt "notification email"
 msgid "New visual differences have been detected on the following page:"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:39
+#: includes/features/class-email-notifications.php:40
 msgctxt "notification email"
 msgid "Review and resolve the alert to resume testing:"
 msgstr ""
 
 #. translators: %1$s: the home url
-#: includes/features/class-email-notifications.php:43
+#: includes/features/class-email-notifications.php:44
 msgctxt "notification email"
 msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/features/class-enqueue-scripts.php:106
+#: includes/features/class-enqueue-scripts.php:108
 #: includes/features/class-metaboxes.php:125
 msgid "Resolve %1$salert%2$s to resume testing"
+msgstr ""
+
+#: includes/features/class-onboarding.php:89
+msgid "If this alert was <strong>triggered by a harmless visual change.</strong> <br><br><strong>Once flagged, this alert will not reappear.</strong>"
 msgstr ""
 
 #: includes/features/class-settings-page.php:73
@@ -715,38 +723,48 @@ msgid "Delete this alert permanently"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:139
-#: includes/list-tables/class-alerts-list-table.php:256
+#: includes/list-tables/class-alerts-list-table.php:263
 msgid "Delete permanently"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:154
-msgid "Edit this alert"
+#. translators: %s: the title of the alert.
+#: includes/list-tables/class-alerts-list-table.php:145
+#: includes/list-tables/class-alerts-list-table.php:174
+msgid "Alert %s"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:155
-#: includes/list-tables/class-alerts-list-table.php:171
+msgid "Edit this alert"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:156
+#: includes/list-tables/class-alerts-list-table.php:172
 msgid "Edit"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:163
+#: includes/list-tables/class-alerts-list-table.php:164
 msgid "Resolve this alert"
 msgstr ""
 
+#: includes/list-tables/class-alerts-list-table.php:199
+msgid "False Positive"
+msgstr ""
+
 #. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:204
+#: includes/list-tables/class-alerts-list-table.php:211
 msgid "Tests on %1$spage%2$s are %3$spaused%4$s"
 msgstr ""
 
 #. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:218
+#: includes/list-tables/class-alerts-list-table.php:225
 msgid "Tests on %1$spage%2$s are %3$snot running until connection with the service is fixed.%4$s"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:325
+#: includes/list-tables/class-alerts-list-table.php:332
 msgid "Open"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:330
+#: includes/list-tables/class-alerts-list-table.php:337
 msgid "Resolved"
 msgstr ""
 
@@ -954,6 +972,22 @@ msgstr ""
 
 #: includes/services/class-test-service.php:443
 msgid "Service could not update test."
+msgstr ""
+
+#: assets/scripts/onboarding.js:18
+msgid "{{current}} of {{total}}"
+msgstr ""
+
+#: assets/scripts/onboarding.js:22
+msgid "Next"
+msgstr ""
+
+#: assets/scripts/onboarding.js:23
+msgid "Previous"
+msgstr ""
+
+#: assets/scripts/onboarding.js:24
+msgid "Got it!"
 msgstr ""
 
 #: editor/components/metabox/index.js:170
