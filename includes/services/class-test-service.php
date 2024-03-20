@@ -84,7 +84,7 @@ class Test_Service {
 				$this->update_test_from_schedule( $test_id, $data );
 			} elseif ( $data['comparison'] ?? null ) {
 				$alert_id = null;
-				if ( $data['is_paused'] ?? null && $data['comparison']['pixels_diff'] > 1 ) {
+				if ( $data['comparison']['pixels_diff'] > 1 && ! $data['matches_false_positive'] ) {
 					$comparison = $data['comparison'];
 					$alert_service = new Alert_Service();
 					$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison );
