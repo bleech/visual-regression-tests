@@ -92,7 +92,7 @@ class Test {
 						posts.post_title,
 						CASE
 							WHEN tests.current_alert_id is not null THEN '6-has-alert'
-							WHEN tests.service_test_id is null THEN '1-post_not_published'
+							WHEN tests.service_test_id is null THEN '1-post-not-published'
 							WHEN tests.base_screenshot_date is null THEN '2-waiting'
 							WHEN tests.is_running > 0 THEN '3-running'
 							WHEN tests.last_comparison_date is null THEN '4-scheduled'

@@ -442,9 +442,9 @@ class Tests_List_Table extends \WP_List_Table {
 		} elseif ( $item->current_alert_id ) {
 			$test_status = 'has-alert';
 		} elseif ( false === (bool) $item->status && ( $no_tests_left || $has_remote_test ) ) {
-			$test_status = 'no_credit_left';
+			$test_status = 'no-credit-left';
 		} elseif ( ! $has_remote_test ) {
-			$test_status = 'post_not_published';
+			$test_status = 'post-not-published';
 		} elseif ( ! $has_base_screenshot ) {
 			$test_status = 'waiting';
 		} elseif ( $is_running ) {
@@ -475,7 +475,7 @@ class Tests_List_Table extends \WP_List_Table {
 					'</a>'
 				);
 				break;
-			case 'no_credit_left':
+			case 'no-credit-left':
 				$class = 'testing-status--paused';
 				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
 				$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
@@ -487,7 +487,7 @@ class Tests_List_Table extends \WP_List_Table {
 					'</a>'
 				);
 				break;
-			case 'post_not_published':
+			case 'post-not-published':
 				$class = 'testing-status--paused';
 				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
 				$instructions = '<br>';
