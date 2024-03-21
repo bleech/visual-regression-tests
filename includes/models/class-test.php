@@ -44,13 +44,14 @@ class Test {
 		}
 
 		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
-			// current_alert_id IS NOT NULL = Pause.
-			if ( 'paused' === $args['filter_status'] ) {
-				$where .= ' AND tests.current_alert_id IS NOT NULL';
+			if ( 'changes-detected' === $args['filter_status'] ) {
+				$where .= " AND calculated_status = '6-has-alert'";
 			}
-			// current_alert_id IS NULL = Running.
-			if ( 'running' === $args['filter_status'] ) {
-				$where .= ' AND tests.current_alert_id IS NULL';
+			if ( 'passed' === $args['filter_status'] ) {
+				$where .= " AND calculated_status = '5-passed'";
+			}
+			if ( 'scheduled' === $args['filter_status'] ) {
+				$where .= " AND calculated_status = '4-scheduled'";
 			}
 		}
 
@@ -74,46 +75,43 @@ class Test {
 			$limit
 		);
 
-		$is_connected = Service::is_connected() ? 'true' : 'false';
-		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0 ? 'true' : 'false';
-
 		$query = "
-			SELECT
-				tests.id,
-				tests.status,
-				tests.base_screenshot_date,
-				tests.post_id,
-				tests.current_alert_id,
-				tests.service_test_id,
-				tests.hide_css_selectors,
-				tests.next_run_date,
-				tests.last_comparison_date,
-				tests.is_running,
-				posts.post_title,
-				CASE
-					WHEN $is_connected is not true THEN '0-disconnected'
-					WHEN tests.current_alert_id is not null THEN '7-has-alert'
-					WHEN tests.status > 0 and $no_tests_left THEN '1-no_credit_left'
-					WHEN tests.service_test_id is null THEN '2-post_not_published'
-					WHEN tests.base_screenshot_date is null THEN '3-waiting'
-					WHEN tests.is_running > 0 THEN '4-running'
-					WHEN tests.last_comparison_date is null THEN '5-scheduled'
-					else '6-passed'
-				END as calculated_status,
-				CASE
-					WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
-					WHEN tests.status > 0 and $no_tests_left THEN tests.base_screenshot_date
-					WHEN tests.service_test_id is null THEN tests.base_screenshot_date
-					WHEN tests.base_screenshot_date is null THEN tests.base_screenshot_date
-					WHEN tests.is_running > 0 THEN tests.base_screenshot_date
-					WHEN tests.last_comparison_date is null THEN tests.next_run_date
-					else tests.last_comparison_date
-				END as calculated_date
-			FROM $tests_table as tests
-			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
-			LEFT JOIN $alerts_table as alerts ON alerts.id = tests.current_alert_id
+			SELECT *
+				FROM (
+					SELECT
+						tests.id,
+						tests.status,
+						tests.base_screenshot_date,
+						tests.post_id,
+						tests.current_alert_id,
+						tests.service_test_id,
+						tests.hide_css_selectors,
+						tests.next_run_date,
+						tests.last_comparison_date,
+						tests.is_running,
+						posts.post_title,
+						CASE
+							WHEN tests.current_alert_id is not null THEN '6-has-alert'
+							WHEN tests.service_test_id is null THEN '1-post_not_published'
+							WHEN tests.base_screenshot_date is null THEN '2-waiting'
+							WHEN tests.is_running > 0 THEN '3-running'
+							WHEN tests.last_comparison_date is null THEN '4-scheduled'
+							else '5-passed'
+						END as calculated_status,
+						CASE
+							WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
+							WHEN tests.service_test_id is null THEN tests.base_screenshot_date
+							WHEN tests.base_screenshot_date is null THEN tests.base_screenshot_date
+							WHEN tests.is_running > 0 THEN tests.base_screenshot_date
+							WHEN tests.last_comparison_date is null THEN tests.next_run_date
+							else tests.last_comparison_date
+						END as calculated_date
+					FROM $tests_table as tests
+					INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
+					LEFT JOIN $alerts_table as alerts ON alerts.id = tests.current_alert_id
+					GROUP BY tests.id
+				) tests
 			$where
-			GROUP BY tests.id
 			$orderby
 			$limits
 		";
