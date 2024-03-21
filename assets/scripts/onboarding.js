@@ -10,7 +10,6 @@ if ( window.vrts_admin_vars.onboarding ) {
 	const onboarding = driver( {
 		overlayColor: 'rgba(44, 51, 56, 0.35)',
 		stageRadius: 0,
-		animate: false,
 		stagePadding: 10,
 		popoverOffset: 20,
 		allowClose: false,
@@ -19,8 +18,8 @@ if ( window.vrts_admin_vars.onboarding ) {
 			'{{current}} of {{total}}',
 			'visual-regression-tests'
 		),
-		nextBtnText: __( 'Next', 'visual-regression-tests' ),
 		prevBtnText: __( 'Previous', 'visual-regression-tests' ),
+		nextBtnText: __( 'Next', 'visual-regression-tests' ),
 		doneBtnText: __( 'Got it!', 'visual-regression-tests' ),
 		onPopoverRender: ( popover, { config, state } ) => {
 			const steps = config.steps;
