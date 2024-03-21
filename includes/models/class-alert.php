@@ -32,9 +32,9 @@ class Alert {
 		$args = wp_parse_args( $args, $defaults );
 
 		// 0 = Open
-		// 1 = Resolved.
+		// 1 = Archived.
 		// 2 = False Positive.
-		$alert_states = ( null !== $args['filter_status'] && 'resolved' === $args['filter_status'] ) ? [ 1, 2 ] : [ 0 ];
+		$alert_states = ( null !== $args['filter_status'] && 'archived' === $args['filter_status'] ) ? [ 1, 2 ] : [ 0 ];
 		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 		$where = $wpdb->prepare(
@@ -139,9 +139,9 @@ class Alert {
 		$alerts_table = Alerts_Table::get_table_name();
 
 		// 0 = Open
-		// 1 = Resolved.
+		// 1 = Archived.
 		// 2 = False Positive.
-		$alert_states = ( 'resolved' === $filter_status_query ) ? [ 1, 2 ] : [ 0 ];
+		$alert_states = ( 'archived' === $filter_status_query ) ? [ 1, 2 ] : [ 0 ];
 		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 		$where = $wpdb->prepare(
@@ -167,14 +167,14 @@ class Alert {
 	 * @param int $new_alert_state the new state of the item.
 	 */
 	public static function set_alert_state( $id = 0, $new_alert_state = null ) {
-		// 0 = Open / 1 = Resolved / 2 = False Positive.
+		// 0 = Open / 1 = Archived / 2 = False Positive.
 		if ( in_array( $new_alert_state, [ 0, 1, 2 ], true ) ) {
 			global $wpdb;
 
 			$alerts_table = Alerts_Table::get_table_name();
 			$data = [ 'alert_state' => $new_alert_state ];
 
-			// Resume test after alert is resolved or marked false positive.
+			// Resume test after alert is archived or marked false positive.
 			if ( in_array( $new_alert_state, [ 1, 2 ], true ) ) {
 				$alert = self::get_item( $id );
 				$service = new Test_Service();

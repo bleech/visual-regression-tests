@@ -41,7 +41,7 @@ class Post_Update_Actions {
 		$test_id = Test::get_item_id( $post_id );
 		if ( $test_id ) {
 			Test::delete( $test_id );
-			// If an alert exists already, resolve it too.
+			// If an alert exists already, archive it too.
 			$alert_id = Alert::get_alert_id_by_post_id( $post_id, 0 );
 			if ( $alert_id ) {
 				Alert::set_alert_state( $alert_id, 1 );

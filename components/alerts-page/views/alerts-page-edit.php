@@ -107,7 +107,7 @@
 											<?php endif; ?>
 										</div>
 										<div id="publishing-action">
-											<?php submit_button( esc_attr__( 'Resolve', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert', false ); ?>
+											<?php submit_button( esc_attr__( 'Archive', 'visual-regression-tests' ), 'button button-primary button-large', 'submit_edit_alert', false ); ?>
 										</div>
 										<div class="clear"></div>
 										<?php

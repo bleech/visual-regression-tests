@@ -142,7 +142,7 @@ class Alerts_Page {
 					'next_alert_id' => Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
 					'prev_next_alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
 					'current' => Alert::get_pagination_current_position( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
-					'total' => Alert::get_total_items( 'edit' === $action ? null : 'resolved' ),
+					'total' => Alert::get_total_items( 'edit' === $action ? null : 'archived' ),
 					'prev_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_prev_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
 					'next_link' => $base_link . '&action=' . $action . '&alert_id=' . Alert::get_pagination_next_alert_id( $alert_id, 'edit' === $action ? [ 0 ] : [ 1, 2 ] ),
 				],
@@ -203,7 +203,7 @@ class Alerts_Page {
 				$insert_alert = static::unmark_as_false_positive( $alert_id );
 			} else {
 				$is_false_positive = isset( $_POST['submit_alert_false_positive'] );
-				$insert_alert = static::resolve_alert( $alert_id, $is_false_positive );
+				$insert_alert = static::archive_alert( $alert_id, $is_false_positive );
 			}
 		}//end if
 
@@ -287,7 +287,7 @@ class Alerts_Page {
 	}
 
 	/**
-	 * Handle column actions (restore, resolve delete).
+	 * Handle column actions (restore, archive, delete).
 	 */
 	public function process_column_actions() {
 		if ( ! isset( $_GET['action'] ) && ! isset( $_GET['alert_id'] ) ) {
@@ -330,21 +330,21 @@ class Alerts_Page {
 		if ( $alert_id && 'restore' === $action ) {
 			$set_alert = $this->restore_alert( $alert_id );
 
-			// Keep reloading resolved filtered page after restored alert, because this action can only be triggered from this page.
-			$page_url = "{$page_url}&status=resolved";
+			// Keep reloading archived filtered page after restored alert, because this action can only be triggered from this page.
+			$page_url = "{$page_url}&status=archived";
 		}
 
-		// Resolve Alert.
-		if ( $alert_id && 'resolve' === $action ) {
-			$set_alert = $this->resolve_alert( $alert_id );
+		// Archive Alert.
+		if ( $alert_id && 'archive' === $action ) {
+			$set_alert = $this->archive_alert( $alert_id );
 		}
 
 		// Delete Alert.
 		if ( $alert_id && 'delete' === $action ) {
 			$set_alert = $this->delete_alert( $alert_id );
 
-			// Keep reloading resolved filtered page after deleted alert, because this action can only be triggered from this page.
-			$page_url = "{$page_url}&status=resolved";
+			// Keep reloading archived filtered page after deleted alert, because this action can only be triggered from this page.
+			$page_url = "{$page_url}&status=archived";
 		}
 
 		if ( is_wp_error( $set_alert ) ) {
@@ -358,12 +358,12 @@ class Alerts_Page {
 	}
 
 	/**
-	 * Resolve alert.
+	 * Archive alert.
 	 *
 	 * @param int  $alert_id the id of the alert.
 	 * @param bool $is_false_positive is the alert a false positive.
 	 */
-	public static function resolve_alert( $alert_id = null, $is_false_positive = false ) {
+	public static function archive_alert( $alert_id = null, $is_false_positive = false ) {
 		// Set the alert state.
 		$new_alert_state = $is_false_positive ? 2 : 1;
 		$alert_result = Alert::set_alert_state( $alert_id, $new_alert_state );
