@@ -31,7 +31,7 @@ class Service {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_api_route = 'sites/' . $service_project_id;
 
-			Service::rest_service_request( $service_api_route, [], 'put' );
+			self::rest_service_request( $service_api_route, [], 'put' );
 		}
 	}
 
@@ -111,7 +111,7 @@ class Service {
 			$args['headers']['Authorization'] = 'Bearer ' . $service_project_token;
 		}
 
-		add_filter( 'http_headers_useragent', [ static::class, 'set_user_agent' ], 10);
+		add_filter( 'http_headers_useragent', [ static::class, 'set_user_agent' ], 10 );
 
 		switch ( $request_type ) {
 			case 'get':
@@ -157,7 +157,7 @@ class Service {
 			];
 		}
 
-		remove_filter( 'http_headers_useragent', [ static::class, 'set_user_agent' ], 10);
+		remove_filter( 'http_headers_useragent', [ static::class, 'set_user_agent' ], 10 );
 
 		return $response;
 	}
@@ -335,9 +335,11 @@ class Service {
 
 	/**
 	 * Set user agent for the request.
+	 *
+	 * @param string $user_agent the user agent.
 	 */
 	public static function set_user_agent( $user_agent ) {
-		return 'VRTs/' . vrts()->get_plugin_info('version') . ';' . $user_agent;
+		return 'VRTs/' . vrts()->get_plugin_info( 'version' ) . ';' . $user_agent;
 	}
 
 	/**

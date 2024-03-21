@@ -210,7 +210,7 @@ class Alerts_List_Table extends \WP_List_Table {
 					sprintf(
 						'<a href="%s"><span class="testing-status--paused">%s</span></a>',
 						$base_link . '&action=edit&alert_id=' . $item->id,
-						esc_html__( 'View Alert', 'visual-regression-tests' ),
+						esc_html__( 'View Alert', 'visual-regression-tests' )
 					)
 				);
 			} else {
