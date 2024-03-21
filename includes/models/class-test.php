@@ -135,7 +135,7 @@ class Test {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT * FROM $tests_table WHERE status != 0 AND current_alert_id IS NULL"
+			"SELECT * FROM $tests_table WHERE status != 0"
 		);
 	}
 
