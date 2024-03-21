@@ -174,13 +174,6 @@ class Alert {
 			$alerts_table = Alerts_Table::get_table_name();
 			$data = [ 'alert_state' => $new_alert_state ];
 
-			// Resume test after alert is archived or marked false positive.
-			if ( in_array( $new_alert_state, [ 1, 2 ], true ) ) {
-				$alert = self::get_item( $id );
-				$service = new Test_Service();
-				$service->resume_test( $alert->post_id );
-			}
-
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			return $wpdb->update( $alerts_table, $data, [ 'id' => $id ] );
 		} else {
