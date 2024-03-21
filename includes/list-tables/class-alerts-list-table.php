@@ -186,6 +186,7 @@ class Alerts_List_Table extends \WP_List_Table {
 	 */
 	public function column_differences( $item ) {
 		$is_connected = Service::is_connected();
+		$base_link = admin_url( 'admin.php?page=vrts-alerts' );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
 		if ( 'archived' === $filter_status_query ) {
@@ -207,12 +208,9 @@ class Alerts_List_Table extends \WP_List_Table {
 					/* translators: %s: the count of pixels with a visual difference. */
 					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
 					sprintf(
-						/* translators: %s: link wrapper */
-						esc_html__( 'Tests on %1$spage%2$s are %3$spaused%4$s', 'visual-regression-tests' ),
-						'<a href="' . esc_url( get_edit_post_link( $item->post_id ) ) . '" target="_blank">',
-						'</a>',
-						'<span class="testing-status--paused">',
-						'</span>'
+						'<a href="%s"><span class="testing-status--paused">%s</span></a>',
+						$base_link . '&action=edit&alert_id=' . $item->id,
+						esc_html__( 'View Alert', 'visual-regression-tests' ),
 					)
 				);
 			} else {

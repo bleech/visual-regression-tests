@@ -464,8 +464,8 @@ class Tests_List_Table extends \WP_List_Table {
 				$instructions .= '<br>';
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
-					esc_html__( '%1$s%2$s Resolve alert%3$s to resume test', 'visual-regression-tests' ),
-					'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'Edit the alert', 'visual-regression-tests' ) . '">',
+					esc_html__( '%1$s%2$s View alert%3$s', 'visual-regression-tests' ),
+					'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'View alert', 'visual-regression-tests' ) . '">',
 					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
 					'</a>'
 				);

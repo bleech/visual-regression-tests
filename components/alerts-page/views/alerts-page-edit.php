@@ -83,9 +83,7 @@
 											<?php esc_html_e( 'Info:', 'visual-regression-tests' ); ?>
 											<strong class="testing-status--paused">
 											<?php
-											if ( $data['is_connected'] ) {
-												esc_html_e( 'Testing is paused until alert gets resolved.', 'visual-regression-tests' );
-											} else {
+											if ( !$data['is_connected'] ) {
 												esc_html_e( 'Testing is disconnected until connection with the service is fixed.', 'visual-regression-tests' );
 											}
 											?>

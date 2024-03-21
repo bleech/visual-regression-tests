@@ -122,7 +122,7 @@ class Metaboxes {
 			$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
 			$testing_status_instructions .= sprintf(
 				/* translators: %1$s and %2$s: link wrapper. */
-				esc_html__( 'Resolve %1$salert%2$s to resume testing', 'visual-regression-tests' ),
+				esc_html__( '%1$sView alert%2$s', 'visual-regression-tests' ),
 				'<a href="' . esc_url( $base_link . $alert_id ) . '">',
 				'</a>'
 			);
