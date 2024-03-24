@@ -369,8 +369,12 @@ class Alerts_Page {
 		$alert_result = Alert::set_alert_state( $alert_id, $new_alert_state );
 
 		// Add the alert from tests table -> this should stop testing.
-		$alert = (object) Alert::get_item( $alert_id );
-		Test::set_alert( $alert->post_id, null );
+		$alert = Alert::get_item( $alert_id );
+		$test = Test::get_item_by_post_id( $alert->post_id );
+
+		if ( $test->current_alert_id === $alert->id ) {
+			Test::set_alert( $alert->post_id, null );
+		}
 
 		if ( $is_false_positive ) {
 			$service = new Service();
