@@ -42,10 +42,7 @@ class Post_Update_Actions {
 		if ( $test_id ) {
 			Test::delete( $test_id );
 			// If an alert exists already, archive it too.
-			$alert_id = Alert::get_alert_id_by_post_id( $post_id, 0 );
-			if ( $alert_id ) {
-				Alert::set_alert_state( $alert_id, 1 );
-			}
+			Alert::set_alert_state_for_post_id( $post_id, 1 );
 		}
 	}
 

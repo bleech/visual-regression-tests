@@ -370,11 +370,9 @@ class Alerts_Page {
 
 		// Add the alert from tests table -> this should stop testing.
 		$alert = Alert::get_item( $alert_id );
-		$test = Test::get_item_by_post_id( $alert->post_id );
 
-		if ( $test->current_alert_id === $alert->id ) {
-			Test::set_alert( $alert->post_id, null );
-		}
+		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $alert->post_id );
+		Test::set_alert( $alert->post_id, $latest_alert_id );
 
 		if ( $is_false_positive ) {
 			$service = new Service();
@@ -412,7 +410,9 @@ class Alerts_Page {
 
 		// Remove the alert from tests table -> this should continue testing.
 		$alert = (object) Alert::get_item( $alert_id );
-		Test::set_alert( $alert->post_id, $alert_id );
+
+		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $alert->post_id );
+		Test::set_alert( $alert->post_id, $latest_alert_id );
 	}
 
 	/**
@@ -423,9 +423,13 @@ class Alerts_Page {
 	public static function delete_alert( $alert_id = null ) {
 		// Remove the alert from tests table, only to be sure that.
 		$alert = (object) Alert::get_item( $alert_id );
-		Test::set_alert( $alert->post_id, null );
 
 		// Remove the alert from the database.
 		Alert::delete( $alert_id );
+
+		// Set the latest alert to the test.
+		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $alert->post_id );
+		Test::set_alert( $alert->post_id, $latest_alert_id );
+
 	}
 }

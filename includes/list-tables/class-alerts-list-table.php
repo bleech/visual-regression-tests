@@ -81,7 +81,7 @@ class Alerts_List_Table extends \WP_List_Table {
 				$date_time = '';
 				if ( $item->target_screenshot_finish_date ) {
 					$status = esc_html__( 'Detected', 'visual-regression-tests' ) . '<br />';
-					$date_time = Date_Time_Helpers::get_formatted_date_time( $item->target_screenshot_finish_date );
+					$date_time = Date_Time_Helpers::get_formatted_relative_date_time( $item->target_screenshot_finish_date );
 				}
 				return $status . $date_time;
 
