@@ -43,7 +43,7 @@ if ( $data['run_tests_checked'] ) {
 				<strong>
 					<?php
 					if ( true === $data['has_post_alert'] ) {
-						esc_html_e( 'Paused', 'visual-regression-tests' );
+						esc_html_e( 'Changes detected', 'visual-regression-tests' );
 					} elseif ( ! $data['test_status'] ) {
 						esc_html_e( 'Disabled', 'visual-regression-tests' );
 					} else {

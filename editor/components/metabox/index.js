@@ -159,7 +159,7 @@ const Metabox = () => {
 
 	let testingStatusText = __( 'Running', 'visual-regression-tests' );
 	if ( test.current_alert_id ) {
-		testingStatusText = __( 'Paused', 'visual-regression-tests' );
+		testingStatusText = __( 'Changes detected', 'visual-regression-tests' );
 	} else if ( ! test.status ) {
 		testingStatusText = __( 'Disabled', 'visual-regression-tests' );
 	}
@@ -191,9 +191,9 @@ const Metabox = () => {
 							<strong>
 								<span
 									className={
-										test.current_alert_id || test.status
-											? 'testing-status--running'
-											: 'testing-status--paused'
+										test.current_alert_id || ! test.status
+											? 'testing-status--paused'
+											: 'testing-status--running'
 									}
 								>
 									{ testingStatusText }
