@@ -598,6 +598,7 @@ class Test {
 	public static function set_alert( $post_id = 0, $alert_id = 0 ) {
 		global $wpdb;
 
+		$alert_id = 0 === $alert_id ? null : $alert_id;
 		$tests_table = Tests_Table::get_table_name();
 		$data = [ 'current_alert_id' => $alert_id ];
 		$where = [ 'post_id' => $post_id ];
