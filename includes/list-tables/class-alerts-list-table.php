@@ -208,7 +208,7 @@ class Alerts_List_Table extends \WP_List_Table {
 					/* translators: %s: the count of pixels with a visual difference. */
 					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
 					sprintf(
-						'<a href="%s"><span class="testing-status--paused">%s</span></a>',
+						'<a href="%s">%s</a>',
 						$base_link . '&action=edit&alert_id=' . $item->id,
 						esc_html__( 'View Alert', 'visual-regression-tests' )
 					)
