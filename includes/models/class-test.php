@@ -16,10 +16,11 @@ class Test {
 	 * Get all test items from database
 	 *
 	 * @param array $args Optional.
+	 * @param bool  $return_count Optional.
 	 *
 	 * @return object
 	 */
-	public static function get_items( $args = [] ) {
+	public static function get_items( $args = [], $return_count = false ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
@@ -34,6 +35,7 @@ class Test {
 
 		$args = wp_parse_args( $args, $defaults );
 
+		$select = $return_count ? 'SELECT COUNT(*)' : 'SELECT *';
 		$where = 'WHERE 1=1';
 
 		if ( isset( $args['s'] ) && null !== $args['s'] ) {
@@ -69,14 +71,18 @@ class Test {
 
 		$limit = $args['number'] > 100 ? 100 : $args['number'];
 
-		$limits = $wpdb->prepare(
-			'LIMIT %d, %d',
-			$args['offset'],
-			$limit
-		);
+		if ( $args['number'] < 1 ) {
+			$limits = '';
+		} else {
+			$limits = $wpdb->prepare(
+				'LIMIT %d, %d',
+				$args['offset'],
+				$limit
+			);
+		}
 
 		$query = "
-			SELECT *
+			$select
 				FROM (
 					SELECT
 						tests.id,
@@ -116,8 +122,13 @@ class Test {
 			$limits
 		";
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
-		$items = $wpdb->get_results( $query );
+		if ( $return_count ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
+			$items = $wpdb->get_var( $query );
+		} else {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
+			$items = $wpdb->get_results( $query );
+		}
 
 		return $items;
 	}
@@ -454,24 +465,10 @@ class Test {
 	 * @return array
 	 */
 	public static function get_total_items( $filter_status_query = null ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-		$query = "SELECT COUNT(*) FROM $tests_table";
-
-		if ( null !== $filter_status_query ) {
-			// current_alert_id IS NOT NULL = Pause.
-			if ( 'paused' === $filter_status_query ) {
-				$query .= ' WHERE current_alert_id IS NOT NULL';
-			}
-			// current_alert_id IS NULL = Running.
-			if ( 'running' === $filter_status_query ) {
-				$query .= ' WHERE current_alert_id IS NULL';
-			}
-		}
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's prepared above
-		return (int) $wpdb->get_var( $query );
+		return (int) self::get_items( [
+			'number' => -1,
+			'filter_status' => $filter_status_query,
+		], true );
 	}
 
 	/**
