@@ -85,7 +85,7 @@ class Onboarding {
 						'side' => 'left',
 						'element' => '#delete-action',
 						'title' => wp_kses_post( __( 'Mark as false positive', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'If this alert was <strong>triggered by a harmless visual change.</strong> <br><br><strong>Once flagged, this alert will not reappear.</strong>', 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'You may <strong>stop this alert from happening again.</strong> Mark it as a false positive and the plugin will filter out matching alerts for you.', 'visual-regression-tests' ) ),
 					],
 				],
 			],
