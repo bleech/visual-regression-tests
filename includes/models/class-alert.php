@@ -104,7 +104,7 @@ class Alert {
 	 * @param int $post_id the id of the post.
 	 * @param int $alert_state the state of the item.
 	 *
-	 * @return array
+	 * @return int
 	 */
 	public static function get_latest_alert_id_by_post_id( $post_id = 0, $alert_state = 0 ) {
 		global $wpdb;

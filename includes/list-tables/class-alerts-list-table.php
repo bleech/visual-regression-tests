@@ -197,7 +197,7 @@ class Alerts_List_Table extends \WP_List_Table {
 				'%s %s',
 				/* translators: %s: the count of pixels with a visual difference. */
 				esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
-				$is_false_positive ? '<span class="alert-status alert-status--false-positive">' . esc_html__( 'False Positive', 'visual-regression-tests' ) . '</span>' : ''
+				$is_false_positive ? '<span class="alert-status alert-status--false-positive">' . esc_html__( 'False positive', 'visual-regression-tests' ) . '</span>' : ''
 			);
 		} else {
 			// Status "Open".
