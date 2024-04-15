@@ -253,16 +253,6 @@ class Tests_List_Table extends \WP_List_Table {
 				'link' => "{$base_link}&status=changes-detected",
 				'count' => Test::get_total_items( 'changes-detected' ),
 			],
-			'passed' => [
-				'title' => esc_html__( 'Passed', 'visual-regression-tests' ),
-				'link' => "{$base_link}&status=passed",
-				'count' => Test::get_total_items( 'passed' ),
-			],
-			'scheduled' => [
-				'title' => esc_html__( 'Scheduled', 'visual-regression-tests' ),
-				'link' => "{$base_link}&status=scheduled",
-				'count' => Test::get_total_items( 'scheduled' ),
-			],
 		];
 
 		$status_links = [];
