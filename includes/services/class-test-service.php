@@ -27,7 +27,6 @@ class Test_Service {
 		$comparison = $data['comparison'];
 		if ( $comparison['screenshot']['image_url'] ?? null ) {
 			// Update test row with new id foreign key and add latest screenshot.
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			$update_data = [
 				'next_run_date' => $data['next_run_at'] ?? '',
 				'last_comparison_date' => $comparison['updated_at'],
@@ -38,6 +37,7 @@ class Test_Service {
 			if ( $alert_id ) {
 				$update_data['current_alert_id'] = $alert_id;
 			}
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			return $wpdb->update(
 				$table_test,
 				$update_data,

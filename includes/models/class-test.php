@@ -743,7 +743,6 @@ class Test {
 		return $wpdb->update(
 			$table_test,
 			[
-				// 'current_alert_id' => null,
 				'base_screenshot_url' => null,
 				'base_screenshot_date' => null,
 				'last_comparison_date' => null,

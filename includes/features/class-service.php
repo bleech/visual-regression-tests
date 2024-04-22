@@ -339,7 +339,11 @@ class Service {
 	 * @param string $user_agent the user agent.
 	 */
 	public static function set_user_agent( $user_agent ) {
-		return 'VRTs/' . vrts()->get_plugin_info( 'version' ) . ';' . $user_agent;
+		if ( function_exists( 'vrts' ) ) {
+			return 'VRTs/' . vrts()->get_plugin_info( 'version' ) . ';' . $user_agent;
+		} else {
+			return $user_agent;
+		}
 	}
 
 	/**
