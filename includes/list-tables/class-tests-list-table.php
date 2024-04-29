@@ -459,8 +459,8 @@ class Tests_List_Table extends \WP_List_Table {
 				$instructions .= '<br>';
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
-					esc_html__( '%1$s%2$s View alert%3$s', 'visual-regression-tests' ),
-					'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'View alert', 'visual-regression-tests' ) . '">',
+					esc_html__( '%1$s%2$s View Alert%3$s', 'visual-regression-tests' ),
+					'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
 					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
 					'</a>'
 				);
@@ -507,8 +507,8 @@ class Tests_List_Table extends \WP_List_Table {
 						'<a href="%s" data-id="%d" title="%s">%s</a>',
 						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $item->id,
 						$item->id,
-						esc_html__( 'Run test now', 'visual-regression-tests' ),
-						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run test now', 'visual-regression-tests' )
+						esc_html__( 'Run Test', 'visual-regression-tests' ),
+						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
 					);
 				}
 				break;
@@ -526,8 +526,8 @@ class Tests_List_Table extends \WP_List_Table {
 						'<a href="%s" data-id="%d" title="%s">%s</a>',
 						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $item->id,
 						$item->id,
-						esc_html__( 'Run test now', 'visual-regression-tests' ),
-						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run test now', 'visual-regression-tests' )
+						esc_html__( 'Run Test', 'visual-regression-tests' ),
+						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
 					);
 				}
 				break;

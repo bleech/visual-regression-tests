@@ -122,7 +122,7 @@ class Settings_Page {
 		vrts()->settings()->add_setting([
 			'type' => 'text',
 			'id' => 'vrts_click_selectors',
-			'title' => esc_html__( 'Click an element before creating a snapshot', 'visual-regression-tests' ),
+			'title' => esc_html__( 'Click Element', 'visual-regression-tests' ),
 			'description' => sprintf(
 				'%s<br>%s',
 				sprintf(
@@ -138,7 +138,7 @@ class Settings_Page {
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => '',
-			'placeholder' => esc_html__( 'e.g.: [data-cookie-accept]', 'visual-regression-tests' ),
+			'placeholder' => esc_html__( 'e.g.: #data-cookie-accept', 'visual-regression-tests' ),
 		]);
 
 		vrts()->settings()->add_section([
