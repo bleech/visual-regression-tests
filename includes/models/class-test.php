@@ -2,6 +2,7 @@
 
 namespace Vrts\Models;
 
+use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Tables\Alerts_Table;
@@ -781,5 +782,175 @@ class Test {
 				$test_ids
 			)
 		);
+	}
+
+	/**
+	 * Get test status data
+	 *
+	 * @param int|object $test test id or test object.
+	 *
+	 * @return array
+	 */
+	public static function get_status_data( $test ) {
+		if ( is_int( $test ) ) {
+			$test = self::get_item( $test );
+		}
+
+		$is_connected = Service::is_connected();
+		$has_subscription = Subscription::get_subscription_status();
+		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
+		$has_remote_test = ! empty( $test->service_test_id );
+		$has_base_screenshot = ! empty( $test->base_screenshot_date );
+		$has_comparison = ! empty( $test->last_comparison_date );
+		$is_running = (bool) $test->is_running;
+
+		$test_status = 'passed';
+		if ( ! (bool) $is_connected ) {
+			$test_status = 'disconnected';
+		} elseif ( $test->current_alert_id ) {
+			$test_status = 'has-alert';
+		} elseif ( false === (bool) $test->status && ( $no_tests_left || $has_remote_test ) ) {
+			$test_status = 'no-credit-left';
+		} elseif ( ! $has_remote_test ) {
+			$test_status = 'post-not-published';
+		} elseif ( ! $has_base_screenshot ) {
+			$test_status = 'waiting';
+		} elseif ( $is_running ) {
+			$test_status = 'running';
+		} elseif ( ! $has_comparison ) {
+			$test_status = 'scheduled';
+		}//end if
+
+		$instructions = '';
+
+		switch ( $test_status ) {
+			case 'disconnected':
+				$class = 'paused';
+				$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
+				break;
+			case 'has-alert':
+				$alert = Alert::get_item( $test->current_alert_id );
+				$class = 'paused';
+				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
+				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
+				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
+				$instructions .= sprintf(
+					/* translators: %1$s and %2$s: link wrapper. */
+					esc_html__( '%1$s%2$s View Alert%3$s', 'visual-regression-tests' ),
+					'<a href="' . $base_link . $test->current_alert_id . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
+					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
+					'</a>'
+				);
+				break;
+			case 'no-credit-left':
+				$class = 'paused';
+				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
+				$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
+				$instructions = sprintf(
+					/* translators: %1$s and %2$s: link wrapper. */
+					esc_html__( '%1$sUpgrade plugin%2$s to resume testing', 'visual-regression-tests' ),
+					'<a href="' . $base_link . '" title="' . esc_attr__( 'Upgrade plugin', 'visual-regression-tests' ) . '">',
+					'</a>'
+				);
+				break;
+			case 'post-not-published':
+				$class = 'paused';
+				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
+				$instructions = esc_html__( 'Publish post to resume testing', 'visual-regression-tests' );
+				break;
+			case 'waiting':
+				$class = 'waiting';
+				$text = esc_html__( 'Waiting', 'visual-regression-tests' );
+				break;
+			case 'running':
+				$class = 'waiting';
+				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
+				$instructions = esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
+				break;
+			case 'scheduled':
+				$class = 'waiting';
+				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
+				if ( $test->next_run_date ) {
+					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->next_run_date );
+				}
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
+				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
+					$instructions .= sprintf(
+						'<a href="%s" data-id="%d" title="%s">%s</a>',
+						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						$test->id,
+						esc_html__( 'Run Test', 'visual-regression-tests' ),
+						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
+					);
+				}
+				break;
+			case 'passed':
+			default:
+				$class = 'running';
+				$text = esc_html__( 'Passed', 'visual-regression-tests' );
+				if ( $test->last_comparison_date ) {
+					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $test->last_comparison_date );
+				}
+				break;
+		}//end switch
+
+		return [
+			'status' => $test_status,
+			'class' => $class,
+			'text' => $text,
+			'instructions' => $instructions,
+		];
+	}
+
+	/**
+	 * Get test screenshot data
+	 *
+	 * @param int|object $test test id or object.
+	 *
+	 * @return array
+	 */
+	public static function get_screenshot_data( $test ) {
+		if ( is_int( $test ) ) {
+			$test = self::get_item( $test );
+		}
+
+		$screenshot_status = 'taken';
+		if ( false === (bool) $test->status ) {
+			$screenshot_status = 'paused';
+		} elseif ( ! $test->base_screenshot_date ) {
+			$screenshot_status = 'waiting';
+		}//end if
+
+		$instructions = '';
+
+		switch ( $screenshot_status ) {
+			case 'paused':
+				$text = esc_html__( 'On hold', 'visual-regression-tests' );
+				break;
+			case 'waiting':
+				$text = esc_html__( 'In progress', 'visual-regression-tests' );
+				$instructions = sprintf(
+					'<span class="vrts-testing-status--waiting">%s</span>',
+					esc_html__( 'Refresh page to see snapshot', 'visual-regression-tests' )
+				);
+				break;
+			case 'taken':
+			default:
+				$text = sprintf(
+					'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a>',
+					self::get_base_screenshot_url( $test->post_id ),
+					$test->id,
+					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
+					esc_html__( 'View Snapshot', 'visual-regression-tests' )
+				);
+				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->base_screenshot_date );
+				break;
+		}//end switch
+
+		return [
+			'status' => $screenshot_status,
+			'text' => $text,
+			'instructions' => $instructions,
+		];
 	}
 }

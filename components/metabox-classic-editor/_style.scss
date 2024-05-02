@@ -13,7 +13,7 @@
 		}
 	}
 
-	.testing-status {
+	.vrts-testing-status {
 		display: flex;
 		justify-content: space-between;
 		gap: 1rem;
@@ -23,52 +23,36 @@
 			color: $alert-red;
 		}
 
+		&--waiting {
+			color: $alert-yellow;
+		}
+
 		&--running {
 			color: $alert-green;
 		}
 
 		&-wrapper {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
 			margin: 1.5rem 0;
 
-			> :first-child {
-				margin-top: 0;
+			> * {
+				margin: 0;
 			}
 
-			> :last-child {
-				margin-bottom: 0;
-			}
-
-			.howto {
-				margin-top: 0.25rem;
-				font-size: 0.75rem;
-				color: $gray-700;
+			.dashicons {
+				display: none;
 			}
 		}
-	}
 
-	.figure {
-		margin: 0;
-		aspect-ratio: 16/9;
-
-		&-link {
-			outline: none;
-			box-shadow: none;
-		}
-
-		&-title {
-			margin-bottom: 0.5rem;
-		}
-
-		&-image {
-			border: solid 1px #bfbfbf;
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			object-position: center top;
-		}
-
-		.howto {
-			margin-top: 0.5rem;
+		&-info {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-end;
+			gap: 5px;
+			font-size: 0.75rem;
+			color: $gray-700;
 		}
 	}
 
@@ -83,6 +67,10 @@
 
 		&-title {
 			margin-bottom: 0.5rem;
+			display: flex;
+			gap: 0.5rem;
+			justify-content: space-between;
+			align-items: center;
 		}
 
 		textarea {

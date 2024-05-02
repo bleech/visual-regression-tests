@@ -418,126 +418,13 @@ class Tests_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	private function render_column_status( $item ) {
-		$is_connected = Service::is_connected();
-		$has_subscription = Subscription::get_subscription_status();
-		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
-		$has_remote_test = ! empty( $item->service_test_id );
-		$has_base_screenshot = ! empty( $item->base_screenshot_date );
-		$has_comparison = ! empty( $item->last_comparison_date );
-		$is_running = (bool) $item->is_running;
-
-		$test_status = 'passed';
-		if ( ! (bool) $is_connected ) {
-			$test_status = 'disconnected';
-		} elseif ( $item->current_alert_id ) {
-			$test_status = 'has-alert';
-		} elseif ( false === (bool) $item->status && ( $no_tests_left || $has_remote_test ) ) {
-			$test_status = 'no-credit-left';
-		} elseif ( ! $has_remote_test ) {
-			$test_status = 'post-not-published';
-		} elseif ( ! $has_base_screenshot ) {
-			$test_status = 'waiting';
-		} elseif ( $is_running ) {
-			$test_status = 'running';
-		} elseif ( ! $has_comparison ) {
-			$test_status = 'scheduled';
-		}//end if
-
-		switch ( $test_status ) {
-			case 'disconnected':
-				$class = 'testing-status--paused';
-				$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
-				$instructions = '';
-				break;
-			case 'has-alert':
-				$alert = Alert::get_item( $item->current_alert_id );
-				$class = 'testing-status--paused';
-				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
-				$instructions = '<br>';
-				$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
-				$instructions .= '<br>';
-				$instructions .= sprintf(
-					/* translators: %1$s and %2$s: link wrapper. */
-					esc_html__( '%1$s%2$s View Alert%3$s', 'visual-regression-tests' ),
-					'<a href="' . $base_link . $item->current_alert_id . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
-					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
-					'</a>'
-				);
-				break;
-			case 'no-credit-left':
-				$class = 'testing-status--paused';
-				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
-				$instructions = '<br>';
-				$instructions .= sprintf(
-					/* translators: %1$s and %2$s: link wrapper. */
-					esc_html__( '%1$sUpgrade plugin%2$s to resume testing', 'visual-regression-tests' ),
-					'<a href="' . $base_link . '" title="' . esc_attr__( 'Upgrade plugin', 'visual-regression-tests' ) . '">',
-					'</a>'
-				);
-				break;
-			case 'post-not-published':
-				$class = 'testing-status--paused';
-				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
-				$instructions = '<br>';
-				$instructions .= esc_html__( 'Publish post to resume testing', 'visual-regression-tests' );
-				break;
-			case 'waiting':
-				$class = 'testing-status--waiting';
-				$text = esc_html__( 'Waiting', 'visual-regression-tests' );
-				$instructions = '';
-				break;
-			case 'running':
-				$class = 'testing-status--waiting';
-				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
-				$instructions = '<br>';
-				$instructions .= esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
-				break;
-			case 'scheduled':
-				$class = 'testing-status--waiting';
-				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
-				$instructions = '<br>';
-				if ( $item->next_run_date ) {
-					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $item->next_run_date );
-					$instructions .= '<br>';
-				}
-				if ( $has_subscription ) {
-					$instructions .= sprintf(
-						'<a href="%s" data-id="%d" title="%s">%s</a>',
-						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $item->id,
-						$item->id,
-						esc_html__( 'Run Test', 'visual-regression-tests' ),
-						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
-					);
-				}
-				break;
-			case 'passed':
-			default:
-				$class = 'testing-status--running';
-				$text = esc_html__( 'Passed', 'visual-regression-tests' );
-				$instructions = '<br>';
-				if ( $item->last_comparison_date ) {
-					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $item->last_comparison_date );
-					$instructions .= '<br>';
-				}
-				if ( $has_subscription ) {
-					$instructions .= sprintf(
-						'<a href="%s" data-id="%d" title="%s">%s</a>',
-						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $item->id,
-						$item->id,
-						esc_html__( 'Run Test', 'visual-regression-tests' ),
-						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
-					);
-				}
-				break;
-		}//end switch
+		$status_data = Test::get_status_data( $item );
 
 		return sprintf(
-			'<span class="%s">%s</span>%s',
-			$class,
-			$text,
-			$instructions
+			'<div class="vrts-testing-status-wrapper"><p class="vrts-testing-status"><span class="%s">%s</span></p><p class="vrts-testing-status">%s</p></div>',
+			'vrts-testing-status--' . $status_data['class'],
+			$status_data['text'],
+			$status_data['instructions']
 		);
 	}
 
@@ -549,39 +436,12 @@ class Tests_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	private function render_column_snapshot( $item ) {
-		$base_screenshot_status = 'taken';
-		if ( false === (bool) $item->status ) {
-			$base_screenshot_status = 'paused';
-		} elseif ( ! $item->base_screenshot_date ) {
-			$base_screenshot_status = 'waiting';
-		}//end if
+		$screenshot_data = Test::get_screenshot_data( $item );
 
-		switch ( $base_screenshot_status ) {
-			case 'paused':
-				$output = esc_html__( 'On hold', 'visual-regression-tests' );
-				break;
-			case 'waiting':
-				$status = esc_html__( 'In progress', 'visual-regression-tests' );
-				$output = sprintf(
-					'<span class="%s">%s</span><br>%s',
-					'testing-status--waiting',
-					$status,
-					esc_html__( 'Refresh page to see snapshot', 'visual-regression-tests' )
-				);
-				break;
-			case 'taken':
-			default:
-				$status = sprintf(
-					'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a><br>',
-					Test::get_base_screenshot_url( $item->post_id ),
-					$item->id,
-					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
-					esc_html__( 'View Snapshot', 'visual-regression-tests' )
-				);
-				$date_time = Date_Time_Helpers::get_formatted_relative_date_time( $item->base_screenshot_date );
-				$output = $status . $date_time;
-				break;
-		}//end switch
-		return $output;
+		return sprintf(
+			'<div class="vrts-testing-status-wrapper"><p class="vrts-testing-status">%s</p><p class="vrts-testing-status">%s</p></div>',
+			$screenshot_data['text'],
+			$screenshot_data['instructions']
+		);
 	}
 }

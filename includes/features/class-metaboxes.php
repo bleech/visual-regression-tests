@@ -134,10 +134,10 @@ class Metaboxes {
 		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
+			'plugin_url' => admin_url( 'admin.php?page=vrts' ),
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
-			'test_status' => (bool) Test::get_status( $post_id ),
 			'base_screenshot_url' => Test::get_base_screenshot_url( $post_id ),
 			'base_screenshot_date' => $base_screenshot_date,
 			'testing_status_instructions' => $testing_status_instructions,
@@ -146,6 +146,8 @@ class Metaboxes {
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
 			'is_connected' => Service::is_connected(),
+			'test_status' => Test::get_status_data( $test ),
+			'screenshot' => Test::get_screenshot_data( $test ),
 			'test_settings' => [
 				'test_id' => isset( $test->id ) ? $test->id : null,
 				'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
