@@ -52,7 +52,7 @@ if ( $data['run_tests_checked'] ) {
 	?>
 	<div class="vrts-testing-status-wrapper">
 		<p class="vrts-testing-status">
-			<strong><?php esc_html_e( 'Test Status', 'visual-regression-tests' ); ?></strong>
+			<span><?php esc_html_e( 'Test Status', 'visual-regression-tests' ); ?></span>
 			<strong class="vrts-testing-status--<?php echo esc_attr( $test_status['class'] ); ?>"><?php echo wp_kses_post( $test_status['text'] ); ?></strong>
 		</p>
 		<p class="vrts-testing-status-info">
@@ -62,7 +62,7 @@ if ( $data['run_tests_checked'] ) {
 
 	<div class="vrts-testing-status-wrapper">
 		<p class="vrts-testing-status">
-			<strong><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></strong>
+			<span><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></span>
 			<span><?php echo wp_kses_post( $screenshot['text'] ); ?></span>
 			</span>
 		</p>
@@ -73,8 +73,8 @@ if ( $data['run_tests_checked'] ) {
 
 	<div class="settings">
 		<input name="test_id" type="hidden" value="<?php echo esc_html( $data['test_settings']['test_id'] ); ?>"/>
-		<p class="settings-title">
-			<strong><?php esc_html_e( 'Hide elements from VRTs', 'visual-regression-tests' ); ?></strong>
+		<label for="vrts-hide-css-selectors" class="settings-title">
+			<span><?php esc_html_e( 'Hide elements from VRTs', 'visual-regression-tests' ); ?></span>
 			<span class="vrts-tooltip">
 				<span class="vrts-tooltip-icon dashicons dashicons-info-outline"></span>
 				<span class="vrts-tooltip-content">
@@ -90,8 +90,8 @@ if ( $data['run_tests_checked'] ) {
 					</span>
 				</span>
 			</span>
-		</p>
-		<textarea name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>
+		</label>
+		<textarea id="vrts-hide-css-selectors" name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>
 	</div>
 <?php }//end if
 ?>

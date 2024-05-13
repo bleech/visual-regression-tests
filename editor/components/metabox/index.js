@@ -63,6 +63,7 @@ const Metabox = () => {
 				method: 'DELETE',
 			} );
 			setTest( response || {} );
+			setNewTest( false );
 			if ( previousServiceTestId ) {
 				setCredits( {
 					...credits,
@@ -156,7 +157,7 @@ const Metabox = () => {
 
 	return (
 		<>
-			<Flex gap={ 3 }>
+			<Flex gap={ 3 } style={ { marginBottom: 12 } }>
 				<ToggleControl
 					label={ __( 'Add to VRTs', 'visual-regression-tests' ) }
 					checked={ test.id ? true : false }

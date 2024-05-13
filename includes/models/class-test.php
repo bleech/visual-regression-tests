@@ -633,6 +633,60 @@ class Test {
 	}
 
 	/**
+	 * Get test calculated status
+	 *
+	 * @param int|object $test test id or test object.
+	 *
+	 * @return string
+	 */
+	public static function get_calculated_status( $test ) {
+		if ( is_int( $test ) ) {
+			$test = self::get_item( $test );
+		}
+
+		if ( ! Service::is_connected() ) {
+			return 'disconnected';
+		}
+
+		// If test doesn't exist set initial status to 'waiting'.
+		if ( ! isset( $test->id ) ) {
+			return 'waiting';
+		}
+
+		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
+		$has_remote_test = ! empty( $test->service_test_id );
+		$has_base_screenshot = ! empty( $test->base_screenshot_date );
+		$has_comparison = ! empty( $test->last_comparison_date );
+		$is_running = (bool) $test->is_running;
+
+		if ( $test->current_alert_id ) {
+			return 'has-alert';
+		}
+
+		if ( false === (bool) $test->status && ( $no_tests_left || $has_remote_test ) ) {
+			return 'no-credit-left';
+		}
+
+		if ( ! $has_remote_test ) {
+			return 'post-not-published';
+		}
+
+		if ( ! $has_base_screenshot ) {
+			return 'waiting';
+		}
+
+		if ( $is_running ) {
+			return 'running';
+		}
+
+		if ( ! $has_comparison ) {
+			return 'scheduled';
+		}
+
+		return 'passed';
+	}
+
+	/**
 	 * Pause test.
 	 *
 	 * @param int $service_test_id The service test id.
@@ -796,31 +850,8 @@ class Test {
 			$test = self::get_item( $test );
 		}
 
-		$is_connected = Service::is_connected();
+		$test_status = self::get_calculated_status( $test );
 		$has_subscription = Subscription::get_subscription_status();
-		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
-		$has_remote_test = ! empty( $test->service_test_id );
-		$has_base_screenshot = ! empty( $test->base_screenshot_date );
-		$has_comparison = ! empty( $test->last_comparison_date );
-		$is_running = (bool) $test->is_running;
-
-		$test_status = 'passed';
-		if ( ! (bool) $is_connected ) {
-			$test_status = 'disconnected';
-		} elseif ( $test->current_alert_id ) {
-			$test_status = 'has-alert';
-		} elseif ( false === (bool) $test->status && ( $no_tests_left || $has_remote_test ) ) {
-			$test_status = 'no-credit-left';
-		} elseif ( ! $has_remote_test ) {
-			$test_status = 'post-not-published';
-		} elseif ( ! $has_base_screenshot ) {
-			$test_status = 'waiting';
-		} elseif ( $is_running ) {
-			$test_status = 'running';
-		} elseif ( ! $has_comparison ) {
-			$test_status = 'scheduled';
-		}//end if
-
 		$instructions = '';
 
 		switch ( $test_status ) {
@@ -915,7 +946,12 @@ class Test {
 		}
 
 		$screenshot_status = 'taken';
-		if ( false === (bool) $test->status ) {
+
+		if ( ! Service::is_connected() ) {
+			$screenshot_status = 'paused';
+		} elseif ( ! isset( $test->id ) ) {
+			$screenshot_status = 'waiting';
+		} elseif ( false === (bool) $test->status ) {
 			$screenshot_status = 'paused';
 		} elseif ( ! $test->base_screenshot_date ) {
 			$screenshot_status = 'waiting';

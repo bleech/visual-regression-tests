@@ -131,8 +131,10 @@
 
 .vrts-testing-toogle {
 	display: flex;
+	align-items: center;
+	gap: 0.25rem;
 
 	.vrts-tooltip {
-		margin-left: 0.5rem;
+		margin-left: auto;
 	}
 }
