@@ -1,6 +1,6 @@
 .driver {
 
-	&-active-element {
+	&-no-interaction {
 		pointer-events: none;
 	}
 
@@ -20,7 +20,7 @@
 		border-radius: 2px;
 		min-width: 250px;
 		max-width: 345px;
-		box-shadow: 4px 4px 4px 0 rgba(30, 30, 30, 0.12);
+		box-shadow: 2px 2px 8px 4px rgba(30, 30, 30, 0.12);
 		z-index: 1000000000;
 		position: fixed;
 		top: 0;
@@ -164,22 +164,22 @@
 
 		&-side-left.driver-popover-arrow-align-start,
 		&-side-right.driver-popover-arrow-align-start {
-			top: 20px;
+			top: 8px;
 		}
 
 		&-side-top.driver-popover-arrow-align-start,
 		&-side-bottom.driver-popover-arrow-align-start {
-			left: 20px;
+			left: 8px;
 		}
 
 		&-align-end.driver-popover-arrow-side-left,
 		&-align-end.driver-popover-arrow-side-right {
-			bottom: 20px;
+			bottom: 8px;
 		}
 
 		&-side-top.driver-popover-arrow-align-end,
 		&-side-bottom.driver-popover-arrow-align-end {
-			right: 20px;
+			right: 8px;
 		}
 
 		&-side-left.driver-popover-arrow-align-center,
@@ -194,6 +194,10 @@
 			margin-left: -5px;
 		}
 	}
+}
+
+.vrts-onboarding-nonblocking ~ .driver-overlay {
+	display: none;
 }
 
 @keyframes vrts-onboarding-animate {

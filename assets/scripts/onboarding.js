@@ -10,10 +10,14 @@ if ( window.vrts_admin_vars.onboarding ) {
 	const onboarding = driver( {
 		overlayColor: 'rgba(44, 51, 56, 0.35)',
 		stageRadius: 0,
-		stagePadding: 10,
+		stagePadding: 0,
 		popoverOffset: 20,
 		allowClose: false,
 		showProgress: ! isHighlight,
+		popoverClass: isHighlight
+			? 'vrts-onboarding-nonblocking'
+			: 'vrts-onboarding',
+		disableActiveInteraction: ! isHighlight,
 		progressText: __(
 			'{{current}} of {{total}}',
 			'visual-regression-tests'
@@ -24,6 +28,10 @@ if ( window.vrts_admin_vars.onboarding ) {
 		onPopoverRender: ( popover, { config, state } ) => {
 			const steps = config.steps;
 			const hasNextStep = steps[ state.activeIndex + 1 ];
+
+			config.stagePadding =
+				window.vrts_admin_vars.onboarding.steps[ state.activeIndex ]
+					.padding || 0;
 
 			popover.previousButton.classList.add(
 				'button',
