@@ -109,12 +109,12 @@ class Onboarding {
 						'align' => 'center',
 						'element' => '.wp-list-table tbody tr:first-child',
 						'title' => wp_kses_post( __( '🎉 Yay, you created your first VRT!', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( "Starting from tomorrow, it will run as part of our <strong>daily test run</strong>, ensuring consistent monitoring of your selected page.", 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'Starting from tomorrow, it will run as part of our <strong>daily test run</strong>, ensuring consistent monitoring of your selected page.', 'visual-regression-tests' ) ),
 					],
 					[
 						'element' => '.vrts_navigation_item a[href$="admin.php?page=vrts-settings"]',
 						'title' => wp_kses_post( __( 'Fine-tune your setup', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( "Further customize your test configuration and plugin settings for an optimized experience.", 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'Further customize your test configuration and plugin settings for an optimized experience.', 'visual-regression-tests' ) ),
 					],
 				],
 			],
@@ -185,7 +185,7 @@ class Onboarding {
 			$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 			$next_id = Test::get_autoincrement_value();
 
-			if ( $next_id === 1 || ( $is_front_page_added && $next_id === 2 ) ) {
+			if ( 1 === $next_id || ( $is_front_page_added && 2 === $next_id ) ) {
 				return true;
 			}
 		}
@@ -200,14 +200,14 @@ class Onboarding {
 	 */
 	public function should_display_first_test_onboarding() {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-		$is_new_test_added = isset( $_GET['new-test-added'] );
+		$is_new_test_added = isset( $_GET['new-test-added'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
 		if ( 'vrts' === $page && $is_new_test_added ) {
 			$frontpage_id = get_option( 'page_on_front' );
 			$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 			$next_id = Test::get_autoincrement_value();
 
-			if ( $next_id === 2 || ( $is_front_page_added && $next_id === 3 ) ) {
+			if ( 2 === $next_id || ( $is_front_page_added && 3 === $next_id ) ) {
 				return true;
 			}
 		}
