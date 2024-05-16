@@ -279,6 +279,27 @@ class Test {
 	}
 
 	/**
+	 * Get autoincrement value
+	 *
+	 * @return int
+	 */
+	public static function get_autoincrement_value() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s",
+				DB_NAME,
+				$tests_table
+			)
+		);
+	}
+
+	/**
 	 * Checks if post has a test
 	 *
 	 * @param int $post_id the id of the post.
@@ -907,7 +928,7 @@ class Test {
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
 				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
 					$instructions .= sprintf(
-						'<a href="%s" data-id="%d" title="%s">%s</a>',
+						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
 						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
 						$test->id,
 						esc_html__( 'Run Test', 'visual-regression-tests' ),
