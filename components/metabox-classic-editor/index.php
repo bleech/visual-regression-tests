@@ -52,23 +52,22 @@ if ( $data['run_tests_checked'] ) {
 	?>
 	<div class="vrts-testing-status-wrapper">
 		<p class="vrts-testing-status">
-			<span><?php esc_html_e( 'Test Status', 'visual-regression-tests' ); ?></span>
 			<strong class="vrts-testing-status--<?php echo esc_attr( $test_status['class'] ); ?>"><?php echo wp_kses_post( $test_status['text'] ); ?></strong>
-		</p>
-		<p class="vrts-testing-status-info">
-			<?php echo wp_kses_post( $test_status['instructions'] ); ?>
+			<span class="vrts-testing-status-info">
+				<?php echo wp_kses_post( $test_status['instructions'] ); ?>
+			</span>
 		</p>
 	</div>
 
 	<div class="vrts-testing-status-wrapper">
 		<p class="vrts-testing-status">
 			<span><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></span>
-			<span><?php echo wp_kses_post( $screenshot['text'] ); ?></span>
+			<span class="vrts-testing-status-info"><?php echo wp_kses_post( $screenshot['text'] ); ?></span>
 			</span>
 		</p>
-		<p class="vrts-testing-status-info">
-			<?php echo wp_kses_post( $screenshot['instructions'] ); ?>
-		</p>
+		<figure class="figure">
+			<?php echo wp_kses_post( $screenshot['screenshot'] ); ?>
+		</figure>
 	</div>
 
 	<div class="settings">

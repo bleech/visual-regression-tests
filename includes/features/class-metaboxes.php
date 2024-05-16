@@ -141,7 +141,6 @@ class Metaboxes {
 			'base_screenshot_url' => Test::get_base_screenshot_url( $post_id ),
 			'base_screenshot_date' => $base_screenshot_date,
 			'testing_status_instructions' => $testing_status_instructions,
-			'placeholder_image_data_url' => vrts()->get_snapshot_placeholder_image(),
 			'is_new_test' => self::is_new_test( $post_id ),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),

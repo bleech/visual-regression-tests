@@ -109,7 +109,6 @@ class Enqueue_Scripts {
 					'has_post_alert' => Test::has_post_alert( $post->ID ),
 					'base_screenshot_url' => Test::get_base_screenshot_url( $post->ID ),
 					'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( Test::get_base_screenshot_date( $post->ID ) ),
-					'placeholder_image_data_url' => vrts()->get_snapshot_placeholder_image(),
 					'remaining_tests' => Subscription::get_remaining_tests(),
 					'total_tests' => Subscription::get_total_tests(),
 					'upgrade_url' => admin_url( 'admin.php?page=vrts-upgrade' ),

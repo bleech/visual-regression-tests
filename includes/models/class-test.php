@@ -978,7 +978,11 @@ class Test {
 			$screenshot_status = 'waiting';
 		}//end if
 
-		$instructions = '';
+		$screenshot = sprintf(
+			'<img class="figure-image" src="%s" alt="%s" />',
+			esc_attr( vrts()->get_snapshot_placeholder_image() ),
+			esc_html__( 'Snapshot', 'visual-regression-tests' )
+		);
 
 		switch ( $screenshot_status ) {
 			case 'paused':
@@ -986,28 +990,25 @@ class Test {
 				break;
 			case 'waiting':
 				$text = esc_html__( 'In progress', 'visual-regression-tests' );
-				$instructions = sprintf(
-					'<span class="vrts-testing-status--waiting">%s</span>',
-					esc_html__( 'Refresh page to see snapshot', 'visual-regression-tests' )
-				);
 				break;
 			case 'taken':
 			default:
-				$text = sprintf(
-					'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a>',
+				$text = Date_Time_Helpers::get_formatted_relative_date_time( $test->base_screenshot_date );
+				$screenshot = sprintf(
+					'<a href="%s" target="_blank" data-id="%d" title="%s"><img class="figure-image" src="%s" alt="%s"></a>',
 					self::get_base_screenshot_url( $test->post_id ),
 					$test->id,
 					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
+					self::get_base_screenshot_url( $test->post_id ),
 					esc_html__( 'View Snapshot', 'visual-regression-tests' )
 				);
-				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->base_screenshot_date );
 				break;
 		}//end switch
 
 		return [
 			'status' => $screenshot_status,
 			'text' => $text,
-			'instructions' => $instructions,
+			'screenshot' => $screenshot,
 		];
 	}
 }

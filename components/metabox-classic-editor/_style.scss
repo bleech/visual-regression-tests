@@ -13,6 +13,32 @@
 		}
 	}
 
+	.figure {
+		margin: 0;
+
+		&-link {
+			outline: none;
+			box-shadow: none;
+		}
+
+		&-title {
+			margin-bottom: 0.5rem;
+		}
+
+		&-image {
+			aspect-ratio: 16/9;
+			border: solid 1px #bfbfbf;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			object-position: center top;
+		}
+
+		.howto {
+			margin-top: 0.5rem;
+		}
+	}
+
 	.vrts-testing-status {
 		display: flex;
 		justify-content: space-between;
