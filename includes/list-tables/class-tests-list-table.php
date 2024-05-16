@@ -292,10 +292,6 @@ class Tests_List_Table extends \WP_List_Table {
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = [ $columns, $hidden, $sortable ];
 
-		$per_page = $this->get_items_per_page( 'vrts_tests_per_page', 20 );
-		$current_page = $this->get_pagenum();
-		$offset = ( $current_page - 1 ) * $per_page;
-
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list order parameter.
 		$order = isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ? 'ASC' : 'DESC';
 
@@ -309,8 +305,7 @@ class Tests_List_Table extends \WP_List_Table {
 		$filter_status_query = isset( $_REQUEST['status'] ) && '' !== $_REQUEST['status'] ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : null;
 
 		$args = [
-			'offset' => $offset,
-			'number' => $per_page,
+			'number' => -1,
 			'order' => $order,
 			'orderby' => $order_by,
 			's' => $search_query,
@@ -320,18 +315,6 @@ class Tests_List_Table extends \WP_List_Table {
 		// Process any bulk actions.
 		$this->process_bulk_action();
 		$this->items = Test::get_items( $args );
-
-		$total_items = 0;
-		if ( null !== $args['filter_status'] ) {
-			$total_items = Test::get_total_items( $filter_status_query );
-		} else {
-			$total_items = Test::get_total_items();
-		}
-
-		$this->set_pagination_args([
-			'total_items' => $total_items,
-			'per_page' => $per_page,
-		]);
 	}
 
 	/**
