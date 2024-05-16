@@ -62,7 +62,11 @@ if ( $data['run_tests_checked'] ) {
 	<div class="vrts-testing-status-wrapper">
 		<p class="vrts-testing-status">
 			<span><?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?></span>
-			<span class="vrts-testing-status-info"><?php echo wp_kses_post( $screenshot['text'] ); ?></span>
+			<span class="vrts-testing-status-info">
+				<?php
+					$text = in_array( $screenshot['status'], [ 'paused', 'waiting' ], true ) ? $screenshot['text'] : $screenshot['instructions'];
+					echo wp_kses_post( $text );
+				?>
 			</span>
 		</p>
 		<figure class="figure">

@@ -221,7 +221,11 @@ const Metabox = () => {
 								className="vrts-testing-status-info"
 								dangerouslySetInnerHTML={ {
 									// This is safe because the content is sanitized in PHP.
-									__html: screenshot.text,
+									__html: [ 'paused', 'waiting' ].includes(
+										screenshot.status
+									)
+										? screenshot.text
+										: screenshot.instructions,
 								} }
 							/>
 						</p>
