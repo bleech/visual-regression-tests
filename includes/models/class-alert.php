@@ -22,6 +22,7 @@ class Alert {
 		$alerts_table = Alerts_Table::get_table_name();
 
 		$defaults = [
+			's' => '',
 			'number' => 20,
 			'offset' => 0,
 			'orderby' => 'id',
@@ -43,7 +44,7 @@ class Alert {
 			$alert_states
 		);
 
-		if ( null !== $args['s'] ) {
+		if ( '' !== $args['s'] ) {
 			$where .= $wpdb->prepare(
 				' AND title LIKE %s',
 				'%' . $wpdb->esc_like( $args['s'] ) . '%'
