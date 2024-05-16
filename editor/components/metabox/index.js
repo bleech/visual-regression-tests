@@ -196,6 +196,12 @@ const Metabox = () => {
 				<>
 					<div className="vrts-testing-status-wrapper">
 						<p className="vrts-testing-status">
+							<span>
+								{ __(
+									'Test Status',
+									'visual-regression-tests'
+								) }
+							</span>
 							<strong>
 								<span
 									className={ `vrts-testing-status--${ testStatus.class }` }
@@ -203,14 +209,14 @@ const Metabox = () => {
 									{ testStatus.text }
 								</span>
 							</strong>
-							<span
-								className="vrts-testing-status-info"
-								dangerouslySetInnerHTML={ {
-									// This is safe because the content is sanitized in PHP.
-									__html: testStatus.instructions,
-								} }
-							/>
 						</p>
+						<p
+							className="vrts-testing-status-info"
+							dangerouslySetInnerHTML={ {
+								// This is safe because the content is sanitized in PHP.
+								__html: testStatus.instructions,
+							} }
+						/>
 					</div>
 					<div className="vrts-testing-status-wrapper">
 						<p className="vrts-testing-status">
