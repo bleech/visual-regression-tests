@@ -138,7 +138,7 @@ class Settings_Page {
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => '',
-			'placeholder' => esc_html__( 'e.g.: #data-cookie-accept', 'visual-regression-tests' ),
+			'placeholder' => esc_html__( 'e.g.: #accept-cookies', 'visual-regression-tests' ),
 		]);
 
 		vrts()->settings()->add_section([
