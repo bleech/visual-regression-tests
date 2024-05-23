@@ -315,6 +315,18 @@ class Tests_List_Table extends \WP_List_Table {
 		// Process any bulk actions.
 		$this->process_bulk_action();
 		$this->items = Test::get_items( $args );
+
+		$total_items = 0;
+		if ( null !== $args['filter_status'] ) {
+			$total_items = Test::get_total_items( $filter_status_query );
+		} else {
+			$total_items = Test::get_total_items();
+		}
+
+		$this->set_pagination_args([
+			'total_items' => $total_items,
+			'per_page' => 100000, // we set it to a high number to avoid pagination.
+		]);
 	}
 
 	/**
