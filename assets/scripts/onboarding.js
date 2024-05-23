@@ -60,14 +60,12 @@ if ( window.vrts_admin_vars.onboarding ) {
 			const hasNextStep = steps[ state.activeIndex + 1 ];
 
 			if ( ! hasNextStep ) {
-				saveOnboarding();
 				onboarding.destroy();
 			} else {
 				onboarding.moveNext();
 			}
 		},
 		onCloseClick: () => {
-			saveOnboarding();
 			onboarding.destroy();
 		},
 		steps: window.vrts_admin_vars.onboarding.steps.map( ( step ) => {
@@ -84,6 +82,7 @@ if ( window.vrts_admin_vars.onboarding ) {
 	} );
 
 	onboarding.drive();
+	saveOnboarding();
 }
 
 async function saveOnboarding() {
