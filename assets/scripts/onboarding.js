@@ -17,7 +17,7 @@ if ( window.vrts_admin_vars.onboarding ) {
 		popoverClass: isHighlight
 			? 'vrts-onboarding-nonblocking'
 			: 'vrts-onboarding',
-		disableActiveInteraction: ! isHighlight,
+		disableActiveInteraction: false,
 		progressText: __(
 			'{{current}} of {{total}}',
 			'visual-regression-tests'
