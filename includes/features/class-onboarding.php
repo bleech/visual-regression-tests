@@ -139,12 +139,6 @@ class Onboarding {
 						'align' => 'center',
 						'element' => '#post-body-content .postbox-header',
 						'title' => wp_kses_post( __( 'Compare Changes', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'Explore detected changes between versions.', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'right',
-						'element' => '#post-body .navigation',
-						'title' => wp_kses_post( __( 'Choose your view', 'visual-regression-tests' ) ),
 						'description' => wp_kses_post( __( 'To check the alert, utilize our <strong>difference, split</strong>, and <strong>side-by-side views</strong> to pinpoint the visual difference accurately.', 'visual-regression-tests' ) ),
 					],
 					[
@@ -159,7 +153,7 @@ class Onboarding {
 						'padding' => 10,
 						'element' => '#delete-action',
 						'title' => wp_kses_post( __( 'Mark as false positive', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'If this alert was <strong>triggered by a harmless visual change.</strong> <br><br><strong>Once flagged, this alert will not reappear.</strong>', 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'You may <strong>stop this alert from happening again</strong>. Mark it as a false positive and the plugin will filter out matching alerts for you.', 'visual-regression-tests' ) ),
 					],
 					[
 						'side' => 'left',
