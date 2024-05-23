@@ -125,6 +125,21 @@ The VRTs plugin primarily supports WordPress pages and posts. Automated visual t
 * Set up a redirect from this page to your desired URL.
 * Configure a test for this page. The screenshotter will follow the redirect.
 
+= My screenshots only contain a block screen from my firewall. What can I do? =
+
+If you are using a firewall that blocks our screenshot service, you can whitelist the IP addresses of our service.
+
+For Cloudflare, you can whitelist the IP addresses of our service by following these steps:
+
+1. Log in to your Cloudflare account.
+2. Go to **Security -> WAF**.
+3. Click on **Tools**.
+4. In the **IP Access Rules** box enter the IP address (`49.13.14.240`) of our service.
+5. Select **Allow** from the action dropdown.
+6. Enter VRTs as the note.
+7. Click on the **Add** button.
+
+
 == Installation ==
 
 = INSTALL VRTS WITHIN WORDPRESS =
