@@ -943,6 +943,16 @@ class Test {
 				if ( $test->last_comparison_date ) {
 					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $test->last_comparison_date );
 				}
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
+				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
+					$instructions .= sprintf(
+						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
+						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						$test->id,
+						esc_html__( 'Run Test', 'visual-regression-tests' ),
+						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
+					);
+				}
 				break;
 		}//end switch
 
