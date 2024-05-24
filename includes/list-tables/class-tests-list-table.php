@@ -325,7 +325,8 @@ class Tests_List_Table extends \WP_List_Table {
 
 		$this->set_pagination_args([
 			'total_items' => $total_items,
-			'per_page' => 100000, // we set it to a high number to avoid pagination.
+			// we set it to a high number to avoid pagination.
+			'per_page' => 100000,
 		]);
 	}
 

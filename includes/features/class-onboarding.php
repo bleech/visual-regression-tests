@@ -160,7 +160,7 @@ class Onboarding {
 						'padding' => 10,
 						'element' => '#publishing-action',
 						'title' => wp_kses_post( __( 'Archive your Alerts', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( "Organize your alerts by <strong>archiving</strong> them after review, for easy access and future reference.", 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'Organize your alerts by <strong>archiving</strong> them after review, for easy access and future reference.', 'visual-regression-tests' ) ),
 					],
 				],
 			],
