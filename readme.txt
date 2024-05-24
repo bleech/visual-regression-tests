@@ -2,8 +2,8 @@
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
-Tested up to: 6.4
-Stable tag: 1.8.0
+Tested up to: 6.5
+Stable tag: 1.9.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -184,6 +184,14 @@ For Cloudflare, follow these steps:
 
 
 == Changelog ==
+
+= 1.9.0 =
+* Test now run continuously and do not pause upon alerts.
+* Added onboarding for tests and alerts.
+* Fixed character encoding in alert emails.
+* Improved test status display inside the Gutenberg editor and classic metaboxes.
+* Removed pagination for tests.
+* Minor wording and styling changes.
 
 = 1.8.0 =
 * Added option to mark alerts as false positive.

@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.8.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 1.9.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-03-13T10:11:06+00:00\n"
+"POT-Creation-Date: 2024-05-24T12:10:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -190,11 +190,10 @@ msgstr ""
 #: components/alerts-page/views/alert-content.php:25
 #: components/alerts-page/views/alert-content.php:40
 #: components/alerts-page/views/alert-content.php:41
-#: components/metabox-classic-editor/index.php:61
 #: components/metabox-classic-editor/index.php:65
-#: components/metabox-classic-editor/index.php:68
 #: includes/list-tables/class-tests-list-table.php:96
-#: editor/components/screenshot/index.js:19
+#: includes/models/class-test.php:995
+#: editor/components/metabox/index.js:224
 msgid "Snapshot"
 msgstr ""
 
@@ -260,9 +259,9 @@ msgstr ""
 #: components/alerts-page/views/alerts-page-edit.php:77
 #: components/alerts-page/views/alerts-page-view.php:77
 #: includes/list-tables/class-alerts-list-table.php:76
-#: includes/list-tables/class-alerts-list-table.php:198
-#: includes/list-tables/class-alerts-list-table.php:208
-#: includes/list-tables/class-alerts-list-table.php:222
+#: includes/list-tables/class-alerts-list-table.php:199
+#: includes/list-tables/class-alerts-list-table.php:209
+#: includes/list-tables/class-alerts-list-table.php:220
 msgid "%s pixel"
 msgid_plural "%s pixels"
 msgstr[0] ""
@@ -273,64 +272,54 @@ msgid "Info:"
 msgstr ""
 
 #: components/alerts-page/views/alerts-page-edit.php:87
-msgid "Testing is paused until alert gets resolved."
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:89
 msgid "Testing is disconnected until connection with the service is fixed."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:104
+#: components/alerts-page/views/alerts-page-edit.php:102
 #: components/alerts-page/views/alerts-page-view.php:89
-#: includes/features/class-onboarding.php:88
 msgid "Mark as false positive"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:106
-#: components/alerts-page/views/alerts-page-edit.php:117
+#: components/alerts-page/views/alerts-page-edit.php:104
+#: components/alerts-page/views/alerts-page-edit.php:115
 #: components/alerts-page/views/alerts-page-view.php:93
 msgid "Go Back"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:110
+#: components/alerts-page/views/alerts-page-edit.php:108
 #: includes/list-tables/class-alerts-list-table.php:165
-#: includes/list-tables/class-alerts-list-table.php:268
-msgid "Resolve"
+#: includes/list-tables/class-alerts-list-table.php:266
+msgid "Archive"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:131
-#: components/metabox-classic-editor/index.php:82
+#: components/alerts-page/views/alerts-page-edit.php:129
 #: includes/features/class-admin.php:43
 #: includes/features/class-settings-page.php:33
 #: includes/features/class-settings-page.php:34
 #: includes/features/class-settings-page.php:48
-#: editor/components/settings/index.js:26
 msgid "Settings"
 msgstr ""
 
 #. translators: %1$s, %2$s: strong element wrapper.
-#: components/alerts-page/views/alerts-page-edit.php:144
-#: includes/list-tables/class-tests-list-table.php:385
+#: components/alerts-page/views/alerts-page-edit.php:142
+#: includes/list-tables/class-tests-list-table.php:376
 msgid "%1$sExclude elements on this page:%2$s "
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
-#. translators: %s name of the page
-#: components/alerts-page/views/alerts-page-edit.php:149
-#: components/metabox-classic-editor/index.php:88
-#: includes/list-tables/class-tests-list-table.php:391
-#: editor/components/settings/index.js:49
+#: components/alerts-page/views/alerts-page-edit.php:147
+#: includes/list-tables/class-tests-list-table.php:382
 msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:155
-#: components/metabox-classic-editor/index.php:94
-#: includes/list-tables/class-tests-list-table.php:380
-#: editor/components/settings/index.js:30
+#: components/alerts-page/views/alerts-page-edit.php:153
+#: components/metabox-classic-editor/index.php:98
+#: includes/list-tables/class-tests-list-table.php:371
+#: editor/components/settings/index.js:54
 msgid "e.g.: .lottie, #ads"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:163
+#: components/alerts-page/views/alerts-page-edit.php:161
 msgid "Save"
 msgstr ""
 
@@ -357,62 +346,31 @@ msgid "Unmark as false positive"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:15
-msgid "Run tests"
-msgstr ""
-
-#: components/metabox-classic-editor/index.php:17
-#: editor/components/metabox/index.js:171
-msgid "Activate tests to get alerted about visual differences in comparison to the snapshot."
-msgstr ""
-
-#: components/metabox-classic-editor/index.php:41
-#: includes/features/class-admin-columns.php:48
-#: editor/components/metabox/index.js:189
-msgid "Status"
-msgstr ""
-
-#: components/metabox-classic-editor/index.php:46
-#: includes/list-tables/class-tests-list-table.php:257
 #: editor/components/metabox/index.js:162
-msgid "Paused"
+msgid "Add to VRTs"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:48
-#: includes/list-tables/class-tests-list-table.php:475
-#: includes/list-tables/class-tests-list-table.php:487
-#: editor/components/metabox/index.js:164
-msgid "Disabled"
+#. translators: %1$s, %2$s: link wrapper.
+#: components/metabox-classic-editor/index.php:23
+#: editor/components/metabox/index.js:182
+msgid "Add this page to your Visual Regression Tests for consistent checks to ensure no visual changes go unnoticed. Explore the %1$sTests page%2$s in the VRTs plugin for an overview of all tests and their status."
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:50
-#: includes/list-tables/class-tests-list-table.php:252
-#: editor/components/metabox/index.js:160
-msgid "Running"
+#: components/metabox-classic-editor/index.php:55
+#: includes/list-tables/class-tests-list-table.php:97
+#: editor/components/metabox/index.js:200
+msgid "Test Status"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:64
-#: editor/components/screenshot/index.js:28
-msgid "View full snapshot image in new tab"
+#: components/metabox-classic-editor/index.php:81
+#: editor/components/settings/index.js:26
+msgid "Hide elements from VRTs"
 msgstr ""
 
-#: components/metabox-classic-editor/index.php:72
-#: editor/components/screenshot/index.js:58
-msgid "Snapshot created on"
-msgstr ""
-
-#: components/metabox-classic-editor/index.php:74
-#: editor/components/screenshot/index.js:67
-msgid "Snapshot: in progress"
-msgstr ""
-
-#: components/metabox-classic-editor/index.php:76
-#: editor/components/screenshot/index.js:75
-msgid "Snapshot gets auto-generated upon publishing or updating the page."
-msgstr ""
-
-#: components/metabox-classic-editor/index.php:85
+#. translators: %1$s, %2$s: link wrapper.
+#: components/metabox-classic-editor/index.php:89
 #: editor/components/settings/index.js:40
-msgid "Exclude elements on this page: "
+msgid "Exclude elements on this page: Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
 
 #: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
@@ -493,6 +451,10 @@ msgctxt "time format"
 msgid "g:i a"
 msgstr ""
 
+#: includes/features/class-admin-columns.php:48
+msgid "Status"
+msgstr ""
+
 #: includes/features/class-admin-columns.php:68
 msgid "Status: Running"
 msgstr ""
@@ -538,35 +500,110 @@ msgctxt "notification email subject"
 msgid "VRTs: Alert %1$s (%2$s)"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:37
+#: includes/features/class-email-notifications.php:30
 msgctxt "notification email"
 msgid "Howdy,"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:38
+#: includes/features/class-email-notifications.php:31
 msgctxt "notification email"
 msgid "New visual differences have been detected on the following page:"
 msgstr ""
 
-#: includes/features/class-email-notifications.php:40
+#: includes/features/class-email-notifications.php:33
 msgctxt "notification email"
-msgid "Review and resolve the alert to resume testing:"
+msgid "View the alert:"
 msgstr ""
 
 #. translators: %1$s: the home url
-#: includes/features/class-email-notifications.php:44
+#: includes/features/class-email-notifications.php:37
 msgctxt "notification email"
 msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/features/class-enqueue-scripts.php:108
 #: includes/features/class-metaboxes.php:125
-msgid "Resolve %1$salert%2$s to resume testing"
+msgid "%1$sView Alert%2$s"
 msgstr ""
 
-#: includes/features/class-onboarding.php:89
-msgid "If this alert was <strong>triggered by a harmless visual change.</strong> <br><br><strong>Once flagged, this alert will not reappear.</strong>"
+#: includes/features/class-onboarding.php:86
+msgid "👋 Howdy, welcome aboard!"
+msgstr ""
+
+#: includes/features/class-onboarding.php:87
+msgid "With our VRTs plugin, you can effortlessly maintain your website's visual consistency. <br><br><strong>Automatically detect visual changes</strong> and <strong>receive Alerts</strong> to achieve pixel-perfect precision."
+msgstr ""
+
+#: includes/features/class-onboarding.php:90
+msgid "⏰ Daily Checks, automatic Alerts"
+msgstr ""
+
+#: includes/features/class-onboarding.php:91
+msgid "Our <strong>daily Test Run</strong> takes screenshots of your <strong>Test pages</strong> and performs <strong>split-screen comparisons</strong>. <br><br>Rest assured, you'll be <strong>notified via email</strong>, as soon as a visual change is detected."
+msgstr ""
+
+#: includes/features/class-onboarding.php:98
+msgid "🚀 Let's get started!"
+msgstr ""
+
+#: includes/features/class-onboarding.php:99
+msgid "Add your first Test here to enable VRTs for the selected page."
+msgstr ""
+
+#: includes/features/class-onboarding.php:111
+msgid "🥳 Yay, you created your first VRT!"
+msgstr ""
+
+#: includes/features/class-onboarding.php:112
+msgid "Starting from tomorrow, your Test will <strong>run daily</strong>, ensuring consistent monitoring of your page."
+msgstr ""
+
+#: includes/features/class-onboarding.php:116
+msgid "🛠️ Fine-tune your setup"
+msgstr ""
+
+#: includes/features/class-onboarding.php:117
+msgid "Further customize your Test configuration and plugin settings for an optimized experience."
+msgstr ""
+
+#: includes/features/class-onboarding.php:128
+msgid "🔬 Run your Test now"
+msgstr ""
+
+#: includes/features/class-onboarding.php:129
+msgid "Want to see your Test in action? <br>Give it a go and run this Test now!"
+msgstr ""
+
+#: includes/features/class-onboarding.php:141
+msgid "🔍 Compare Changes"
+msgstr ""
+
+#: includes/features/class-onboarding.php:142
+msgid "Utilize the <strong>Difference, Split</strong>, and <strong>Side by Side views</strong> to accurately identify visual differences."
+msgstr ""
+
+#: includes/features/class-onboarding.php:148
+msgid "🛠️ Fine-tune Tests"
+msgstr ""
+
+#: includes/features/class-onboarding.php:149
+msgid "If the Alert is not accurate, <strong>adjust the Test setup by excluding elements</strong> from the page when the snapshot is created."
+msgstr ""
+
+#: includes/features/class-onboarding.php:155
+msgid "🚫 Mark as false positive"
+msgstr ""
+
+#: includes/features/class-onboarding.php:156
+msgid "You may <strong>stop this Alert from happening again</strong>. Mark it as a false positive and the plugin will filter out matching Alerts in the future."
+msgstr ""
+
+#: includes/features/class-onboarding.php:162
+msgid "📦 Archive your Alerts"
+msgstr ""
+
+#: includes/features/class-onboarding.php:163
+msgid "Organize your Alerts by <strong>archiving</strong> them after review, for easy access and future reference."
 msgstr ""
 
 #: includes/features/class-settings-page.php:73
@@ -604,7 +641,7 @@ msgid "Email address(es)"
 msgstr ""
 
 #: includes/features/class-settings-page.php:125
-msgid "Click an element before creating a snapshot"
+msgid "Click Element"
 msgstr ""
 
 #. translators: %s: link wrapper.
@@ -617,7 +654,7 @@ msgid "Useful to accept cookie banners or anything else that should be clicked a
 msgstr ""
 
 #: includes/features/class-settings-page.php:141
-msgid "e.g.: [data-cookie-accept]"
+msgid "e.g.: #accept-cookies"
 msgstr ""
 
 #: includes/features/class-settings-page.php:153
@@ -655,7 +692,7 @@ msgstr ""
 
 #: includes/features/class-tests-page.php:308
 #: includes/list-tables/class-alerts-list-table.php:80
-#: includes/list-tables/class-tests-list-table.php:569
+#: includes/models/class-test.php:1003
 msgid "In progress"
 msgstr ""
 
@@ -723,7 +760,7 @@ msgid "Delete this alert permanently"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:139
-#: includes/list-tables/class-alerts-list-table.php:263
+#: includes/list-tables/class-alerts-list-table.php:261
 msgid "Delete permanently"
 msgstr ""
 
@@ -743,37 +780,33 @@ msgid "Edit"
 msgstr ""
 
 #: includes/list-tables/class-alerts-list-table.php:164
-msgid "Resolve this alert"
+msgid "Archive this alert"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:199
-msgid "False Positive"
+#: includes/list-tables/class-alerts-list-table.php:200
+msgid "False positive"
+msgstr ""
+
+#: includes/list-tables/class-alerts-list-table.php:213
+#: includes/models/class-test.php:892
+msgid "View Alert"
 msgstr ""
 
 #. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:211
-msgid "Tests on %1$spage%2$s are %3$spaused%4$s"
-msgstr ""
-
-#. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:225
+#: includes/list-tables/class-alerts-list-table.php:223
 msgid "Tests on %1$spage%2$s are %3$snot running until connection with the service is fixed.%4$s"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:332
-msgid "Open"
+#: includes/list-tables/class-alerts-list-table.php:330
+msgid "New"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:337
-msgid "Resolved"
+#: includes/list-tables/class-alerts-list-table.php:335
+msgid "Archived"
 msgstr ""
 
 #: includes/list-tables/class-tests-list-table.php:46
 msgid "No tests found."
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:97
-msgid "Test Status"
 msgstr ""
 
 #: includes/list-tables/class-tests-list-table.php:118
@@ -804,6 +837,10 @@ msgid "Disable Testing"
 msgstr ""
 
 #: includes/list-tables/class-tests-list-table.php:181
+#: includes/models/class-test.php:934
+#: includes/models/class-test.php:935
+#: includes/models/class-test.php:952
+#: includes/models/class-test.php:953
 msgid "Run Test"
 msgstr ""
 
@@ -811,80 +848,77 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:377
-msgid "Quick Edit"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:454
-msgid "Disconnected"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:460
+#: includes/list-tables/class-tests-list-table.php:252
+#: includes/models/class-test.php:886
 msgid "Changes detected"
 msgstr ""
 
-#. translators: %1$s and %2$s: link wrapper.
-#: includes/list-tables/class-tests-list-table.php:467
-msgid "%1$s%2$s Resolve alert%3$s to resume test"
+#: includes/list-tables/class-tests-list-table.php:368
+msgid "Quick Edit"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:468
-msgid "Edit the alert"
+#: includes/models/class-test.php:881
+msgid "Disconnected"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/list-tables/class-tests-list-table.php:480
+#: includes/models/class-test.php:891
+msgid "%1$s%2$s View Alert%3$s"
+msgstr ""
+
+#: includes/models/class-test.php:899
+#: includes/models/class-test.php:910
+msgid "Disabled"
+msgstr ""
+
+#. translators: %1$s and %2$s: link wrapper.
+#: includes/models/class-test.php:903
 msgid "%1$sUpgrade plugin%2$s to resume testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:481
+#: includes/models/class-test.php:904
 msgid "Upgrade plugin"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:489
+#: includes/models/class-test.php:911
 msgid "Publish post to resume testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:493
+#: includes/models/class-test.php:915
 msgid "Waiting"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:498
+#: includes/models/class-test.php:919
 msgid "In Progress"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:500
+#: includes/models/class-test.php:920
 msgid "Refresh page to see result"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:504
+#: includes/models/class-test.php:924
 msgid "Scheduled"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:515
-#: includes/list-tables/class-tests-list-table.php:516
-#: includes/list-tables/class-tests-list-table.php:534
-#: includes/list-tables/class-tests-list-table.php:535
-msgid "Run test now"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:523
+#: includes/models/class-test.php:942
 msgid "Passed"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:566
+#: includes/models/class-test.php:1000
 msgid "On hold"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:574
+#: includes/models/class-test.php:1006
 msgid "Refresh page to see snapshot"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:583
+#: includes/models/class-test.php:1015
+#: includes/models/class-test.php:1023
 msgid "View this snapshot"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:584
+#: includes/models/class-test.php:1016
+#: includes/models/class-test.php:1025
 msgid "View Snapshot"
 msgstr ""
 
@@ -909,7 +943,7 @@ msgid "Signature is not valid."
 msgstr ""
 
 #: includes/rest-api/class-rest-service-controller.php:133
-#: includes/services/class-test-service.php:433
+#: includes/services/class-test-service.php:438
 msgid "Test not found."
 msgstr ""
 
@@ -937,66 +971,57 @@ msgstr ""
 msgid "The test could not be updated."
 msgstr ""
 
-#: includes/services/class-test-service.php:141
+#: includes/services/class-test-service.php:146
 msgid "Post not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:158
-#: includes/services/class-test-service.php:236
-#: includes/services/class-test-service.php:283
-#: includes/services/class-test-service.php:342
-#: includes/services/class-test-service.php:446
+#: includes/services/class-test-service.php:163
+#: includes/services/class-test-service.php:241
+#: includes/services/class-test-service.php:288
+#: includes/services/class-test-service.php:347
+#: includes/services/class-test-service.php:451
 msgid "Service is not connected."
 msgstr ""
 
-#: includes/services/class-test-service.php:160
-#: includes/services/class-test-service.php:238
+#: includes/services/class-test-service.php:165
+#: includes/services/class-test-service.php:243
 msgid "Error creating test."
 msgstr ""
 
-#: includes/services/class-test-service.php:184
+#: includes/services/class-test-service.php:189
 msgid "Posts not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:280
+#: includes/services/class-test-service.php:285
 msgid "Service could not create test."
 msgstr ""
 
-#: includes/services/class-test-service.php:336
+#: includes/services/class-test-service.php:341
 msgid "Plugin could not save tests."
 msgstr ""
 
-#: includes/services/class-test-service.php:339
+#: includes/services/class-test-service.php:344
 msgid "Service could not create tests."
 msgstr ""
 
-#: includes/services/class-test-service.php:443
+#: includes/services/class-test-service.php:448
 msgid "Service could not update test."
 msgstr ""
 
-#: assets/scripts/onboarding.js:18
+#: assets/scripts/onboarding.js:21
 msgid "{{current}} of {{total}}"
 msgstr ""
 
-#: assets/scripts/onboarding.js:22
-msgid "Next"
-msgstr ""
-
-#: assets/scripts/onboarding.js:23
+#: assets/scripts/onboarding.js:25
 msgid "Previous"
 msgstr ""
 
-#: assets/scripts/onboarding.js:24
+#: assets/scripts/onboarding.js:26
+msgid "Next"
+msgstr ""
+
+#: assets/scripts/onboarding.js:27
 msgid "Got it!"
-msgstr ""
-
-#: editor/components/metabox/index.js:170
-msgid "Run Tests"
-msgstr ""
-
-#: editor/components/screenshot/index.js:37
-#: editor/components/screenshot/index.js:48
-msgid "Visual Regression current state"
 msgstr ""
 
 #: editor/plugins/index.js:50
