@@ -1,17 +1,17 @@
 .driver {
 
-	&-active-element {
+	&-no-interaction {
 		pointer-events: none;
 	}
 
 	&-overlay {
-		animation: onboading-animate 0.2s ease-in-out;
+		animation: vrts-onboarding-animate 0.2s ease-in-out;
 		pointer-events: none;
 	}
 
 	&-popover {
 		all: unset;
-		animation: onboading-animate 0.2s;
+		animation: vrts-onboarding-animate 0.2s;
 		box-sizing: border-box;
 		background-color: #fff;
 		color: #1e1e1e;
@@ -19,9 +19,9 @@
 		padding: 15px;
 		border-radius: 2px;
 		min-width: 250px;
-		max-width: 350px;
-		box-shadow: 4px 4px 4px 0 rgba(30, 30, 30, 0.12);
-		z-index: 1000000000;
+		max-width: 345px;
+		box-shadow: 2px 2px 8px 4px rgba(30, 30, 30, 0.12);
+		z-index: 100099;
 		position: fixed;
 		top: 0;
 		right: 0;
@@ -164,22 +164,22 @@
 
 		&-side-left.driver-popover-arrow-align-start,
 		&-side-right.driver-popover-arrow-align-start {
-			top: 20px;
+			top: 8px;
 		}
 
 		&-side-top.driver-popover-arrow-align-start,
 		&-side-bottom.driver-popover-arrow-align-start {
-			left: 20px;
+			left: 8px;
 		}
 
 		&-align-end.driver-popover-arrow-side-left,
 		&-align-end.driver-popover-arrow-side-right {
-			bottom: 20px;
+			bottom: 8px;
 		}
 
 		&-side-top.driver-popover-arrow-align-end,
 		&-side-bottom.driver-popover-arrow-align-end {
-			right: 20px;
+			right: 8px;
 		}
 
 		&-side-left.driver-popover-arrow-align-center,
@@ -196,7 +196,11 @@
 	}
 }
 
-@keyframes onboading-animate {
+.vrts-onboarding-nonblocking ~ .driver-overlay {
+	display: none;
+}
+
+@keyframes vrts-onboarding-animate {
 
 	0% {
 		opacity: 0;

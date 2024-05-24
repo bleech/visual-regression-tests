@@ -90,7 +90,7 @@
 										<?php endif; ?>
 									</div>
 									<div id="publishing-action">
-										<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts&status=resolved' ) ); ?>"><?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?></a>
+										<a class="button button-secondary" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts&status=archived' ) ); ?>"><?php esc_html_e( 'Go Back', 'visual-regression-tests' ); ?></a>
 									</div>
 									<div class="clear"></div>
 								</div>

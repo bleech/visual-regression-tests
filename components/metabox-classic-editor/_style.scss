@@ -13,42 +13,8 @@
 		}
 	}
 
-	.testing-status {
-		display: flex;
-		justify-content: space-between;
-		gap: 1rem;
-		margin-bottom: 0;
-
-		&--paused {
-			color: $alert-red;
-		}
-
-		&--running {
-			color: $alert-green;
-		}
-
-		&-wrapper {
-			margin: 1.5rem 0;
-
-			> :first-child {
-				margin-top: 0;
-			}
-
-			> :last-child {
-				margin-bottom: 0;
-			}
-
-			.howto {
-				margin-top: 0.25rem;
-				font-size: 0.75rem;
-				color: $gray-700;
-			}
-		}
-	}
-
 	.figure {
 		margin: 0;
-		aspect-ratio: 16/9;
 
 		&-link {
 			outline: none;
@@ -60,6 +26,7 @@
 		}
 
 		&-image {
+			aspect-ratio: 16/9;
 			border: solid 1px #bfbfbf;
 			width: 100%;
 			height: 100%;
@@ -72,22 +39,60 @@
 		}
 	}
 
-	.howto-run-tests {
-		margin-top: 0.5rem;
-		margin-top: 0.25rem;
-		font-size: 0.75rem;
-		color: $gray-700;
+	.vrts-testing-status {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0;
+
+		&--paused {
+			color: $alert-red;
+		}
+
+		&--waiting {
+			color: $alert-yellow;
+		}
+
+		&--running {
+			color: $alert-green;
+		}
+
+		&-wrapper {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+			margin: 1.5rem 0;
+
+			> * {
+				margin: 0;
+			}
+
+			.dashicons {
+				display: none;
+			}
+		}
+
+		&-info {
+			display: flex;
+			justify-content: space-between;
+			gap: 5px;
+			font-size: 0.75rem;
+			color: $gray-700;
+		}
 	}
 
 	.settings {
 
 		&-title {
 			margin-bottom: 0.5rem;
+			display: flex;
+			gap: 0.5rem;
+			justify-content: space-between;
+			align-items: center;
 		}
 
 		textarea {
 			width: 100%;
-			margin-top: 0.5rem;
 		}
 	}
 }

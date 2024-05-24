@@ -122,7 +122,7 @@ class Metaboxes {
 			$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
 			$testing_status_instructions .= sprintf(
 				/* translators: %1$s and %2$s: link wrapper. */
-				esc_html__( 'Resolve %1$salert%2$s to resume testing', 'visual-regression-tests' ),
+				esc_html__( '%1$sView Alert%2$s', 'visual-regression-tests' ),
 				'<a href="' . esc_url( $base_link . $alert_id ) . '">',
 				'</a>'
 			);
@@ -134,18 +134,19 @@ class Metaboxes {
 		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
+			'plugin_url' => admin_url( 'admin.php?page=vrts' ),
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
-			'test_status' => (bool) Test::get_status( $post_id ),
 			'base_screenshot_url' => Test::get_base_screenshot_url( $post_id ),
 			'base_screenshot_date' => $base_screenshot_date,
 			'testing_status_instructions' => $testing_status_instructions,
-			'placeholder_image_data_url' => vrts()->get_snapshot_placeholder_image(),
 			'is_new_test' => self::is_new_test( $post_id ),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 			'total_tests' => Subscription::get_total_tests(),
 			'is_connected' => Service::is_connected(),
+			'test_status' => Test::get_status_data( $test ),
+			'screenshot' => Test::get_screenshot_data( $test ),
 			'test_settings' => [
 				'test_id' => isset( $test->id ) ? $test->id : null,
 				'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,

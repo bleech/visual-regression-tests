@@ -24,8 +24,8 @@ class Post_Update_Actions {
 	 * @param int $post_id Post ID.
 	 */
 	public function resume_test( $post_id ) {
-		// If post has test and no active alerts, update the screenshot to the latest version.
-		if ( Test::get_item_id( $post_id ) && ! Test::has_post_alert( $post_id ) ) {
+		// If post has test, update the screenshot to the latest version.
+		if ( Test::get_item_id( $post_id ) ) {
 			$service = new Test_Service();
 			$service->resume_test( $post_id );
 		}
@@ -41,11 +41,8 @@ class Post_Update_Actions {
 		$test_id = Test::get_item_id( $post_id );
 		if ( $test_id ) {
 			Test::delete( $test_id );
-			// If an alert exists already, resolve it too.
-			$alert_id = Alert::get_alert_id_by_post_id( $post_id, 0 );
-			if ( $alert_id ) {
-				Alert::set_alert_state( $alert_id, 1 );
-			}
+			// If an alert exists already, archive it too.
+			Alert::set_alert_state_for_post_id( $post_id, 1 );
 		}
 	}
 

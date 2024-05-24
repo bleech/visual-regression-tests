@@ -1,12 +1,11 @@
 // Native
-import { ToggleControl } from '@wordpress/components';
+import { Flex, Icon, ToggleControl } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
 import { select, subscribe } from '@wordpress/data';
-import { __ } from '@wordpress/i18n';
-import DOMPurify from 'dompurify';
+import { info as infoIcon } from '@wordpress/icons';
+import { __, sprintf } from '@wordpress/i18n';
 
 // Custom
-import Screenshot from 'editor/components/screenshot';
 import {
 	NotificationNewTestAdded,
 	NotificationUnlockMoreTests,
@@ -20,10 +19,8 @@ import apiFetch from '@wordpress/api-fetch';
 const Metabox = () => {
 	const upgradeUrl = window.vrts_editor_vars.upgrade_url;
 	const pluginUrl = window.vrts_editor_vars.plugin_url;
-	const testingStatusInstructions =
-		window.vrts_editor_vars.testing_status_instructions;
-	const placeholderImageDataUrl =
-		window.vrts_editor_vars.placeholder_image_data_url;
+	const testStatus = window.vrts_editor_vars.test_status;
+	const screenshot = window.vrts_editor_vars.screenshot;
 
 	const postId = select( 'core/editor' ).getCurrentPostId();
 	const [ postStatus, setPostStatus ] = useState(
@@ -66,6 +63,7 @@ const Metabox = () => {
 				method: 'DELETE',
 			} );
 			setTest( response || {} );
+			setNewTest( false );
 			if ( previousServiceTestId ) {
 				setCredits( {
 					...credits,
@@ -157,66 +155,95 @@ const Metabox = () => {
 		return <NotificationConnectionFailed pluginUrl={ pluginUrl } />;
 	}
 
-	let testingStatusText = __( 'Running', 'visual-regression-tests' );
-	if ( test.current_alert_id ) {
-		testingStatusText = __( 'Paused', 'visual-regression-tests' );
-	} else if ( ! test.status ) {
-		testingStatusText = __( 'Disabled', 'visual-regression-tests' );
-	}
-
 	return (
 		<>
-			<ToggleControl
-				label={ __( 'Run Tests', 'visual-regression-tests' ) }
-				help={ __(
-					'Activate tests to get alerted about visual differences in comparison to the snapshot.',
-					'visual-regression-tests'
-				) }
-				checked={ test.id ? true : false }
-				onChange={ test.id ? deleteTest : createTest }
-				disabled={
-					disabled ||
-					loading ||
-					( credits.remaining_tests === 0 && ! test.id )
-				}
-			/>
+			<Flex gap={ 3 } style={ { marginBottom: 12 } }>
+				<ToggleControl
+					label={ __( 'Add to VRTs', 'visual-regression-tests' ) }
+					checked={ test.id ? true : false }
+					onChange={ test.id ? deleteTest : createTest }
+					disabled={
+						disabled ||
+						loading ||
+						( credits.remaining_tests === 0 && ! test.id )
+					}
+					__nextHasNoMarginBottom={ true }
+				/>
+				<span className="vrts-tooltip">
+					<span className="vrts-tooltip-icon">
+						<Icon icon={ infoIcon } size="20" />
+					</span>
+					<span className="vrts-tooltip-content">
+						<span
+							className="vrts-tooltip-content-inner"
+							dangerouslySetInnerHTML={ {
+								__html: sprintf(
+									// translators: %1$s, %2$s: link wrapper.
+									__(
+										'Add this page to your Visual Regression Tests for consistent checks to ensure no visual changes go unnoticed. Explore the %1$sTests page%2$s in the VRTs plugin for an overview of all tests and their status.',
+										'visual-regression-tests'
+									),
+									'<a href="' + pluginUrl + '">',
+									'</a>'
+								),
+							} }
+						></span>
+					</span>
+				</span>
+			</Flex>
 			{ metaboxNotification }
 			{ test.id && (
 				<>
-					<div className="testing-status-wrapper">
-						<p className="testing-status">
+					<div className="vrts-testing-status-wrapper">
+						<p className="vrts-testing-status">
 							<span>
-								{ __( 'Status', 'visual-regression-tests' ) }
+								{ __(
+									'Test Status',
+									'visual-regression-tests'
+								) }
 							</span>
 							<strong>
 								<span
-									className={
-										test.current_alert_id || test.status
-											? 'testing-status--running'
-											: 'testing-status--paused'
-									}
+									className={ `vrts-testing-status--${ testStatus.class }` }
 								>
-									{ testingStatusText }
+									{ testStatus.text }
 								</span>
 							</strong>
 						</p>
 						<p
-							className="howto"
+							className="vrts-testing-status-info"
 							dangerouslySetInnerHTML={ {
-								__html: DOMPurify.sanitize(
-									testingStatusInstructions
-								),
+								// This is safe because the content is sanitized in PHP.
+								__html: testStatus.instructions,
 							} }
-						></p>
+						/>
+					</div>
+					<div className="vrts-testing-status-wrapper">
+						<p className="vrts-testing-status">
+							<span>
+								{ __( 'Snapshot', 'visual-regression-tests' ) }
+							</span>
+							<span
+								className="vrts-testing-status-info"
+								dangerouslySetInnerHTML={ {
+									// This is safe because the content is sanitized in PHP.
+									__html: [ 'paused', 'waiting' ].includes(
+										screenshot.status
+									)
+										? screenshot.text
+										: screenshot.instructions,
+								} }
+							/>
+						</p>
+						<figure
+							className="figure"
+							dangerouslySetInnerHTML={ {
+								// This is safe because the content is sanitized in PHP.
+								__html: screenshot.screenshot,
+							} }
+						/>
 					</div>
 				</>
-			) }
-			{ test.id && !! test.status && (
-				<Screenshot
-					url={ test.base_screenshot_url }
-					placeholderUrl={ placeholderImageDataUrl }
-					finishDate={ test.base_screenshot_date }
-				/>
 			) }
 			{ test.id && (
 				<>

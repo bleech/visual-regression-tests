@@ -2,7 +2,11 @@
 
 .vrts_list_table_page {
 
-	.testing-status {
+	.vrts-testing-status {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		margin: 0;
 
 		&--paused {
 			color: $alert-red;
@@ -74,5 +78,63 @@
 
 	> :last-child {
 		margin-bottom: 0;
+	}
+}
+
+.vrts-tooltip {
+	position: relative;
+
+	&-icon {
+		color: $blue-50;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		&::before {
+			font-size: 1rem;
+		}
+
+		svg {
+			fill: currentcolor;
+		}
+	}
+
+	&-content {
+		display: block;
+		position: absolute;
+		visibility: hidden;
+		padding: 0.5rem;
+		width: 240px;
+		z-index: 1000002;
+		top: -10px;
+		right: 20px;
+	}
+
+	&-content-inner {
+		display: block;
+		background: #000;
+		border-radius: 2px;
+		color: #f0f0f0;
+		font-size: 12px;
+		line-height: 1.4;
+		padding: 0.725rem;
+
+		a {
+			color: #fff;
+		}
+	}
+
+	&:hover &-content {
+		visibility: visible;
+	}
+}
+
+.vrts-testing-toogle {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+
+	.vrts-tooltip {
+		margin-left: auto;
 	}
 }

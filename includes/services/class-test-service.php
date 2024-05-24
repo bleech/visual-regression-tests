@@ -27,15 +27,20 @@ class Test_Service {
 		$comparison = $data['comparison'];
 		if ( $comparison['screenshot']['image_url'] ?? null ) {
 			// Update test row with new id foreign key and add latest screenshot.
+			$update_data = [
+				'next_run_date' => $data['next_run_at'] ?? '',
+				'last_comparison_date' => $comparison['updated_at'],
+				'base_screenshot_url' => $comparison['screenshot']['image_url'],
+				'base_screenshot_date' => $comparison['screenshot']['updated_at'],
+				'is_running' => false,
+			];
+			if ( $alert_id ) {
+				$update_data['current_alert_id'] = $alert_id;
+			}
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			return $wpdb->update(
 				$table_test,
-				[
-					'current_alert_id' => $alert_id,
-					'next_run_date' => $data['next_run_at'] ?? '',
-					'last_comparison_date' => $comparison['updated_at'],
-					'is_running' => false,
-				],
+				$update_data,
 				[ 'service_test_id' => $test_id ]
 			);
 		}
@@ -84,7 +89,7 @@ class Test_Service {
 				$this->update_test_from_schedule( $test_id, $data );
 			} elseif ( $data['comparison'] ?? null ) {
 				$alert_id = null;
-				if ( $data['is_paused'] ?? null && $data['comparison']['pixels_diff'] > 1 ) {
+				if ( $data['comparison']['pixels_diff'] > 1 && ! $data['matches_false_positive'] ) {
 					$comparison = $data['comparison'];
 					$alert_service = new Alert_Service();
 					$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison );

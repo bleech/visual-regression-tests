@@ -10,21 +10,28 @@ if ( window.vrts_admin_vars.onboarding ) {
 	const onboarding = driver( {
 		overlayColor: 'rgba(44, 51, 56, 0.35)',
 		stageRadius: 0,
-		animate: false,
-		stagePadding: 10,
+		stagePadding: 0,
 		popoverOffset: 20,
 		allowClose: false,
 		showProgress: ! isHighlight,
+		popoverClass: isHighlight
+			? 'vrts-onboarding-nonblocking'
+			: 'vrts-onboarding',
+		disableActiveInteraction: false,
 		progressText: __(
 			'{{current}} of {{total}}',
 			'visual-regression-tests'
 		),
-		nextBtnText: __( 'Next', 'visual-regression-tests' ),
 		prevBtnText: __( 'Previous', 'visual-regression-tests' ),
+		nextBtnText: __( 'Next', 'visual-regression-tests' ),
 		doneBtnText: __( 'Got it!', 'visual-regression-tests' ),
 		onPopoverRender: ( popover, { config, state } ) => {
 			const steps = config.steps;
 			const hasNextStep = steps[ state.activeIndex + 1 ];
+
+			config.stagePadding =
+				window.vrts_admin_vars.onboarding.steps[ state.activeIndex ]
+					.padding || 0;
 
 			popover.previousButton.classList.add(
 				'button',
@@ -53,14 +60,12 @@ if ( window.vrts_admin_vars.onboarding ) {
 			const hasNextStep = steps[ state.activeIndex + 1 ];
 
 			if ( ! hasNextStep ) {
-				saveOnboarding();
 				onboarding.destroy();
 			} else {
 				onboarding.moveNext();
 			}
 		},
 		onCloseClick: () => {
-			saveOnboarding();
 			onboarding.destroy();
 		},
 		steps: window.vrts_admin_vars.onboarding.steps.map( ( step ) => {
@@ -77,6 +82,7 @@ if ( window.vrts_admin_vars.onboarding ) {
 	} );
 
 	onboarding.drive();
+	saveOnboarding();
 }
 
 async function saveOnboarding() {

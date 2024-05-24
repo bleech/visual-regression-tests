@@ -1,8 +1,8 @@
 import { __, sprintf } from '@wordpress/i18n';
-import { TextareaControl } from '@wordpress/components';
+import { Icon, TextareaControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
+import { info as infoIcon } from '@wordpress/icons';
 import { dispatch } from '@wordpress/data';
-import DOMPurify from 'dompurify';
 
 const Settings = ( { test = {} } ) => {
 	const [ testState, setTestState ] = useState( {
@@ -23,7 +23,31 @@ const Settings = ( { test = {} } ) => {
 		<>
 			<div className="settings">
 				<p className="settings-title">
-					{ __( 'Settings', 'visual-regression-tests' ) }
+					{ __(
+						'Hide elements from VRTs',
+						'visual-regression-tests'
+					) }
+					<span className="vrts-tooltip">
+						<span className="vrts-tooltip-icon">
+							<Icon icon={ infoIcon } size="20" />
+						</span>
+						<span className="vrts-tooltip-content">
+							<span
+								className="vrts-tooltip-content-inner"
+								dangerouslySetInnerHTML={ {
+									__html: sprintf(
+										/* translators: %1$s, %2$s: link wrapper. */
+										__(
+											'Exclude elements on this page: Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.',
+											'visual-regression-tests'
+										),
+										'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
+										'</a>'
+									),
+								} }
+							></span>
+						</span>
+					</span>
 				</p>
 
 				<TextareaControl
@@ -35,30 +59,6 @@ const Settings = ( { test = {} } ) => {
 					onChange={ ( value ) => {
 						updateTest( value );
 					} }
-					label={
-						<>
-							{ __(
-								'Exclude elements on this page: ',
-								'visual-regression-tests'
-							) }
-							<span
-								dangerouslySetInnerHTML={ {
-									__html: DOMPurify.sanitize(
-										sprintf(
-											/* translators: %s name of the page */
-											__(
-												'Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.',
-												'visual-regression-tests'
-											),
-											'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
-											'</a>'
-										),
-										{ ADD_ATTR: [ 'target' ] }
-									),
-								} }
-							/>
-						</>
-					}
 				/>
 			</div>
 		</>

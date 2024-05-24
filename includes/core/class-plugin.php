@@ -214,6 +214,9 @@ class Plugin {
 	 * @return string Desired plugin information.
 	 */
 	public function get_plugin_info( $info ) {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
 		$plugin = get_plugin_data( $this->plugin_file );
 
 		$infos = [

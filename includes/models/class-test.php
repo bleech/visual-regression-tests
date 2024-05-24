@@ -2,6 +2,7 @@
 
 namespace Vrts\Models;
 
+use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Tables\Alerts_Table;
@@ -16,10 +17,11 @@ class Test {
 	 * Get all test items from database
 	 *
 	 * @param array $args Optional.
+	 * @param bool  $return_count Optional.
 	 *
 	 * @return object
 	 */
-	public static function get_items( $args = [] ) {
+	public static function get_items( $args = [], $return_count = false ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
@@ -34,6 +36,7 @@ class Test {
 
 		$args = wp_parse_args( $args, $defaults );
 
+		$select = $return_count ? 'SELECT COUNT(*)' : 'SELECT *';
 		$where = 'WHERE 1=1';
 
 		if ( isset( $args['s'] ) && null !== $args['s'] ) {
@@ -44,13 +47,14 @@ class Test {
 		}
 
 		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
-			// current_alert_id IS NOT NULL = Pause.
-			if ( 'paused' === $args['filter_status'] ) {
-				$where .= ' AND tests.current_alert_id IS NOT NULL';
+			if ( 'changes-detected' === $args['filter_status'] ) {
+				$where .= " AND calculated_status = '6-has-alert'";
 			}
-			// current_alert_id IS NULL = Running.
-			if ( 'running' === $args['filter_status'] ) {
-				$where .= ' AND tests.current_alert_id IS NULL';
+			if ( 'passed' === $args['filter_status'] ) {
+				$where .= " AND calculated_status = '5-passed'";
+			}
+			if ( 'scheduled' === $args['filter_status'] ) {
+				$where .= " AND calculated_status = '4-scheduled'";
 			}
 		}
 
@@ -68,58 +72,64 @@ class Test {
 
 		$limit = $args['number'] > 100 ? 100 : $args['number'];
 
-		$limits = $wpdb->prepare(
-			'LIMIT %d, %d',
-			$args['offset'],
-			$limit
-		);
-
-		$is_connected = Service::is_connected() ? 'true' : 'false';
-		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0 ? 'true' : 'false';
+		if ( $args['number'] < 1 ) {
+			$limits = '';
+		} else {
+			$limits = $wpdb->prepare(
+				'LIMIT %d, %d',
+				$args['offset'],
+				$limit
+			);
+		}
 
 		$query = "
-			SELECT
-				tests.id,
-				tests.status,
-				tests.base_screenshot_date,
-				tests.post_id,
-				tests.current_alert_id,
-				tests.service_test_id,
-				tests.hide_css_selectors,
-				tests.next_run_date,
-				tests.last_comparison_date,
-				tests.is_running,
-				posts.post_title,
-				CASE
-					WHEN $is_connected is not true THEN '0-disconnected'
-					WHEN tests.current_alert_id is not null THEN '7-has-alert'
-					WHEN tests.status > 0 and $no_tests_left THEN '1-no_credit_left'
-					WHEN tests.service_test_id is null THEN '2-post_not_published'
-					WHEN tests.base_screenshot_date is null THEN '3-waiting'
-					WHEN tests.is_running > 0 THEN '4-running'
-					WHEN tests.last_comparison_date is null THEN '5-scheduled'
-					else '6-passed'
-				END as calculated_status,
-				CASE
-					WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
-					WHEN tests.status > 0 and $no_tests_left THEN tests.base_screenshot_date
-					WHEN tests.service_test_id is null THEN tests.base_screenshot_date
-					WHEN tests.base_screenshot_date is null THEN tests.base_screenshot_date
-					WHEN tests.is_running > 0 THEN tests.base_screenshot_date
-					WHEN tests.last_comparison_date is null THEN tests.next_run_date
-					else tests.last_comparison_date
-				END as calculated_date
-			FROM $tests_table as tests
-			INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
-			LEFT JOIN $alerts_table as alerts ON alerts.id = tests.current_alert_id
+			$select
+				FROM (
+					SELECT
+						tests.id,
+						tests.status,
+						tests.base_screenshot_date,
+						tests.post_id,
+						tests.current_alert_id,
+						tests.service_test_id,
+						tests.hide_css_selectors,
+						tests.next_run_date,
+						tests.last_comparison_date,
+						tests.is_running,
+						posts.post_title,
+						CASE
+							WHEN tests.current_alert_id is not null THEN '6-has-alert'
+							WHEN tests.service_test_id is null THEN '1-post-not-published'
+							WHEN tests.base_screenshot_date is null THEN '2-waiting'
+							WHEN tests.is_running > 0 THEN '3-running'
+							WHEN tests.last_comparison_date is null THEN '4-scheduled'
+							else '5-passed'
+						END as calculated_status,
+						CASE
+							WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
+							WHEN tests.service_test_id is null THEN tests.base_screenshot_date
+							WHEN tests.base_screenshot_date is null THEN tests.base_screenshot_date
+							WHEN tests.is_running > 0 THEN tests.base_screenshot_date
+							WHEN tests.last_comparison_date is null THEN tests.next_run_date
+							else tests.last_comparison_date
+						END as calculated_date
+					FROM $tests_table as tests
+					INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
+					LEFT JOIN $alerts_table as alerts ON alerts.id = tests.current_alert_id
+					GROUP BY tests.id
+				) tests
 			$where
-			GROUP BY tests.id
 			$orderby
 			$limits
 		";
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
-		$items = $wpdb->get_results( $query );
+		if ( $return_count ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
+			$items = $wpdb->get_var( $query );
+		} else {
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Query is prepared above.
+			$items = $wpdb->get_results( $query );
+		}
 
 		return $items;
 	}
@@ -137,7 +147,7 @@ class Test {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT * FROM $tests_table WHERE status != 0 AND current_alert_id IS NULL"
+			"SELECT * FROM $tests_table WHERE status != 0"
 		);
 	}
 
@@ -264,6 +274,27 @@ class Test {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT id FROM $tests_table WHERE post_id = %d",
 				$post_id
+			)
+		);
+	}
+
+	/**
+	 * Get autoincrement value
+	 *
+	 * @return int
+	 */
+	public static function get_autoincrement_value() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				'SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s',
+				DB_NAME,
+				$tests_table
 			)
 		);
 	}
@@ -456,24 +487,10 @@ class Test {
 	 * @return array
 	 */
 	public static function get_total_items( $filter_status_query = null ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-		$query = "SELECT COUNT(*) FROM $tests_table";
-
-		if ( null !== $filter_status_query ) {
-			// current_alert_id IS NOT NULL = Pause.
-			if ( 'paused' === $filter_status_query ) {
-				$query .= ' WHERE current_alert_id IS NOT NULL';
-			}
-			// current_alert_id IS NULL = Running.
-			if ( 'running' === $filter_status_query ) {
-				$query .= ' WHERE current_alert_id IS NULL';
-			}
-		}
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's prepared above
-		return (int) $wpdb->get_var( $query );
+		return (int) self::get_items( [
+			'number' => -1,
+			'filter_status' => $filter_status_query,
+		], true );
 	}
 
 	/**
@@ -603,6 +620,7 @@ class Test {
 	public static function set_alert( $post_id = 0, $alert_id = 0 ) {
 		global $wpdb;
 
+		$alert_id = 0 === $alert_id ? null : $alert_id;
 		$tests_table = Tests_Table::get_table_name();
 		$data = [ 'current_alert_id' => $alert_id ];
 		$where = [ 'post_id' => $post_id ];
@@ -633,6 +651,60 @@ class Test {
 		);
 
 		return $post_status;
+	}
+
+	/**
+	 * Get test calculated status
+	 *
+	 * @param int|object $test test id or test object.
+	 *
+	 * @return string
+	 */
+	public static function get_calculated_status( $test ) {
+		if ( is_int( $test ) ) {
+			$test = self::get_item( $test );
+		}
+
+		if ( ! Service::is_connected() ) {
+			return 'disconnected';
+		}
+
+		// If test doesn't exist set initial status to 'waiting'.
+		if ( ! isset( $test->id ) ) {
+			return 'waiting';
+		}
+
+		$no_tests_left = intval( Subscription::get_remaining_tests() ) === 0;
+		$has_remote_test = ! empty( $test->service_test_id );
+		$has_base_screenshot = ! empty( $test->base_screenshot_date );
+		$has_comparison = ! empty( $test->last_comparison_date );
+		$is_running = (bool) $test->is_running;
+
+		if ( $test->current_alert_id ) {
+			return 'has-alert';
+		}
+
+		if ( false === (bool) $test->status && ( $no_tests_left || $has_remote_test ) ) {
+			return 'no-credit-left';
+		}
+
+		if ( ! $has_remote_test ) {
+			return 'post-not-published';
+		}
+
+		if ( ! $has_base_screenshot ) {
+			return 'waiting';
+		}
+
+		if ( $is_running ) {
+			return 'running';
+		}
+
+		if ( ! $has_comparison ) {
+			return 'scheduled';
+		}
+
+		return 'passed';
 	}
 
 	/**
@@ -747,7 +819,6 @@ class Test {
 		return $wpdb->update(
 			$table_test,
 			[
-				'current_alert_id' => null,
 				'base_screenshot_url' => null,
 				'base_screenshot_date' => null,
 				'last_comparison_date' => null,
@@ -786,5 +857,181 @@ class Test {
 				$test_ids
 			)
 		);
+	}
+
+	/**
+	 * Get test status data
+	 *
+	 * @param int|object $test test id or test object.
+	 *
+	 * @return array
+	 */
+	public static function get_status_data( $test ) {
+		if ( is_int( $test ) ) {
+			$test = self::get_item( $test );
+		}
+
+		$test_status = self::get_calculated_status( $test );
+		$has_subscription = Subscription::get_subscription_status();
+		$instructions = '';
+
+		switch ( $test_status ) {
+			case 'disconnected':
+				$class = 'paused';
+				$text = esc_html__( 'Disconnected', 'visual-regression-tests' );
+				break;
+			case 'has-alert':
+				$alert = Alert::get_item( $test->current_alert_id );
+				$class = 'paused';
+				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
+				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
+				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
+				$instructions .= sprintf(
+					/* translators: %1$s and %2$s: link wrapper. */
+					esc_html__( '%1$s%2$s View Alert%3$s', 'visual-regression-tests' ),
+					'<a href="' . $base_link . $test->current_alert_id . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
+					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
+					'</a>'
+				);
+				break;
+			case 'no-credit-left':
+				$class = 'paused';
+				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
+				$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
+				$instructions = sprintf(
+					/* translators: %1$s and %2$s: link wrapper. */
+					esc_html__( '%1$sUpgrade plugin%2$s to resume testing', 'visual-regression-tests' ),
+					'<a href="' . $base_link . '" title="' . esc_attr__( 'Upgrade plugin', 'visual-regression-tests' ) . '">',
+					'</a>'
+				);
+				break;
+			case 'post-not-published':
+				$class = 'paused';
+				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
+				$instructions = esc_html__( 'Publish post to resume testing', 'visual-regression-tests' );
+				break;
+			case 'waiting':
+				$class = 'waiting';
+				$text = esc_html__( 'Waiting', 'visual-regression-tests' );
+				break;
+			case 'running':
+				$class = 'waiting';
+				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
+				$instructions = esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
+				break;
+			case 'scheduled':
+				$class = 'waiting';
+				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
+				if ( $test->next_run_date ) {
+					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->next_run_date );
+				}
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
+				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
+					$instructions .= sprintf(
+						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
+						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						$test->id,
+						esc_html__( 'Run Test', 'visual-regression-tests' ),
+						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
+					);
+				}
+				break;
+			case 'passed':
+			default:
+				$class = 'running';
+				$text = esc_html__( 'Passed', 'visual-regression-tests' );
+				if ( $test->last_comparison_date ) {
+					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $test->last_comparison_date );
+				}
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
+				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
+					$instructions .= sprintf(
+						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
+						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						$test->id,
+						esc_html__( 'Run Test', 'visual-regression-tests' ),
+						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
+					);
+				}
+				break;
+		}//end switch
+
+		return [
+			'status' => $test_status,
+			'class' => $class,
+			'text' => $text,
+			'instructions' => $instructions,
+		];
+	}
+
+	/**
+	 * Get test screenshot data
+	 *
+	 * @param int|object $test test id or object.
+	 *
+	 * @return array
+	 */
+	public static function get_screenshot_data( $test ) {
+		if ( is_int( $test ) ) {
+			$test = self::get_item( $test );
+		}
+
+		$screenshot_status = 'taken';
+
+		if ( ! Service::is_connected() ) {
+			$screenshot_status = 'paused';
+		} elseif ( ! isset( $test->id ) ) {
+			$screenshot_status = 'waiting';
+		} elseif ( false === (bool) $test->status ) {
+			$screenshot_status = 'paused';
+		} elseif ( ! $test->base_screenshot_date ) {
+			$screenshot_status = 'waiting';
+		}//end if
+
+		$instructions = '';
+		$screenshot = sprintf(
+			'<img class="figure-image" src="%s" alt="%s" />',
+			esc_url( vrts()->get_plugin_url( 'assets/images/vrts-snapshot-placeholder.svg' ) ),
+			esc_html__( 'Snapshot', 'visual-regression-tests' )
+		);
+
+		switch ( $screenshot_status ) {
+			case 'paused':
+				$text = esc_html__( 'On hold', 'visual-regression-tests' );
+				break;
+			case 'waiting':
+				$text = esc_html__( 'In progress', 'visual-regression-tests' );
+				$instructions = sprintf(
+					'<span class="vrts-testing-status--waiting">%s</span>',
+					esc_html__( 'Refresh page to see snapshot', 'visual-regression-tests' )
+				);
+				break;
+			case 'taken':
+			default:
+				$text = sprintf(
+					'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a>',
+					self::get_base_screenshot_url( $test->post_id ),
+					$test->id,
+					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
+					esc_html__( 'View Snapshot', 'visual-regression-tests' )
+				);
+				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->base_screenshot_date );
+				$screenshot = sprintf(
+					'<a href="%s" target="_blank" data-id="%d" title="%s"><img class="figure-image" src="%s" alt="%s"></a>',
+					esc_url( self::get_base_screenshot_url( $test->post_id ) ),
+					esc_attr( $test->id ),
+					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
+					esc_url( self::get_base_screenshot_url( $test->post_id ) ),
+					esc_html__( 'View Snapshot', 'visual-regression-tests' )
+				);
+				break;
+		}//end switch
+
+		return [
+			'status' => $screenshot_status,
+			'text' => $text,
+			'instructions' => $instructions,
+			'screenshot' => $screenshot,
+		];
 	}
 }

@@ -7,7 +7,7 @@ use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 
 class Service {
-	const DB_VERSION = '1.0';
+	const DB_VERSION = '1.1';
 	const SERVICE = 'vrts_service';
 	const BASE_URL = VRTS_SERVICE_ENDPOINT;
 
@@ -26,6 +26,12 @@ class Service {
 		}
 		if ( self::is_connected() && ! self::has_secret() ) {
 			self::create_secret();
+		}
+		if ( $installed_version && version_compare( $installed_version, '1.1', '<' ) ) {
+			$service_project_id = get_option( 'vrts_project_id' );
+			$service_api_route = 'sites/' . $service_project_id;
+
+			self::rest_service_request( $service_api_route, [], 'put' );
 		}
 	}
 
@@ -105,6 +111,8 @@ class Service {
 			$args['headers']['Authorization'] = 'Bearer ' . $service_project_token;
 		}
 
+		add_filter( 'http_headers_useragent', [ static::class, 'set_user_agent' ], 10 );
+
 		switch ( $request_type ) {
 			case 'get':
 				$args = [
@@ -148,6 +156,9 @@ class Service {
 				'status_code' => wp_remote_retrieve_response_code( $data ),
 			];
 		}
+
+		remove_filter( 'http_headers_useragent', [ static::class, 'set_user_agent' ], 10 );
+
 		return $response;
 	}
 
@@ -320,6 +331,19 @@ class Service {
 	 */
 	public static function has_secret() {
 		return (bool) get_option( 'vrts_project_secret' );
+	}
+
+	/**
+	 * Set user agent for the request.
+	 *
+	 * @param string $user_agent the user agent.
+	 */
+	public static function set_user_agent( $user_agent ) {
+		if ( function_exists( 'vrts' ) ) {
+			return 'VRTs/' . vrts()->get_plugin_info( 'version' ) . ';' . $user_agent;
+		} else {
+			return $user_agent;
+		}
 	}
 
 	/**

@@ -27,17 +27,10 @@ class Email_Notifications {
 			esc_url( get_the_permalink( $post_id ) )
 		);
 
-		/**
-		 * It replaces common plain text characters with formatted entities
-		 * so we remove it as in plain text emails it displays it as e.g. &#8217;s
-		 */
-		remove_filter( 'the_title', 'wptexturize' );
-		remove_filter( 'the_title', 'convert_chars' );
-
 		$message = esc_html_x( 'Howdy,', 'notification email', 'visual-regression-tests' ) . "\n\n" .
 			esc_html_x( 'New visual differences have been detected on the following page:', 'notification email', 'visual-regression-tests' ) . "\n\n" .
-			get_the_title( $post_id ) . "\n\n" .
-			esc_html_x( 'Review and resolve the alert to resume testing:', 'notification email', 'visual-regression-tests' ) . "\n" .
+			wp_specialchars_decode( get_the_title( $post_id ) ) . "\n\n" .
+			esc_html_x( 'View the alert:', 'notification email', 'visual-regression-tests' ) . "\n" .
 			esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
 			sprintf(
 				/* translators: %1$s: the home url */
@@ -52,7 +45,7 @@ class Email_Notifications {
 		}
 
 		if ( $notification_email ) {
-			$sent = wp_mail( $notification_email, $subject, $message, $headers );
+			$sent = wp_mail( $notification_email, wp_specialchars_decode( $subject ), $message, $headers );
 			if ( $sent ) {
 				return true;
 			} else {

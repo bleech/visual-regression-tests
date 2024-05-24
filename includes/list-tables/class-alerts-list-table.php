@@ -81,7 +81,7 @@ class Alerts_List_Table extends \WP_List_Table {
 				$date_time = '';
 				if ( $item->target_screenshot_finish_date ) {
 					$status = esc_html__( 'Detected', 'visual-regression-tests' ) . '<br />';
-					$date_time = Date_Time_Helpers::get_formatted_date_time( $item->target_screenshot_finish_date );
+					$date_time = Date_Time_Helpers::get_formatted_relative_date_time( $item->target_screenshot_finish_date );
 				}
 				return $status . $date_time;
 
@@ -121,8 +121,8 @@ class Alerts_List_Table extends \WP_List_Table {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
-		if ( 'resolved' === $filter_status_query ) {
-			// Actions Status "Resolved".
+		if ( 'archived' === $filter_status_query ) {
+			// Actions Status "Archived".
 			$actions['view'] = sprintf(
 				'<a href="%s" data-id="%d" title="%s">%s</a>',
 				$base_link . '&action=view&alert_id=' . $item->id,
@@ -159,10 +159,10 @@ class Alerts_List_Table extends \WP_List_Table {
 			if ( $is_connected ) {
 				$actions['trash'] = sprintf(
 					'<a href="%s" data-id="%d" title="%s">%s</a>',
-					$base_link . '&action=resolve&alert_id=' . $item->id,
+					$base_link . '&action=archive&alert_id=' . $item->id,
 					$item->id,
-					__( 'Resolve this alert', 'visual-regression-tests' ),
-					__( 'Resolve', 'visual-regression-tests' )
+					__( 'Archive this alert', 'visual-regression-tests' ),
+					__( 'Archive', 'visual-regression-tests' )
 				);
 			}
 
@@ -186,17 +186,18 @@ class Alerts_List_Table extends \WP_List_Table {
 	 */
 	public function column_differences( $item ) {
 		$is_connected = Service::is_connected();
+		$base_link = admin_url( 'admin.php?page=vrts-alerts' );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
-		if ( 'resolved' === $filter_status_query ) {
-			// Status "Resolved".
+		if ( 'archived' === $filter_status_query ) {
+			// Status "Archived".
 			$differences = ceil( $item->differences / 4 );
 			$is_false_positive = 2 === (int) $item->alert_state;
 			return sprintf(
 				'%s %s',
 				/* translators: %s: the count of pixels with a visual difference. */
 				esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
-				$is_false_positive ? '<span class="alert-status alert-status--false-positive">' . esc_html__( 'False Positive', 'visual-regression-tests' ) . '</span>' : ''
+				$is_false_positive ? '<span class="alert-status alert-status--false-positive">' . esc_html__( 'False positive', 'visual-regression-tests' ) . '</span>' : ''
 			);
 		} else {
 			// Status "Open".
@@ -207,12 +208,9 @@ class Alerts_List_Table extends \WP_List_Table {
 					/* translators: %s: the count of pixels with a visual difference. */
 					esc_html( sprintf( _n( '%s pixel', '%s pixels', $differences, 'visual-regression-tests' ), $differences ) ),
 					sprintf(
-						/* translators: %s: link wrapper */
-						esc_html__( 'Tests on %1$spage%2$s are %3$spaused%4$s', 'visual-regression-tests' ),
-						'<a href="' . esc_url( get_edit_post_link( $item->post_id ) ) . '" target="_blank">',
-						'</a>',
-						'<span class="testing-status--paused">',
-						'</span>'
+						'<a href="%s">%s</a>',
+						$base_link . '&action=edit&alert_id=' . $item->id,
+						esc_html__( 'View Alert', 'visual-regression-tests' )
 					)
 				);
 			} else {
@@ -258,14 +256,14 @@ class Alerts_List_Table extends \WP_List_Table {
 
 		// phpcs:ignore Processing form data without nonce verification, WordPress.Security.NonceVerification.Recommended -- Should be okay for now.
 		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
-		if ( 'resolved' === $filter_status_query ) {
+		if ( 'archived' === $filter_status_query ) {
 			$actions = [
 				'delete' => esc_html__( 'Delete permanently', 'visual-regression-tests' ),
 			];
 		} else {
 			// Actions Status "Open".
 			$actions = [
-				'set-status-resolved' => esc_html__( 'Resolve', 'visual-regression-tests' ),
+				'set-status-archived' => esc_html__( 'Archive', 'visual-regression-tests' ),
 			];
 		}
 		return $actions;
@@ -284,13 +282,13 @@ class Alerts_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		if ( 'set-status-resolved' === $this->current_action() ) {
+		if ( 'set-status-archived' === $this->current_action() ) {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Should be okay for now.
 			$alert_ids = wp_unslash( $_POST['id'] ?? '' );
 
 			foreach ( $alert_ids as $alert_id ) {
 				$alert_id = intval( $alert_id );
-				Alerts_Page::resolve_alert( $alert_id );
+				Alerts_Page::archive_alert( $alert_id );
 			}
 		}
 
@@ -329,14 +327,14 @@ class Alerts_List_Table extends \WP_List_Table {
 
 		$links = [
 			'all' => [
-				'title' => esc_html__( 'Open', 'visual-regression-tests' ),
+				'title' => esc_html__( 'New', 'visual-regression-tests' ),
 				'link' => $base_link,
 				'count' => Alert::get_total_items(),
 			],
-			'resolved' => [
-				'title' => esc_html__( 'Resolved', 'visual-regression-tests' ),
-				'link' => "{$base_link}&status=resolved",
-				'count' => Alert::get_total_items( 'resolved' ),
+			'archived' => [
+				'title' => esc_html__( 'Archived', 'visual-regression-tests' ),
+				'link' => "{$base_link}&status=archived",
+				'count' => Alert::get_total_items( 'archived' ),
 			],
 		];
 
