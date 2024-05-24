@@ -20,6 +20,17 @@
 	"engines": {
 		"node": "16"
 	},
+	"files": [
+		"assets",
+		"build",
+		"components",
+		"editor",
+		"includes",
+		"languages",
+		"readme.txt",
+		"uninstall.php",
+		"visual-regression-tests.php"
+	],
 	"dependencies": {
 		"@wordpress/components": "^22.1.0",
 		"@wordpress/dom-ready": "^3.56.0",
