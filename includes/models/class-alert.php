@@ -280,11 +280,18 @@ class Alert {
 		$alerts_table = Alerts_Table::get_table_name();
 		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-		$query = $wpdb->prepare( "SELECT `row_number` FROM (SELECT RANK() OVER(ORDER BY id ASC) as `row_number`, `id` FROM `$alerts_table` WHERE `alert_state` IN ($alert_states_placeholders)) AS openAlertsWithRowNumber WHERE id = %d", array_merge( $alert_states, [ $id ] ) );
+		// Let's get the count of the alerts that are before the current one.
+		$query = $wpdb->prepare(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT (SELECT count(*) FROM `$alerts_table` WHERE alert_state IN ($alert_states_placeholders) AND id < %d ORDER BY id DESC) FROM `$alerts_table`",
+			array_merge( $alert_states, [ $id ] )
+		);
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's ok.
-		return (int) $wpdb->get_var( $query );
+		$count = (int) $wpdb->get_var( $query );
+
+		// We need to add 1. E.g. if the count is 0, the position is 1.
+		return $count + 1;
 	}
 
 	/**
