@@ -1,6 +1,6 @@
 {
 	"name": "@bleech/visual-regression-tests",
-	"version": "1.9.0",
+	"version": "1.9.1",
 	"description": "Test your website for unwanted visual changes. Run automatic tests and spot differences.",
 	"author": "Bleech <hello@bleech.de>",
 	"license": "GPL-2.0-or-later",

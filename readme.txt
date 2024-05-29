@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.5
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -184,6 +184,9 @@ For Cloudflare, follow these steps:
 
 
 == Changelog ==
+
+= 1.9.1 =
+* Fixed alerts pagination SQL query compatibility with MySQL 5.7 and lower.
 
 = 1.9.0 =
 * Test now run continuously and do not pause upon alerts.
