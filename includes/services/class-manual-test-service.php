@@ -5,6 +5,7 @@ namespace Vrts\Services;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Models\Test;
+use Vrts\Models\Test_Run;
 
 class Manual_Test_Service {
 	const OPTION_NAME_STATUS = 'vrts_run_manual_test_is_active';
@@ -52,14 +53,19 @@ class Manual_Test_Service {
 		}, $tests );
 		self::set_option();
 		$request = Service::run_manual_tests( $service_test_ids );
-		if ( 200 === $request['status_code'] ) {
+
+		$test_ids = array_map( function( $test ) {
+			return $test->id;
+		}, $tests );
+
+		if ( 201 === $request['status_code'] ) {
 			$response = $request['response'];
-			if ( array_key_exists( 'triggered_ids', $response ) ) {
-				$triggered_ids = $response['triggered_ids'];
-				if ( ! empty( $triggered_ids ) ) {
-					Test::set_tests_running( $triggered_ids );
-				}
-			}
+			Test_Run::save([
+				'service_test_run_id' => $response['id'],
+				'tests' => maybe_serialize( $test_ids ),
+				'trigger' => 'manual',
+				'is_running' => 1,
+			]);
 		}
 	}
 }
