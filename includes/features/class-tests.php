@@ -17,7 +17,7 @@ class Tests {
 	/**
 	 * Run all tests if a subscription is active.
 	 */
-	public static function run_tests() {
+	public static function run_tests( $notes = '' ) {
 		$has_subscription = Subscription::get_subscription_status();
 
 		if ( ! $has_subscription ) {
@@ -26,6 +26,9 @@ class Tests {
 
 		$tests = Test::get_all_running();
 		$service_test_ids = wp_list_pluck( $tests, 'service_test_id' );
-		Service::run_manual_tests( $service_test_ids );
+		Service::run_manual_tests( $service_test_ids, [
+			'trigger' => 'api',
+			'trigger_notes'    => $notes,
+		] );
 	}
 }

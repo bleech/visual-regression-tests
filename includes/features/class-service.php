@@ -254,12 +254,12 @@ class Service {
 	 *
 	 * @param string[] $service_test_ids the service test ids.
 	 */
-	public static function run_manual_tests( $service_test_ids ) {
+	public static function run_manual_tests( $service_test_ids, $options = [] ) {
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id . '/trigger';
-		return self::rest_service_request( $service_api_route, [
+		return self::rest_service_request( $service_api_route, array_merge( $options, [
 			'ids' => $service_test_ids,
-		], 'post' );
+		]), 'post' );
 	}
 
 	/**

@@ -50,7 +50,8 @@ class Test_Run_Service {
 				'finished_at' => $data['finished_at'],
 				'scheduled_at' => $data['scheduled_at'],
 				'is_running' => !empty($data['started_at'] && empty($data['finished_at'])),
-				'trigger' => 'scheduled',
+				'trigger' => $data['trigger'],
+				'trigger_notes' => $data['trigger_notes'],
 			]);
 			return true;
 		}//end if
