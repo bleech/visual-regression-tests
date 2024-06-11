@@ -39,17 +39,11 @@ class Test_Run {
 		$select = $return_count ? 'SELECT COUNT(*)' : 'SELECT *';
 		$where = 'WHERE started_at IS NOT NULL AND finished_at IS NOT NULL';
 
-		// if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
-		// 	if ( 'changes-detected' === $args['filter_status'] ) {
-		// 		$where .= " AND calculated_status = '6-has-alert'";
-		// 	}
-		// 	if ( 'passed' === $args['filter_status'] ) {
-		// 		$where .= " AND calculated_status = '5-passed'";
-		// 	}
-		// 	if ( 'scheduled' === $args['filter_status'] ) {
-		// 		$where .= " AND calculated_status = '4-scheduled'";
-		// 	}
-		// }
+		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
+			if ( 'changes-detected' === $args['filter_status'] ) {
+				$where .= " AND alerts IS NOT NULL";
+			}
+		}
 
 		$whitelist_orderby = [ 'id', 'title' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];

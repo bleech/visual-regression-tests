@@ -64,13 +64,13 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_views() {
-		$base_link = admin_url( 'admin.php?page=vrts' );
+		$base_link = admin_url( 'admin.php?page=vrts-runs' );
 
 		$links = [
 			'all' => [
 				'title' => esc_html__( 'Queue', 'visual-regression-tests' ),
 				'link' => $base_link,
-				'count' => Test_Run::get_total_items(),
+				'count' => count( Test_Run::get_queued_items() ),
 			],
 		];
 
