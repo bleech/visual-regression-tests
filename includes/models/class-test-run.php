@@ -264,7 +264,7 @@ class Test_Run {
 			$test_run = self::get_item( $test_run );
 		}
 
-		$has_alerts = ! empty( $test_run->alerts );
+		$has_alerts = ! empty( maybe_unserialize( $test_run->alerts ) );
 
 		if ( $has_alerts ) {
 			return 'has-alerts';
