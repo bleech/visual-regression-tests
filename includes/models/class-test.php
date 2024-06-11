@@ -1034,4 +1034,20 @@ class Test {
 			'screenshot' => $screenshot,
 		];
 	}
+
+	public static function get_by_service_test_ids( $service_test_ids ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table
+					WHERE service_test_id IN ( %s )",
+				implode( ',', $service_test_ids )
+			)
+		);
+	}
 }
