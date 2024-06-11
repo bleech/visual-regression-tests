@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\Features\Service;
 use Vrts\Tables\Alerts_Table;
 use Vrts\Tables\Tests_Table;
+use Vrts\Tables\Test_Runs_Table;
 
 class Install {
 
@@ -57,6 +58,7 @@ class Install {
 	private function install_tables() {
 		Alerts_Table::install_table();
 		Tests_Table::install_table();
+		Test_Runs_Table::install_table();
 	}
 
 	/**
