@@ -64,13 +64,13 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_views() {
-		$base_link = admin_url( 'admin.php?page=vrts' );
+		$base_link = admin_url( 'admin.php?page=vrts-runs' );
 
 		$links = [
 			'all' => [
 				'title' => esc_html__( 'Queue', 'visual-regression-tests' ),
 				'link' => $base_link,
-				'count' => Test_Run::get_total_items(),
+				'count' => count( Test_Run::get_queued_items() ),
 			],
 		];
 
@@ -142,9 +142,19 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_icon( $item ) {
+		$status = Test_Run::get_calculated_status( $item );
+
+		$icons = [
+			'scheduled' => 'clock',
+			'running' => 'update',
+		];
+
+		$icon = $icons[ $status ] ?? 'info';
+
 		return sprintf(
-			'<span class="dashicons dashicons-%s"></span>',
-			'yes-alt'
+			'<span class="dashicons dashicons-%s vrts-runs-status--%s"></span>',
+			$icon,
+			$status
 		);
 	}
 
@@ -158,6 +168,11 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	public function column_title( $item ) {
 		$actions = [];
 		$tests_count = count( maybe_unserialize( $item->tests ) );
+		$status = Test_Run::get_calculated_status( $item );
+
+		if ( 'scheduled' === $item->trigger && empty( $item->started_at ) ) {
+			$tests_count = Test::get_total_items();
+		}
 
 		$actions['tests'] = sprintf(
 			'<span>%s</span>',
@@ -171,16 +186,15 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 
 		$title = Date_Time_Helpers::get_formatted_relative_date_time( $item->scheduled_at );
 
-		if ( $item->is_running ) {
+		if ( 'running' === $status ) {
 			$title = __( 'In Progress', 'visual-regression-tests' );
 		}
 
 		$row_actions = sprintf(
-			'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',
-			'#',
-			esc_html__( 'View Tests', 'visual-regression-tests' ),
+			'<strong><span class="row-title vrts-testing-status--%3$s">%1$s</a></strong> %2$s',
 			$title,
-			$this->row_actions( $actions )
+			$this->row_actions( $actions ),
+			$status
 		);
 
 		return $row_actions;

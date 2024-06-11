@@ -37,19 +37,13 @@ class Test_Run {
 		$args = wp_parse_args( $args, $defaults );
 
 		$select = $return_count ? 'SELECT COUNT(*)' : 'SELECT *';
-		$where = 'WHERE started_at IS NOT NULL AND is_running = 0';
+		$where = 'WHERE started_at IS NOT NULL AND finished_at IS NOT NULL';
 
-		// if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
-		// 	if ( 'changes-detected' === $args['filter_status'] ) {
-		// 		$where .= " AND calculated_status = '6-has-alert'";
-		// 	}
-		// 	if ( 'passed' === $args['filter_status'] ) {
-		// 		$where .= " AND calculated_status = '5-passed'";
-		// 	}
-		// 	if ( 'scheduled' === $args['filter_status'] ) {
-		// 		$where .= " AND calculated_status = '4-scheduled'";
-		// 	}
-		// }
+		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
+			if ( 'changes-detected' === $args['filter_status'] ) {
+				$where .= " AND alerts IS NOT NULL";
+			}
+		}
 
 		$whitelist_orderby = [ 'id', 'title' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];
@@ -86,8 +80,7 @@ class Test_Run {
 						runs.trigger_notes,
 						runs.started_at,
 						runs.scheduled_at,
-						runs.finished_at,
-						runs.is_running
+						runs.finished_at
 					FROM $test_runs_table as runs
 				) runs
 			$where
@@ -277,6 +270,14 @@ class Test_Run {
 			return 'has-alerts';
 		}
 
+		if ( ! empty( $test_run->scheduled_at ) && empty( $test_run->finished_at ) ) {
+			return 'scheduled';
+		}
+
+		if ( ! empty( $test_run->started_at && empty( $test_run->finished_at ) ) ) {
+			return 'running';
+		}
+
 		return 'passed';
 	}
 
@@ -362,6 +363,7 @@ class Test_Run {
 				if ( $test_run->finished_at ) {
 					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );
 				}
+				$instructions .= esc_html__( 'No changes detected', 'visual-regression-tests' );
 				break;
 		}//end switch
 

@@ -10,15 +10,37 @@
 .vrts-test-runs-list-table {
 	.column-icon {
 		text-align: center;
-		padding: 8px 0 0 3px;
-		width: 2.2em;
+		padding: 10px 0 0 10px;
+		width: 28px;
+	}
+
+	.vrts-runs-status {
+		&--passed {
+			color: $alert-green;
+		}
+
+		&--scheduled {
+			color: $alert-yellow;
+		}
+
+		&--has-alerts {
+			color: $alert-red;
+		}
+
+		&--running {
+			color: $blue-50;
+		}
+	}
+
+	.row-title {
+		color: $blue-50;
 	}
 
 	.row-actions {
 		position: static;
 
 		.tests {
-			color: #2c3338;
+			color: $gray-80;
 		}
 	}
 

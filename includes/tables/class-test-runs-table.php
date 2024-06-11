@@ -37,7 +37,6 @@ class Test_Runs_Table {
 				started_at datetime,
 				scheduled_at datetime,
 				finished_at datetime,
-				is_running tinyint(1) default 0,
 				PRIMARY KEY (id)
 			) $charset_collate;";
 

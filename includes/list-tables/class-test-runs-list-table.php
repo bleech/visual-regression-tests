@@ -78,7 +78,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_views() {
-		$base_link = admin_url( 'admin.php?page=vrts' );
+		$base_link = admin_url( 'admin.php?page=vrts-runs' );
 
 		$links = [
 			'all' => [
@@ -180,9 +180,19 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_icon( $item ) {
+		$status = Test_Run::get_calculated_status( $item );
+
+		$icons = [
+			'has-alerts' => 'warning',
+			'passed' => 'yes-alt',
+		];
+
+		$icon = $icons[ $status ] ?? 'info';
+
 		return sprintf(
-			'<span class="dashicons dashicons-%s"></span>',
-			'yes-alt'
+			'<span class="dashicons dashicons-%s vrts-runs-status--%s"></span>',
+			$icon,
+			$status
 		);
 	}
 
@@ -208,9 +218,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		);
 
 		$row_actions = sprintf(
-			'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',
-			'#',
-			esc_html__( 'View Tests', 'visual-regression-tests' ),
+			'<strong><span class="row-title">%1$s</span></strong> %2$s',
 			sprintf( __( 'Run #%s', 'visual-regression-tests' ), $item->id ),
 			$this->row_actions( $actions )
 		);
@@ -220,11 +228,11 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 	public function column_trigger( $item ) {
 		$triggerTitles = [
-			'manual' => esc_html__( 'Manual', 'visual-regression-tests' ),
-			'scheduled' => esc_html__( 'Scheduled', 'visual-regression-tests' ),
-			'api' => esc_html__( 'API', 'visual-regression-tests' ),
-			'core' => esc_html__( 'WordPress Core', 'visual-regression-tests' ),
-			'plugin' => esc_html__( 'WordPress Plugin', 'visual-regression-tests' ),
+			'manual' => __( 'Manual', 'visual-regression-tests' ),
+			'scheduled' => __( 'Scheduled', 'visual-regression-tests' ),
+			'api' => __( 'API', 'visual-regression-tests' ),
+			'core' => __( 'WordPress Core', 'visual-regression-tests' ),
+			'plugin' => __( 'WordPress Plugin', 'visual-regression-tests' ),
 		];
 
 		$triggerTitle = $triggerTitles[ $item->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
