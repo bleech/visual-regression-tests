@@ -74,7 +74,7 @@ class Test_Run_Service {
 			] );
 		}
 		$update_data = [
-			'alerts' => maybe_serialize( $alert_ids ),
+			'alerts' => $alert_ids ? maybe_serialize( $alert_ids ) : null,
 			'started_at' => $data['started_at'],
 			'finished_at' => $data['finished_at'],
 		];
