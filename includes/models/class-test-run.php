@@ -374,4 +374,20 @@ class Test_Run {
 			'instructions' => $instructions,
 		];
 	}
+
+	/**
+	 * Delete test run by service test run id
+	 *
+	 * @param string $test_run_id the service test run id.
+	 *
+	 * @return int
+	 */
+	public static function delete_by_service_test_run_id( $test_run_id ) {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->delete( $test_runs_table, [ 'service_test_run_id' => $test_run_id ] );
+	}
 }

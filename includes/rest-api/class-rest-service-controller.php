@@ -5,6 +5,7 @@ namespace Vrts\Rest_Api;
 use WP_Error;
 use WP_REST_Request;
 use Vrts\Features\Subscription;
+use Vrts\Models\Test_Run;
 use Vrts\Services\Test_Run_Service;
 use Vrts\Services\Test_Service;
 
@@ -95,6 +96,10 @@ class Rest_Service_Controller {
 				$response = $this->run_updated_request( $data );
 				break;
 
+			case 'run_deleted':
+				$response = $this->run_deleted_request( $data );
+				break;
+
 			case 'subscription_changed':
 				$response = $this->subscription_changed_request( $data );
 				break;
@@ -162,7 +167,36 @@ class Rest_Service_Controller {
 			Subscription::update_available_tests( $data['remaining_credits'], $data['total_credits'], $data['has_subscription'], $data['tier_id'] );
 
 			return rest_ensure_response([
-				'message' => 'Action test_updated successful.',
+				'message' => 'Action run_updated successful.',
+			]);
+		}//end if
+
+		return new WP_Error( 'error', esc_html__( 'Test not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
+	}
+
+	/**
+	 * Test Run updated request
+	 *
+	 * @param array $data Rest api response body.
+	 */
+	private function run_deleted_request( $data ) {
+		if ( ! array_key_exists( 'project_id', $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Project id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		} elseif ( get_option( 'vrts_project_id' ) !== $data['project_id'] ) {
+			return new WP_Error( 'error', esc_html__( 'Project id does not match.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		} elseif ( ! array_key_exists( 'run_id', $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Run id is missing.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		}
+
+		if ( ! self::verify_signature( $data ) ) {
+			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
+		};
+
+		$test_run_service = new Test_Run_Service();
+		if ( Test_Run::delete_by_service_test_run_id( $data['run_id'] ) ) {
+
+			return rest_ensure_response([
+				'message' => 'Action run_deleted successful.',
 			]);
 		}//end if
 
