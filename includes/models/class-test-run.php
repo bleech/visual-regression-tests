@@ -37,7 +37,7 @@ class Test_Run {
 		$args = wp_parse_args( $args, $defaults );
 
 		$select = $return_count ? 'SELECT COUNT(*)' : 'SELECT *';
-		$where = 'WHERE started_at IS NOT NULL AND is_running = 0';
+		$where = 'WHERE started_at IS NOT NULL AND finished_at IS NOT NULL';
 
 		// if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
 		// 	if ( 'changes-detected' === $args['filter_status'] ) {
@@ -86,8 +86,7 @@ class Test_Run {
 						runs.trigger_notes,
 						runs.started_at,
 						runs.scheduled_at,
-						runs.finished_at,
-						runs.is_running
+						runs.finished_at
 					FROM $test_runs_table as runs
 				) runs
 			$where

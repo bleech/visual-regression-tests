@@ -159,6 +159,10 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		$actions = [];
 		$tests_count = count( maybe_unserialize( $item->tests ) );
 
+		if ( 'scheduled' === $item->trigger && empty( $item->started_at ) ) {
+			$tests_count = Test::get_total_items();
+		}
+
 		$actions['tests'] = sprintf(
 			'<span>%s</span>',
 			esc_html (
@@ -171,7 +175,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 
 		$title = Date_Time_Helpers::get_formatted_relative_date_time( $item->scheduled_at );
 
-		if ( $item->is_running ) {
+		if ( !empty( $item->started_at && empty($item->finished_at ) ) ) {
 			$title = __( 'In Progress', 'visual-regression-tests' );
 		}
 

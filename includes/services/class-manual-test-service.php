@@ -64,7 +64,7 @@ class Manual_Test_Service {
 				'service_test_run_id' => $response['id'],
 				'tests' => maybe_serialize( $test_ids ),
 				'trigger' => 'manual',
-				'is_running' => 1,
+				'started_at' => current_time( 'mysql' ),
 			]);
 		}
 	}

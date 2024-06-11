@@ -26,7 +26,6 @@ class Test_Run_Service {
 					'started_at' => $data['started_at'],
 					'finished_at' => $data['finished_at'],
 					'scheduled_at' => $data['scheduled_at'],
-					'is_running' => !empty($data['started_at'] && empty($data['finished_at']))
 				];
 				if ($data['trigger'] === 'scheduled' && !empty($data['started_at'])) {
 					$test_ids = array_map(function( $test ) {
@@ -49,7 +48,6 @@ class Test_Run_Service {
 				'started_at' => $data['started_at'],
 				'finished_at' => $data['finished_at'],
 				'scheduled_at' => $data['scheduled_at'],
-				'is_running' => !empty($data['started_at'] && empty($data['finished_at'])),
 				'trigger' => 'scheduled',
 			]);
 			return true;
@@ -79,7 +77,6 @@ class Test_Run_Service {
 			'alerts' => maybe_serialize( $alert_ids ),
 			'started_at' => $data['started_at'],
 			'finished_at' => $data['finished_at'],
-			'is_running' => 0,
 		];
 		$tests = maybe_unserialize( $test_run->tests );
 		if (empty($tests)) {
