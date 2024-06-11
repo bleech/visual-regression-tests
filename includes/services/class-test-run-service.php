@@ -48,7 +48,8 @@ class Test_Run_Service {
 				'started_at' => $data['started_at'],
 				'finished_at' => $data['finished_at'],
 				'scheduled_at' => $data['scheduled_at'],
-				'trigger' => 'scheduled',
+				'trigger' => $data['trigger'],
+				'trigger_notes' => $data['trigger_notes'],
 			]);
 			return true;
 		}//end if
