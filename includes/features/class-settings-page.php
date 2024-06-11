@@ -20,6 +20,7 @@ class Settings_Page {
 		add_action( 'add_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
 		add_action( 'update_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
 		add_action( 'pre_update_option_vrts_license_key', [ $this, 'do_before_add_license_key' ], 10, 2 );
+		add_action( 'update_option_vrts_automatic_comparison', [ $this, 'do_after_update_vrts_automatic_comparison' ], 10, 2 );
 
 		$this->add_settings();
 	}
@@ -164,6 +165,36 @@ class Settings_Page {
 			'default' => '',
 			'placeholder' => esc_html_x( 'XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX', 'license key placeholder', 'visual-regression-tests' ),
 		]);
+
+		vrts()->settings()->add_section([
+			'id' => 'vrts-settings-section-test-configuration',
+			'page' => $this->page_slug,
+			'title' => 'Test Configuration',
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'checkbox',
+			'id' => 'vrts_automatic_comparison',
+			'title' => esc_html__( 'Daily', 'visual-regression-tests' ),
+			'label' => esc_html__( 'Run daily scheduled tests.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-test-configuration',
+			// 'sanitize_callback' => 'sanitize_text_field',
+			'show_in_rest' => true,
+			'value_type' => 'boolean',
+			'default' => 1,
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'checkbox',
+			'id' => 'vrts_test_runs_updates',
+			'title' => esc_html__( 'Post-Updates', 'visual-regression-tests' ),
+			'label' => esc_html__( 'Run tests automatically after WordPress has been updated to a new version.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-test-configuration',
+			// 'sanitize_callback' => 'sanitize_text_field',
+			'show_in_rest' => true,
+			'value_type' => 'boolean',
+			'default' => 1,
+		]);
 	}
 
 	/**
@@ -227,6 +258,19 @@ class Settings_Page {
 		}//end if
 
 		return $old;
+	}
+
+	public function do_after_update_vrts_automatic_comparison( $old, $new ) {
+		if ( $old !== $new ) {
+			$service_project_id = get_option( 'vrts_project_id' );
+			$service_api_route = 'sites/' . $service_project_id;
+
+			$parameters = [
+				'automatic_comparison' => empty( $new ) ? false : true,
+			];
+
+			$response = Service::rest_service_request( $service_api_route, $parameters, 'put' );
+		}
 	}
 
 	/**
