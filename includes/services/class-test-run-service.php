@@ -30,10 +30,9 @@ class Test_Run_Service {
 			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'] );
 		}
 
-		$test_ids = array_map(function( $test ) {
+		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function( $test ) {
 			return $test->id;
-		}, Test::get_by_service_test_ids($data['comparison_schedule_ids']) );
-
+		}, Test::get_by_service_test_ids( $data['comparison_schedule_ids'] ));
 
 		$this->create_test_run( $data['run_id'], [
 			'tests' => maybe_serialize( $test_ids ),
@@ -57,7 +56,7 @@ class Test_Run_Service {
 	protected function update_tests_and_create_alerts( $comparisons ) {
 		$alert_ids = [];
 
-		foreach ($comparisons as $comparison) {
+		foreach ( $comparisons as $comparison ) {
 			$test_id = $comparison['comparison_schedule_id'];
 			$alert_id = null;
 
@@ -70,7 +69,7 @@ class Test_Run_Service {
 
 			$test_service = new Test_Service();
 			$test_service->update_test_from_comparison( $alert_id, $test_id, [
-				'comparison' => $comparison
+				'comparison' => $comparison,
 			] );
 		}
 		return $alert_ids;

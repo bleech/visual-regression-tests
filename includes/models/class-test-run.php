@@ -41,7 +41,7 @@ class Test_Run {
 
 		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
 			if ( 'changes-detected' === $args['filter_status'] ) {
-				$where .= " AND alerts IS NOT NULL";
+				$where .= ' AND alerts IS NOT NULL';
 			}
 		}
 
@@ -99,6 +99,11 @@ class Test_Run {
 		return $items;
 	}
 
+	/**
+	 * Get all queued test items from database
+	 *
+	 * @return object
+	 */
 	public static function get_queued_items() {
 		global $wpdb;
 
@@ -106,6 +111,7 @@ class Test_Run {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 			"SELECT * FROM $test_runs_table WHERE finished_at is NULL ORDER BY scheduled_at ASC"
 		);
 	}
@@ -154,6 +160,13 @@ class Test_Run {
 		);
 	}
 
+	/**
+	 * Get test run by service test id
+	 *
+	 * @param int $test_run_id Service test run id.
+	 *
+	 * @return object
+	 */
 	public static function get_by_service_test_run_id( $test_run_id ) {
 		global $wpdb;
 
@@ -264,14 +277,14 @@ class Test_Run {
 			$test_run = self::get_item( $test_run );
 		}
 
-		$triggerTitles = [
+		$trigger_titles = [
 			'manual' => __( 'Manual', 'visual-regression-tests' ),
 			'scheduled' => __( 'Scheduled', 'visual-regression-tests' ),
 			'api' => __( 'API', 'visual-regression-tests' ),
 			'updates' => __( 'WordPress Updates', 'visual-regression-tests' ),
 		];
 
-		return $triggerTitles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
+		return $trigger_titles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
 	}
 
 	/**
@@ -328,8 +341,8 @@ class Test_Run {
 	 */
 	public static function cast_values( $test_run ) {
 		$test_run->id = ! is_null( $test_run->id ) ? (int) $test_run->id : null;
-		$test_run->tests = ! is_null( $test_run->tests ) ?  maybe_unserialize( $test_run->tests ) : [];
-		$test_run->alerts = ! is_null( $test_run->alerts ) ?  maybe_unserialize( $test_run->alerts ) : [];
+		$test_run->tests = ! is_null( $test_run->tests ) ? maybe_unserialize( $test_run->tests ) : [];
+		$test_run->alerts = ! is_null( $test_run->alerts ) ? maybe_unserialize( $test_run->alerts ) : [];
 		$test_run->started_at = ! is_null( $test_run->started_at ) ? mysql2date( 'c', $test_run->started_at ) : null;
 		$test_run->scheduled_at = ! is_null( $test_run->scheduled_at ) ? mysql2date( 'c', $test_run->scheduled_at ) : null;
 		$test_run->finished_at = ! is_null( $test_run->finished_at ) ? mysql2date( 'c', $test_run->finished_at ) : null;
@@ -354,7 +367,6 @@ class Test_Run {
 
 		switch ( $test_run_status ) {
 			case 'has-alerts':
-				// $alert = Alert::get_item( $test->current_alert_id );
 				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
@@ -380,7 +392,7 @@ class Test_Run {
 				$instructions .= sprintf(
 					'<a href="%1$s">%2$s</a>',
 					esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
-					esc_html__( 'Edit Test Configuration', 'visual-regression-tests' ),
+					esc_html__( 'Edit Test Configuration', 'visual-regression-tests' )
 				);
 				break;
 			case 'passed':

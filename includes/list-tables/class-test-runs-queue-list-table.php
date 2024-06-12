@@ -188,6 +188,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 			'<span>%s</span>',
 			esc_html(
 				sprintf(
+					// translators: %s: number of tests.
 					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
 					$tests_count
 				)
@@ -209,13 +210,20 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		return $row_actions;
 	}
 
+	/**
+	 * Render the trigger column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
 	public function column_trigger( $item ) {
-		$triggerTitle = Test_Run::get_trigger_title( $item );
+		$trigger_title = Test_Run::get_trigger_title( $item );
 
 		return sprintf(
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span><p class="vrts-test-run-trigger-notes">%s</p>',
 			esc_attr( $item->trigger ),
-			esc_html( $triggerTitle ),
+			esc_html( $trigger_title ),
 			esc_html( $item->trigger_notes )
 		);
 	}

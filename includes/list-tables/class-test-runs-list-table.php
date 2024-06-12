@@ -187,9 +187,6 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		$this->alerts = Alert::get_items( [
 			'ids' => $alerts_ids,
 		] );
-
-		// print_r( $this->tests );
-		// print_r( $this->alerts );
 	}
 
 	/**
@@ -284,6 +281,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			'<span>%s</span>',
 			esc_html(
 				sprintf(
+					// translators: %s: number of tests.
 					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
 					$tests_count
 				)
@@ -297,9 +295,10 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		$row_actions = sprintf(
 			'<strong><span class="row-title">%1$s</span></strong> %2$s %3$s',
+			// translators: %s: Test run number.
 			sprintf( __( 'Run #%s', 'visual-regression-tests' ), $item->id ),
 			$this->row_actions( $actions, true ),
-			$this->test_run_details( $item ),
+			$this->test_run_details( $item )
 		);
 
 		return $row_actions;
@@ -315,26 +314,28 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	protected function test_run_details( $item ) {
 		// Get tests for this test run.
 		$tests = array_filter( $this->tests, function( $test ) use ( $item ) {
-			return in_array( $test->id, empty( $item->tests ) ? [] : maybe_unserialize( $item->tests ) );
+			return in_array( $test->id, empty( $item->tests ) ? [] : maybe_unserialize( $item->tests ), true );
 		} );
 
 		// Get alerts for this test run.
 		$alerts = array_filter( $this->alerts, function( $alert ) use ( $item ) {
-			return in_array( $alert->id, empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ) );
+			return in_array( $alert->id, empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ), true );
 		} );
 
 		$alert_post_ids = wp_list_pluck( $alerts, 'post_id' );
 
 		$tests_passed = array_filter( $tests, function( $test ) use ( $alert_post_ids ) {
-			return ! in_array( $test->post_id, $alert_post_ids );
+			return ! in_array( $test->post_id, $alert_post_ids, true );
 		} );
 
 		$tests_with_alerts = array_filter( $tests, function( $test ) use ( $alert_post_ids ) {
-			return in_array( $test->post_id, $alert_post_ids );
+			return in_array( $test->post_id, $alert_post_ids, true );
 		} );
 
 		$titles = [
+			// translators: %s: number of tests.
 			'changes-detected' => __( 'Changes Detected (%s)', 'visual-regression-tests' ),
+			// translators: %s: number of tests.
 			'passed' => __( 'Passed (%s)', 'visual-regression-tests' ),
 		];
 
@@ -382,13 +383,20 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		);
 	}
 
+	/**
+	 * Render the trigger column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
 	public function column_trigger( $item ) {
-		$triggerTitle = Test_Run::get_trigger_title( $item );
+		$trigger_title = Test_Run::get_trigger_title( $item );
 
 		return sprintf(
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span><p class="vrts-test-run-trigger-notes">%s</p>',
 			esc_attr( $item->trigger ),
-			esc_html( $triggerTitle ),
+			esc_html( $trigger_title ),
 			esc_html( $item->trigger_notes )
 		);
 	}

@@ -66,7 +66,7 @@ class Manual_Test_Service {
 				'trigger' => 'manual',
 				'started_at' => current_time( 'mysql' ),
 			] );
-			Cron_Jobs::schedule_initial_fetch_test_run_updates($id);
+			Cron_Jobs::schedule_initial_fetch_test_run_updates( $id );
 		}
 	}
 }

@@ -157,7 +157,7 @@ class Settings_Page {
 				'value_type' => 'boolean',
 				'default' => 1,
 			]);
-		}
+		}//end if
 
 		vrts()->settings()->add_setting([
 			'type' => 'text',
@@ -245,6 +245,12 @@ class Settings_Page {
 		return $old;
 	}
 
+	/**
+	 * Update automatic comparison settings for project in service
+	 *
+	 * @param string $old Old value.
+	 * @param string $new New value.
+	 */
 	public function do_after_update_vrts_automatic_comparison( $old, $new ) {
 		if ( $old !== $new ) {
 			$service_project_id = get_option( 'vrts_project_id' );

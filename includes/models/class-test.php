@@ -61,7 +61,7 @@ class Test {
 		if ( isset( $args['ids'] ) ) {
 			$where .= $wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				" AND id IN (" . implode( ',', array_fill( 0, count( $args['ids'] ), '%d' ) ) . ')',
+				' AND id IN (' . implode( ',', array_fill( 0, count( $args['ids'] ), '%d' ) ) . ')',
 				$args['ids']
 			);
 		}
@@ -1043,6 +1043,13 @@ class Test {
 		];
 	}
 
+	/**
+	 * Get tests by service test ids.
+	 *
+	 * @param array $service_test_ids Service test ids.
+	 *
+	 * @return array
+	 */
 	public static function get_by_service_test_ids( $service_test_ids ) {
 		global $wpdb;
 
@@ -1052,8 +1059,7 @@ class Test {
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $tests_table
-					WHERE service_test_id IN (" . implode( ',', array_fill( 0, count( $service_test_ids ), '%s' ) ) . ')',
+				"SELECT * FROM $tests_table WHERE service_test_id IN (" . implode( ',', array_fill( 0, count( $service_test_ids ), '%s' ) ) . ')',
 				$service_test_ids
 			)
 		);
