@@ -133,29 +133,31 @@ class Settings_Page {
 			'title' => 'Test Configuration',
 		]);
 
-		vrts()->settings()->add_setting([
-			'type' => 'checkbox',
-			'id' => 'vrts_automatic_comparison',
-			'title' => esc_html__( 'Daily', 'visual-regression-tests' ),
-			'label' => esc_html__( 'Run daily scheduled tests.', 'visual-regression-tests' ),
-			'section' => 'vrts-settings-section-test-configuration',
-			'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
-			'show_in_rest' => true,
-			'value_type' => 'boolean',
-			'default' => 1,
-		]);
+		if ( '1' === $has_subscription ) {
+			vrts()->settings()->add_setting([
+				'type' => 'checkbox',
+				'id' => 'vrts_automatic_comparison',
+				'title' => esc_html__( 'Daily', 'visual-regression-tests' ),
+				'label' => esc_html__( 'Run daily scheduled tests.', 'visual-regression-tests' ),
+				'section' => 'vrts-settings-section-test-configuration',
+				'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
+				'show_in_rest' => true,
+				'value_type' => 'boolean',
+				'default' => 1,
+			]);
 
-		vrts()->settings()->add_setting([
-			'type' => 'checkbox',
-			'id' => 'vrts_updates_comparison',
-			'title' => esc_html__( 'Post-Updates', 'visual-regression-tests' ),
-			'label' => esc_html__( 'Run tests automatically after WordPress has been updated to a new version.', 'visual-regression-tests' ),
-			'section' => 'vrts-settings-section-test-configuration',
-			'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
-			'show_in_rest' => true,
-			'value_type' => 'boolean',
-			'default' => 1,
-		]);
+			vrts()->settings()->add_setting([
+				'type' => 'checkbox',
+				'id' => 'vrts_updates_comparison',
+				'title' => esc_html__( 'Post Updates', 'visual-regression-tests' ),
+				'label' => esc_html__( 'Run tests automatically after WordPress has been updated to a new version.', 'visual-regression-tests' ),
+				'section' => 'vrts-settings-section-test-configuration',
+				'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
+				'show_in_rest' => true,
+				'value_type' => 'boolean',
+				'default' => 1,
+			]);
+		}
 
 		vrts()->settings()->add_setting([
 			'type' => 'text',
