@@ -253,6 +253,28 @@ class Test_Run {
 	}
 
 	/**
+	 * Get test run trigger title
+	 *
+	 * @param int|object $test_run test run id or test object.
+	 *
+	 * @return string
+	 */
+	public static function get_trigger_title( $test_run ) {
+		if ( is_int( $test_run ) ) {
+			$test_run = self::get_item( $test_run );
+		}
+
+		$triggerTitles = [
+			'manual' => __( 'Manual', 'visual-regression-tests' ),
+			'scheduled' => __( 'Scheduled', 'visual-regression-tests' ),
+			'api' => __( 'API', 'visual-regression-tests' ),
+			'updates' => __( 'WordPress Updates', 'visual-regression-tests' ),
+		];
+
+		return $triggerTitles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
+	}
+
+	/**
 	 * Get test run calculated status
 	 *
 	 * @param int|object $test_run test run id or test object.

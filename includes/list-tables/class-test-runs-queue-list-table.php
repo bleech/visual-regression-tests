@@ -201,15 +201,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	}
 
 	public function column_trigger( $item ) {
-		$triggerTitles = [
-			'manual' => esc_html__( 'Manual', 'visual-regression-tests' ),
-			'scheduled' => esc_html__( 'Scheduled', 'visual-regression-tests' ),
-			'api' => esc_html__( 'API', 'visual-regression-tests' ),
-			'core' => esc_html__( 'WordPress Core', 'visual-regression-tests' ),
-			'plugin' => esc_html__( 'WordPress Plugin', 'visual-regression-tests' ),
-		];
-
-		$triggerTitle = $triggerTitles[ $item->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
+		$triggerTitle = Test_Run::get_trigger_title( $item );
 
 		return sprintf(
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span><p class="vrts-test-run-trigger-notes">%s</p>',

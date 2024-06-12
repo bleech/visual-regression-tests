@@ -49,6 +49,8 @@
 		border-radius: 32px;
 		padding: 4px 10px;
 		font-size: 13px;
+		background: rgba(192, 192, 192, 0.15);
+		color: $gray-80;
 
 		&--api {
 			background: rgba(224, 84, 6, 0.15);
@@ -66,8 +68,7 @@
 
 		}
 
-		&--core,
-		&--plugin {
+		&--updates {
 			background: rgba(200, 11, 147, 0.1);
 			color: #A51D7F;
 		}
