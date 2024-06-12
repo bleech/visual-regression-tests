@@ -186,7 +186,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 
 		$actions['tests'] = sprintf(
 			'<span>%s</span>',
-			esc_html (
+			esc_html(
 				sprintf(
 					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
 					$tests_count
@@ -203,7 +203,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		$row_actions = sprintf(
 			'<strong><span class="row-title">%1$s</a></strong> %2$s',
 			$title,
-			$this->row_actions( $actions )
+			$this->row_actions( $actions, true )
 		);
 
 		return $row_actions;

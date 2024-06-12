@@ -2,6 +2,7 @@
 
 namespace Vrts\List_Tables;
 
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 
@@ -13,6 +14,20 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  * List table class.
  */
 class Test_Runs_List_Table extends \WP_List_Table {
+
+	/**
+	 * Tests.
+	 *
+	 * @var array
+	 */
+	protected $tests = [];
+
+	/**
+	 * Alerts.
+	 *
+	 * @var array
+	 */
+	protected $alerts = [];
 
 	/**
 	 * Parent construct.
@@ -156,6 +171,25 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			'total_items' => $total_items,
 			'per_page' => $per_page,
 		]);
+
+		$tests_ids = [];
+		$alerts_ids = [];
+
+		foreach ( $this->items as $test_run ) {
+			$tests_ids = array_unique( array_merge( $tests_ids, empty( $test_run->tests ) ? [] : maybe_unserialize( $test_run->tests ) ) );
+			$alerts_ids = array_unique( array_merge( $alerts_ids, empty( $test_run->alerts ) ? [] : maybe_unserialize( $test_run->alerts ) ) );
+		}
+
+		$this->tests = Test::get_items( [
+			'ids' => $tests_ids,
+		] );
+
+		$this->alerts = Alert::get_items( [
+			'ids' => $alerts_ids,
+		] );
+
+		// print_r( $this->tests );
+		// print_r( $this->alerts );
 	}
 
 	/**
@@ -166,10 +200,49 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	public function single_row( $item ) {
 		$classes = 'iedit';
 		?>
-		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>">
+		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>" data-vrts-test-run-details="hidden">
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
 		<?php
+	}
+
+	/**
+	 * Generates the required HTML for a list of row action links.
+	 *
+	 * @param string[] $actions        An array of action links.
+	 * @param bool     $always_visible Whether the actions should be always visible.
+	 *
+	 * @return string The HTML for the row actions.
+	 */
+	protected function row_actions( $actions, $always_visible = false ) {
+		$action_count = count( $actions );
+
+		if ( ! $action_count ) {
+			return '';
+		}
+
+		$mode = get_user_setting( 'posts_list_mode', 'list' );
+
+		if ( 'excerpt' === $mode ) {
+			$always_visible = true;
+		}
+
+		$output = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
+
+		$i = 0;
+
+		foreach ( $actions as $action => $link ) {
+			$output .= "<span class='$action'>{$link}</span>";
+		}
+
+		$output .= '</div>';
+
+		$output .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' .
+			/* translators: Hidden accessibility text. */
+			esc_html__( 'Show more details', 'visual-regression-tests' ) .
+		'</span></button>';
+
+		return $output;
 	}
 
 	/**
@@ -209,7 +282,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		$actions['tests'] = sprintf(
 			'<span>%s</span>',
-			esc_html (
+			esc_html(
 				sprintf(
 					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
 					$tests_count
@@ -217,13 +290,96 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			)
 		);
 
+		$actions['details'] = sprintf(
+			'<a class="vrts-show-test-run-details" href="#">%s</a>',
+			esc_html__( 'Show Details', 'visual-regression-tests' )
+		);
+
 		$row_actions = sprintf(
-			'<strong><span class="row-title">%1$s</span></strong> %2$s',
+			'<strong><span class="row-title">%1$s</span></strong> %2$s %3$s',
 			sprintf( __( 'Run #%s', 'visual-regression-tests' ), $item->id ),
-			$this->row_actions( $actions )
+			$this->row_actions( $actions, true ),
+			$this->test_run_details( $item ),
 		);
 
 		return $row_actions;
+	}
+
+	/**
+	 * Render the test run details.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
+	protected function test_run_details( $item ) {
+		// Get tests for this test run.
+		$tests = array_filter( $this->tests, function( $test ) use ( $item ) {
+			return in_array( $test->id, empty( $item->tests ) ? [] : maybe_unserialize( $item->tests ) );
+		} );
+
+		// Get alerts for this test run.
+		$alerts = array_filter( $this->alerts, function( $alert ) use ( $item ) {
+			return in_array( $alert->id, empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ) );
+		} );
+
+		$alert_post_ids = wp_list_pluck( $alerts, 'post_id' );
+
+		$tests_passed = array_filter( $tests, function( $test ) use ( $alert_post_ids ) {
+			return ! in_array( $test->post_id, $alert_post_ids );
+		} );
+
+		$tests_with_alerts = array_filter( $tests, function( $test ) use ( $alert_post_ids ) {
+			return in_array( $test->post_id, $alert_post_ids );
+		} );
+
+		$titles = [
+			'changes-detected' => __( 'Changes Detected (%s)', 'visual-regression-tests' ),
+			'passed' => __( 'Passed (%s)', 'visual-regression-tests' ),
+		];
+
+		$data = array_filter( [
+			'changes-detected' => array_map( function( $test ) {
+				$parsed_internal_url = wp_parse_url( get_permalink( $test->post_id ) );
+				$internal_url = $parsed_internal_url['path'];
+
+				return sprintf(
+					'<a href="%s" target="_blank">%s | %s</a>',
+					esc_url( get_edit_post_link( $test->post_id ) ),
+					esc_html( $test->post_title ),
+					esc_url( $internal_url )
+				);
+			}, $tests_with_alerts ),
+			'passed' => array_map( function( $test ) {
+				$parsed_internal_url = wp_parse_url( get_permalink( $test->post_id ) );
+				$internal_url = $parsed_internal_url['path'];
+
+				return sprintf(
+					'<a href="%s" target="_blank">%s | %s</a>',
+					esc_url( get_edit_post_link( $test->post_id ) ),
+					esc_html( $test->post_title ),
+					esc_url( $internal_url )
+				);
+			}, $tests_passed ),
+		] );
+
+		return sprintf(
+			'<div class="vrts-test-run-details">%s %s</div>',
+			implode( '', array_map( function( $key ) use ( $data, $titles ) {
+				return sprintf(
+					'<div class="vrts-test-run-details-section vrts-test-run-details-section--%s"><p class="vrts-test-run-details-section-title">%s</p><ul>%s</ul></div>',
+					$key,
+					sprintf( $titles[ $key ], count( $data[ $key ] ) ),
+					implode( '', array_map( function( $item ) {
+						return sprintf( '<li>%s</li>', $item );
+					}, $data[ $key ] ) )
+				);
+			}, array_keys( $data ) ) ),
+			sprintf(
+				'<button type="button" class="button button-secondary vrts-show-test-run-details">%s</button>',
+				esc_html__( 'Close', 'visual-regression-tests' )
+			)
+		);
 	}
 
 	public function column_trigger( $item ) {
