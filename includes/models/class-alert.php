@@ -51,6 +51,14 @@ class Alert {
 			);
 		}
 
+		if ( isset( $args['ids'] ) ) {
+			$where .= $wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				" AND id IN (" . implode( ',', array_fill( 0, count( $args['ids'] ), '%d' ) ) . ')',
+				$args['ids']
+			);
+		}
+
 		$whitelist_orderby = [ 'id', 'title', 'differences', 'target_screenshot_finish_date' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];
 
