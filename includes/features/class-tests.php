@@ -23,10 +23,10 @@ class Tests {
 	}
 
 	public static function run_upgrader_tests( $upgrader, $options ) {
-		error_log( 'run_upgrader_tests: ' . print_r(func_get_args(), true) );
+		self::run_tests( 'update', null, $options );
 	}
 
-	private static function run_tests( $trigger, $trigger_notes ) {
+	private static function run_tests( $trigger, $trigger_notes, $trigger_meta = null) {
 		$has_subscription = Subscription::get_subscription_status();
 
 		if ( ! $has_subscription ) {
@@ -38,6 +38,7 @@ class Tests {
 		Service::run_manual_tests( $service_test_ids, [
 			'trigger' => $trigger,
 			'trigger_notes'    => $trigger_notes,
+			'trigger_meta'     => $trigger_meta,
 		] );
 	}
 }
