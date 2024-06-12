@@ -3,6 +3,8 @@
 namespace Vrts\Features;
 
 use Vrts\Models\Test;
+use Vrts\Models\Test_Run;
+use Vrts\Services\Test_Run_Service;
 use Vrts\Services\Test_Service;
 
 class Cron_Jobs {
@@ -33,6 +35,7 @@ class Cron_Jobs {
 		}
 		add_action( 'vrts_fetch_updates_cron', [ $this, 'fetch_updates' ] );
 		add_action( 'vrts_fetch_test_updates', [ $this, 'fetch_test_updates' ], 10, 2 );
+		add_action( 'vrts_fetch_test_run_updates', [ $this, 'fetch_test_run_updates' ], 10, 2 );
 	}
 
 	/**
@@ -70,6 +73,20 @@ class Cron_Jobs {
 		}
 	}
 
+	public function fetch_test_run_updates( $test_run_id, $try_number = 1 ) {
+		$test_run = Test_Run::get_item( $test_run_id );
+		if ( empty( $test_run ) || empty( $test_run->finished_at ) ) {
+			$service = new Test_Run_Service();
+			$service->fetch_and_update_test_runs();
+
+			if ( $try_number < $this->max_tries ) {
+				$next_execution = time() + $this->initial_wait * $this->wait_multiplicator * $try_number;
+				wp_schedule_single_event( $next_execution, 'vrts_fetch_test_run_updates', [ $test_run_id, $try_number + 1 ] );
+			}
+		}
+
+	}
+
 	/**
 	 * Schedule initial fetch test updates.
 	 *
@@ -77,5 +94,9 @@ class Cron_Jobs {
 	 */
 	public static function schedule_initial_fetch_test_updates( $test_id ) {
 		wp_schedule_single_event( time(), 'vrts_fetch_test_updates', [ $test_id, 1 ] );
+	}
+
+	public static function schedule_initial_fetch_test_run_updates( $test_run_id ) {
+		wp_schedule_single_event( time(), 'vrts_fetch_test_run_updates', [ $test_run_id, 1 ] );
 	}
 }

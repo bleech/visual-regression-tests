@@ -2,10 +2,10 @@
 
 namespace Vrts\Services;
 
+use Vrts\Features\Cron_Jobs;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Models\Test;
-use Vrts\Models\Test_Run;
 
 class Manual_Test_Service {
 	const OPTION_NAME_STATUS = 'vrts_run_manual_test_is_active';
@@ -60,12 +60,13 @@ class Manual_Test_Service {
 
 		if ( 201 === $request['status_code'] ) {
 			$response = $request['response'];
-			Test_Run::save([
-				'service_test_run_id' => $response['id'],
+			$service = new Test_Run_Service();
+			$id = $service->create_test_run( $response['id'], [
 				'tests' => maybe_serialize( $test_ids ),
 				'trigger' => 'manual',
 				'started_at' => current_time( 'mysql' ),
-			]);
+			] );
+			Cron_Jobs::schedule_initial_fetch_test_run_updates($id);
 		}
 	}
 }

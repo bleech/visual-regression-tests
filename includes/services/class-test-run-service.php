@@ -2,6 +2,8 @@
 
 namespace Vrts\Services;
 
+use Vrts\Features\Service;
+use Vrts\Features\Subscription;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 
@@ -18,47 +20,44 @@ class Test_Run_Service {
 		$run_id = $data['run_id'];
 		$test_run = Test_Run::get_by_service_test_run_id( $run_id );
 
-		if ( $test_run ) {
-			if ( ! empty( $data['finished_at'] ?? null ) ) {
-				$this->update_finished_run( $data, $test_run );
-			} else {
-				$update_data = [
-					'started_at' => $data['started_at'],
-					'finished_at' => $data['finished_at'],
-					'scheduled_at' => $data['scheduled_at'],
-				];
-				if ($data['trigger'] === 'scheduled' && !empty($data['started_at'])) {
-					$test_ids = array_map(function( $test ) {
-						return $test->id;
-					}, Test::get_by_service_test_ids($data['comparison_schedule_ids']) );
-					$update_data['tests'] = maybe_serialize( $test_ids );
-				}
-				Test_Run::save( $update_data, $test_run->id );
-			}
-
-			return true;
-		} else {
-			$test_ids = array_map(function( $test ) {
-				return $test->id;
-			}, Test::get_by_service_test_ids($data['comparison_schedule_ids']) );
-
-			Test_Run::save([
-				'service_test_run_id' => $data['run_id'],
-				'tests' => maybe_serialize( $test_ids ),
-				'started_at' => $data['started_at'],
-				'finished_at' => $data['finished_at'],
-				'scheduled_at' => $data['scheduled_at'],
-				'trigger' => $data['trigger'],
-				'trigger_notes' => $data['trigger_notes'],
-			]);
-			return true;
-		}//end if
-	}
-
-	protected function update_finished_run( $data, $test_run ) {
+		$test_run_just_finished = false;
 		$alert_ids = [];
 
-		foreach ($data['comparisons'] as $comparison) {
+		// var_dump($run_id, $data, $test_run);die();
+
+		if ( $test_run && empty( $test_run->finished_at ) && ! empty( $data['finished_at'] ) ) {
+			$test_run_just_finished = true;
+			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'] );
+		}
+
+		$test_ids = array_map(function( $test ) {
+			return $test->id;
+		}, Test::get_by_service_test_ids($data['comparison_schedule_ids']) );
+
+
+		$this->create_test_run( $data['run_id'], [
+			'tests' => maybe_serialize( $test_ids ),
+			'alerts' => ! empty( $alert_ids ) ? maybe_serialize( $alert_ids ) : null,
+			'started_at' => $data['started_at'],
+			'finished_at' => $data['finished_at'],
+			'scheduled_at' => $data['scheduled_at'],
+			'trigger' => $data['trigger'],
+			'trigger_notes' => $data['trigger_notes'],
+		], true);
+
+		if ( $test_run_just_finished && ! empty( $alert_ids ) ) {
+			// TODO Send e-mail notification.
+			// $email_notifications = new Email_Notifications();
+			// $email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
+		}
+
+		return true;
+	}
+
+	protected function update_tests_and_create_alerts( $comparisons ) {
+		$alert_ids = [];
+
+		foreach ($comparisons as $comparison) {
 			$test_id = $comparison['comparison_schedule_id'];
 			$alert_id = null;
 
@@ -74,24 +73,43 @@ class Test_Run_Service {
 				'comparison' => $comparison
 			] );
 		}
-		$update_data = [
-			'alerts' => $alert_ids ? maybe_serialize( $alert_ids ) : null,
-			'started_at' => $data['started_at'],
-			'finished_at' => $data['finished_at'],
-		];
-		$tests = maybe_unserialize( $test_run->tests );
-		if (empty($tests)) {
-			$test_ids = array_map(function( $test ) {
-				return $test->id;
-			}, Test::get_by_service_test_ids($data['comparison_schedule_ids']) );
-			$update_data['tests'] = maybe_serialize( $test_ids );
+		return $alert_ids;
+	}
+
+	public function create_test_run( $service_test_run_id, $data, $update = false ) {
+		$test_run = Test_Run::get_by_service_test_run_id( $service_test_run_id );
+
+		if ( $test_run && ! $update ) {
+			return false;
 		}
+		return Test_Run::save(array_merge( $data, [
+			'service_test_run_id' => $service_test_run_id,
+		]), $test_run->id ?? null);
+	}
 
-		Test_Run::save( $update_data, $test_run->id );
-
-		// TODO Send e-mail notification.
-		// $email_notifications = new Email_Notifications();
-		// $email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
-		return true;
+	/**
+	 * Fetch and update tests.
+	 *
+	 * @return void
+	 */
+	public function fetch_and_update_test_runs() {
+		$service_request = Service::fetch_updates();
+		if ( 200 === $service_request['status_code'] ) {
+			$response = $service_request['response'];
+			if ( array_key_exists( 'run_updates', $response ) ) {
+				$updates = $response['run_updates'];
+				foreach ( $updates as $update ) {
+					$this->update_run_from_api_data( $update );
+				}
+			}
+			if (
+				array_key_exists( 'remaining_credits', $response )
+				&& array_key_exists( 'total_credits', $response )
+				&& array_key_exists( 'has_subscription', $response )
+				&& array_key_exists( 'tier_id', $response )
+			) {
+				Subscription::update_available_tests( $response['remaining_credits'], $response['total_credits'], $response['has_subscription'], $response['tier_id'] );
+			}
+		}
 	}
 }

@@ -1045,8 +1045,8 @@ class Test {
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT * FROM $tests_table
-					WHERE service_test_id IN ( %s )",
-				implode( ',', $service_test_ids )
+					WHERE service_test_id IN (" . implode( ',', array_fill( 0, count( $service_test_ids ), '%s' ) ) . ')',
+				$service_test_ids
 			)
 		);
 	}
