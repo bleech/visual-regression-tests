@@ -136,6 +136,15 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	}
 
 	/**
+	 * Generates the table navigation above or below the table
+	 *
+	 * @param string $which The location of the navigation: Either 'top' or 'bottom'.
+	 */
+	protected function display_tablenav( $which ) {
+		// Don't display the table nav.
+	}
+
+	/**
 	 * Render the status icon column
 	 *
 	 * @param object $item column item.

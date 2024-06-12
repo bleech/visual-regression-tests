@@ -14,10 +14,6 @@
 	$list_table->prepare_items();
 	$list_table->views();
 	$list_table->display();
-
-	if ( $list_table->has_items() ) {
-		$list_table->inline_edit();
-	}
 	?>
 
 	<form method="post">

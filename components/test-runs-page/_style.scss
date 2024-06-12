@@ -88,8 +88,15 @@
 }
 
 .vrts-test-runs-list-queue-table {
+	margin-top: 10px;
+	margin-bottom: 20px;
+
 	thead,
 	tfoot {
 		display: none;
+	}
+
+	.subsubsub:has(+ &) {
+		float: none;
 	}
 }
