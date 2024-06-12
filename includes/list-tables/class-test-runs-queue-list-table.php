@@ -30,7 +30,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * Get table classes.
 	 */
 	public function get_table_classes() {
-		return [ 'vrts-test-runs-list-table', 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
+		return [ 'vrts-test-runs-list-table', 'vrts-test-runs-list-queue-table', 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
 	}
 
 	/**
