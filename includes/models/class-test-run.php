@@ -358,7 +358,7 @@ class Test_Run {
 				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
+				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&test_run_id=' );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
@@ -371,12 +371,17 @@ class Test_Run {
 				break;
 			case 'running':
 				$class = 'waiting';
-				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
+				$text = '';
 				$instructions = esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
 				break;
 			case 'scheduled':
 				$class = 'waiting';
 				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
+				$instructions .= sprintf(
+					'<a href="%1$s">%2$s</a>',
+					esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
+					esc_html__( 'Edit Test Configuration', 'visual-regression-tests' ),
+				);
 				break;
 			case 'passed':
 			default:

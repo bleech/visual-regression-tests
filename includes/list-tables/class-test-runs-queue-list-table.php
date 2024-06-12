@@ -127,8 +127,9 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 		$classes = 'iedit';
+		$status = Test_Run::get_calculated_status( $item );
 		?>
-		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>">
+		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>" data-vrts-test-run-status="<?php echo esc_attr( $status ); ?>">
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
 		<?php
@@ -191,10 +192,9 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		}
 
 		$row_actions = sprintf(
-			'<strong><span class="row-title vrts-testing-status--%3$s">%1$s</a></strong> %2$s',
+			'<strong><span class="row-title">%1$s</a></strong> %2$s',
 			$title,
-			$this->row_actions( $actions ),
-			$status
+			$this->row_actions( $actions )
 		);
 
 		return $row_actions;
@@ -219,7 +219,6 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_status( $item ) {
-		return 'status: ' . $item->id;
 		$status_data = Test_Run::get_status_data( $item );
 
 		return sprintf(

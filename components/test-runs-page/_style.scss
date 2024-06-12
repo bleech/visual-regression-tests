@@ -74,6 +74,10 @@
 		color: $blue-50;
 	}
 
+	[data-vrts-test-run-status="running"] .row-title {
+		color: #F97B06;
+	}
+
 	.row-actions {
 		position: static;
 
