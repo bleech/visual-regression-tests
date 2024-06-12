@@ -6,7 +6,7 @@ use Vrts\Services\Manual_Test_Service;
 
 ?>
 
-<div class="wrap vrts_list_table_page">
+<div class="wrap vrts-list-table-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Tests', 'visual-regression-tests' ); ?>
 	</h1>

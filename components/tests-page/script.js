@@ -326,7 +326,7 @@ window.wp = window.wp || {};
 	};
 
 	$( function () {
-		if ( $( '.vrts_list_table_page' ).length ) {
+		if ( $( '.vrts-list-table-page' ).length ) {
 			inlineEditTest.init();
 		}
 	} );

@@ -2,7 +2,7 @@
 
 ?>
 
-<div class="wrap vrts_list_table_page vrts-test-runs-page">
+<div class="wrap vrts-list-table-page vrts-test-runs-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Runs', 'visual-regression-tests' ); ?>
 	</h1>

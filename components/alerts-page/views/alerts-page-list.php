@@ -1,4 +1,4 @@
-<div class="wrap vrts_list_table_page">
+<div class="wrap vrts-list-table-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Alerts', 'visual-regression-tests' ); ?>
 	</h1>
