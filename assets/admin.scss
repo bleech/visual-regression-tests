@@ -1,6 +1,6 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 
-.vrts_list_table_page {
+.vrts-list-table-page {
 
 	.vrts-testing-status {
 		display: flex;
@@ -17,7 +17,7 @@
 		}
 
 		&--waiting {
-			color: $alert-yellow;
+			color: #F97B06;
 		}
 	}
 }

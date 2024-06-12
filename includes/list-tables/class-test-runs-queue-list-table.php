@@ -30,7 +30,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * Get table classes.
 	 */
 	public function get_table_classes() {
-		return [ 'vrts-test-runs-list-table', 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
+		return [ 'vrts-test-runs-list-table', 'vrts-test-runs-list-queue-table', 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
 	}
 
 	/**
@@ -127,11 +127,21 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 		$classes = 'iedit';
+		$status = Test_Run::get_calculated_status( $item );
 		?>
-		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>">
+		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>" data-vrts-test-run-status="<?php echo esc_attr( $status ); ?>">
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
 		<?php
+	}
+
+	/**
+	 * Generates the table navigation above or below the table
+	 *
+	 * @param string $which The location of the navigation: Either 'top' or 'bottom'.
+	 */
+	protected function display_tablenav( $which ) {
+		// Don't display the table nav.
 	}
 
 	/**
@@ -176,8 +186,9 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 
 		$actions['tests'] = sprintf(
 			'<span>%s</span>',
-			esc_html (
+			esc_html(
 				sprintf(
+					// translators: %s: number of tests.
 					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
 					$tests_count
 				)
@@ -191,30 +202,28 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		}
 
 		$row_actions = sprintf(
-			'<strong><span class="row-title vrts-testing-status--%3$s">%1$s</a></strong> %2$s',
+			'<strong><span class="row-title">%1$s</a></strong> %2$s',
 			$title,
-			$this->row_actions( $actions ),
-			$status
+			$this->row_actions( $actions, true )
 		);
 
 		return $row_actions;
 	}
 
+	/**
+	 * Render the trigger column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
 	public function column_trigger( $item ) {
-		$triggerTitles = [
-			'manual' => esc_html__( 'Manual', 'visual-regression-tests' ),
-			'scheduled' => esc_html__( 'Scheduled', 'visual-regression-tests' ),
-			'api' => esc_html__( 'API', 'visual-regression-tests' ),
-			'core' => esc_html__( 'WordPress Core', 'visual-regression-tests' ),
-			'plugin' => esc_html__( 'WordPress Plugin', 'visual-regression-tests' ),
-		];
-
-		$triggerTitle = $triggerTitles[ $item->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
+		$trigger_title = Test_Run::get_trigger_title( $item );
 
 		return sprintf(
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span><p class="vrts-test-run-trigger-notes">%s</p>',
 			esc_attr( $item->trigger ),
-			esc_html( $triggerTitle ),
+			esc_html( $trigger_title ),
 			esc_html( $item->trigger_notes )
 		);
 	}
@@ -227,7 +236,6 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_status( $item ) {
-		return 'status: ' . $item->id;
 		$status_data = Test_Run::get_status_data( $item );
 
 		return sprintf(

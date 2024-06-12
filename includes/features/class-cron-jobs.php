@@ -73,6 +73,12 @@ class Cron_Jobs {
 		}
 	}
 
+	/**
+	 * Fetch test run updates.
+	 *
+	 * @param int $test_run_id Test run id.
+	 * @param int $try_number Try number.
+	 */
 	public function fetch_test_run_updates( $test_run_id, $try_number = 1 ) {
 		$test_run = Test_Run::get_item( $test_run_id );
 		if ( empty( $test_run ) || empty( $test_run->finished_at ) ) {
@@ -96,6 +102,11 @@ class Cron_Jobs {
 		wp_schedule_single_event( time(), 'vrts_fetch_test_updates', [ $test_id, 1 ] );
 	}
 
+	/**
+	 * Schedule initial fetch test run updates.
+	 *
+	 * @param int $test_run_id Test run id.
+	 */
 	public static function schedule_initial_fetch_test_run_updates( $test_run_id ) {
 		wp_schedule_single_event( time(), 'vrts_fetch_test_run_updates', [ $test_run_id, 1 ] );
 	}

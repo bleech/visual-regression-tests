@@ -253,6 +253,7 @@ class Service {
 	 * Run manual tests.
 	 *
 	 * @param string[] $service_test_ids the service test ids.
+	 * @param array    $options the options.
 	 */
 	public static function run_manual_tests( $service_test_ids, $options = [] ) {
 		$service_project_id = get_option( 'vrts_project_id' );

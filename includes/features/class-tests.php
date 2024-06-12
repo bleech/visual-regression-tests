@@ -16,16 +16,31 @@ class Tests {
 	}
 
 	/**
-	 * Run all tests if a subscription is active.
+	 * Run api tests.
+	 *
+	 * @param string $notes Notes.
 	 */
 	public static function run_api_tests( $notes = '' ) {
 		self::run_tests( 'api', $notes );
 	}
 
+	/**
+	 * Run upgrader tests.
+	 *
+	 * @param \WP_Upgrader $upgrader Upgrader.
+	 * @param array        $options Options.
+	 */
 	public static function run_upgrader_tests( $upgrader, $options ) {
 		self::run_tests( 'update', null, $options );
 	}
 
+	/**
+	 * Run tests.
+	 *
+	 * @param string $trigger Trigger.
+	 * @param string $trigger_notes Trigger notes.
+	 * @param array  $trigger_meta Trigger meta.
+	 */
 	private static function run_tests( $trigger, $trigger_notes, $trigger_meta = null) {
 		$has_subscription = Subscription::get_subscription_status();
 
@@ -37,8 +52,8 @@ class Tests {
 		$service_test_ids = wp_list_pluck( $tests, 'service_test_id' );
 		Service::run_manual_tests( $service_test_ids, [
 			'trigger' => $trigger,
-			'trigger_notes'    => $trigger_notes,
-			'trigger_meta'     => $trigger_meta,
+			'trigger_notes' => $trigger_notes,
+			'trigger_meta' => $trigger_meta,
 		] );
 	}
 }
