@@ -143,8 +143,7 @@ class Alerts_List_Table extends \WP_List_Table {
 
 			return sprintf(
 				'<strong>%1$s</strong> %2$s',
-				/* translators: %s: the title of the alert. */
-				sprintf( __( 'Alert %s', 'visual-regression-tests' ), $item->title ),
+				sprintf( $item->title ),
 				$this->row_actions( $actions )
 			);
 
@@ -172,8 +171,7 @@ class Alerts_List_Table extends \WP_List_Table {
 				'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',
 				$base_link . '&action=edit&alert_id=' . $item->id,
 				__( 'Edit', 'visual-regression-tests' ),
-				/* translators: %s: the title of the alert. */
-				sprintf( __( 'Alert %s', 'visual-regression-tests' ), $item->title ),
+				sprintf( $item->title ),
 				$this->row_actions( $actions )
 			);
 		}//end if
