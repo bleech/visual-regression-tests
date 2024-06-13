@@ -69,11 +69,17 @@ class Test_Run {
 			);
 		}
 
+		$run_title = $wpdb->prepare(
+			"CONCAT( '%s', runs.id ) as title",
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		$query = "
 			$select
 				FROM (
 					SELECT
 						runs.id,
+						$run_title,
 						runs.tests,
 						runs.alerts,
 						runs.trigger,
