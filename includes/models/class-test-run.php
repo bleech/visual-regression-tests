@@ -287,7 +287,7 @@ class Test_Run {
 			'manual' => __( 'Manual', 'visual-regression-tests' ),
 			'scheduled' => __( 'Scheduled', 'visual-regression-tests' ),
 			'api' => __( 'API', 'visual-regression-tests' ),
-			'updates' => __( 'WordPress Updates', 'visual-regression-tests' ),
+			'update' => __( 'WordPress Updates', 'visual-regression-tests' ),
 		];
 
 		return $trigger_titles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
