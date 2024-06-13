@@ -180,7 +180,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			$alerts_ids = array_unique( array_merge( $alerts_ids, empty( $test_run->alerts ) ? [] : maybe_unserialize( $test_run->alerts ) ) );
 		}
 
-		$this->tests = empty( $test_ids ) ? [] : Test::get_items( [
+		$this->tests = empty( $tests_ids ) ? [] : Test::get_items( [
 			'ids' => $tests_ids,
 		] );
 
@@ -318,7 +318,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		// Get alerts for this test run.
 		$alerts = array_filter( $this->alerts, function( $alert ) use ( $item ) {
-			return in_array( $alert->id, empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ), true );
+			return in_array( intval($alert->id), empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ), true );
 		} );
 
 		$alert_post_ids = wp_list_pluck( $alerts, 'post_id' );
