@@ -180,11 +180,11 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			$alerts_ids = array_unique( array_merge( $alerts_ids, empty( $test_run->alerts ) ? [] : maybe_unserialize( $test_run->alerts ) ) );
 		}
 
-		$this->tests = Test::get_items( [
+		$this->tests = empty( $test_ids ) ? [] : Test::get_items( [
 			'ids' => $tests_ids,
 		] );
 
-		$this->alerts = Alert::get_items( [
+		$this->alerts = empty( $alerts_ids ) ? [] : Alert::get_items( [
 			'ids' => $alerts_ids,
 		] );
 	}
