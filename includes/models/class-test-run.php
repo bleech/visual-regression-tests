@@ -370,7 +370,7 @@ class Test_Run {
 				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&test_run_id=' );
+				$base_link = admin_url( 'admin.php?page=vrts-alerts&test_run_id=' . $test_run->id );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */

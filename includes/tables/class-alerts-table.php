@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Alerts_Table {
 
-	const DB_VERSION = '1.1';
+	const DB_VERSION = '1.2';
 	const TABLE_NAME = 'vrts_alerts';
 
 	/**
@@ -40,6 +40,7 @@ class Alerts_Table {
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				title text,
 				post_id bigint(20),
+				test_run_id bigint(20),
 				screenshot_test_id varchar(40),
 				target_screenshot_url varchar(2048),
 				target_screenshot_finish_date datetime,

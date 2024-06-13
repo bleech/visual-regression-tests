@@ -32,7 +32,7 @@
 		}
 	}
 
-	.vrts-test-run-trigger-notes {
+	[data-vrts-test-run-details="hidden"] .vrts-test-run-trigger-notes {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;

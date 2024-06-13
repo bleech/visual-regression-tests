@@ -6,6 +6,7 @@ use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Features\Alerts_Page;
 use Vrts\Models\Alert;
 use Vrts\Features\Service;
+use Vrts\Models\Test_Run;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
@@ -99,6 +100,7 @@ class Alerts_List_Table extends \WP_List_Table {
 		$columns = [
 			'cb' => '<input type="checkbox" />',
 			'title' => esc_html__( 'Title', 'visual-regression-tests' ),
+			'test_run' => esc_html__( 'Run', 'visual-regression-tests' ),
 			'tested_url' => esc_html__( 'Path', 'visual-regression-tests' ),
 			'differences' => esc_html__( 'Visual Difference', 'visual-regression-tests' ),
 			'target_screenshot_finish_date' => esc_html__( 'Date', 'visual-regression-tests' ),
@@ -175,6 +177,25 @@ class Alerts_List_Table extends \WP_List_Table {
 				$this->row_actions( $actions )
 			);
 		}//end if
+	}
+
+	/**
+	 * Render the test run column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
+	public function column_test_run( $item ) {
+		$test_run = Test_Run::get_item( $item->test_run_id );
+		$trigger_title = Test_Run::get_trigger_title( $test_run );
+
+		return sprintf(
+			'<p>%s<p><span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span>',
+			sprintf( esc_html__( 'Run #%s', 'visual-regression-tests' ), $item->test_run_id ),
+			esc_attr( $test_run->trigger ),
+			$trigger_title
+		);
 	}
 
 	/**
@@ -399,6 +420,10 @@ class Alerts_List_Table extends \WP_List_Table {
 			's' => $search_query,
 			'filter_status' => $filter_status_query,
 		];
+
+		if ( isset( $_GET['test_run_id'] ) ) {
+			$args['test_run_id'] = intval( $_GET['test_run_id'] );
+		}
 
 		// Process any bulk actions.
 		$this->process_bulk_action();

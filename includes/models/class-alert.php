@@ -44,7 +44,7 @@ class Alert {
 			$alert_states
 		);
 
-		if ( '' !== $args['s'] ) {
+		if ( ! empty( $args['s'] ) ) {
 			$where .= $wpdb->prepare(
 				' AND title LIKE %s',
 				'%' . $wpdb->esc_like( $args['s'] ) . '%'
@@ -56,6 +56,13 @@ class Alert {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				' AND id IN (' . implode( ',', array_fill( 0, count( $args['ids'] ), '%d' ) ) . ')',
 				$args['ids']
+			);
+		}
+
+		if ( isset( $args['test_run_id'] ) ) {
+			$where .= $wpdb->prepare(
+				' AND test_run_id = %d',
+				$args['test_run_id']
 			);
 		}
 
