@@ -295,8 +295,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		$row_actions = sprintf(
 			'<strong><span class="row-title">%1$s</span></strong> %2$s %3$s',
-			// translators: %s: Test run number.
-			sprintf( __( 'Run #%s', 'visual-regression-tests' ), $item->id ),
+			sprintf( $item->title ),
 			$this->row_actions( $actions, true ),
 			$this->test_run_details( $item )
 		);

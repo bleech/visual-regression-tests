@@ -3,6 +3,7 @@ namespace Vrts\Models;
 
 use Vrts\Tables\Alerts_Table;
 use Vrts\Services\Test_Service;
+use Vrts\Tables\Test_Runs_Table;
 
 /**
  * Model Alert Page.
@@ -20,6 +21,7 @@ class Alert {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
+		$test_runs_table = Test_Runs_Table::get_table_name();
 
 		$defaults = [
 			's' => '',
@@ -46,7 +48,8 @@ class Alert {
 
 		if ( ! empty( $args['s'] ) ) {
 			$where .= $wpdb->prepare(
-				' AND title LIKE %s',
+				' AND ( title LIKE %s OR test_run_title LIKE %s )',
+				'%' . $wpdb->esc_like( $args['s'] ) . '%',
 				'%' . $wpdb->esc_like( $args['s'] ) . '%'
 			);
 		}
@@ -82,8 +85,38 @@ class Alert {
 			$limit
 		);
 
+		$alert_title = sprintf(
+			"CONCAT( '%s', alert.id ) as title",
+			esc_html__( 'Alert #', 'visual-regression-tests' )
+		);
+
+		$run_title = sprintf(
+			"CONCAT( '%s', run.id ) as test_run_title",
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		$query = "
-			SELECT * FROM $alerts_table
+			SELECT
+				*
+				FROM (
+					SELECT
+						alert.id,
+						$alert_title,
+						alert.post_id,
+						alert.screenshot_test_id,
+						alert.target_screenshot_url,
+						alert.target_screenshot_finish_date,
+						alert.base_screenshot_url,
+						alert.base_screenshot_finish_date,
+						alert.comparison_screenshot_url,
+						alert.comparison_id,
+						alert.differences,
+						alert.alert_state,
+						alert.test_run_id,
+						$run_title
+					FROM $alerts_table as alert
+					LEFT JOIN $test_runs_table as run ON run.id = alert.test_run_id
+				) alerts
 			$where
 			$orderby
 			$limits

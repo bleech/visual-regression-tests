@@ -109,6 +109,12 @@
 			}
 		}
 	}
+
+	.vrts-test-run-view-alerts {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+	}
 }
 
 .vrts-test-runs-list-queue-table {

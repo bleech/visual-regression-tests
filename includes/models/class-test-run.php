@@ -69,11 +69,17 @@ class Test_Run {
 			);
 		}
 
+		$run_title = $wpdb->prepare(
+			"CONCAT( '%s', runs.id ) as title",
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		$query = "
 			$select
 				FROM (
 					SELECT
 						runs.id,
+						$run_title,
 						runs.tests,
 						runs.alerts,
 						runs.trigger,
@@ -370,15 +376,15 @@ class Test_Run {
 				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-alerts&test_run_id=' . $test_run->id );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );
 				$instructions .= sprintf(
-					/* translators: %1$s and %2$s: link wrapper. */
-					esc_html( _n( '%1$s%2$s View Alert (%4$s)%3$s', '%1$s%2$s View Alerts (%4$s)%3$s', $alerts_count, 'visual-regression-tests' ) ),
-					'<a href="' . $base_link . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
-					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
-					'</a>',
-					$alerts_count
+					'<button type="submit" name="s" value="%1$s" form="vrts-filter-alerts-form" class="button-link vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</button>',
+					esc_attr( $test_run->title ),
+					sprintf(
+						// translators: %s: number of alerts.
+						esc_html( _n( 'View Alert (%s)', 'View Alerts (%s)', $alerts_count, 'visual-regression-tests' ) ),
+						$alerts_count
+					)
 				);
 				break;
 			case 'running':

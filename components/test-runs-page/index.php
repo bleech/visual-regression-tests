@@ -12,6 +12,8 @@
 	$list_table->display();
 	?>
 
+	<form id="vrts-filter-alerts-form" action="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>" method="post"></form>
+
 	<form method="post">
 		<?php
 		$list_table = $data['list_table'];
