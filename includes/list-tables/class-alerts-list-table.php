@@ -188,6 +188,11 @@ class Alerts_List_Table extends \WP_List_Table {
 	 */
 	public function column_test_run( $item ) {
 		$test_run = Test_Run::get_item( $item->test_run_id );
+
+		if ( ! $test_run ) {
+			return '-';
+		}
+
 		$trigger_title = Test_Run::get_trigger_title( $test_run );
 
 		return sprintf(
