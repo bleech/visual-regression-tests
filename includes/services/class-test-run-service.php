@@ -27,7 +27,7 @@ class Test_Run_Service {
 
 		if ( $test_run && empty( $test_run->finished_at ) && ! empty( $data['finished_at'] ) ) {
 			$test_run_just_finished = true;
-			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'] );
+			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'], $test_run );
 		}
 
 		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function( $test ) {
@@ -53,7 +53,7 @@ class Test_Run_Service {
 		return true;
 	}
 
-	protected function update_tests_and_create_alerts( $comparisons ) {
+	protected function update_tests_and_create_alerts( $comparisons, $test_run ) {
 		$alert_ids = [];
 
 		foreach ( $comparisons as $comparison ) {
@@ -63,7 +63,7 @@ class Test_Run_Service {
 			if ( $comparison['pixels_diff'] > 1 && ! $comparison['matches_false_positive'] ) {
 				$post_id = Test::get_post_id_by_service_test_id( $test_id );
 				$alert_service = new Alert_Service();
-				$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison );
+				$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison, $test_run );
 				$alert_ids[] = $alert_id;
 			}//end if
 

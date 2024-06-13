@@ -182,7 +182,7 @@ class Alert {
 	 *
 	 * @return array
 	 */
-	public static function get_total_items( $filter_status_query = null ) {
+	public static function get_total_items( $filter_status_query = null, $test_run_id = null ) {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
@@ -193,9 +193,17 @@ class Alert {
 		$alert_states = ( 'archived' === $filter_status_query ) ? [ 1, 2 ] : [ 0 ];
 		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
+		$test_run_where = '';
+		if ( null !== $test_run_id ) {
+			$test_run_where = $wpdb->prepare(
+				' AND test_run_id = %d',
+				$test_run_id
+			);
+		}
+
 		$where = $wpdb->prepare(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
-			"WHERE alert_state IN ($alert_states_placeholders)",
+			"WHERE alert_state IN ($alert_states_placeholders)" . $test_run_where,
 			$alert_states
 		);
 
