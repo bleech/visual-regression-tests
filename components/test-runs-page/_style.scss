@@ -2,6 +2,7 @@
 @import "@wordpress/base-styles/breakpoints";
 
 .vrts-list-table-page {
+
 	.vrts-test-run-trigger {
 		display: inline-block;
 		border-radius: 32px;
@@ -12,12 +13,12 @@
 
 		&--api {
 			background: rgba(224, 84, 6, 0.15);
-			color: #AE4204;
+			color: #ae4204;
 		}
 
 		&--scheduled {
 			background: rgba(106, 26, 185, 0.1);
-			color: #591B98;
+			color: #591b98;
 		}
 
 		&--manual {
@@ -28,7 +29,7 @@
 
 		&--updates {
 			background: rgba(200, 11, 147, 0.1);
-			color: #A51D7F;
+			color: #a51d7f;
 		}
 	}
 
@@ -40,12 +41,14 @@
 }
 
 .vrts-test-runs-page {
+
 	.tablenav.top {
 		clear: none;
 	}
 }
 
 .vrts-test-runs-list-table {
+
 	.column-icon {
 		text-align: center;
 		padding: 10px 0 0 10px;
@@ -53,12 +56,13 @@
 	}
 
 	.vrts-runs-status {
+
 		&--passed {
 			color: $alert-green;
 		}
 
 		&--scheduled {
-			color: #F97B06;
+			color: #f97b06;
 		}
 
 		&--has-alerts {
@@ -75,7 +79,7 @@
 	}
 
 	[data-vrts-test-run-status="running"] .row-title {
-		color: #F97B06;
+		color: #f97b06;
 	}
 
 	.row-actions {
@@ -97,7 +101,9 @@
 	}
 
 	tr:hover {
+
 		.row-actions {
+
 			.details {
 				visibility: visible;
 			}
@@ -142,6 +148,7 @@
 		}
 
 		&--passed {
+
 			.vrts-test-run-details-section-title {
 				color: $alert-green;
 			}
