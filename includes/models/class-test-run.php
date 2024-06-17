@@ -70,7 +70,7 @@ class Test_Run {
 		}
 
 		$run_title = $wpdb->prepare(
-			"CONCAT( '%s', runs.id ) as title",
+			'CONCAT( %s, runs.id ) as title',
 			esc_html__( 'Run #', 'visual-regression-tests' )
 		);
 

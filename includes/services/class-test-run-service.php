@@ -23,8 +23,6 @@ class Test_Run_Service {
 		$test_run_just_finished = false;
 		$alert_ids = [];
 
-		// var_dump($run_id, $data, $test_run);die();
-
 		if ( $test_run && empty( $test_run->finished_at ) && ! empty( $data['finished_at'] ) ) {
 			$test_run_just_finished = true;
 			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'], $test_run );
@@ -53,6 +51,14 @@ class Test_Run_Service {
 		return true;
 	}
 
+	/**
+	 * Update tests and create alerts.
+	 *
+	 * @param array  $comparisons Comparisons.
+	 * @param object $test_run Test run.
+	 *
+	 * @return array
+	 */
 	protected function update_tests_and_create_alerts( $comparisons, $test_run ) {
 		$alert_ids = [];
 
@@ -75,6 +81,15 @@ class Test_Run_Service {
 		return $alert_ids;
 	}
 
+	/**
+	 * Create test run.
+	 *
+	 * @param string $service_test_run_id Service test run id.
+	 * @param array  $data Data.
+	 * @param bool   $update Update.
+	 *
+	 * @return boolean
+	 */
 	public function create_test_run( $service_test_run_id, $data, $update = false ) {
 		$test_run = Test_Run::get_by_service_test_run_id( $service_test_run_id );
 

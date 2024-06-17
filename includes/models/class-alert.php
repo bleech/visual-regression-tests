@@ -179,6 +179,7 @@ class Alert {
 	 * Get total test items from database
 	 *
 	 * @param int $filter_status_query the id of status.
+	 * @param int $test_run_id the id of the test run.
 	 *
 	 * @return array
 	 */
@@ -203,7 +204,7 @@ class Alert {
 
 		$where = $wpdb->prepare(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
-			"WHERE alert_state IN ($alert_states_placeholders)" . $test_run_where,
+			"WHERE alert_state IN ($alert_states_placeholders)$test_run_where",
 			$alert_states
 		);
 
