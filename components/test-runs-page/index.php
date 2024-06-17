@@ -26,4 +26,14 @@
 		}
 		?>
 	</form>
+	<?php
+	use Vrts\Features\Admin_Notices;
+	use Vrts\Services\Manual_Test_Service;
+
+	$vrts_manual_test_service = new Manual_Test_Service();
+	if ( $vrts_manual_test_service->is_active() ) {
+		$vrts_manual_test_service->delete_option();
+		Admin_Notices::render_notification( 'test_started', false, [] );
+	}
+	?>
 </div>

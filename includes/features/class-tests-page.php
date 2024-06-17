@@ -18,6 +18,7 @@ class Tests_Page {
 		add_filter( 'set-screen-option', [ $this, 'set_screen' ], 10, 3 );
 		add_action( 'wp_link_query', [ $this, 'wp_link_query' ], 10, 2 );
 		add_action( 'wp_ajax_vrts_test_quick_edit_save', [ $this, 'quick_edit_save' ] );
+		add_action( 'admin_init', [ $this, 'handle_bulk_actions' ] );
 	}
 
 	/**
@@ -163,9 +164,8 @@ class Tests_Page {
 		$service = new Manual_Test_Service();
 		$service->run_tests();
 
-		if ( isset( $_SERVER['REQUEST_URI'] ) ) {
-			wp_safe_redirect( wp_unslash( $_SERVER['REQUEST_URI'] ) );
-		}
+		$page_url = admin_url( 'admin.php?page=vrts-runs' );
+		wp_safe_redirect( $page_url );
 		exit;
 	}
 
@@ -248,6 +248,7 @@ class Tests_Page {
 			$test = Test::get_item( $test_id );
 
 			$redirect_to = add_query_arg([
+				'page' => 'vrts-runs',
 				'message' => 'success',
 				'run-manual-test' => true,
 				'post_id' => $test->post_id,
@@ -483,5 +484,28 @@ class Tests_Page {
 			'total_tests' => Subscription::get_total_tests(),
 			'remaining_tests' => Subscription::get_remaining_tests(),
 		]);
+	}
+
+	public function handle_bulk_actions( ) {
+		$action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+		$page = ! empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : '';
+		if ( 'vrts-tests_list_table' === $page && 'run-manual-test' === $action ) {
+			$nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ?? '' ) );
+			if ( ! wp_verify_nonce( $nonce, 'bulk-tests' ) ) {
+				return;
+			}
+
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Should be okay for now.
+			$test_ids = wp_unslash( $_POST['id'] ?? 0 );
+			if ( 0 === $test_ids ) {
+				return;
+			}
+
+			$manual_test_service = new Manual_Test_Service();
+			$manual_test_service->run_tests( $test_ids );
+			$page_url = admin_url( 'admin.php?page=vrts-runs' );
+			wp_safe_redirect( $page_url );
+			exit;
+		}
 	}
 }

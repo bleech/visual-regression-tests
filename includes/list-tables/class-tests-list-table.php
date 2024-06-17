@@ -203,11 +203,6 @@ class Tests_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		if ( 'run-manual-test' === $this->current_action() ) {
-			$manual_test_service = new Manual_Test_Service();
-			$manual_test_service->run_tests( $test_ids );
-			return;
-		}
 
 		if ( 'set-status-disable' === $this->current_action() ) {
 			foreach ( $test_ids as $test_id ) {
