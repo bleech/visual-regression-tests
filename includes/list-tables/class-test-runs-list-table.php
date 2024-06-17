@@ -318,7 +318,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		// Get alerts for this test run.
 		$alerts = array_filter( $this->alerts, function( $alert ) use ( $item ) {
-			return in_array( intval($alert->id), empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ), true );
+			return in_array( intval( $alert->id ), empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ), true );
 		} );
 
 		$alert_post_ids = wp_list_pluck( $alerts, 'post_id' );

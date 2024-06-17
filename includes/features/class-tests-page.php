@@ -486,8 +486,13 @@ class Tests_Page {
 		]);
 	}
 
-	public function handle_bulk_actions( ) {
+	/**
+	 * Handle bulk actions.
+	 */
+	public function handle_bulk_actions() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It should be ok here.
 		$action = ! empty( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It should be ok here.
 		$page = ! empty( $_REQUEST['page'] ) ? $_REQUEST['page'] : '';
 		if ( 'vrts-tests_list_table' === $page && 'run-manual-test' === $action ) {
 			$nonce = sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ?? '' ) );

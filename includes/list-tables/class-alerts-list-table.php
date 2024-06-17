@@ -195,6 +195,7 @@ class Alerts_List_Table extends \WP_List_Table {
 
 		return sprintf(
 			'<p>%s<p><span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span>',
+			/* translators: %s: The ID of the test run. */
 			sprintf( esc_html__( 'Run #%s', 'visual-regression-tests' ), $item->test_run_id ),
 			esc_attr( $test_run->trigger ),
 			$trigger_title

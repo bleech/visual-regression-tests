@@ -41,7 +41,7 @@ class Tests {
 	 * @param string $trigger_notes Trigger notes.
 	 * @param array  $trigger_meta Trigger meta.
 	 */
-	private static function run_tests( $trigger, $trigger_notes, $trigger_meta = null) {
+	private static function run_tests( $trigger, $trigger_notes, $trigger_meta = null ) {
 		$has_subscription = Subscription::get_subscription_status();
 
 		if ( ! $has_subscription ) {

@@ -203,7 +203,6 @@ class Tests_List_Table extends \WP_List_Table {
 			return;
 		}
 
-
 		if ( 'set-status-disable' === $this->current_action() ) {
 			foreach ( $test_ids as $test_id ) {
 				$item = Test::get_item( $test_id );
