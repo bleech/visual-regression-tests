@@ -2,6 +2,7 @@
 
 namespace Vrts\Core\Utilities;
 
+use DateTime;
 use DateTimeZone;
 
 class Date_Time_Helpers {
@@ -58,7 +59,7 @@ class Date_Time_Helpers {
 	 *
 	 * @param mixed $date a DateTime string.
 	 *
-	 * @return string Formatted date.
+	 * @return DateTime DateTime instance.
 	 */
 	private static function date_from_gmt( $date ) {
 		$date = date_create( $date, new DateTimeZone( 'UTC' ) );

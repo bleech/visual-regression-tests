@@ -294,6 +294,43 @@ class Test_Run {
 	}
 
 	/**
+	 * Get test run trigger text color
+	 *
+	 * @param int|object $test_run test run id or test object.
+	 *
+	 * @return string
+	 */
+	public static function get_trigger_text_color( $test_run ) {
+		if ( is_int( $test_run ) ) {
+			$test_run = self::get_item( $test_run );
+		}
+
+		$trigger_colours = [
+			'manual' => '#045495',
+			'scheduled' => '#591b98',
+			'api' => '#ae4204',
+			'update' => '#a51d7f',
+		];
+
+		return $trigger_colours[ $test_run->trigger ] ?? '#2c3338';
+	}
+
+	public static function get_trigger_background_color( $test_run ) {
+		if ( is_int( $test_run ) ) {
+			$test_run = self::get_item( $test_run );
+		}
+
+		$trigger_colours = [
+			'manual' => 'rgba(5, 116, 206, 0.1)',
+			'scheduled' => 'rgba(106, 26, 185, 0.1)',
+			'api' => 'rgba(224, 84, 6, 0.15)',
+			'update' => 'rgba(200, 11, 147, 0.1)',
+		];
+
+		return $trigger_colours[ $test_run->trigger ] ?? 'rgba(192, 192, 192, 0.15)';
+	}
+
+	/**
 	 * Get test run calculated status
 	 *
 	 * @param int|object $test_run test run id or test object.

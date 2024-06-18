@@ -2,6 +2,7 @@
 
 namespace Vrts\Services;
 
+use Vrts\Features\Email_Notifications;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Models\Test;
@@ -32,7 +33,7 @@ class Test_Run_Service {
 			return $test->id;
 		}, Test::get_by_service_test_ids( $data['comparison_schedule_ids'] ));
 
-		$this->create_test_run( $data['run_id'], [
+		$test_run_id = $this->create_test_run( $data['run_id'], [
 			'tests' => maybe_serialize( $test_ids ),
 			'alerts' => ! empty( $alert_ids ) ? maybe_serialize( $alert_ids ) : null,
 			'started_at' => $data['started_at'],
@@ -43,9 +44,8 @@ class Test_Run_Service {
 		], true);
 
 		if ( $test_run_just_finished && ! empty( $alert_ids ) ) {
-			// TODO Send e-mail notification.
-			// $email_notifications = new Email_Notifications();
-			// $email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
+			$email_notifications = new Email_Notifications();
+			$email_notifications->send_test_run_email( $test_run_id );
 		}
 
 		return true;

@@ -3,6 +3,10 @@
 namespace Vrts\Features;
 
 use Vrts\Features\Subscription;
+use Vrts\Models\Alert;
+use Vrts\Models\Test;
+use Vrts\Models\Test_Run;
+use Vrts\Services\Render_Template_Service;
 class Email_Notifications {
 
 	/**
@@ -55,6 +59,50 @@ class Email_Notifications {
 	}
 
 	/**
+	 * Send email.
+	 *
+	 *  @param int $differences the number of differences.
+	 *  @param int $post_id the id of the post.
+	 *  @param int $alert_id the id of the alert.
+	 */
+	public function send_test_run_email( $test_run_id ) {
+		$notification_email = sanitize_email( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
+		$site_url = get_site_url();
+		$parse_url = wp_parse_url( $site_url );
+		$base_url  = $parse_url['scheme'] . '://' . $parse_url['host'];
+		$admin_url = get_admin_url();
+
+		// Check if notification email already exists.
+		$subject = sprintf(
+			/* translators: %1$s: the id of the alert, %2$s: the test url */
+			esc_html_x( 'VRTs: Alert for Test Run #%1$s', 'test run notification email subject', 'visual-regression-tests' ),
+			$test_run_id
+		);
+
+		$service = new Render_Template_Service();
+		$context = $this->get_test_run_email_context( $test_run_id );
+		$message = $service->render_template('emails/test-run', $context);
+
+		$has_subscription = Subscription::get_subscription_status();
+		$headers = [
+			'Content-Type: text/html; charset=UTF-8',
+		];
+		if ( '1' === $has_subscription ) {
+			$notification_email_cc = $this->sanitize_multiple_emails( vrts()->settings()->get_option( 'vrts_email_notification_cc_address' ) );
+			$headers[] = 'Cc: ' . $notification_email_cc;
+		}
+
+		if ( $notification_email ) {
+			$sent = wp_mail( $notification_email, wp_specialchars_decode( $subject ), $message, $headers );
+			if ( $sent ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	/**
 	 * Sanitize multiple emails at once
 	 *
 	 * @param string $multiple_emails_string the email addresses to sanitize.
@@ -72,5 +120,42 @@ class Email_Notifications {
 			}
 		}
 		return implode( ',', $sanitized_email_array );
+	}
+
+	/**
+	 * Get the context for the test run email.
+	 *
+	 * @param int $test_run_id the id of the test run.
+	 */
+	private function get_test_run_email_context( $test_run_id ) {
+		$test_run = Test_Run::get_item( $test_run_id );
+		$test_ids = maybe_unserialize( $test_run->tests ) ?? [];
+		$alert_ids = maybe_unserialize( $test_run->alerts ) ?? [];
+		$tests = Test::get_items_by_ids( $test_ids );
+		$alerts = Alert::get_items_by_ids( $alert_ids );
+
+		$tests_with_alerts = array_map( function( $alert ) use ($tests) {
+			foreach ( $tests as $test ) {
+				if ( $test->post_id === $alert->post_id ) {
+					return $test->id;
+				}
+			}
+		}, $alerts );
+		$tests_without_alerts = array_diff( $test_ids, $tests_with_alerts );
+
+		$tests_by_id = [];
+		foreach ( $tests as $test ) {
+			$tests_by_id[ $test->id ] = $test;
+		}
+
+		$context = [
+			'test_run' => $test_run,
+			'tests' => $tests_by_id,
+			'alerts' => $alert_ids,
+			'tests_with_alerts' => $tests_with_alerts,
+			'tests_without_alerts' => $tests_without_alerts,
+		];
+
+		return $context;
 	}
 }

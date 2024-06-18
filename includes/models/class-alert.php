@@ -148,6 +148,28 @@ class Alert {
 	}
 
 	/**
+	 * Get multiple alerts from database by id
+	 *
+	 * @param array $ids the ids of the items.
+	 *
+	 * @return array
+	 */
+	public static function get_items_by_ids( $ids = [] ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $alerts_table WHERE id IN (" . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) . ')',
+				$ids
+			)
+		);
+	}
+
+	/**
 	 * Get latest alert id by post id
 	 *
 	 * @param int $post_id the id of the post.
