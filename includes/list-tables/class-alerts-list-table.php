@@ -422,7 +422,7 @@ class Alerts_List_Table extends \WP_List_Table {
 		$order_by = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) : 'id';
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- It's the list search query parameter.
-		$search_query = isset( $_POST['s'] ) && '' !== $_POST['s'] ? sanitize_text_field( wp_unslash( $_POST['s'] ) ) : null;
+		$search_query = isset( $_REQUEST['s'] ) && '' !== $_REQUEST['s'] ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : null;
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- It's the list search query parameter.
 		$filter_status_query = isset( $_REQUEST['status'] ) && '' !== $_REQUEST['status'] ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : null;

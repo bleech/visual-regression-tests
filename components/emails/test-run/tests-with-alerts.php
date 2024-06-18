@@ -25,7 +25,7 @@ use Vrts\Core\Utilities\Url_Helpers;
 					<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#1954ed" width="100.00%" style="border-radius: 2px; background-color: #1954ed; width: 100%; border-spacing: 0; border-collapse: separate">
 						<tr>
 							<td align="center" valign="middle">
-								<a href="<?php echo Url_Helpers::get_alerts_page($test_run->id); ?>" style="font-size: 14px; font-weight: 600; color: white; margin: 0; padding: 0; line-height: 20px; mso-line-height-alt: 20px; text-decoration: none; display: block; padding: 8px 12px;"><?php esc_html_e('Review&nbsp;Alerts', 'visual-regression-tests'); ?></a>
+								<a href="<?php echo Url_Helpers::get_alerts_page($test_run); ?>" style="font-size: 14px; font-weight: 600; color: white; margin: 0; padding: 0; line-height: 20px; mso-line-height-alt: 20px; text-decoration: none; display: block; padding: 8px 12px;"><?php esc_html_e('Review&nbsp;Alerts', 'visual-regression-tests'); ?></a>
 							</td>
 						</tr>
 					</table>

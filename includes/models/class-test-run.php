@@ -3,6 +3,7 @@
 namespace Vrts\Models;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Tables\Alerts_Table;
@@ -134,11 +135,16 @@ class Test_Run {
 
 		$test_runs_table = Test_Runs_Table::get_table_name();
 
+		$run_title = $wpdb->prepare(
+			'CONCAT( %s, id ) as title',
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_row(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $test_runs_table WHERE id = %d",
+				"SELECT *, $run_title FROM $test_runs_table WHERE id = %d",
 				$id
 			)
 		);
@@ -156,11 +162,16 @@ class Test_Run {
 
 		$test_runs_table = Test_Runs_Table::get_table_name();
 
+		$run_title = $wpdb->prepare(
+			'CONCAT( %s, id ) as title',
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $test_runs_table WHERE id IN (" . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) . ')',
+				"SELECT *, $run_title FROM $test_runs_table WHERE id IN (" . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) . ')',
 				$ids
 			)
 		);
@@ -178,11 +189,16 @@ class Test_Run {
 
 		$test_runs_table = Test_Runs_Table::get_table_name();
 
+		$run_title = $wpdb->prepare(
+			'CONCAT( %s, id ) as title',
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_row(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $test_runs_table WHERE service_test_run_id = %s",
+				"SELECT *, $run_title FROM $test_runs_table WHERE service_test_run_id = %s",
 				$test_run_id
 			)
 		);
@@ -415,8 +431,8 @@ class Test_Run {
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );
 				$instructions .= sprintf(
-					'<button type="submit" name="s" value="%1$s" form="vrts-filter-alerts-form" class="button-link vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</button>',
-					esc_attr( $test_run->title ),
+					'<a href="%1$s" class="button-link vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</a>',
+					esc_url( Url_Helpers::get_alerts_page( $test_run ) ),
 					sprintf(
 						// translators: %s: number of alerts.
 						esc_html( _n( 'View Alert (%s)', 'View Alerts (%s)', $alerts_count, 'visual-regression-tests' ) ),

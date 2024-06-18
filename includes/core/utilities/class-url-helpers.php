@@ -2,6 +2,8 @@
 
 namespace Vrts\Core\Utilities;
 
+use Vrts\Models\Test_Run;
+
 class Url_Helpers {
 	/**
 	 * Get the relative permalink of a post.
@@ -26,11 +28,14 @@ class Url_Helpers {
 		return $admin_url . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id;
 	}
 
-	public static function get_alerts_page( $test_run_id = null ) {
+	public static function get_alerts_page( $test_run = null ) {
 		$admin_url = get_admin_url();
 		$page = 'admin.php?page=vrts-alerts';
-		if ( $test_run_id ) {
-			$page .= '&test_run_id=' . $test_run_id;
+		if ( is_numeric( $test_run ) && intval( $test_run ) == $test_run ) {
+			$test_run = Test_Run::get_item( $test_run );
+		}
+		if ( $test_run ) {
+			$page .= '&s=' . urlencode( $test_run->title );
 		}
 		return $admin_url . $page;
 	}
