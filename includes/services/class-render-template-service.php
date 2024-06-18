@@ -3,24 +3,27 @@
 namespace Vrts\Services;
 
 class Render_Template_Service {
-	function render_template($template, $context = []) {
-		// Check if the file exists
+	/**
+	 * Render a template.
+	 *
+	 * @param string $template Template name.
+	 * @param array  $context Context.
+	 *
+	 * @return string
+	 */
+	public function render_template( $template, $context = [] ) {
 		$template_path = plugin_dir_path( VRTS_PLUGIN_FILE ) . 'components/' . $template . '.php';
 
-		if (!file_exists($template_path)) {
+		if ( ! file_exists( $template_path ) ) {
 			return '';
 		}
 
-		// Extract the variables from the context array
-		extract($context);
+		extract( $context );
 
-		// Start output buffering
 		ob_start();
 
-		// Include the template file
 		include $template_path;
 
-		// Get the contents of the buffer
 		$output = ob_get_clean();
 
 		return $output;

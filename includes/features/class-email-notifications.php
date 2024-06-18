@@ -61,9 +61,7 @@ class Email_Notifications {
 	/**
 	 * Send email.
 	 *
-	 *  @param int $differences the number of differences.
-	 *  @param int $post_id the id of the post.
-	 *  @param int $alert_id the id of the alert.
+	 *  @param int $test_run_id the id of the test run.
 	 */
 	public function send_test_run_email( $test_run_id ) {
 		$notification_email = sanitize_email( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
@@ -81,7 +79,7 @@ class Email_Notifications {
 
 		$service = new Render_Template_Service();
 		$context = $this->get_test_run_email_context( $test_run_id );
-		$message = $service->render_template('emails/test-run', $context);
+		$message = $service->render_template( 'emails/test-run', $context );
 
 		$has_subscription = Subscription::get_subscription_status();
 		$headers = [
@@ -134,7 +132,7 @@ class Email_Notifications {
 		$tests = Test::get_items_by_ids( $test_ids );
 		$alerts = Alert::get_items_by_ids( $alert_ids );
 
-		$tests_with_alerts = array_map( function( $alert ) use ($tests) {
+		$tests_with_alerts = array_map( function( $alert ) use ( $tests ) {
 			foreach ( $tests as $test ) {
 				if ( $test->post_id === $alert->post_id ) {
 					return $test->id;

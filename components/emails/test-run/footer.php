@@ -25,7 +25,7 @@
 			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="border-spacing: 0">
 				<tr>
 					<td valign="middle">
-						<img src="<?php echo esc_url(vrts()->get_plugin_url('assets/icons/vrts-logo-icon.svg')); ?>" width="20" height="20" alt="VRTs logo" style="width: 20px; height: 20px; display: block" />
+						<img src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/icons/vrts-logo-icon.svg' ) ); ?>" width="20" height="20" alt="VRTs logo" style="width: 20px; height: 20px; display: block" />
 					</td>
 					<td valign="middle" style="padding-left: 4px">
 						<p style="color: #262626; margin: 0; padding: 0; font-size: 12px; line-height: 20px; mso-line-height-alt: normal">

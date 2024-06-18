@@ -331,6 +331,13 @@ class Test_Run {
 		return $trigger_colours[ $test_run->trigger ] ?? '#2c3338';
 	}
 
+	/**
+	 * Get test run trigger background color
+	 *
+	 * @param int|object $test_run test run id or test object.
+	 *
+	 * @return string
+	 */
 	public static function get_trigger_background_color( $test_run ) {
 		if ( is_int( $test_run ) ) {
 			$test_run = self::get_item( $test_run );

@@ -363,17 +363,8 @@ class Alerts_List_Table extends \WP_List_Table {
 			],
 		];
 
-		if ( isset( $_GET['test_run_id'] ) ) {
-			$test_run_id = intval( $_GET['test_run_id'] );
-			$links['test_run'] = [
-				'title' => esc_html__( 'For Test Run', 'visual-regression-tests' ) . ' #' . $test_run_id,
-				'link' => "{$base_link}&test_run_id=" . $test_run_id,
-				'count' => Alert::get_total_items( null, $test_run_id ),
-			];
-			$filter_status_query = 'test_run';
-		} else {
-			$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
-		}
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list search query parameter.
+		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
 
 		$status_links = [];
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
@@ -435,10 +426,6 @@ class Alerts_List_Table extends \WP_List_Table {
 			's' => $search_query,
 			'filter_status' => $filter_status_query,
 		];
-
-		if ( isset( $_GET['test_run_id'] ) ) {
-			$args['test_run_id'] = intval( $_GET['test_run_id'] );
-		}
 
 		// Process any bulk actions.
 		$this->process_bulk_action();

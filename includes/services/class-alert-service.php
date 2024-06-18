@@ -9,9 +9,9 @@ class Alert_Service {
 	/**
 	 * Create alert from comparison.
 	 *
-	 * @param int   $post_id Post ID.
-	 * @param int   $test_id Test ID.
-	 * @param array $comparison Comparison.
+	 * @param int    $post_id Post ID.
+	 * @param int    $test_id Test ID.
+	 * @param array  $comparison Comparison.
 	 * @param object $test_run Test run.
 	 */
 	public function create_alert_from_comparison( $post_id, $test_id, $comparison, $test_run = null ) {
