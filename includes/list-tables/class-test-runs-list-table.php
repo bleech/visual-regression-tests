@@ -294,7 +294,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		);
 
 		$row_actions = sprintf(
-			'<strong><span class="row-title">%1$s</span></strong> %2$s %3$s',
+			'<strong><a class="row-title vrts-show-test-run-details" href="#">%1$s</a></strong> %2$s %3$s',
 			sprintf( $item->title ),
 			$this->row_actions( $actions, true ),
 			$this->test_run_details( $item )
