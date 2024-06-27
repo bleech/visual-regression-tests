@@ -39,10 +39,12 @@ use Vrts\Core\Utilities\Url_Helpers;
 			<tr>
 				<td colspan="2" style="padding-top: 5px;">
 					<ul style="list-style-type: disc; margin: 0; padding-left: 1.5em">
-						<?php foreach ( $tests_with_alerts as $index => $test_id ) : ?>
+						<?php foreach ( $tests_with_alerts as $test_id ) : ?>
+							<?php $test = $tests[ $test_id ]; ?>
+							<?php $alert = $alerts[ $test->post_id ]; ?>
 							<li style="margin-top: 10px">
-								<span style="font-size: 14px; font-weight: 600; text-align: left; line-height: 20px; mso-line-height-rule: exactly"><?php echo get_the_title( $test_id ); ?></span><br />
-								<a href="<?php echo esc_url( Url_Helpers::get_alert_page( $alerts[ $index ] ) ); ?>" style="font-size: 14px; font-weight: 400; color: #1954ed; text-align: left; line-height: 20px; mso-line-height-rule: exactly; text-decoration: none;"><?php echo esc_url( Url_Helpers::get_relative_permalink( $test_id ) ); ?></a>
+								<span style="font-size: 14px; font-weight: 600; text-align: left; line-height: 20px; mso-line-height-rule: exactly"><?php echo get_the_title( $test->post_id ); ?></span><br />
+								<a href="<?php echo esc_url( Url_Helpers::get_alert_page( $alert->id ) ); ?>" style="font-size: 14px; font-weight: 400; color: #1954ed; text-align: left; line-height: 20px; mso-line-height-rule: exactly; text-decoration: none;"><?php echo esc_url( Url_Helpers::get_relative_permalink( $test->post_id ) ); ?></a>
 							</li>
 						<?php endforeach; ?>
 					</ul>

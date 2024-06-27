@@ -145,15 +145,26 @@ class Email_Notifications {
 		foreach ( $tests as $test ) {
 			$tests_by_id[ $test->id ] = $test;
 		}
+		$alerts_by_post_id = [];
+		foreach ( $alerts as $alert ) {
+			$alerts_by_post_id[ $alert->post_id ] = $alert;
+		}
 
 		$context = [
 			'test_run' => $test_run,
 			'tests' => $tests_by_id,
-			'alerts' => $alert_ids,
+			'alerts' => $alerts_by_post_id,
 			'tests_with_alerts' => $tests_with_alerts,
 			'tests_without_alerts' => $tests_without_alerts,
 		];
 
 		return $context;
+	}
+
+	public function preview_test_run_email( $test_run_id ) {
+		$service = new Render_Template_Service();
+		$context = $this->get_test_run_email_context( $test_run_id );
+		$message = $service->render_template( 'emails/test-run', $context );
+		echo $message;
 	}
 }
