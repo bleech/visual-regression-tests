@@ -116,7 +116,7 @@ class Alerts_Page {
 		$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ?? '0' ) );
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
-		$search_query = sanitize_text_field( wp_unslash( $_POST['s'] ?? '' ) );
+		$search_query = sanitize_text_field( wp_unslash( $_REQUEST['s'] ?? '' ) );
 
 		// Render Edit Page or View page.
 		if ( 'edit' === $action || 'view' === $action ) {
