@@ -1,3 +1,4 @@
+<?php use Vrts\Core\Utilities\Url_Helpers; ?>
 <div class="wrap vrts_edit_alert_page">
 	<h1 class="wp-heading-inline">
 		<?php
@@ -78,17 +79,31 @@
 											</strong>
 										</div>
 
-										<div class="misc-pub-section misc-pub-section-icon">
-											<i class="dashicons dashicons-info-outline"></i>
-											<?php esc_html_e( 'Info:', 'visual-regression-tests' ); ?>
-											<strong class="testing-status--paused">
-											<?php
-											if ( ! $data['is_connected'] ) {
-												esc_html_e( 'Testing is disconnected until connection with the service is fixed.', 'visual-regression-tests' );
-											}
-											?>
-											</strong>
-										</div>
+										<?php if ( ! empty( $data[ 'run' ] ) ): ?>
+											<div class="misc-pub-section misc-pub-section-icon">
+												<i class="dashicons dashicons-admin-tools"></i>
+												<?php esc_html_e( 'Run:', 'visual-regression-tests' ); ?>
+												<strong>
+													<a href="<?php echo esc_url( Url_Helpers::get_alerts_page( $data[ 'run' ] ) ); ?>">
+														<?php echo esc_html( $data[ 'run' ]->title ); ?>
+													</a>
+												</strong>
+											</div>
+										<?php endif; ?>
+
+										<?php if ( ! $data[ 'is_connected' ] ): ?>
+											<div class="misc-pub-section misc-pub-section-icon">
+												<i class="dashicons dashicons-info-outline"></i>
+												<?php esc_html_e( 'Info:', 'visual-regression-tests' ); ?>
+												<strong class="testing-status--paused">
+												<?php
+												if ( ! $data['is_connected'] ) {
+													esc_html_e( 'Testing is disconnected until connection with the service is fixed.', 'visual-regression-tests' );
+												}
+												?>
+												</strong>
+											</div>
+										<?php endif; ?>
 									</div>
 									<div class="clear"></div>
 								</div>

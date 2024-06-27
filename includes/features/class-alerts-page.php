@@ -7,6 +7,7 @@ use Vrts\List_Tables\Alerts_List_Table;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
+use Vrts\Models\Test_Run;
 use Vrts\Services\Test_Service;
 
 class Alerts_Page {
@@ -127,6 +128,8 @@ class Alerts_Page {
 			$test_id = Test::get_item_id( $alert->post_id );
 			$test = (object) Test::get_item( $test_id );
 
+			$run = empty( $alert->test_run_id ) ? null : Test_Run::get_item( $alert->test_run_id );
+
 			vrts()->component('alerts-page', [
 				'action' => $action,
 				'alert_id' => $alert_id,
@@ -150,6 +153,7 @@ class Alerts_Page {
 				'test_settings' => [
 					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
 				],
+				'run' => $run,
 			]);
 		} else {
 			// Render Lists page.
