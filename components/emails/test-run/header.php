@@ -1,7 +1,7 @@
 <table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; padding-bottom: 25px; border-spacing: 0;">
 	<tr>
 		<td width="1%" valign="middle">
-			<img src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/icons/vrts-logo-icon.svg' ) ); ?>" width="40" height="40" alt="VRTs logo" style="width: 40px; height: 40px; display: block" />
+			<img src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/icons/vrts-logo-icon_reduced.png' ) ); ?>" width="40" height="40" alt="VRTs logo" style="width: 40px; height: 40px; display: block" />
 		</td>
 		<td width="99%" valign="middle" style="padding-left: 10px;">
 			<table border="0" cellspacing="0" width="100%">
