@@ -186,6 +186,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		$this->alerts = empty( $alerts_ids ) ? [] : Alert::get_items( [
 			'ids' => $alerts_ids,
+			'filter_status' => 'all',
 		] );
 	}
 

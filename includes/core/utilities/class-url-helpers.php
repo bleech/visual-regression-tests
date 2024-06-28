@@ -44,7 +44,7 @@ class Url_Helpers {
 	 */
 	public static function get_alerts_page( $test_run = null ) {
 		$admin_url = get_admin_url();
-		$page = 'admin.php?page=vrts-alerts';
+		$page = 'admin.php?page=vrts-alerts&status=all';
 		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
 		if ( is_numeric( $test_run ) && intval( $test_run ) == $test_run ) {
 			$test_run = Test_Run::get_item( $test_run );

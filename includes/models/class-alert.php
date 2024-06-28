@@ -37,14 +37,28 @@ class Alert {
 		// 0 = Open
 		// 1 = Archived.
 		// 2 = False Positive.
-		$alert_states = ( null !== $args['filter_status'] && 'archived' === $args['filter_status'] ) ? [ 1, 2 ] : [ 0 ];
-		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
+		switch( $args['filter_status'] ?? null) {
+			case 'archived':
+				$alert_states = [ 1, 2 ];
+				break;
+			case 'all':
+				$alert_states = [];
+				break;
+			default:
+				$alert_states = [ 0 ];
+				break;
+		}
+		if ( !empty( $alert_states ) ) {
+			$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
-		$where = $wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
-			"WHERE alert_state IN ($alert_states_placeholders)",
-			$alert_states
-		);
+			$where = $wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				"WHERE alert_state IN ($alert_states_placeholders)",
+				$alert_states
+			);
+		} else {
+			$where = 'WHERE 1=1';
+		}
 
 		if ( ! empty( $args['s'] ) ) {
 			$where .= $wpdb->prepare(
@@ -213,8 +227,28 @@ class Alert {
 		// 0 = Open
 		// 1 = Archived.
 		// 2 = False Positive.
-		$alert_states = ( 'archived' === $filter_status_query ) ? [ 1, 2 ] : [ 0 ];
-		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
+		switch( $filter_status_query ?? null) {
+			case 'archived':
+				$alert_states = [ 1, 2 ];
+				break;
+			case 'all':
+				$alert_states = [];
+				break;
+			default:
+				$alert_states = [ 0 ];
+				break;
+		}
+		if ( !empty( $alert_states ) ) {
+			$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
+
+			$status_where = $wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				"WHERE alert_state IN ($alert_states_placeholders)",
+				$alert_states
+			);
+		} else {
+			$status_where = 'WHERE 1=1';
+		}
 
 		$test_run_where = '';
 		if ( null !== $test_run_id ) {
@@ -224,11 +258,7 @@ class Alert {
 			);
 		}
 
-		$where = $wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
-			"WHERE alert_state IN ($alert_states_placeholders)$test_run_where",
-			$alert_states
-		);
+		$where = "{$status_where}{$test_run_where}";
 
 		$query = "
 			SELECT COUNT(*) FROM $alerts_table
@@ -387,5 +417,17 @@ class Alert {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->delete( $alerts_table, [ 'id' => $id ] );
+	}
+
+	/**
+	 * Get the alert state.
+	 *
+	 * @param object $alert the alert object.
+	 */
+	public static function is_archived( $alert ) {
+		// 0 = Open
+		// 1 = Archived.
+		// 2 = False Positive.
+		return in_array($alert->alert_state, [1, 2], false);
 	}
 }

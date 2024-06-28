@@ -121,9 +121,7 @@ class Alerts_List_Table extends \WP_List_Table {
 		$base_link = admin_url( 'admin.php?page=vrts-alerts' );
 		$is_connected = Service::is_connected();
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
-		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
-		if ( 'archived' === $filter_status_query ) {
+		if ( Alert::is_archived( $item ) ) {
 			// Actions Status "Archived".
 			$actions['view'] = sprintf(
 				'<a href="%s" data-id="%d" title="%s">%s</a>',
@@ -285,7 +283,7 @@ class Alerts_List_Table extends \WP_List_Table {
 			$actions = [
 				'delete' => esc_html__( 'Delete permanently', 'visual-regression-tests' ),
 			];
-		} else {
+		} elseif ( 'new' === $filter_status_query ) {
 			// Actions Status "Open".
 			$actions = [
 				'set-status-archived' => esc_html__( 'Archive', 'visual-regression-tests' ),
@@ -351,10 +349,15 @@ class Alerts_List_Table extends \WP_List_Table {
 		$base_link = admin_url( 'admin.php?page=vrts-alerts' );
 
 		$links = [
-			'all' => [
+			'new' => [
 				'title' => esc_html__( 'New', 'visual-regression-tests' ),
 				'link' => $base_link,
 				'count' => Alert::get_total_items(),
+			],
+			'all' => [
+				'title' => esc_html__( 'All', 'visual-regression-tests' ),
+				'link' => "{$base_link}&status=all",
+				'count' => Alert::get_total_items( 'all' ),
 			],
 			'archived' => [
 				'title' => esc_html__( 'Archived', 'visual-regression-tests' ),
@@ -364,7 +367,7 @@ class Alerts_List_Table extends \WP_List_Table {
 		];
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list search query parameter.
-		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'all' );
+		$filter_status_query = ( isset( $_REQUEST['status'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : 'new' );
 
 		$status_links = [];
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's status request.
