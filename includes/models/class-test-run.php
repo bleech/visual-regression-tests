@@ -438,7 +438,7 @@ class Test_Run {
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );
 				$instructions .= sprintf(
-					'<a href="%1$s" class="button-link vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</a>',
+					'<a href="%1$s" class="vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</a>',
 					esc_url( Url_Helpers::get_alerts_page( $test_run ) ),
 					sprintf(
 						// translators: %s: number of alerts.
