@@ -147,11 +147,15 @@
 		}
 
 		&-title {
-			color: $alert-red;
-			font-weight: 600;
 			border-bottom: 1px solid $gray-5;
-			padding-bottom: 10px;
+			color: $alert-red;
+			display: flex;
+			flex-wrap: wrap;
+			font-weight: 600;
+			gap: 10px;
+			justify-content: space-between;
 			margin-bottom: 10px;
+			padding-bottom: 10px;
 		}
 
 		&--passed {
@@ -163,6 +167,8 @@
 
 		ul {
 			margin: 0;
+			margin-left: 1rem;
+			list-style: outside;
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 namespace Vrts\List_Tables;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
@@ -328,10 +329,6 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			return ! in_array( $test->post_id, $alert_post_ids, true );
 		} );
 
-		$tests_with_alerts = array_filter( $tests, function( $test ) use ( $alert_post_ids ) {
-			return in_array( $test->post_id, $alert_post_ids, true );
-		} );
-
 		$titles = [
 			// translators: %s: number of tests.
 			'changes-detected' => __( 'Changes Detected (%s)', 'visual-regression-tests' ),
@@ -340,37 +337,40 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		];
 
 		$data = array_filter( [
-			'changes-detected' => array_map( function( $test ) {
-				$parsed_internal_url = wp_parse_url( get_permalink( $test->post_id ) );
-				$internal_url = $parsed_internal_url['path'];
-
+			'changes-detected' => array_map( function( $alert ) {
 				return sprintf(
-					'<a href="%s" target="_blank">%s | %s</a>',
-					esc_url( get_edit_post_link( $test->post_id ) ),
-					esc_html( $test->post_title ),
-					esc_url( $internal_url )
+					'%s<br><a href="%s" target="_blank">%s</a>',
+					esc_html( get_the_title( $alert->post_id ) ),
+					esc_url( Url_Helpers::get_alert_page( $alert->id ) ),
+					esc_url( Url_Helpers::get_relative_permalink( $alert->post_id ) )
 				);
-			}, $tests_with_alerts ),
+			}, $alerts ),
 			'passed' => array_map( function( $test ) {
-				$parsed_internal_url = wp_parse_url( get_permalink( $test->post_id ) );
-				$internal_url = $parsed_internal_url['path'];
-
 				return sprintf(
-					'<a href="%s" target="_blank">%s | %s</a>',
-					esc_url( get_edit_post_link( $test->post_id ) ),
+					'%s<br><a href="%s" target="_blank">%s</a>',
 					esc_html( $test->post_title ),
-					esc_url( $internal_url )
+					esc_url( get_edit_post_link( $test->post_id ) ),
+					esc_url( Url_Helpers::get_relative_permalink( $test->post_id ) )
 				);
 			}, $tests_passed ),
 		] );
 
 		return sprintf(
 			'<div class="vrts-test-run-details">%s %s</div>',
-			implode( '', array_map( function( $key ) use ( $data, $titles ) {
+			implode( '', array_map( function( $key ) use ( $data, $titles, $item ) {
 				return sprintf(
-					'<div class="vrts-test-run-details-section vrts-test-run-details-section--%s"><p class="vrts-test-run-details-section-title">%s</p><ul>%s</ul></div>',
+					'<div class="vrts-test-run-details-section vrts-test-run-details-section--%s"><p class="vrts-test-run-details-section-title"><span>%s</span>%s</p><ul>%s</ul></div>',
 					$key,
 					sprintf( $titles[ $key ], count( $data[ $key ] ) ),
+					$key === 'changes-detected' ? sprintf(
+						'<a href="%1$s" class="vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</a>',
+						esc_url( Url_Helpers::get_alerts_page( $item ) ),
+						sprintf(
+							// translators: %s: number of alerts.
+							esc_html( _n( 'View Alert (%s)', 'View Alerts (%s)', count( $data[ $key ] ), 'visual-regression-tests' ) ),
+							count( $data[ $key ] )
+						)
+					) : '',
 					implode( '', array_map( function( $item ) {
 						return sprintf( '<li>%s</li>', $item );
 					}, $data[ $key ] ) )
