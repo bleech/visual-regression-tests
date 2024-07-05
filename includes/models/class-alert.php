@@ -430,4 +430,34 @@ class Alert {
 		// 2 = False Positive.
 		return in_array($alert->alert_state, [1, 2], false);
 	}
+
+	/**
+	 * Get unread alerts count by test run ids.
+	 *
+	 * @param array|int $test_run_ids the ids of the test runs.
+	 *
+	 */
+	public static function get_unread_count_by_test_run_ids( $test_run_ids ) {
+		global $wpdb;
+
+		if ( is_int($test_run_ids) || is_string($test_run_ids) ) {
+			$test_run_ids = [ $test_run_ids ];
+		}
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		$placeholders = implode( ', ', array_fill( 0, count( $test_run_ids ), '%d' ) );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT test_run_id, COUNT(*) as count FROM $alerts_table
+				WHERE test_run_id IN ($placeholders)
+				AND alert_state = 0
+				GROUP BY test_run_id",
+				$test_run_ids
+			)
+		);
+	}
 }

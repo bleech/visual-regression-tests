@@ -160,6 +160,14 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		];
 
 		$this->items = Test_Run::get_items( $args );
+		$test_run_ids = wp_list_pluck( $this->items, 'id' );
+		$alert_counts = [];
+		foreach (Alert::get_unread_count_by_test_run_ids( $test_run_ids ) as $alert_count) {
+			$alert_counts[$alert_count->test_run_id] = $alert_count->count;
+		}
+		foreach ($this->items as $item) {
+			$item->alerts_count = $alert_counts[$item->id] ?? 0;
+		}
 
 		$total_items = 0;
 		if ( null !== $args['filter_status'] ) {
@@ -197,9 +205,15 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @param object|array $item The current item.
 	 */
 	public function single_row( $item ) {
-		$classes = 'iedit';
+		$classes = 'iedit test-run-row';
 		?>
-		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>" data-vrts-test-run-details="hidden">
+		<tr
+			id="test-<?php echo esc_attr( $item->id ); ?>"
+			class="<?php echo esc_attr( $classes ); ?>"
+			data-vrts-test-run-details="hidden"
+			data-test-run-id="<?php echo esc_attr( $item->id ); ?>"
+			<?php echo $item->alerts_count > 0 ? 'data-has-alerts' : '' ?>
+		>
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
 		<?php

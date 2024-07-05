@@ -129,7 +129,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		$classes = 'iedit';
 		$status = Test_Run::get_calculated_status( $item );
 		?>
-		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>" data-vrts-test-run-status="<?php echo esc_attr( $status ); ?>">
+		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>" data-vrts-test-run-status="<?php echo esc_attr( $status ); ?>" data-test-run-id="<?php echo esc_attr( $item->id ); ?>">
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
 		<?php

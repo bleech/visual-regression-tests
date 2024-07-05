@@ -27,7 +27,7 @@
 
 		}
 
-		&--update, {
+		&--update {
 			background: rgba(200, 11, 147, 0.1);
 			color: #a51d7f;
 		}
@@ -48,6 +48,60 @@
 }
 
 .vrts-test-runs-list-table {
+
+	@keyframes scale-up-down {
+
+		from,
+		0%,
+		20%,
+		40%,
+		60%,
+		80%,
+		to {
+			animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+		}
+
+		0% {
+			transform: scale3d(1, 1, 1);
+		}
+
+		20% {
+			transform: scale3d(1.5, 1.5, 1.5);
+		}
+
+		40% {
+			transform: scale3d(0.7, 0.7, 0.7);
+		}
+
+		60% {
+			transform: scale3d(1.3, 1.3, 1.3);
+		}
+
+		80% {
+			transform: scale3d(0.8, 0.8, 0.8);
+		}
+
+		100% {
+			transform: scale3d(1, 1, 1);
+		}
+	}
+
+	@keyframes color-highlight {
+
+		0% {
+		}
+
+		25% {
+			background-color: rgba(32, 113, 177, 0.2);
+		}
+
+		75% {
+			background-color: rgba(32, 113, 177, 0.2);
+		}
+
+		100% {
+		}
+	}
 
 	.column-icon {
 		text-align: center;
@@ -101,12 +155,32 @@
 		}
 	}
 
-	tr:hover {
+	tr {
 
-		.row-actions {
+		&[data-has-alerts] {
+			font-weight: 600;
 
-			.details {
-				visibility: visible;
+			td:first-child {
+				border-left: 4px solid $blue-50;
+				padding-left: 6px;
+			}
+		}
+
+		&.test-run-highlighted {
+			animation: color-highlight 3s ease;
+
+			td.column-icon .dashicons {
+				animation: scale-up-down 3s;
+			}
+		}
+
+		&:hover {
+
+			.row-actions {
+
+				.details {
+					visibility: visible;
+				}
 			}
 		}
 	}
