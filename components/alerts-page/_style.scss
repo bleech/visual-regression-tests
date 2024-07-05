@@ -117,6 +117,13 @@ $navigation-item-border-height: 3px;
 		}
 	}
 
+	#misc-publishing-actions {
+		[data-section="trigger-notes"] {
+			color: $gray-40;
+			font-size: 12px
+		}
+	}
+
 	.slug-and-pagination {
 		align-items: center;
 		background: #f0f0f1;

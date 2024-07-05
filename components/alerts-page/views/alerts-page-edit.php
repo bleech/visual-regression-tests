@@ -1,4 +1,7 @@
-<?php use Vrts\Core\Utilities\Url_Helpers; ?>
+<?php use Vrts\Core\Utilities\Url_Helpers;
+use Vrts\Models\Test_Run;
+
+ ?>
 <div class="wrap vrts_edit_alert_page">
 	<h1 class="wp-heading-inline">
 		<?php
@@ -81,13 +84,26 @@
 
 										<?php if ( ! empty( $data[ 'run' ] ) ): ?>
 											<div class="misc-pub-section misc-pub-section-icon">
-												<i class="dashicons dashicons-admin-tools"></i>
+												<i class="dashicons dashicons-controls-play"></i>
 												<?php esc_html_e( 'Run:', 'visual-regression-tests' ); ?>
 												<strong>
 													<a href="<?php echo esc_url( Url_Helpers::get_alerts_page( $data[ 'run' ] ) ); ?>">
 														<?php echo esc_html( $data[ 'run' ]->title ); ?>
 													</a>
 												</strong>
+											</div>
+											<div class="misc-pub-section misc-pub-section-icon">
+												<i class="dashicons dashicons-media-code"></i>
+												<?php esc_html_e( 'Trigger:', 'visual-regression-tests' ); ?>
+												<strong>
+													<?php echo esc_html( Test_Run::get_trigger_title( $data[ 'run' ] ) ); ?>
+												</strong>
+												<?php if ( ! empty( $data[ 'run']->trigger_notes ) ): ?>
+													<br>
+													<span data-section="trigger-notes">
+														<?php echo esc_html( $data[ 'run' ]->trigger_notes ); ?>
+													</span>
+												<?php endif; ?>
 											</div>
 										<?php endif; ?>
 
