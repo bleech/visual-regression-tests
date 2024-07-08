@@ -450,7 +450,15 @@ class Test_Run {
 			case 'running':
 				$class = 'waiting';
 				$text = '';
-				$instructions = esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
+				$instructions = sprintf(
+					'<span>%s</span>',
+					sprintf(
+						// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
+						wp_kses( __( '%1$sRefresh page%2$s to see result', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
+						'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-runs' ) ) . '">',
+						'</a>'
+					)
+				);
 				break;
 			case 'scheduled':
 				$class = 'waiting';

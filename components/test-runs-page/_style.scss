@@ -103,10 +103,16 @@
 		}
 	}
 
-	.column-icon {
+	.check-column {
 		text-align: center;
-		padding: 10px 0 0 10px;
+		padding: 10px 0 0 10px !important;
 		width: 28px;
+	}
+
+	.column-status {
+		@media screen and (max-width: 782px){
+			padding-bottom: 8px !important;
+		}
 	}
 
 	.vrts-runs-status {
@@ -137,6 +143,10 @@
 		color: #f97b06;
 	}
 
+	[data-vrts-test-run-status="scheduled"] .row-title {
+		color: $gray-70;
+	}
+
 	.row-actions {
 		display: flex;
 		flex-wrap: wrap;
@@ -144,6 +154,10 @@
 
 		.tests {
 			color: $gray-80;
+
+			@media screen and (max-width: 782px){
+				padding: 4px 8px !important;
+			}
 		}
 
 		.details {

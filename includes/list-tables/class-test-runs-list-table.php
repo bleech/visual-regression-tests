@@ -64,7 +64,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 */
 	public function get_columns() {
 		$columns = [
-			'icon' => '',
+			'cb' => '',
 			'title' => esc_html__( 'Title', 'visual-regression-tests' ),
 			'trigger' => esc_html__( 'Trigger', 'visual-regression-tests' ),
 			'status' => esc_html__( 'Test Status', 'visual-regression-tests' ),
@@ -265,7 +265,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 *
 	 * @return string
 	 */
-	public function column_icon( $item ) {
+	public function column_cb( $item ) {
 		$status = Test_Run::get_calculated_status( $item );
 
 		$icons = [
