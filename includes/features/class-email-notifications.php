@@ -33,7 +33,7 @@ class Email_Notifications {
 
 		$message = esc_html_x( 'Howdy,', 'notification email', 'visual-regression-tests' ) . "\n\n" .
 			esc_html_x( 'New visual differences have been detected on the following page:', 'notification email', 'visual-regression-tests' ) . "\n\n" .
-			wp_specialchars_decode( get_the_title( $post_id ) ) . "\n\n" .
+			html_entity_decode( wp_specialchars_decode( get_the_title( $post_id ) ) ) . "\n\n" .
 			esc_html_x( 'View the alert:', 'notification email', 'visual-regression-tests' ) . "\n" .
 			esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
 			sprintf(
