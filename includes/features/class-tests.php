@@ -31,7 +31,72 @@ class Tests {
 	 * @param array        $options Options.
 	 */
 	public static function run_upgrader_tests( $upgrader, $options ) {
-		self::run_tests( 'update', null, $options );
+		$updates = [];
+		if ($options['action'] == 'update') {
+			switch ($options['type']) {
+				case 'plugin':
+					foreach($options['plugins'] as $plugin) {
+						$plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $plugin);
+						$new_version = $plugin_data['Version'];
+						$name = $plugin_data['Name'];
+						$slug = dirname(plugin_basename($plugin));
+						$updates[] = [
+							'type' => 'plugin',
+							'name' => $name,
+							'slug' => $slug,
+							'version' => $new_version,
+						];
+					}
+					break;
+				case 'theme':
+					foreach($options['themes'] as $theme) {
+						$theme_data = wp_get_theme($theme);
+						$new_version = $theme_data->get('Version');
+						$name = $theme_data->get('Name');
+						$slug = $theme;
+						$updates[] = [
+							'type' => 'theme',
+							'name' => $name,
+							'slug' => $slug,
+							'version' => $new_version,
+						];
+					}
+					break;
+				case 'core':
+					$new_version = static::get_wp_version();
+					$updates[] = [
+						'type' => 'core',
+						'version' => $new_version,
+					];
+					break;
+				case 'translation':
+					$translations = $options['translations'] ?? [];
+					foreach ($translations as $translation) {
+						$type = $translation['type'];
+						$slug = $translation['slug'];
+						$language = $translation['language'];
+						if ($type === 'plugin') {
+							$plugin_data = get_plugin_data(WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php');
+							$name = $plugin_data['Name'];
+						} elseif ($type === 'theme') {
+							$theme_data = wp_get_theme($slug);
+							$name = $theme_data->get('Name');
+						} else {
+							$name = 'WordPress';
+						}
+						$updates[] = [
+							'type' => $type,
+							'name' => $name,
+							'slug' => $slug,
+							'language' => $language,
+						];
+					}
+					break;
+			}
+		}
+		if ( ! empty( $updates ) ) {
+			self::run_tests( 'update', null, $updates );
+		}
 	}
 
 	/**
@@ -55,5 +120,12 @@ class Tests {
 			'trigger_notes' => $trigger_notes,
 			'trigger_meta' => $trigger_meta,
 		] );
+	}
+
+	static function get_wp_version() {
+		return (function() {
+			require ABSPATH . WPINC . '/version.php';
+			return $wp_version;
+		})();
 	}
 }

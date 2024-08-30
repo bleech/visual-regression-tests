@@ -440,6 +440,10 @@ class Alert {
 	public static function get_unread_count_by_test_run_ids( $test_run_ids ) {
 		global $wpdb;
 
+		if ( empty( $test_run_ids ) ) {
+			return [];
+		}
+
 		if ( is_int($test_run_ids) || is_string($test_run_ids) ) {
 			$test_run_ids = [ $test_run_ids ];
 		}

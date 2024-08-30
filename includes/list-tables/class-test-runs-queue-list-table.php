@@ -219,12 +219,13 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 */
 	public function column_trigger( $item ) {
 		$trigger_title = Test_Run::get_trigger_title( $item );
+		$trigger_note = Test_Run::get_trigger_note( $item );
 
 		return sprintf(
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span><p class="vrts-test-run-trigger-notes">%s</p>',
 			esc_attr( $item->trigger ),
 			esc_html( $trigger_title ),
-			esc_html( $item->trigger_notes )
+			$trigger_note
 		);
 	}
 

@@ -85,6 +85,7 @@ class Test_Run {
 						runs.alerts,
 						runs.trigger,
 						runs.trigger_notes,
+						runs.trigger_meta,
 						runs.started_at,
 						runs.scheduled_at,
 						runs.finished_at
@@ -502,5 +503,47 @@ class Test_Run {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->delete( $test_runs_table, [ 'service_test_run_id' => $test_run_id ] );
+	}
+
+	public static function get_trigger_note( $test_run ) {
+		if ( $test_run->trigger ?? null === 'update' ) {
+			$updates = maybe_unserialize( $test_run->trigger_meta ) ?? [];
+			$updates = array_merge(...$updates);
+			// print_r($updates);
+			$types = ['core', 'plugin', 'theme', 'translation'];
+			$trigger_notes = '';
+			foreach ($types as $type) {
+				$updates_by_type = array_filter($updates, function($update) use ($type) {
+					// var_dump($update);
+					return $update['type'] === $type;
+				});
+				if (empty($updates_by_type)) {
+					continue;
+				}
+				$trigger_notes .= sprintf( '<strong>%s:</strong> ', ucfirst( $type ) );
+				$trigger_notes .= implode(', ', array_map(function($update) use ($type) {
+					$updateName = $update['name'] ?? $update['slug'] ?? null;
+					if ($type === 'translation') {
+						return '\'' . $updateName . ' (' . $update['language'] . ')' . '\'';
+					} elseif ($type === 'core') {
+						return $update['version'] ?? $update['language'] ?? '-';
+					} else {
+						if ( $update['version'] ?? false ) {
+							return $updateName . ' (' . $update['version'] . ')';
+						} elseif ( $update['language'] ?? false ) {
+							return $updateName . ' (' . $update['language'] . ')';
+						} else {
+							return $updateName ?? '';
+						}
+					}
+				}, $updates_by_type));
+				if ( ! empty( $trigger_notes ) ) {
+					$trigger_notes .= '. ';
+				}
+			}
+			return $trigger_notes;
+		} else {
+			return $test_run->trigger_notes ?? '';
+		}
 	}
 }

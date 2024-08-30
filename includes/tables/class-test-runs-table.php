@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Test_Runs_Table {
 
-	const DB_VERSION = '1.0';
+	const DB_VERSION = '1.1';
 	const TABLE_NAME = 'vrts_test_runs';
 
 	/**
@@ -34,6 +34,7 @@ class Test_Runs_Table {
 				alerts text default NULL,
 				`trigger` varchar(20),
 				trigger_notes text,
+				trigger_meta text default NULL,
 				started_at datetime,
 				scheduled_at datetime,
 				finished_at datetime,

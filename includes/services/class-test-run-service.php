@@ -41,6 +41,7 @@ class Test_Run_Service {
 			'scheduled_at' => $data['scheduled_at'],
 			'trigger' => $data['trigger'],
 			'trigger_notes' => $data['trigger_notes'],
+			'trigger_meta' => maybe_serialize( $data['trigger_meta'] ),
 		], true);
 
 		if ( $test_run_just_finished && ! empty( $alert_ids ) ) {
