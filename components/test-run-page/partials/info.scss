@@ -1,0 +1,38 @@
+.vrts-test-run-info {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	> * {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		min-width: 0;
+		flex-shrink: 0;
+
+		&:not(:last-child)::after {
+			content: "";
+			display: block;
+			width: 1px;
+			height: 1rem;
+			background: $gray-10;
+		}
+	}
+
+	&__trigger {
+		flex-shrink: 1;
+	}
+
+	.vrts-test-run-trigger-notes {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+		display: -webkit-box;
+		color: $gray-40;
+		font-size: 13px;
+		line-height: 1.4;
+		max-block-size: calc(13px * 1.4);
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: initial
+	}
+}

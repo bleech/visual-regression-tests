@@ -1,0 +1,93 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+@import "@wordpress/base-styles/mixins";
+@import "@wordpress/base-styles/breakpoints";
+@import "@wordpress/base-styles/variables";
+@import "@wordpress/base-styles/default-custom-properties";
+
+@import './partials/alerts';
+@import './partials/info';
+@import './partials/pagination';
+@import './partials/comparisons';
+@import './partials/alert-actions';
+
+.vrts-test-run-wrap {
+	#wpfooter {
+		@media (min-width: 851px) {
+			left: 280px;
+		}
+	}
+
+	#wpbody-content {
+		padding-bottom: 0;
+	}
+}
+
+.vrts-test-run-page {
+	display: flex;
+	gap: 20px;
+	margin-right: 10px;
+	flex-direction: column;
+
+	@media (min-width: 851px) {
+		flex-direction: row;
+		margin-left: -20px;
+		margin-right: 20px;
+	}
+
+	&__sidebar {
+		--vrts-scrollbar-border: #ddd;
+		--vrts-scrollbar-track-bacground: #f0f0f1;
+
+		-webkit-overflow-scrolling: touch;
+		overflow-x: scroll;
+
+		&::-webkit-scrollbar {
+			width: 4px;
+			height: 4px;
+		}
+
+		&::-webkit-scrollbar-track {
+			// background-color: #ddd;
+			background: linear-gradient(90deg, var(--vrts-scrollbar-track-bacground) 0%, var(--vrts-scrollbar-track-bacground) 1px, var(--vrts-scrollbar-track-bacground) 1px, var(--vrts-scrollbar-track-bacground) calc(100% - 1px), var(--vrts-scrollbar-border) calc(100% - 1px), var(--vrts-scrollbar-border) 100%);
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: $gray-300;
+		}
+
+		@media (min-width: 851px) {
+			width: 280px;
+			position: sticky;
+			top: var(--wp-admin--admin-bar--height);
+			height: calc(100vh - 32px);
+			overflow-x: hidden;
+			overflow-y: scroll;
+
+			> *:last-child {
+				margin-bottom: 62px;
+			}
+		}
+	}
+
+	&__content {
+		flex: 1;
+		padding-bottom: 50px;
+
+		&-heading {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			padding: 1rem 0;
+			column-gap: 2rem;
+			row-gap: 1rem;
+
+			@media (min-width: 851px) {
+				flex-wrap: nowrap;
+				position: sticky;
+				top: var(--wp-admin--admin-bar--height);
+				background: #f0f0f1;
+				z-index: 1;
+			}
+		}
+	}
+}

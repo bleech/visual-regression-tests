@@ -1,45 +1,6 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 @import "@wordpress/base-styles/breakpoints";
 
-.vrts-list-table-page {
-
-	.vrts-test-run-trigger {
-		display: inline-block;
-		border-radius: 32px;
-		padding: 4px 10px;
-		font-size: 13px;
-		background: rgba(192, 192, 192, 0.15);
-		color: $gray-80;
-
-		&--api {
-			background: rgba(224, 84, 6, 0.15);
-			color: #ae4204;
-		}
-
-		&--scheduled {
-			background: rgba(106, 26, 185, 0.1);
-			color: #591b98;
-		}
-
-		&--manual {
-			background: rgba(5, 116, 206, 0.1);
-			color: #045495;
-
-		}
-
-		&--update {
-			background: rgba(200, 11, 147, 0.1);
-			color: #a51d7f;
-		}
-	}
-
-	[data-vrts-test-run-details="hidden"] .vrts-test-run-trigger-notes {
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-}
-
 .vrts-test-runs-page {
 
 	.tablenav.top {

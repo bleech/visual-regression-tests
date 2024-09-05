@@ -1,0 +1,168 @@
+.vrts-comparisons {
+	box-sizing: border-box;
+	border-top: 0;
+	margin-bottom: 0;
+
+	&__header {
+		border-top: 1px solid $gray-10;
+		background-color: $white;
+		z-index: 1;
+
+		@media (min-width: 850px) {
+			position: sticky;
+			top: calc(62px + var(--wp-admin--admin-bar--height));
+		}
+	}
+
+	&__info {
+		display: flex;
+		align-items: center;
+		padding-right: 0.25rem;
+	}
+
+	&__difference {
+		display: flex;
+		align-items: center;
+		color: #B32D2E;
+
+		&::after {
+			content: "";
+			display: block;
+			width: 1px;
+			height: 1rem;
+			background: $gray-10;
+			margin-left: 0.75rem;
+		}
+	}
+
+	&__panel {
+		margin: 0 !important;
+		display: flex;
+		align-items: flex-start;
+		flex-wrap: wrap;
+		gap: 1rem;
+		padding: 1em;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	&__tabs {
+		margin: 0;
+		padding: 0;
+		display: inherit;
+		flex-direction: row;
+
+		[role="tab"] {
+			--vrts-comparisons-tab-border-height: 3px;
+			all: unset;
+			margin-bottom: 0;
+			list-style: none;
+			border-bottom: transparent solid var(--vrts-comparisons-tab-border-height);
+			flex-wrap: wrap;
+			padding: 1rem calc(1.33rem - var(--vrts-comparisons-tab-border-height));
+			color: $gray-text;
+			cursor: pointer;
+			text-decoration: none;
+			transition: border 0.2s, color 0.2s;
+
+			&:hover {
+				color: var(--wp-admin-theme-color);
+			}
+
+			&[aria-selected="true"] {
+				border-bottom-color: var(--wp-admin-theme-color);
+			}
+		}
+	}
+
+	&__figure {
+		margin: 0;
+		position: relative;
+
+		&-image {
+			box-sizing: border-box;
+			border: solid 1px #{$gray-lighten-20};
+			max-width: 100%;
+			margin: 0 auto;
+		}
+
+		&-caption {
+			--caption-offset: 10px;
+			background: #{$dark-opacity-900};
+			color: #{$white};
+			position: absolute;
+			top: var(--caption-offset);
+			left: var(--caption-offset);
+			font-size: 11px;
+			padding: 4px 8px 5px 8px;
+			border-radius: 1rem;
+			line-height: 1.7;
+			transition: opacity 0.2s ease-in-out;
+		}
+	}
+
+	#vrts-comparisons-side-by-side {
+		flex-direction: column;
+
+		@media (min-width: $break-medium) {
+			flex-direction: row;
+		}
+
+		.vrts-comparisons__figure {
+			@media (min-width: $break-medium) {
+				flex: 1 1 calc(50% - 0.5rem - 2px);
+			}
+
+			&:hover,
+			&:focus {
+				.vrts-comparisons__figure-caption {
+					opacity: 0;
+				}
+			}
+		}
+	}
+
+	#vrts-comparisons-split {
+		.img-comparison-slider {
+			--divider-width: 1px;
+			--divider-color: var(--wp-admin-theme-color);
+			--divider-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			--default-handle-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+			--default-handle-background-color: #{$white};
+			--default-handle-color: var(--wp-admin-theme-color);
+			margin: 0 auto;
+			border: solid 1px #{$gray-lighten-20};
+			position: relative;
+			display: flex;
+			min-height: 320px;
+
+			[slot="handle"] {
+				filter: drop-shadow(var(--default-handle-shadow));
+			}
+
+			.vrts-comparisons__figure {
+				margin: 0;
+				background: #{$light-gray-500};
+				height: 100%;
+				width: 100%;
+
+				&-image {
+					border: 0;
+					width: auto;
+					height: auto;
+				}
+
+				&-caption {
+					--caption-offset: 9px;
+
+					&[data-position="second"] {
+						left: initial;
+						right: 10px;
+					}
+				}
+			}
+		}
+	}
+}

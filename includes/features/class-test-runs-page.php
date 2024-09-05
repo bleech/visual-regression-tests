@@ -4,6 +4,8 @@ namespace Vrts\Features;
 
 use Vrts\List_Tables\Test_Runs_List_Table;
 use Vrts\List_Tables\Test_Runs_Queue_List_Table;
+use Vrts\Models\Alert;
+use Vrts\Models\Test_Run;
 
 class Test_Runs_Page {
 
@@ -12,6 +14,7 @@ class Test_Runs_Page {
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
+		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
 	}
 
 	/**
@@ -28,8 +31,10 @@ class Test_Runs_Page {
 			1
 		);
 
-		add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
-		add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
+		if ( ! isset( $_GET['run_id'] ) ) {
+			add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
+			add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
+		}
 	}
 
 	/**
@@ -48,19 +53,59 @@ class Test_Runs_Page {
 	}
 
 	/**
+	 * Add body class.
+	 *
+	 * @param string $classes Body classes.
+	 */
+	public function add_body_class( $classes ) {
+		if ( isset( $_GET['run_id'] ) ) {
+			$classes .= ' vrts-test-run-wrap';
+		}
+
+		return $classes;
+	}
+
+	/**
 	 * Render page
 	 */
 	public function render_page() {
-		vrts()->component('test-runs-page', [
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
-			'id' => intval( $_GET['id'] ?? 0 ),
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
-			'action' => sanitize_text_field( wp_unslash( $_GET['action'] ?? 'list' ) ),
-			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
-			'search_query' => sanitize_text_field( wp_unslash( $_POST['s'] ?? '' ) ),
-			'list_table' => new Test_Runs_List_Table(),
-			'list_queue_table' => new Test_Runs_Queue_List_Table(),
-		]);
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
+		$run_id = intval( $_GET['run_id'] ?? 0 );
+		$run = Test_Run::get_item( $run_id );
+
+		if ( $run ) {
+			// $alerts_ids = maybe_unserialize( $run->alerts );
+			$alerts = Alert::get_items_by_test_run( $run_id );
+			$alert_id = isset( $_GET['alert_id'] ) ? intval( $_GET['alert_id'] ) : ( isset( $alerts[0] ) ? $alerts[0]->id : 0 );
+			$base_link = add_query_arg( [
+				'run_id' => $run_id,
+			], admin_url( 'admin.php?page=vrts-runs' ) );
+
+			vrts()->component('test-run-page', [
+				'run' => $run,
+				'alerts' => $alerts,
+				'alert' => Alert::get_item( $alert_id ),
+				'pagination' => [
+					'prev_alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, $run_id ),
+					'next_alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
+					'current' => Alert::get_pagination_current_position( $alert_id, $run_id ),
+					'total' => count( $alerts ),
+					'prev_link' => add_query_arg( [
+						'alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, $run_id ),
+					], $base_link ),
+					'next_link' => add_query_arg( [
+						'alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
+					], $base_link ),
+				],
+			]);
+		} else {
+			vrts()->component('test-runs-page', [
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
+				'search_query' => sanitize_text_field( wp_unslash( $_POST['s'] ?? '' ) ),
+				'list_table' => new Test_Runs_List_Table(),
+				'list_queue_table' => new Test_Runs_Queue_List_Table(),
+			]);
+		}//end if
 	}
 
 	/**

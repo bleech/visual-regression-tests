@@ -37,7 +37,7 @@ class Alert {
 		// 0 = Open
 		// 1 = Archived.
 		// 2 = False Positive.
-		switch( $args['filter_status'] ?? null) {
+		switch ( $args['filter_status'] ?? null ) {
 			case 'archived':
 				$alert_states = [ 1, 2 ];
 				break;
@@ -48,7 +48,7 @@ class Alert {
 				$alert_states = [ 0 ];
 				break;
 		}
-		if ( !empty( $alert_states ) ) {
+		if ( ! empty( $alert_states ) ) {
 			$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 			$where = $wpdb->prepare(
@@ -184,6 +184,28 @@ class Alert {
 	}
 
 	/**
+	 * Get multiple alerts from database by test run id
+	 *
+	 * @param array $run_id the id of the test run.
+	 *
+	 * @return array
+	 */
+	public static function get_items_by_test_run( $id = 0 ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $alerts_table WHERE test_run_id = %d",
+				$id
+			)
+		);
+	}
+
+	/**
 	 * Get latest alert id by post id
 	 *
 	 * @param int $post_id the id of the post.
@@ -227,7 +249,7 @@ class Alert {
 		// 0 = Open
 		// 1 = Archived.
 		// 2 = False Positive.
-		switch( $filter_status_query ?? null) {
+		switch ( $filter_status_query ?? null ) {
 			case 'archived':
 				$alert_states = [ 1, 2 ];
 				break;
@@ -238,7 +260,7 @@ class Alert {
 				$alert_states = [ 0 ];
 				break;
 		}
-		if ( !empty( $alert_states ) ) {
+		if ( ! empty( $alert_states ) ) {
 			$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 			$status_where = $wpdb->prepare(
@@ -331,23 +353,24 @@ class Alert {
 	 * Get the next alert id for the pagination.
 	 *
 	 * @param int   $id the id of the item.
-	 * @param array $alert_states the state of the item.
+	 * @param array $test_run_id the id of the test run.
 	 */
-	public static function get_pagination_next_alert_id( $id = 0, $alert_states = [ 0 ] ) {
+	public static function get_pagination_next_alert_id( $id = 0, $test_run_id = 0 ) {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
-		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT id FROM $alerts_table WHERE alert_state IN ($alert_states_placeholders)
-				AND id > %d
+				"SELECT id FROM $alerts_table
+				WHERE id > %d
+				AND test_run_id = %d
 				ORDER BY id ASC
 				LIMIT 1",
-				array_merge( $alert_states, [ $id ] )
+				$id,
+				$test_run_id
 			)
 		);
 	}
@@ -356,23 +379,24 @@ class Alert {
 	 * Get the prev alert id for the pagination.
 	 *
 	 * @param int   $id the id of the item.
-	 * @param array $alert_states the state of the item.
+	 * @param array $test_run_id the id of the test run.
 	 */
-	public static function get_pagination_prev_alert_id( $id = 0, $alert_states = [ 0 ] ) {
+	public static function get_pagination_prev_alert_id( $id = 0, $test_run_id = 0 ) {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
-		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT id FROM $alerts_table WHERE alert_state IN ($alert_states_placeholders)
-				AND id < %d
+				"SELECT id FROM $alerts_table
+				WHERE id < %d
+				AND test_run_id = %d
 				ORDER BY id DESC
 				LIMIT 1",
-				array_merge( $alert_states, [ $id ] )
+				$id,
+				$test_run_id
 			)
 		);
 	}
@@ -381,19 +405,22 @@ class Alert {
 	 * Get the current position inside the pagination.
 	 *
 	 * @param int   $id the id of the item.
-	 * @param array $alert_states the state of the item.
+	 * @param array $test_run_id the id of the test run.
 	 */
-	public static function get_pagination_current_position( $id = 0, $alert_states = [ 0 ] ) {
+	public static function get_pagination_current_position( $id = 0, $test_run_id = 0 ) {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
-		$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
 
 		// Let's get the count of the alerts that are before the current one.
 		$query = $wpdb->prepare(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT (SELECT count(*) FROM `$alerts_table` WHERE alert_state IN ($alert_states_placeholders) AND id < %d ORDER BY id DESC) FROM `$alerts_table`",
-			array_merge( $alert_states, [ $id ] )
+			"SELECT count(*) FROM `$alerts_table`
+			WHERE id < %d
+			AND test_run_id = %d
+			ORDER BY id DESC",
+			$id,
+			$test_run_id
 		);
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's ok.
@@ -428,14 +455,13 @@ class Alert {
 		// 0 = Open
 		// 1 = Archived.
 		// 2 = False Positive.
-		return in_array($alert->alert_state, [1, 2], false);
+		return in_array( $alert->alert_state, [ 1, 2 ], false );
 	}
 
 	/**
 	 * Get unread alerts count by test run ids.
 	 *
 	 * @param array|int $test_run_ids the ids of the test runs.
-	 *
 	 */
 	public static function get_unread_count_by_test_run_ids( $test_run_ids ) {
 		global $wpdb;
@@ -444,7 +470,7 @@ class Alert {
 			return [];
 		}
 
-		if ( is_int($test_run_ids) || is_string($test_run_ids) ) {
+		if ( is_int( $test_run_ids ) || is_string( $test_run_ids ) ) {
 			$test_run_ids = [ $test_run_ids ];
 		}
 
