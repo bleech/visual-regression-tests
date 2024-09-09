@@ -3,7 +3,7 @@
  * Plugin Name:       VRTs – Visual Regression Tests
  * Plugin URI:        https://bleech.de/en/products/visual-regression-tests/
  * Description:       Test your website for unwanted visual changes. Run automatic tests and spot differences.
- * Version:           1.9.1
+ * Version:           2.0.0
  * Requires at least: 5.0
  * Requires PHP:      7.0
  * Author:            Bleech
@@ -14,6 +14,8 @@
  */
 
 use Vrts\Core\Plugin;
+use Vrts\Features\Email_Notifications;
+use Vrts\Services\Render_Template_Service;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -52,3 +54,10 @@ vrts()->setup( 'vrts', [
 	'Vrts\\Tables\\' => 'includes/tables',
 	'Vrts\\Rest_Api\\' => 'includes/rest-api',
 ]);
+
+// add_action('admin_init', function () {
+// $test_run_id = 14;
+// $email_notifications = new Email_Notifications();
+// $email_notifications->send_test_run_email( $test_run_id );
+// die();
+// });

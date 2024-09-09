@@ -65,9 +65,9 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	public function get_columns() {
 		$columns = [
 			'cb' => '',
-			'title' => esc_html__( 'Title', 'visual-regression-tests' ),
+			'title' => esc_html__( 'Test Run', 'visual-regression-tests' ),
 			'trigger' => esc_html__( 'Trigger', 'visual-regression-tests' ),
-			'status' => esc_html__( 'Test Status', 'visual-regression-tests' ),
+			'status' => esc_html__( 'Status', 'visual-regression-tests' ),
 		];
 
 		return $columns;
@@ -81,7 +81,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	public function get_sortable_columns() {
 		$sortable_columns = [
 			'title' => [ 'title', true ],
-			'status' => [ 'status', true ],
+			'status' => false,
 			'trigger' => [ 'trigger', true ],
 		];
 
@@ -424,13 +424,32 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_status( $item ) {
-		$status_data = Test_Run::get_status_data( $item );
+		$alerts_count = count(maybe_unserialize($item->alerts) ?? []);
+		$tests_count = count(maybe_unserialize($item->tests) ?? []);
+		if ( $alerts_count > 0 ) {
+			$status_class = 'paused';
+			$status_text = esc_html__( 'Changes detected', 'visual-regression-tests' );
+			$status_instructions = sprintf(
+				// translators: %s: number of alerts, %s: number of tests.
+				esc_html( _n( '%s of %s Test Failed', '%s of %s Tests Failed', $tests_count, 'visual-regression-tests' ) ),
+				$alerts_count,
+				$tests_count
+			);
+		} else {
+			$status_class = 'running';
+			$status_text = esc_html__( 'Passed', 'visual-regression-tests' );
+			$status_instructions = sprintf(
+				// translators: %s: number of tests.
+				esc_html( _n( '%s Test Successfull', '%s Tests Successfull', $tests_count, 'visual-regression-tests' ) ),
+				$tests_count
+			);
+		}
 
 		return sprintf(
 			'<div class="vrts-testing-status-wrapper"><p class="vrts-testing-status"><span class="%s">%s</span></p><p class="vrts-testing-status">%s</p></div>',
-			'vrts-testing-status--' . $status_data['class'],
-			$status_data['text'],
-			$status_data['instructions']
+			'vrts-testing-status--' . $status_class,
+			$status_text,
+			$status_instructions
 		);
 	}
 }
