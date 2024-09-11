@@ -117,10 +117,15 @@ class Test_Run {
 
 		$test_runs_table = Test_Runs_Table::get_table_name();
 
+		$run_title = $wpdb->prepare(
+			'CONCAT( %s, id ) as title',
+			esc_html__( 'Run #', 'visual-regression-tests' )
+		);
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT * FROM $test_runs_table WHERE finished_at is NULL ORDER BY scheduled_at ASC"
+			"SELECT *, $run_title FROM $test_runs_table WHERE finished_at is NULL ORDER BY scheduled_at ASC"
 		);
 	}
 

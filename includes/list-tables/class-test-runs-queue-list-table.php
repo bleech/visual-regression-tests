@@ -30,7 +30,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * Get table classes.
 	 */
 	public function get_table_classes() {
-		return [ 'vrts-test-runs-list-table', 'vrts-test-runs-list-queue-table', 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
+		return [ 'vrts-test-runs-list-table', 'vrts-test-runs-list-queue-table', 'widefat', 'fixed', $this->_args['plural'] ];
 	}
 
 	/**
@@ -177,34 +177,19 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 */
 	public function column_title( $item ) {
 		$actions = [];
-		$tests_count = count( maybe_unserialize( $item->tests ) );
 		$status = Test_Run::get_calculated_status( $item );
 
-		if ( 'scheduled' === $item->trigger && empty( $item->started_at ) ) {
-			$tests_count = Test::get_total_items();
-		}
-
-		$actions['tests'] = sprintf(
-			'<span>%s</span>',
-			esc_html(
-				sprintf(
-					// translators: %s: number of tests.
-					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
-					$tests_count
-				)
-			)
-		);
-
-		$title = Date_Time_Helpers::get_formatted_relative_date_time( $item->scheduled_at );
 
 		if ( 'running' === $status ) {
-			$title = __( 'In Progress', 'visual-regression-tests' );
+			$scheduled_at = __( 'In Progress', 'visual-regression-tests' );
+		} else {
+			$scheduled_at = Date_Time_Helpers::get_formatted_relative_date_time( $item->scheduled_at );
 		}
 
 		$row_actions = sprintf(
-			'<strong><span class="row-title">%1$s</a></strong> %2$s',
-			$title,
-			$this->row_actions( $actions, true )
+			'<strong><span class="row-title">%1$s</a></strong><div class="row-title-subline">%2$s</div>',
+			$item->title,
+			$scheduled_at
 		);
 
 		return $row_actions;
@@ -237,13 +222,43 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_status( $item ) {
-		$status_data = Test_Run::get_status_data( $item );
+		$test_run_status = Test_Run::get_calculated_status( $item );
+		$number_of_tests = count( maybe_unserialize( $item->tests ) ?? [] );
+		if ($number_of_tests === 0) {
+			$number_of_tests = Test::get_all_running(true);
+		}
 
+		if ($test_run_status === 'running') {
+			$class = 'waiting';
+			$text = '';
+			$instructions = sprintf(
+				'<span>%s</span>',
+				sprintf(
+					// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
+					wp_kses( __( '%1$sRefresh page%2$s to see result', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
+					'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-runs' ) ) . '">',
+					'</a>'
+				)
+			);
+		} else {
+			$class = 'waiting';
+			$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
+			$instructions = sprintf(
+				'%1$s | <a href="%2$s">%3$s</a>',
+				// translators: %s: number of tests.
+				sprintf(
+					esc_html( _n( '%s Test', '%s Tests', $number_of_tests, 'visual-regression-tests' ) ),
+					$number_of_tests
+				),
+				esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
+				esc_html__( 'Edit Test Configuration', 'visual-regression-tests' )
+			);
+		}
 		return sprintf(
-			'<div class="vrts-testing-status-wrapper"><p class="vrts-testing-status"><span class="%s">%s</span></p><p class="vrts-testing-status">%s</p></div>',
-			'vrts-testing-status--' . $status_data['class'],
-			$status_data['text'],
-			$status_data['instructions']
+			'<div class="vrts-testing-status-wrapper"><div class="vrts-testing-status"><span class="%s">%s</span></div><div>%s</div></div>',
+			'vrts-testing-status--' . $class,
+			$text,
+			$instructions
 		);
 	}
 }

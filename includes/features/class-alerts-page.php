@@ -16,8 +16,9 @@ class Alerts_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
-		add_filter( 'set-screen-option', [ $this, 'set_screen' ], 10, 3 );
+		// TODO: remove before release.
+		// add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
+		// add_filter( 'set-screen-option', [ $this, 'set_screen' ], 10, 3 );
 	}
 
 	/**

@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Alerts_Table {
 
-	const DB_VERSION = '1.2';
+	const DB_VERSION = '1.3';
 	const TABLE_NAME = 'vrts_alerts';
 
 	/**
@@ -50,6 +50,7 @@ class Alerts_Table {
 				comparison_id varchar(40),
 				differences int(4),
 				alert_state tinyint NOT NULL DEFAULT 0,
+				is_false_positive tinyint NOT NULL DEFAULT 0,
 				PRIMARY KEY (id)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -58,6 +59,9 @@ class Alerts_Table {
 			update_option( $option_name, self::DB_VERSION );
 
 		}//end if
+		if ($installed_version <= '1.2') {
+			static::set_is_false_positive_from_alert_state();
+		}
 	}
 
 
@@ -72,5 +76,14 @@ class Alerts_Table {
 		$wpdb->query( $sql );
 
 		delete_option( self::TABLE_NAME . '_db_version' );
+	}
+
+	protected static function set_is_false_positive_from_alert_state() {
+		global $wpdb;
+		$table_name = self::get_table_name();
+		$wpdb->query(
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
+			"UPDATE {$table_name} SET is_false_positive = 1, alert_state = 1 WHERE alert_state = 2"
+		);
 	}
 }

@@ -54,4 +54,33 @@ class Url_Helpers {
 		}
 		return $admin_url . $page;
 	}
+
+	public static function get_test_run_page( $test_run_id ) {
+		if ( is_object($test_run_id) ) {
+			$test_run_id = $test_run_id->ID;
+		} else
+		$admin_url = get_admin_url();
+		return $admin_url . 'admin.php?page=vrts-runs&run_id=' . $test_run_id;
+	}
+
+	public static function get_test_runs_page() {
+		$admin_url = get_admin_url();
+		return $admin_url . 'admin.php?page=vrts-runs';
+	}
+
+	public static function get_mark_as_read_url( $test_run_id, $redirect_to_overview = false ) {
+		$url = static::get_test_run_page( $test_run_id );
+		return add_query_arg( [
+			'action' => 'mark_as_read',
+			'redirect' => $redirect_to_overview ? 'overview' : '',
+		], $url );
+	}
+
+	public static function get_mark_as_unread_url( $test_run_id, $redirect_to_overview = false ) {
+		$url = static::get_test_run_page( $test_run_id );
+		return add_query_arg( [
+			'action' => 'mark_as_unread',
+			'redirect' => $redirect_to_overview ? 'overview' : '',
+		], $url );
+	}
 }

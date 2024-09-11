@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\List_Tables\Test_Runs_List_Table;
 use Vrts\List_Tables\Test_Runs_Queue_List_Table;
 use Vrts\Models\Alert;
@@ -15,6 +16,8 @@ class Test_Runs_Page {
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
+		add_action( 'admin_init', [ $this, 'submit_mark_as_read' ] );
+		add_action( 'admin_init', [ $this, 'submit_mark_as_unread' ] );
 	}
 
 	/**
@@ -122,5 +125,61 @@ class Test_Runs_Page {
 	 */
 	public function render_notification_connection_failed() {
 		Admin_Notices::render_notification( 'connection_failed' );
+	}
+
+	public function submit_mark_as_read() {
+		if ( ! isset( $_GET['run_id'] ) || ! isset( $_GET['page'] ) || 'vrts-runs' !== $_GET['page'] ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
+		if ( ! isset( $_GET['action'] ) || 'mark_as_read' !== $_GET['action'] ) {
+			return;
+		}
+
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'mark_as_read' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
+		$run_id = intval( $_GET['run_id'] );
+		$run = Test_Run::get_item( $run_id );
+
+		if ( ! $run ) {
+			return;
+		}
+
+		Alert::mark_as_read_by_test_run( $run_id );
+		$redirect_url = ( isset( $_GET['redirect'] ) && 'overview' === $_GET['redirect'] ) ? Url_Helpers::get_test_runs_page() : Url_Helpers::get_test_run_page( $run_id );
+		wp_safe_redirect( $redirect_url );
+		exit;
+	}
+
+	public function submit_mark_as_unread() {
+		if ( ! isset( $_GET['run_id'] ) || ! isset( $_GET['page'] ) || 'vrts-runs' !== $_GET['page'] ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
+		if ( ! isset( $_GET['action'] ) || 'mark_as_unread' !== $_GET['action'] ) {
+			return;
+		}
+
+		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'mark_as_unread' ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
+		$run_id = intval( $_GET['run_id'] );
+		$run = Test_Run::get_item( $run_id );
+
+		if ( ! $run ) {
+			return;
+		}
+
+		Alert::mark_as_unread_by_test_run( $run_id );
+		$redirect_url = ( isset( $_GET['redirect'] ) && 'overview' === $_GET['redirect'] ) ? Url_Helpers::get_test_runs_page() : Url_Helpers::get_test_run_page( $run_id );
+		wp_safe_redirect( $redirect_url );
+		exit;
 	}
 }

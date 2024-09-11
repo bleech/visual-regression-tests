@@ -147,16 +147,24 @@ class Test {
 	 *
 	 * @return array
 	 */
-	public static function get_all_running() {
+	public static function get_all_running( $return_count = false ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_results(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT * FROM $tests_table WHERE status != 0"
-		);
+		if ($return_count) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->get_var(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT COUNT(*) FROM $tests_table WHERE status != 0"
+			);
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->get_results(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE status != 0"
+			);
+		}
 	}
 
 	/**

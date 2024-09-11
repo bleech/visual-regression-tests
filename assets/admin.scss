@@ -1,6 +1,9 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 
 .vrts-list-table-page {
+	th, td {
+		border-bottom: 1px solid #CCCCCC;
+	}
 
 	.vrts-testing-status {
 		display: flex;
@@ -29,6 +32,11 @@
 	// 		background-color: #FCFCFC;
 	// 	}
 	// }
+	&:not(.vrts-test-runs-list-queue-table) {
+		.test-run-row:not([data-has-alerts]) {
+				background-color: #F6F7F7;
+		}
+	}
 }
 
 .column-vrts_testing_status {

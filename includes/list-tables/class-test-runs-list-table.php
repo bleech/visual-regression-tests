@@ -2,6 +2,7 @@
 
 namespace Vrts\List_Tables;
 
+use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
@@ -45,7 +46,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * Get table classes.
 	 */
 	public function get_table_classes() {
-		return [ 'vrts-test-runs-list-table', 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
+		return [ 'vrts-test-runs-list-table', 'widefat', 'fixed', $this->_args['plural'] ];
 	}
 
 	/**
@@ -180,23 +181,6 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			'total_items' => $total_items,
 			'per_page' => $per_page,
 		]);
-
-		$tests_ids = [];
-		$alerts_ids = [];
-
-		foreach ( $this->items as $test_run ) {
-			$tests_ids = array_unique( array_merge( $tests_ids, empty( $test_run->tests ) ? [] : maybe_unserialize( $test_run->tests ) ) );
-			$alerts_ids = array_unique( array_merge( $alerts_ids, empty( $test_run->alerts ) ? [] : maybe_unserialize( $test_run->alerts ) ) );
-		}
-
-		$this->tests = empty( $tests_ids ) ? [] : Test::get_items( [
-			'ids' => $tests_ids,
-		] );
-
-		$this->alerts = empty( $alerts_ids ) ? [] : Alert::get_items( [
-			'ids' => $alerts_ids,
-			'filter_status' => 'all',
-		] );
 	}
 
 	/**
@@ -291,110 +275,48 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 */
 	public function column_title( $item ) {
 		$actions = [];
-		$tests_count = count( maybe_unserialize( $item->tests ) );
 
-		$actions['tests'] = sprintf(
-			'<span>%s</span>',
-			esc_html(
-				sprintf(
-					// translators: %s: number of tests.
-					_n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ),
-					$tests_count
-				)
-			)
-		);
+		echo '<script>console.log(' . json_encode( $item ) . ')</script>';
+		// $actions['finished-at'] = sprintf(
+		// 	'<span>%s</span>',
+		// 	Date_Time_Helpers::get_formatted_relative_date_time( $item->finished_at )
+		// );
 
 		$actions['details'] = sprintf(
-			'<a class="vrts-show-test-run-details" href="#">%s</a>',
+			'<a class="vrts-show-test-run-details" href="%s">%s</a>',
+			esc_url( Url_Helpers::get_test_run_page( $item->id ) ),
 			esc_html__( 'Show Details', 'visual-regression-tests' )
 		);
 
+		if ( $item->alerts_count > 0 ) {
+			$actions['mark-read'] = sprintf(
+				'<a class="vrts-mark-read" href="%s">%s</a>',
+				esc_url( wp_nonce_url( Url_Helpers::get_mark_as_read_url( $item->id, true ), 'mark_as_read') ),
+				sprintf(
+					// translators: %s: number of alerts.
+					esc_html( __( 'Mark as read', 'visual-regression-tests' ) ),
+				)
+			);
+		} elseif (count(maybe_unserialize($item->alerts) ?? []) > 0) {
+			$actions['mark-unread'] = sprintf(
+				'<a class="vrts-mark-unread" href="%s">%s</a>',
+				esc_url( wp_nonce_url( Url_Helpers::get_mark_as_unread_url( $item->id, true ), 'mark_as_unread') ),
+				sprintf(
+					// translators: %s: number of alerts.
+					esc_html( __( 'Mark as unread', 'visual-regression-tests' ) ),
+				)
+			);
+		}
+
 		$row_actions = sprintf(
-			'<strong><a class="row-title vrts-show-test-run-details" href="#">%1$s</a></strong> %2$s %3$s',
+			'<strong><a class="row-title vrts-show-test-run-details" href="%1$s">%2$s</a></strong><div class="vrts-test-runs-title-subline">%3$s</div> %4$s',
+			esc_url( Url_Helpers::get_test_run_page( $item->id ) ),
 			sprintf( $item->title ),
+			Date_Time_Helpers::get_formatted_relative_date_time( $item->finished_at ),
 			$this->row_actions( $actions, true ),
-			$this->test_run_details( $item )
 		);
 
 		return $row_actions;
-	}
-
-	/**
-	 * Render the test run details.
-	 *
-	 * @param object $item column item.
-	 *
-	 * @return string
-	 */
-	protected function test_run_details( $item ) {
-		// Get tests for this test run.
-		$tests = array_filter( $this->tests, function( $test ) use ( $item ) {
-			return in_array( $test->id, empty( $item->tests ) ? [] : maybe_unserialize( $item->tests ), true );
-		} );
-
-		// Get alerts for this test run.
-		$alerts = array_filter( $this->alerts, function( $alert ) use ( $item ) {
-			return in_array( intval( $alert->id ), empty( $item->alerts ) ? [] : maybe_unserialize( $item->alerts ), true );
-		} );
-
-		$alert_post_ids = wp_list_pluck( $alerts, 'post_id' );
-
-		$tests_passed = array_filter( $tests, function( $test ) use ( $alert_post_ids ) {
-			return ! in_array( $test->post_id, $alert_post_ids, true );
-		} );
-
-		$titles = [
-			// translators: %s: number of tests.
-			'changes-detected' => __( 'Changes Detected (%s)', 'visual-regression-tests' ),
-			// translators: %s: number of tests.
-			'passed' => __( 'Passed (%s)', 'visual-regression-tests' ),
-		];
-
-		$data = array_filter( [
-			'changes-detected' => array_map( function( $alert ) {
-				return sprintf(
-					'%s<br><a href="%s" target="_blank">%s</a>',
-					esc_html( get_the_title( $alert->post_id ) ),
-					esc_url( Url_Helpers::get_alert_page( $alert->id ) ),
-					esc_url( Url_Helpers::get_relative_permalink( $alert->post_id ) )
-				);
-			}, $alerts ),
-			'passed' => array_map( function( $test ) {
-				return sprintf(
-					'%s<br><a href="%s" target="_blank">%s</a>',
-					esc_html( $test->post_title ),
-					esc_url( get_edit_post_link( $test->post_id ) ),
-					esc_url( Url_Helpers::get_relative_permalink( $test->post_id ) )
-				);
-			}, $tests_passed ),
-		] );
-
-		return sprintf(
-			'<div class="vrts-test-run-details">%s %s</div>',
-			implode( '', array_map( function( $key ) use ( $data, $titles, $item ) {
-				return sprintf(
-					'<div class="vrts-test-run-details-section vrts-test-run-details-section--%s"><p class="vrts-test-run-details-section-title"><span>%s</span>%s</p><ul>%s</ul></div>',
-					$key,
-					sprintf( $titles[ $key ], count( $data[ $key ] ) ),
-					$key === 'changes-detected' ? sprintf(
-						'<a href="%1$s" class="vrts-test-run-view-alerts"><i class="dashicons dashicons-image-flip-horizontal"></i> %2$s</a>',
-						esc_url( Url_Helpers::get_alerts_page( $item ) ),
-						sprintf(
-							// translators: %s: number of alerts.
-							esc_html( _n( 'View Alert (%s)', 'View Alerts (%s)', count( $data[ $key ] ), 'visual-regression-tests' ) ),
-							count( $data[ $key ] )
-						)
-					) : '',
-					implode( '', array_map( function( $item ) {
-						return sprintf( '<li>%s</li>', $item );
-					}, $data[ $key ] ) )
-				);
-			}, array_keys( $data ) ) ),
-			sprintf(
-				'<button type="button" class="button button-secondary vrts-show-test-run-details">%s</button>',
-				esc_html__( 'Close', 'visual-regression-tests' )
-			)
-		);
 	}
 
 	/**

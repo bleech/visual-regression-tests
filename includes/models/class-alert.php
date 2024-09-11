@@ -490,4 +490,30 @@ class Alert {
 			)
 		);
 	}
+
+	public static function mark_as_read_by_test_run( $test_run_id ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+		// var_dump($test_run_id);die();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->update(
+			$alerts_table,
+			[ 'alert_state' => 1 ],
+			[ 'test_run_id' => intval($test_run_id) ]
+		);
+	}
+
+	public static function mark_as_unread_by_test_run( $test_run_id ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->update(
+			$alerts_table,
+			[ 'alert_state' => 0 ],
+			[ 'test_run_id' => intval($test_run_id) ]
+		);
+	}
 }
