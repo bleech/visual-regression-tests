@@ -491,20 +491,26 @@ class Alert {
 		);
 	}
 
-	public static function mark_as_read_by_test_run( $test_run_id ) {
+	public static function set_read_status_by_test_run( $test_run_id, $read_status = 1 ) {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
-		// var_dump($test_run_id);die();
+
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->update(
 			$alerts_table,
-			[ 'alert_state' => 1 ],
+			[ 'alert_state' => $read_status ],
 			[ 'test_run_id' => intval($test_run_id) ]
 		);
 	}
 
-	public static function mark_as_unread_by_test_run( $test_run_id ) {
+	/**
+	 * Set or remove alert as false positive.
+	 *
+	 * @param int $alert_id the id of the item.
+	 * @param int $is_false_positive the state of the item.
+	 */
+	public static function set_false_positive( $alert_id, $is_false_positive = 1 ) {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
@@ -512,8 +518,8 @@ class Alert {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->update(
 			$alerts_table,
-			[ 'alert_state' => 0 ],
-			[ 'test_run_id' => intval($test_run_id) ]
+			[ 'is_false_positive' => $is_false_positive ],
+			[ 'id' => intval( $alert_id ) ]
 		);
 	}
 }

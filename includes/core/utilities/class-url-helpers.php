@@ -87,4 +87,12 @@ class Url_Helpers {
 	public static function get_tests_url() {
 		return admin_url( 'admin.php?page=vrts' );
 	}
+
+	public static function get_set_false_positive_url( $test_run_id, $alert_id, $is_false_positive = false ) {
+		$url = static::get_test_run_page( $test_run_id ) . '&alert_id=' . $alert_id;
+		return add_query_arg( [
+			'action' => $is_false_positive ? 'remove_false_positive' : 'flag_false_positive',
+			'redirect' => '',
+		], $url );
+	}
 }

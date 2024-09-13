@@ -1,34 +1,55 @@
 import 'img-comparison-slider';
 
-const $comparisons = document.querySelector( '.vrts-comparisons ' );
-
 document.addEventListener( 'DOMContentLoaded', function () {
+	const $comparisons = document.querySelector( '.vrts-comparisons' );
+	const $actions = document.querySelector( '.vrts-alert-actions' );
+	const $actionOpen = $actions.querySelector( '[data-vrts-action-open]' );
+
 	if ( $comparisons ) {
-		initComparisonsTabs();
+		initComparisonsTabs( $comparisons );
 	}
+
+	$actionOpen?.addEventListener( 'click', openAlertActions );
+
+	// Close actions dropdown when clicking outside of it.
+	document.addEventListener( 'click', ( e ) => {
+		if (
+			$actions &&
+			$actions !== e.target &&
+			! $actions.contains( e.target )
+		) {
+			$actionOpen.setAttribute( 'aria-expanded', false );
+			document
+				.getElementById( $actionOpen.getAttribute( 'aria-controls' ) )
+				.setAttribute( 'aria-hidden', true );
+		}
+	} );
 
 	const urlParams = new URLSearchParams( window.location.search );
 	const currentAlertId = urlParams.get( 'alert_id' );
 
 	if ( currentAlertId ) {
-		const $sidebar = document.querySelector(
-			'.vrts-test-run-page__sidebar'
-		);
 		const $alert = document.getElementById(
 			`vrts-alert-${ currentAlertId }`
 		);
 
-		if ( $alert ) {
-			$sidebar.scrollTo( {
-				behavior: 'smooth',
-				left: 0,
-				top: $alert.offsetTop - 100,
-			} );
-		}
+		setTimeout( () => {
+			$alert.setAttribute( 'data-state', 'read' );
+		}, 1000 );
 	}
 } );
 
-function initComparisonsTabs() {
+function openAlertActions( e ) {
+	const $el = e.currentTarget;
+	const controls = $el.getAttribute( 'aria-controls' );
+	const $controls = document.getElementById( controls );
+	const isExpanded = $el.getAttribute( 'aria-expanded' ) === 'true';
+
+	$el.setAttribute( 'aria-expanded', ! isExpanded );
+	$controls.setAttribute( 'aria-hidden', isExpanded );
+}
+
+function initComparisonsTabs( $comparisons ) {
 	const $tabs = $comparisons.querySelectorAll( '[role="tab"]' );
 	const $panels = $comparisons.querySelectorAll( '[role="tabpanel"]' );
 
