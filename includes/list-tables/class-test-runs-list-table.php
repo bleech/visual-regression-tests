@@ -36,8 +36,8 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 */
 	public function __construct() {
 		parent::__construct([
-			'singular' => 'test',
-			'plural' => 'tests',
+			'singular' => __( 'Run', 'visual-regression-tests' ),
+			'plural'   => __( 'Runs', 'visual-regression-tests' ),
 			'ajax' => false,
 		]);
 	}
@@ -194,7 +194,6 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		<tr
 			id="test-<?php echo esc_attr( $item->id ); ?>"
 			class="<?php echo esc_attr( $classes ); ?>"
-			data-vrts-test-run-details="hidden"
 			data-test-run-id="<?php echo esc_attr( $item->id ); ?>"
 			<?php echo $item->alerts_count > 0 ? 'data-has-alerts' : '' ?>
 		>
@@ -234,10 +233,10 @@ class Test_Runs_List_Table extends \WP_List_Table {
 
 		$output .= '</div>';
 
-		$output .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' .
-			/* translators: Hidden accessibility text. */
-			esc_html__( 'Show more details', 'visual-regression-tests' ) .
-		'</span></button>';
+		// $output .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' .
+		// 	/* translators: Hidden accessibility text. */
+		// 	esc_html__( 'Show more details', 'visual-regression-tests' ) .
+		// '</span></button>';
 
 		return $output;
 	}
@@ -276,7 +275,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	public function column_title( $item ) {
 		$actions = [];
 
-		echo '<script>console.log(' . json_encode( $item ) . ')</script>';
+		// echo '<script>console.log(' . json_encode( $item ) . ')</script>';
 		// $actions['finished-at'] = sprintf(
 		// 	'<span>%s</span>',
 		// 	Date_Time_Helpers::get_formatted_relative_date_time( $item->finished_at )
@@ -288,25 +287,25 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			esc_html__( 'Show Details', 'visual-regression-tests' )
 		);
 
-		if ( $item->alerts_count > 0 ) {
-			$actions['mark-read'] = sprintf(
-				'<a class="vrts-mark-read" href="%s">%s</a>',
-				esc_url( wp_nonce_url( Url_Helpers::get_mark_as_read_url( $item->id, true ), 'mark_as_read') ),
-				sprintf(
-					// translators: %s: number of alerts.
-					esc_html( __( 'Mark as read', 'visual-regression-tests' ) ),
-				)
-			);
-		} elseif (count(maybe_unserialize($item->alerts) ?? []) > 0) {
-			$actions['mark-unread'] = sprintf(
-				'<a class="vrts-mark-unread" href="%s">%s</a>',
-				esc_url( wp_nonce_url( Url_Helpers::get_mark_as_unread_url( $item->id, true ), 'mark_as_unread') ),
-				sprintf(
-					// translators: %s: number of alerts.
-					esc_html( __( 'Mark as unread', 'visual-regression-tests' ) ),
-				)
-			);
-		}
+		// if ( $item->alerts_count > 0 ) {
+		// 	$actions['mark-read'] = sprintf(
+		// 		'<a class="vrts-mark-read" href="%s">%s</a>',
+		// 		esc_url( wp_nonce_url( Url_Helpers::get_mark_as_read_url( $item->id, true ), 'mark_as_read') ),
+		// 		sprintf(
+		// 			// translators: %s: number of alerts.
+		// 			esc_html( __( 'Mark as read', 'visual-regression-tests' ) ),
+		// 		)
+		// 	);
+		// } elseif (count(maybe_unserialize($item->alerts) ?? []) > 0) {
+		// 	$actions['mark-unread'] = sprintf(
+		// 		'<a class="vrts-mark-unread" href="%s">%s</a>',
+		// 		esc_url( wp_nonce_url( Url_Helpers::get_mark_as_unread_url( $item->id, true ), 'mark_as_unread') ),
+		// 		sprintf(
+		// 			// translators: %s: number of alerts.
+		// 			esc_html( __( 'Mark as unread', 'visual-regression-tests' ) ),
+		// 		)
+		// 	);
+		// }
 
 		$row_actions = sprintf(
 			'<strong><a class="row-title vrts-show-test-run-details" href="%1$s">%2$s</a></strong><div class="vrts-test-runs-title-subline">%3$s</div> %4$s',
@@ -331,10 +330,12 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		$trigger_note = Test_Run::get_trigger_note( $item );
 
 		return sprintf(
-			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span><p class="vrts-test-run-trigger-notes">%s</p>',
+			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span>%s',
 			esc_attr( $item->trigger ),
 			esc_html( $trigger_title ),
-			$trigger_note
+			empty( $trigger_note ) ? '' : sprintf('<p class="vrts-test-run-trigger-notes">%s</p>',
+				$trigger_note
+			)
 		);
 	}
 

@@ -32,9 +32,30 @@
 	// 		background-color: #FCFCFC;
 	// 	}
 	// }
-	&:not(.vrts-test-runs-list-queue-table) {
-		.test-run-row:not([data-has-alerts]) {
-				background-color: #F6F7F7;
+}
+
+.vrts-test-runs-list-table:not(.vrts-test-runs-list-queue-table) {
+	.test-run-row:not([data-has-alerts]) {
+			background-color: #F6F7F7;
+	}
+	td {
+		cursor: pointer;
+
+		> * {
+			cursor: default;
+		}
+
+		> div, strong {
+			display: inline-block;
+			align-self: start;
+		}
+
+		// .vrts-test-runs-title-subline {
+		// 	clear: right;
+		// }
+		&.column-title {
+			display: flex;
+			flex-direction: column;
 		}
 	}
 }

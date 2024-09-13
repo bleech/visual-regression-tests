@@ -83,4 +83,8 @@ class Url_Helpers {
 			'redirect' => $redirect_to_overview ? 'overview' : '',
 		], $url );
 	}
+
+	public static function get_tests_url() {
+		return admin_url( 'admin.php?page=vrts' );
+	}
 }

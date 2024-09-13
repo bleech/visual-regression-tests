@@ -3,6 +3,7 @@
 namespace Vrts\List_Tables;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 
@@ -244,8 +245,9 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 			$class = 'waiting';
 			$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
 			$instructions = sprintf(
-				'%1$s | <a href="%2$s">%3$s</a>',
+				'<a href="%1$s">%2$s</a> | <a href="%3$s">%4$s</a>',
 				// translators: %s: number of tests.
+				esc_url( Url_Helpers::get_tests_url() ),
 				sprintf(
 					esc_html( _n( '%s Test', '%s Tests', $number_of_tests, 'visual-regression-tests' ) ),
 					$number_of_tests

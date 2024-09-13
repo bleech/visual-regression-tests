@@ -55,7 +55,7 @@ function extractDate( inputDate ) {
 	} else if ( difference === -1 ) {
 		return __( 'Yesterday', 'visual-regression-testing' );
 	}
-	return dateFormat( inputDate, 'Y/m/d' );
+	return dateFormat( inputDate, 'D, Y/m/d' );
 }
 
 function extractTime( inputDate ) {
@@ -65,6 +65,7 @@ function extractTime( inputDate ) {
 // format date like in php date_format
 function dateFormat( date, format ) {
 	const pad = ( number ) => ( number < 10 ? `0${ number }` : number );
+	const dayNames = [ 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat' ]; // abbreviated day names
 	const d = pad( date.getDate() );
 	const m = pad( date.getMonth() + 1 );
 	const y = date.getFullYear();
@@ -74,6 +75,7 @@ function dateFormat( date, format ) {
 	const s = date.getSeconds();
 	const g = date.getHours() % 12 || 12;
 	const a = date.getHours() >= 12 ? 'pm' : 'am';
+	const D = dayNames[ date.getDay() ]; // get the abbreviated day name
 
 	return format
 		.replace( 'd', d )
@@ -84,5 +86,6 @@ function dateFormat( date, format ) {
 		.replace( 'i', i )
 		.replace( 's', s )
 		.replace( 'g', g )
-		.replace( 'a', a );
+		.replace( 'a', a )
+		.replace( 'D', D ); // replace capital D with day name
 }

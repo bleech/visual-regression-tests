@@ -439,7 +439,7 @@ class Test_Run {
 
 		switch ( $test_run_status ) {
 			case 'has-alerts':
-				echo '<script>console.log(' . json_encode($test_run) . ')</script>';
+				// echo '<script>console.log(' . json_encode($test_run) . ')</script>';
 				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
