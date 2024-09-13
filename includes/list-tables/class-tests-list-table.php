@@ -34,7 +34,7 @@ class Tests_List_Table extends \WP_List_Table {
 	 * Get table classes.
 	 */
 	public function get_table_classes() {
-		return [ 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
+		return [ 'widefat', 'fixed', $this->_args['plural'] ];
 	}
 
 	/**

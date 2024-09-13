@@ -333,7 +333,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span>%s',
 			esc_attr( $item->trigger ),
 			esc_html( $trigger_title ),
-			empty( $trigger_note ) ? '' : sprintf('<p class="vrts-test-run-trigger-notes">%s</p>',
+			empty( $trigger_note ) ? '' : sprintf('<p class="vrts-test-run-trigger-notes" title="%1$s">%1$s</p>',
 				$trigger_note
 			)
 		);
@@ -351,22 +351,17 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		$tests_count = count(maybe_unserialize($item->tests) ?? []);
 		if ( $alerts_count > 0 ) {
 			$status_class = 'paused';
-			$status_text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-			$status_instructions = sprintf(
-				// translators: %s: number of alerts, %s: number of tests.
-				esc_html( _n( '%s of %s Test Failed', '%s of %s Tests Failed', $tests_count, 'visual-regression-tests' ) ),
-				$alerts_count,
-				$tests_count
-			);
+			$status_text = esc_html__( 'Changes detected ', 'visual-regression-tests' ) . sprintf( '(%s)', $alerts_count );
+
 		} else {
 			$status_class = 'running';
-			$status_text = esc_html__( 'Passed', 'visual-regression-tests' );
-			$status_instructions = sprintf(
-				// translators: %s: number of tests.
-				esc_html( _n( '%s Test Successfull', '%s Tests Successfull', $tests_count, 'visual-regression-tests' ) ),
-				$tests_count
-			);
+			$status_text = esc_html__( 'No changes', 'visual-regression-tests' );
 		}
+		$status_instructions = sprintf(
+			// translators: %s: number of alerts, %s: number of tests.
+			esc_html( _n( '%s Test', '%s Tests', $tests_count, 'visual-regression-tests' ) ),
+			$tests_count
+		);
 
 		return sprintf(
 			'<div class="vrts-testing-status-wrapper"><p class="vrts-testing-status"><span class="%s">%s</span></p><p class="vrts-testing-status">%s</p></div>',

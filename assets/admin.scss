@@ -1,8 +1,11 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 
 .vrts-list-table-page {
+	tbody {
+		background-color: #F6F7FB;
+	}
 	th, td {
-		border-bottom: 1px solid #CCCCCC;
+		border-bottom: 1px solid #ddd;
 	}
 
 	.vrts-testing-status {
@@ -35,14 +38,14 @@
 }
 
 .vrts-test-runs-list-table:not(.vrts-test-runs-list-queue-table) {
-	.test-run-row:not([data-has-alerts]) {
-			background-color: #F6F7F7;
+	.test-run-row[data-has-alerts] {
+			background-color: #FFF;
 	}
 	td {
 		cursor: pointer;
 
 		> * {
-			cursor: default;
+			cursor: initial;
 		}
 
 		> div, strong {

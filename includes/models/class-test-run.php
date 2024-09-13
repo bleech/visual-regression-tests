@@ -309,7 +309,7 @@ class Test_Run {
 			'manual' => __( 'Manual', 'visual-regression-tests' ),
 			'scheduled' => __( 'Scheduled', 'visual-regression-tests' ),
 			'api' => __( 'API', 'visual-regression-tests' ),
-			'update' => __( 'WordPress Updates', 'visual-regression-tests' ),
+			'update' => __( 'WordPress', 'visual-regression-tests' ),
 		];
 
 		return $trigger_titles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
@@ -512,41 +512,20 @@ class Test_Run {
 	}
 
 	public static function get_trigger_note( $test_run ) {
-		if ( $test_run->trigger ?? null === 'update' ) {
+		if ( ( $test_run->trigger ?? null ) === 'update' ) {
 			$updates = maybe_unserialize( $test_run->trigger_meta ) ?? [];
 			$updates = array_merge(...$updates);
-			// print_r($updates);
-			$types = ['core', 'plugin', 'theme', 'translation'];
-			$trigger_notes = '';
-			foreach ($types as $type) {
-				$updates_by_type = array_filter($updates, function($update) use ($type) {
-					// var_dump($update);
-					return $update['type'] === $type;
-				});
-				if (empty($updates_by_type)) {
-					continue;
-				}
-				$trigger_notes .= sprintf( '<strong>%s:</strong> ', ucfirst( $type ) );
-				$trigger_notes .= implode(', ', array_map(function($update) use ($type) {
+
+			$trigger_notes = implode(', ', array_map(function ($update) {
+				if ( $update['type'] === 'core' ) {
+					$updateName = 'WordPress';
+				} else {
 					$updateName = $update['name'] ?? $update['slug'] ?? null;
-					if ($type === 'translation') {
-						return '\'' . $updateName . ' (' . $update['language'] . ')' . '\'';
-					} elseif ($type === 'core') {
-						return $update['version'] ?? $update['language'] ?? '-';
-					} else {
-						if ( $update['version'] ?? false ) {
-							return $updateName . ' (' . $update['version'] . ')';
-						} elseif ( $update['language'] ?? false ) {
-							return $updateName . ' (' . $update['language'] . ')';
-						} else {
-							return $updateName ?? '';
-						}
-					}
-				}, $updates_by_type));
-				if ( ! empty( $trigger_notes ) ) {
-					$trigger_notes .= '. ';
 				}
-			}
+				$updateInfo = $update['version'] ?? $update['language'] ?? null;
+
+				return $updateName . ( empty( $updateInfo ) ? '' : ' (' . $updateInfo . ')' );
+			}, $updates));
 			return $trigger_notes;
 		} else {
 			return $test_run->trigger_notes ?? '';
