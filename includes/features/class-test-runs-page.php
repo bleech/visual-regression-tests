@@ -22,10 +22,12 @@ class Test_Runs_Page {
 	 * Add submenu.
 	 */
 	public function add_submenu_page() {
+		$count = Alert::get_total_items_grouped_by_test_run();
+
 		$submenu_page = add_submenu_page(
 			'vrts',
 			__( 'Runs', 'visual-regression-tests' ),
-			__( 'Runs', 'visual-regression-tests' ),
+			$count ? esc_html__( 'Runs', 'visual-regression-tests' ) . '&nbsp;<span class="update-plugins" title="' . esc_attr( $count ) . '">' . esc_html( $count ) . '</span>' : esc_html__( 'Runs', 'visual-regression-tests' ),
 			'manage_options',
 			'vrts-runs',
 			[ $this, 'render_page' ],

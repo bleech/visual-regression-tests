@@ -46,7 +46,7 @@ class Test_Run {
 			}
 		}
 
-		$whitelist_orderby = [ 'id', 'title' ];
+		$whitelist_orderby = [ 'id', 'title', 'started_at', 'finished_at', 'trigger' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];
 
 		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'id';
@@ -55,7 +55,7 @@ class Test_Run {
 		if ( 'status' === $orderby ) {
 			$orderby = "ORDER BY calculated_status $order, calculated_date $order";
 		} else {
-			$orderby = "ORDER BY $orderby $order";
+			$orderby = "ORDER BY `$orderby` $order";
 		}
 
 		$limit = $args['number'] > 100 ? 100 : $args['number'];
@@ -307,9 +307,9 @@ class Test_Run {
 
 		$trigger_titles = [
 			'manual' => __( 'Manual', 'visual-regression-tests' ),
-			'scheduled' => __( 'Scheduled', 'visual-regression-tests' ),
+			'scheduled' => __( 'Schedule', 'visual-regression-tests' ),
 			'api' => __( 'API', 'visual-regression-tests' ),
-			'update' => __( 'WordPress', 'visual-regression-tests' ),
+			'update' => __( 'Update', 'visual-regression-tests' ),
 		];
 
 		return $trigger_titles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );

@@ -18,7 +18,7 @@ class Admin {
 	 * Add main menu where other sub menus can be added to.
 	 */
 	public function add_main_menu() {
-		$count = Alert::get_total_items();
+		$count = Alert::get_total_items_grouped_by_test_run();
 
 		add_menu_page(
 			'VRTs',

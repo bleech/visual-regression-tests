@@ -81,8 +81,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 */
 	public function get_sortable_columns() {
 		$sortable_columns = [
-			'title' => [ 'title', true ],
-			'status' => false,
+			'title' => [ 'finished_at', true ],
 			'trigger' => [ 'trigger', true ],
 		];
 
@@ -147,7 +146,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		$order = isset( $_REQUEST['order'] ) && 'asc' === $_REQUEST['order'] ? 'ASC' : 'DESC';
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's the list order by parameter.
-		$order_by = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) : 'id';
+		$order_by = isset( $_REQUEST['orderby'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['orderby'] ) ) : 'finished_at';
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- It's the list search query parameter.
 		$filter_status_query = isset( $_REQUEST['status'] ) && '' !== $_REQUEST['status'] ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : null;
