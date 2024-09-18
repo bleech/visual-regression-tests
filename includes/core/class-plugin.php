@@ -2,10 +2,11 @@
 
 namespace Vrts\Core;
 
+use Exception;
+use WP_Filesystem_Direct;
 use Vrts\Core\Settings\Manager;
 use Vrts\Core\Traits\Singleton;
 use Vrts\Core\Traits\Macroable;
-use Exception;
 
 /**
  * Main class responsible for defining all plugin functionalities.
@@ -167,6 +168,35 @@ class Plugin {
 	}
 
 	/**
+	 * Get the plugin informations.
+	 *
+	 * @param string $info What information do we want.
+	 *
+	 * @return string Desired plugin information.
+	 */
+	public function get_plugin_info( $info ) {
+		if ( ! function_exists( 'get_plugin_data' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$plugin = get_plugin_data( $this->plugin_file );
+
+		$infos = [
+			'name' => 'Name',
+			'version' => 'Version',
+			'uri' => 'PluginURI',
+			'author' => 'Author',
+			'author_uri' => 'AuthorURI',
+			'description' => 'Description',
+			'requires_wp'  => 'RequiresWP',
+			'requires_php' => 'RequiresPHP',
+			'text_domain' => 'TextDomain',
+			'domain_path' => 'DomainPath',
+		];
+
+		return isset( $infos[ $info ] ) ? $plugin[ $infos[ $info ] ] : '';
+	}
+
+	/**
 	 * Get a component with passing arguments.
 	 *
 	 * Makes it easy for a plugin to reuse sections of code.
@@ -207,32 +237,37 @@ class Plugin {
 	}
 
 	/**
-	 * Get the plugin informations.
+	 * Get an icon.
 	 *
-	 * @param string $info What information do we want.
+	 * @param string $icon The icon name.
+	 * @param bool   $escape If true it will escape the icon.
 	 *
-	 * @return string Desired plugin information.
+	 * @return string Icon.
 	 */
-	public function get_plugin_info( $info ) {
-		if ( ! function_exists( 'get_plugin_data' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+	public function get_icon( $icon, $escape = true ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+
+		$filesystem = new WP_Filesystem_Direct( null );
+		$icon = $filesystem->get_contents( $this->get_plugin_path( "assets/icons/{$icon}.svg" ) );
+
+		if ( $escape ) {
+			return wp_kses( $icon, $this->wp_kses_svg() );
 		}
-		$plugin = get_plugin_data( $this->plugin_file );
 
-		$infos = [
-			'name' => 'Name',
-			'version' => 'Version',
-			'uri' => 'PluginURI',
-			'author' => 'Author',
-			'author_uri' => 'AuthorURI',
-			'description' => 'Description',
-			'requires_wp'  => 'RequiresWP',
-			'requires_php' => 'RequiresPHP',
-			'text_domain' => 'TextDomain',
-			'domain_path' => 'DomainPath',
-		];
+		return $icon;
+	}
 
-		return isset( $infos[ $info ] ) ? $plugin[ $infos[ $info ] ] : '';
+	/**
+	 * Load an icon.
+	 *
+	 * @param string $icon The icon name.
+	 */
+	public function icon( $icon ) {
+		echo wp_kses(
+			$this->get_icon( $icon, false ),
+			$this->wp_kses_svg()
+		);
 	}
 
 	/**
@@ -288,5 +323,53 @@ class Plugin {
 		}
 
 		return $svg;
+	}
+
+	/**
+	 * Get allowed SVG tags and attributes.
+	 *
+	 * @return array Allowed SVG tags and attributes.
+	 */
+	private function wp_kses_svg() {
+		return apply_filters( 'vrts_wp_kses_svg', [
+			'svg' => [
+				'class' => true,
+				'width' => true,
+				'height' => true,
+				'version' => true,
+				'fill' => true,
+				'viewbox' => true,
+				'xmlns' => true,
+				'aria-hidden' => true,
+				'focusable' => true,
+			],
+			'path' => [
+				'd' => true,
+				'fill' => true,
+				'stroke' => true,
+				'stroke-linecap' => true,
+				'stroke-linejoin' => true,
+				'stroke-width' => true,
+				'vector-effect' => true,
+				'transform-origin' => true,
+			],
+			'circle' => [
+				'fill' => true,
+				'stroke' => true,
+				'cx' => true,
+				'cy' => true,
+				'r' => true,
+				'vector-effect' => true,
+			],
+			'rect' => [
+				'x' => true,
+				'y' => true,
+				'width' => true,
+				'height' => true,
+				'fill' => true,
+				'class' => true,
+				'rx' => true,
+			],
+		] );
 	}
 }
