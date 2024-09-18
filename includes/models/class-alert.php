@@ -291,6 +291,59 @@ class Alert {
 		return (int) $wpdb->get_var( $query );
 	}
 
+	/**
+	 * Get total test items from database
+	 *
+	 * @param int $filter_status_query the id of status.
+	 * @param int $test_run_id the id of the test run.
+	 *
+	 * @return array
+	 */
+	public static function get_total_items_grouped_by_test_run( $filter_status_query = null ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// 0 = Open
+		// 1 = Archived.
+		// 2 = False Positive.
+		switch ( $filter_status_query ?? null ) {
+			case 'archived':
+				$alert_states = [ 1, 2 ];
+				break;
+			case 'all':
+				$alert_states = [];
+				break;
+			default:
+				$alert_states = [ 0 ];
+				break;
+		}
+		if ( ! empty( $alert_states ) ) {
+			$alert_states_placeholders = implode( ', ', array_fill( 0, count( $alert_states ), '%d' ) );
+
+			$status_where = $wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				"WHERE alert_state IN ($alert_states_placeholders)",
+				$alert_states
+			);
+		} else {
+			$status_where = 'WHERE 1=1';
+		}
+
+		$where = "{$status_where} AND test_run_id IS NOT NULL";
+
+
+		$query = "
+			SELECT COUNT(DISTINCT test_run_id) FROM $alerts_table
+			$where
+		";
+
+		// var_dump($query);die();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's prepared above
+		return (int) $wpdb->get_var( $query );
+	}
+
 
 	/**
 	 * Update alert status.

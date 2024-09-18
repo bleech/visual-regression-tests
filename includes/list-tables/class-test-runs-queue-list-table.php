@@ -243,7 +243,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 			);
 		} else {
 			$class = 'waiting';
-			$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
+			$text = esc_html__( 'Pending', 'visual-regression-tests' );
 			$instructions = sprintf(
 				'<a href="%1$s">%2$s</a> | <a href="%3$s">%4$s</a>',
 				// translators: %s: number of tests.
