@@ -1,4 +1,8 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+@import "@wordpress/base-styles/breakpoints";
+
 .vrts-comparisons {
+	display: block;
 	box-sizing: border-box;
 	border-top: 0;
 	margin-bottom: 0;

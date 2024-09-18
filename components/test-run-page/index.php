@@ -7,6 +7,6 @@
 			<?php require dirname( __FILE__ ) . '/partials/info.php'; ?>
 			<?php require dirname( __FILE__ ) . '/partials/pagination.php'; ?>
 		</div>
-		<?php require dirname( __FILE__ ) . '/partials/comparisons.php'; ?>
+		<?php vrts()->component( 'comparisons', $data['alert'] ); ?>
 	</div>
 </div>
