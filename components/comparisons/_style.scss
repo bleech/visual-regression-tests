@@ -27,7 +27,7 @@
 	&__difference {
 		display: flex;
 		align-items: center;
-		color: #B32D2E;
+		color: #b32d2e;
 
 		&::after {
 			content: "";
@@ -115,12 +115,14 @@
 		}
 
 		> * {
+
 			@media (min-width: $break-medium) {
 				flex: 1 1 calc(50% - 0.5rem - 2px);
 			}
 
 			&:hover,
 			&:focus {
+
 				.vrts-comparisons__figure-caption {
 					opacity: 0;
 				}

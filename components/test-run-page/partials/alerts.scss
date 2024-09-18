@@ -1,4 +1,5 @@
 .vrts-test-run-alerts {
+
 	&__heading {
 		display: flex;
 		align-items: center;
@@ -47,7 +48,6 @@
 	&__card {
 		background: #fff;
 		border: 1px solid $gray-10;
-		box-shadow: 0 1px 1px rgba(0,0,0,.04);
 		display: flex;
 		flex-direction: column;
 		flex: 1;
@@ -68,7 +68,7 @@
 
 		&-figure {
 			position: relative;
-			background: #F6F7F7;
+			background: #f6f7f7;
 			border: 1px solid $gray-5;
 			aspect-ratio: 1 / 1.15;
 			display: flex;
@@ -102,13 +102,13 @@
 			align-items: center;
 			gap: 0.25rem;
 			color: $gray-70;
-			font-weight: bold;
+			font-weight: 700;
 			margin-top: 12px;
 			margin-bottom: 4px;
 			text-decoration: none;
 
 			[data-state="unread"] &::after {
-				content: '';
+				content: "";
 				width: 8px;
 				height: 8px;
 				background: var(--wp-admin-theme-color);

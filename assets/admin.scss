@@ -1,10 +1,13 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 
 .vrts-list-table-page {
+
 	tbody {
-		background-color: #F6F7FB;
+		background-color: #f6f7fb;
 	}
-	th, td {
+
+	th,
+	td {
 		border-bottom: 1px solid #ddd;
 	}
 
@@ -38,9 +41,11 @@
 }
 
 .vrts-test-runs-list-table:not(.vrts-test-runs-list-queue-table) {
+
 	.test-run-row[data-has-alerts] {
-			background-color: #FFF;
+		background-color: #fff;
 	}
+
 	td {
 		cursor: pointer;
 
@@ -48,7 +53,8 @@
 			cursor: initial;
 		}
 
-		> div, strong {
+		> div,
+		strong {
 			display: inline-block;
 			align-self: start;
 		}
@@ -216,7 +222,98 @@
 	}
 }
 
-@keyframes rotate {
+.vrts-action-button {
+	display: grid !important;
+	grid-template-columns: max-content max-content;
+
+	&__icons {
+		position: relative;
+		display: grid;
+	}
+
+	&__icon {
+		display: flex;
+		transition: opacity 0.3s, transform 0.3s;
+		grid-row: 1 / 1;
+		grid-column: 1 / 1;
+	}
+
+	&__info {
+		grid-row: 1 / 1;
+		grid-column: 2 / 3;
+		text-align: left;
+	}
+
+	&__spinner {
+		display: flex;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, calc(-50% + 5px));
+		z-index: 1;
+		visibility: hidden;
+		opacity: 0;
+		transition: all 0.3s;
+
+		svg {
+			overflow: visible;
+			width: 14px;
+			height: 14px;
+		}
+
+		circle {
+			stroke-width: 1.5px;
+			stroke: $gray-5;
+		}
+
+		path {
+			stroke-width: 1.5px;
+			animation: 1.4s linear 0s infinite normal both paused vrts-rotate;
+		}
+	}
+
+	&[data-vrts-loading="true"] {
+
+		.vrts-action-button__icon {
+			opacity: 0;
+			transform: translateY(5px);
+		}
+
+		.vrts-action-button__spinner {
+			visibility: visible;
+			opacity: 1;
+			transform: translate(-50%, -50%);
+
+			path {
+				animation-play-state: running;
+			}
+		}
+	}
+
+	&[data-vrts-action-state="primary"] {
+
+		[data-vrts-action-state-primary] {
+			visibility: visible;
+		}
+
+		[data-vrts-action-state-secondary] {
+			visibility: hidden;
+		}
+	}
+
+	&[data-vrts-action-state="secondary"] {
+
+		[data-vrts-action-state-primary] {
+			visibility: hidden;
+		}
+
+		[data-vrts-action-state-secondary] {
+			visibility: visible;
+		}
+	}
+}
+
+@keyframes vrts-rotate {
 
 	0% {
 		transform: rotate(0deg);

@@ -50,7 +50,8 @@ class Enqueue_Scripts {
 				'vrts-admin',
 				'vrts_admin_vars',
 				[
-					'rest_url' => esc_url_raw( rest_url() ),
+					'rest_url' => esc_url_raw( rest_url( 'vrts/v1' ) ),
+					'rest_nonce' => wp_create_nonce( 'wp_rest' ),
 					'currentUserId' => get_current_user_id(),
 					'onboarding' => apply_filters( 'vrts_onboarding', null ),
 				]

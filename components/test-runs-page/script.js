@@ -84,7 +84,7 @@ function navigateToTestRun( table ) {
 				.querySelector( 'a' )
 				.dispatchEvent( newClickEvent );
 		}
-	});
+	} );
 }
 
 highlightNewTestRuns(

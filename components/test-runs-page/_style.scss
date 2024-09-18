@@ -71,7 +71,8 @@
 	}
 
 	.column-status {
-		@media screen and (max-width: 782px){
+
+		@media screen and (max-width: 782px) {
 			padding-bottom: 8px !important;
 		}
 	}
@@ -91,7 +92,7 @@
 		}
 
 		&--running {
-			animation: rotate 1.5s linear infinite;
+			animation: vrts-rotate 1.5s linear infinite;
 			color: $blue-50;
 		}
 	}
@@ -122,6 +123,7 @@
 	tr {
 
 		&[data-has-alerts] {
+
 			.row-title,
 			.vrts-test-run-trigger,
 			.vrts-testing-status-wrapper > *:first-child {

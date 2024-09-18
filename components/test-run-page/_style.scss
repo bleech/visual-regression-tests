@@ -3,13 +3,14 @@
 @import "@wordpress/base-styles/breakpoints";
 @import "@wordpress/base-styles/variables";
 @import "@wordpress/base-styles/default-custom-properties";
-
-@import './partials/alerts';
-@import './partials/info';
-@import './partials/pagination';
+@import "./partials/alerts";
+@import "./partials/info";
+@import "./partials/pagination";
 
 .vrts-test-run-wrap {
+
 	#wpfooter {
+
 		@media (min-width: 851px) {
 			left: 280px;
 		}

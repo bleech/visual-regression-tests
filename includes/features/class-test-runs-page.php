@@ -2,7 +2,6 @@
 
 namespace Vrts\Features;
 
-use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\List_Tables\Test_Runs_List_Table;
 use Vrts\List_Tables\Test_Runs_Queue_List_Table;
 use Vrts\Models\Alert;
@@ -36,9 +35,6 @@ class Test_Runs_Page {
 			add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
 			add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
 		}
-
-		add_action( 'load-' . $submenu_page, [ $this, 'handle_read_status' ] );
-		add_action( 'load-' . $submenu_page, [ $this, 'handle_false_positive' ] );
 	}
 
 	/**
@@ -128,85 +124,5 @@ class Test_Runs_Page {
 	 */
 	public function render_notification_connection_failed() {
 		Admin_Notices::render_notification( 'connection_failed' );
-	}
-
-	public function handle_read_status() {
-		if ( ! isset( $_GET['run_id'] ) || ! isset( $_GET['page'] ) || 'vrts-runs' !== $_GET['page'] ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
-		if ( ! isset( $_GET['action'] ) || ( 'mark_as_read' !== $_GET['action'] && 'mark_as_unread' !== $_GET['action'] ) ) {
-			return;
-		}
-
-		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'mark_as_read' ) ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
-		$run_id = intval( $_GET['run_id'] );
-		$run = Test_Run::get_item( $run_id );
-		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
-
-		if ( ! $run ) {
-			return;
-		}
-
-		$read_status = 'mark_as_read' === $action;
-		Alert::set_read_status_by_test_run( $run_id, $read_status );
-
-		$redirect_url = ( isset( $_GET['redirect'] ) && 'overview' === $_GET['redirect'] ) ? Url_Helpers::get_test_runs_page() : Url_Helpers::get_test_run_page( $run_id );
-		wp_safe_redirect( $redirect_url );
-		exit;
-	}
-
-	/**
-	 * Submit false positive.
-	 */
-	public function handle_false_positive() {
-		if ( ! isset( $_GET['alert_id'] ) || ! isset( $_GET['page'] ) || 'vrts-runs' !== $_GET['page'] ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
-		if ( ! isset( $_GET['action'] ) || ( 'flag_false_positive' !== $_GET['action'] && 'remove_false_positive' !== $_GET['action'] ) ) {
-			return;
-		}
-
-		if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'false_positive' ) ) {
-			return;
-		}
-
-		$alert_id = intval( $_GET['alert_id'] );
-		$run_id = intval( $_GET['run_id'] );
-		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
-
-		$run = Test_Run::get_item( $run_id );
-		$alert = Alert::get_item( $alert_id );
-
-		if ( ! $run ) {
-			return;
-		}
-
-		if ( ! $alert ) {
-			return;
-		}
-
-		$service = new Service();
-		$should_flag_false_positive = 'flag_false_positive' === $action;
-
-		Alert::set_false_positive( $alert_id, $should_flag_false_positive );
-
-		if ( $should_flag_false_positive ) {
-			$service->mark_alert_as_false_positive( $alert_id );
-		} else {
-			$service->unmark_alert_as_false_positive( $alert_id );
-		}
-
-		$redirect_url = Url_Helpers::get_test_run_page( $run_id ) . '&alert_id=' . $alert_id;
-		wp_safe_redirect( $redirect_url );
-
-		exit;
 	}
 }
