@@ -469,7 +469,7 @@ class Test_Run {
 				break;
 			case 'scheduled':
 				$class = 'waiting';
-				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
+				$text = esc_html__( 'Pending', 'visual-regression-tests' );
 				$instructions .= sprintf(
 					'<a href="%1$s">%2$s</a>',
 					esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
