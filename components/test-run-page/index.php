@@ -1,12 +1,16 @@
 <div class="vrts-test-run-page">
 	<div class="vrts-test-run-page__sidebar">
-		<?php require dirname( __FILE__ ) . '/partials/alerts.php'; ?>
+		<?php vrts()->component( 'test-run-alerts', $data ); ?>
 	</div>
 	<div class="vrts-test-run-page__content">
 		<div class="vrts-test-run-page__content-heading">
-			<?php require dirname( __FILE__ ) . '/partials/info.php'; ?>
-			<?php require dirname( __FILE__ ) . '/partials/pagination.php'; ?>
+			<?php vrts()->component( 'test-run-info', $data['run'] ); ?>
+			<?php vrts()->component( 'test-run-pagination', $data['pagination'] ); ?>
 		</div>
-		<?php vrts()->component( 'comparisons', $data['alert'] ); ?>
+		<?php if ( $data['alerts'] ) : ?>
+			<?php vrts()->component( 'comparisons', $data['alert'] ); ?>
+		<?php else : ?>
+			<?php vrts()->component( 'test-run-empty' ); ?>
+		<?php endif; ?>
 	</div>
 </div>

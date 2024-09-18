@@ -292,23 +292,15 @@
 
 	&[data-vrts-action-state="primary"] {
 
-		[data-vrts-action-state-primary] {
-			visibility: visible;
-		}
-
 		[data-vrts-action-state-secondary] {
-			visibility: hidden;
+			display: none;
 		}
 	}
 
 	&[data-vrts-action-state="secondary"] {
 
 		[data-vrts-action-state-primary] {
-			visibility: hidden;
-		}
-
-		[data-vrts-action-state-secondary] {
-			visibility: visible;
+			display: none;
 		}
 	}
 }

@@ -1,9 +1,6 @@
-import Dropdown from '../../assets/scripts/dropdown';
-
-class VrtsAlertActions extends window.HTMLElement {
+class VrtsTestRunAlerts extends window.HTMLElement {
 	constructor() {
 		super();
-		this.dropdown = null;
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
@@ -11,7 +8,7 @@ class VrtsAlertActions extends window.HTMLElement {
 
 	resolveElements() {
 		this.$actionButtons = this.querySelectorAll(
-			'[data-vrts-alert-action]'
+			'[data-vrts-test-run-action]'
 		);
 	}
 
@@ -26,7 +23,18 @@ class VrtsAlertActions extends window.HTMLElement {
 	}
 
 	connectedCallback() {
-		this.dropdown = Dropdown( this );
+		const urlParams = new URLSearchParams( window.location.search );
+		const currentAlertId = urlParams.get( 'alert_id' );
+
+		if ( currentAlertId ) {
+			const $alert = document.getElementById(
+				`vrts-alert-${ currentAlertId }`
+			);
+
+			setTimeout( () => {
+				$alert.setAttribute( 'data-state', 'read' );
+			}, 1000 );
+		}
 	}
 
 	handleActionClick( e ) {
@@ -41,14 +49,14 @@ class VrtsAlertActions extends window.HTMLElement {
 
 		$el.setAttribute( 'data-vrts-loading', 'true' );
 
-		const action = $el.getAttribute( 'data-vrts-alert-action' );
-		const id = $el.getAttribute( 'data-vrts-alert-id' );
+		const action = $el.getAttribute( 'data-vrts-test-run-action' );
+		const id = $el.getAttribute( 'data-vrts-test-run-id' );
 
 		this.handleAction( action, $el, id, isPrimary );
 	}
 
 	handleAction( action, $el, id, shouldSetAction ) {
-		const restEndpoint = `${ window.vrts_admin_vars.rest_url }/alerts/${ id }/${ action }`;
+		const restEndpoint = `${ window.vrts_admin_vars.rest_url }/test-runs/${ id }/${ action }`;
 		const method = shouldSetAction ? 'POST' : 'DELETE';
 
 		fetch( restEndpoint, {
@@ -69,32 +77,24 @@ class VrtsAlertActions extends window.HTMLElement {
 					shouldSetAction ? 'secondary' : 'primary'
 				);
 
-				const $alert = document.getElementById( `vrts-alert-${ id }` );
+				const $alert = document.querySelectorAll(
+					'.vrts-test-run-alerts__card'
+				);
 
-				if ( $alert ) {
-					if ( 'false-positive' === action ) {
-						$alert.setAttribute(
-							'data-false-positive',
-							shouldSetAction ? 'true' : 'false'
-						);
-					}
-
-					if ( 'read-status' === action ) {
-						$alert.setAttribute(
-							'data-state',
-							shouldSetAction ? 'read' : 'unread'
-						);
-					}
-				}
+				$alert.forEach( ( item ) => {
+					item.setAttribute(
+						'data-state',
+						shouldSetAction ? 'read' : 'unread'
+					);
+				} );
 			} );
 	}
 
 	disconnectedCallback() {
-		this.dropdown?.();
 		this.$actionButtons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleActionClick );
 		} );
 	}
 }
 
-window.customElements.define( 'vrts-alert-actions', VrtsAlertActions );
+window.customElements.define( 'vrts-test-run-alerts', VrtsTestRunAlerts );

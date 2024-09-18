@@ -2,13 +2,13 @@
 
 namespace Vrts\Rest_Api;
 
-use Vrts\Features\Service;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_REST_Controller;
 use Vrts\Models\Alert;
+use Vrts\Features\Service;
 
 class Rest_Alerts_Controller extends WP_REST_Controller {
 
