@@ -3,6 +3,8 @@
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Models\Test_Run;
 
+$trigger_note = Test_Run::get_trigger_note( $data );
+
 ?>
 <div class="vrts-test-run-info">
 	<strong>
@@ -16,9 +18,9 @@ use Vrts\Models\Test_Run;
 		<span class="vrts-test-run-trigger vrts-test-run-trigger--<?php echo esc_attr( $data->trigger ); ?>">
 			<?php echo esc_html( Test_Run::get_trigger_title( $data ) ); ?>
 		</span>
-		<?php if ( ! empty( $data->trigger_notes ) ) : ?>
-			<span class="vrts-test-run-trigger-notes">
-				<?php echo esc_html( $data->trigger_notes ); ?>
+		<?php if ( ! empty( $trigger_note ) ) : ?>
+			<span class="vrts-test-run-trigger-notes" title="<?php echo esc_attr( $trigger_note ); ?>">
+				<?php echo esc_html( $trigger_note ); ?>
 			</span>
 		<?php endif; ?>
 	</span>

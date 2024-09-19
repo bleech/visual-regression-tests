@@ -10,7 +10,7 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 	<div class="vrts-test-run-alerts__heading">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-runs' ) ); ?>" class="vrts-test-run-alerts__heading-link">
 			<?php vrts()->icon( 'chevron-left' ); ?>
-			<?php esc_html_e( 'Back', 'visual-regression-tests' ); ?>
+			<?php esc_html_e( 'All Runs', 'visual-regression-tests' ); ?>
 		</a>
 		<?php if ( $data['alerts'] ) : ?>
 			<button data-vrts-loading="false" data-vrts-action-state="<?php echo esc_attr( $unread_count > 0 ? 'primary' : 'secondary' ); ?>" data-vrts-test-run-id="<?php echo esc_attr( $data['run']->id ); ?>" data-vrts-test-run-action="read-status" class="vrts-test-run-alerts__heading-link vrts-test-run-alerts__heading-link--button vrts-action-button">
@@ -19,8 +19,8 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 					<span class="vrts-action-button__icon" data-vrts-action-state-primary><?php vrts()->icon( 'email-read' ); ?></span>
 					<span class="vrts-action-button__spinner"><?php vrts()->icon( 'spinner' ); ?></span>
 				</span>
-				<span class="vrts-action-button__info" data-vrts-action-state-primary><?php esc_html_e( 'Mark all as Read', 'visual-regression-tests' ); ?></span>
-				<span class="vrts-action-button__info" data-vrts-action-state-secondary><?php esc_html_e( 'Mark all as Unread', 'visual-regression-tests' ); ?></span>
+				<span class="vrts-action-button__info" data-vrts-action-state-primary><?php esc_html_e( 'Mark all as read', 'visual-regression-tests' ); ?></span>
+				<span class="vrts-action-button__info" data-vrts-action-state-secondary><?php esc_html_e( 'Mark all as unread', 'visual-regression-tests' ); ?></span>
 			</button>
 		<?php endif; ?>
 	</div>

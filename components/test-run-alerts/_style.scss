@@ -67,7 +67,7 @@
 		flex: 1 0 auto;
 		padding: 10px;
 		text-decoration: none;
-		transition: all 0.2s;
+		transition: all 0.1s;
 		box-shadow: inset 0 0 0 1px transparent;
 		width: 80%;
 
@@ -138,6 +138,10 @@
 			margin-top: 12px;
 			margin-bottom: 4px;
 			text-decoration: none;
+
+			[data-state="read"] & {
+				font-weight: 400;
+			}
 
 			[data-state="unread"] &::after {
 				content: "";

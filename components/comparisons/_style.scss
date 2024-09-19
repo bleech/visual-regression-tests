@@ -172,11 +172,10 @@
 		border: solid 1px #{$gray-lighten-20};
 		position: relative;
 		display: grid;
-		min-height: 320px;
 		outline: none;
 
 		[slot="handle"] {
-			// position: absolute;
+			position: absolute;
 			// opacity: 0;
 			filter: drop-shadow(var(--default-handle-shadow));
 		}

@@ -8,11 +8,33 @@
 		cursor: pointer;
 		line-height: 1;
 		padding: 0.5rem;
+
+		&::before {
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			right: 5px;
+			bottom: 5px;
+			content: "";
+			background: #f6f7f7;
+			opacity: 0;
+			z-index: -1;
+			transition: opacity 0.2s;
+		}
+
+		&:hover,
+		&:focus-visible,
+		&[aria-expanded="true"] {
+
+			&::before {
+				opacity: 1;
+			}
+		}
 	}
 
 	&__dropdown {
 		position: absolute;
-		top: 100%;
+		top: calc(100% - 5px);
 		right: 0;
 		background: #fff;
 		border: 1px solid #c3c4c7;
@@ -43,6 +65,12 @@
 		width: 100%;
 		text-decoration: none;
 		color: inherit;
+		transition: color 0.2s;
+
+		&:hover,
+		&:focus-visible {
+			color: var(--wp-admin-theme-color);
+		}
 
 		&:not(:last-child) {
 			border-bottom: 1px solid #ccc;
