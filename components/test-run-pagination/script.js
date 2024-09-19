@@ -55,7 +55,8 @@ class VrtsTestRunPagination extends window.HTMLElement {
 				const parser = new window.DOMParser();
 				const $html = parser.parseFromString( data, 'text/html' );
 
-				const $newComparisons = $html.querySelector( 'vrts-comparisons' );
+				const $newComparisons =
+					$html.querySelector( 'vrts-comparisons' );
 				const $newPagination = $html.querySelector(
 					'vrts-test-run-pagination'
 				);

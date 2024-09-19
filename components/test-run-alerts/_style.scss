@@ -8,6 +8,11 @@
 		justify-content: space-between;
 		background: #f0f0f1;
 		padding: 1rem 0;
+		transition: box-shadow 0.2s;
+
+		&[data-is-sticky="true"] {
+			box-shadow: inset 0 -1px 0 0 $gray-10;
+		}
 
 		a {
 			text-decoration: none;
@@ -22,8 +27,7 @@
 		@media (min-width: 851px) {
 			padding: 1rem 20px;
 			position: sticky;
-			// top: var(--wp-admin--admin-bar--height);
-			top: 0;
+			top: -0.1px;
 			z-index: 1;
 		}
 

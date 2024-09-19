@@ -31,21 +31,18 @@
 	}
 
 	&__sidebar {
-		--vrts-scrollbar-border: #ddd;
-		--vrts-scrollbar-track-bacground: #f0f0f1;
 
 		&::-webkit-scrollbar {
-			width: 4px;
-			height: 4px;
+			width: 2px;
+			height: 2px;
 		}
 
 		&::-webkit-scrollbar-track {
-			// background-color: #ddd;
-			background: linear-gradient(90deg, var(--vrts-scrollbar-track-bacground) 0%, var(--vrts-scrollbar-track-bacground) 1px, var(--vrts-scrollbar-track-bacground) 1px, var(--vrts-scrollbar-track-bacground) calc(100% - 1px), var(--vrts-scrollbar-border) calc(100% - 1px), var(--vrts-scrollbar-border) 100%);
+			background: linear-gradient(to right, #{$gray-10} 1px, transparent 1px);
 		}
 
 		&::-webkit-scrollbar-thumb {
-			background: $gray-300;
+			background: $gray-20;
 		}
 
 		@media (min-width: 851px) {

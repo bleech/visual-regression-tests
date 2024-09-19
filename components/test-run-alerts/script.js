@@ -7,6 +7,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	}
 
 	resolveElements() {
+		this.$heading = this.querySelector( '.vrts-test-run-alerts__heading' );
 		this.$alerts = this.querySelectorAll( '.vrts-test-run-alerts__card' );
 		this.$actionButtons = this.querySelectorAll(
 			'[data-vrts-test-run-action]'
@@ -28,6 +29,11 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	}
 
 	connectedCallback() {
+		this.setCurrentAlertReadStatus();
+		this.checkHeadingSticky();
+	}
+
+	setCurrentAlertReadStatus() {
 		const currentAlertId = this.getAttribute( 'data-vrts-current-alert' );
 
 		if ( false !== currentAlertId ) {
@@ -39,6 +45,20 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				$alert.setAttribute( 'data-state', 'read' );
 			}, 1000 );
 		}
+	}
+
+	checkHeadingSticky() {
+		const checkIsSticky = ( entries ) => {
+			const isSticky = ! entries[ 0 ].isIntersecting;
+			this.$heading.setAttribute( 'data-is-sticky', isSticky );
+		};
+
+		const observer = new window.IntersectionObserver( checkIsSticky, {
+			root: document,
+			threshold: [ 1 ],
+		} );
+
+		observer.observe( this.$heading );
 	}
 
 	handleAlertClick( e ) {
@@ -65,7 +85,8 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				const parser = new window.DOMParser();
 				const $html = parser.parseFromString( data, 'text/html' );
 
-				const $newComparisons = $html.querySelector( 'vrts-comparisons' );
+				const $newComparisons =
+					$html.querySelector( 'vrts-comparisons' );
 				const $newPagination = $html.querySelector(
 					'vrts-test-run-pagination'
 				);

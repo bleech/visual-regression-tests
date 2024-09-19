@@ -16,7 +16,7 @@
 		background: linear-gradient(90deg, #fff, #ddd, #fff);
 		background-size: 200% 100%;
 		animation: vrts-shimmer 1.5s linear paused infinite;
-		transition: opacity .2s, visibility .2s;
+		transition: opacity 0.2s, visibility 0.2s;
 		visibility: hidden;
 		z-index: 10;
 
@@ -27,11 +27,13 @@
 		}
 
 		@keyframes vrts-shimmer {
+
 			0% {
-			  background-position: 100% 0;
+				background-position: 100% 0;
 			}
+
 			100% {
-			  background-position: -100% 0;
+				background-position: -100% 0;
 			}
 		}
 	}
