@@ -18,12 +18,12 @@ if ( 0 === $data['prev_alert_id'] && 0 === $data['next_alert_id'] ) {
 		);
 		?>
 	</span>
-	<a class="button <?php echo ( 0 === $data['prev_alert_id'] ) ? 'button-disabled' : ''; ?>"
+	<a data-alert-id="<?php echo esc_attr( $data['prev_alert_id'] ); ?>" class="button <?php echo ( 0 === $data['prev_alert_id'] ) ? 'button-disabled' : ''; ?>"
 		<?php echo ( 0 !== $data['prev_alert_id'] ) ? 'href="' . esc_url( $data['prev_link'] ) . '"' : ''; ?>>
 		<span class="screen-reader-text"><?php esc_html_e( 'Previous alert', 'visual-regression-tests' ); ?></span>
 		<span aria-hidden="true">‹</span>
 	</a>
-	<a class="button <?php echo ( 0 === $data['next_alert_id'] ) ? 'button-disabled' : ''; ?>"
+	<a data-alert-id="<?php echo esc_attr( $data['next_alert_id'] ); ?>" class="button <?php echo ( 0 === $data['next_alert_id'] ) ? 'button-disabled' : ''; ?>"
 		<?php echo ( 0 !== $data['next_alert_id'] ) ? 'href="' . esc_url( $data['next_link'] ) . '"' : ''; ?>>
 		<span class="screen-reader-text"><?php esc_html_e( 'Next alert', 'visual-regression-tests' ); ?></span>
 		<span aria-hidden="true">›</span>

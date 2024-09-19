@@ -7,26 +7,30 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	}
 
 	resolveElements() {
+		this.$alerts = this.querySelectorAll( '.vrts-test-run-alerts__card' );
 		this.$actionButtons = this.querySelectorAll(
 			'[data-vrts-test-run-action]'
 		);
 	}
 
 	bindFunctions() {
+		this.handleAlertClick = this.handleAlertClick.bind( this );
 		this.handleActionClick = this.handleActionClick.bind( this );
 	}
 
 	bindEvents() {
-		this.$actionButtons.forEach( ( item ) => {
+		this.$alerts?.forEach( ( item ) => {
+			item.addEventListener( 'click', this.handleAlertClick );
+		} );
+		this.$actionButtons?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleActionClick );
 		} );
 	}
 
 	connectedCallback() {
-		const urlParams = new URLSearchParams( window.location.search );
-		const currentAlertId = urlParams.get( 'alert_id' );
+		const currentAlertId = this.getAttribute( 'data-vrts-current-alert' );
 
-		if ( currentAlertId ) {
+		if ( false !== currentAlertId ) {
 			const $alert = document.getElementById(
 				`vrts-alert-${ currentAlertId }`
 			);
@@ -35,6 +39,52 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				$alert.setAttribute( 'data-state', 'read' );
 			}, 1000 );
 		}
+	}
+
+	handleAlertClick( e ) {
+		e.preventDefault();
+		const $el = e.currentTarget;
+		const href = $el.getAttribute( 'href' );
+		const $comparisons = document.querySelector( 'vrts-comparisons' );
+		const $pagination = document.querySelector(
+			'vrts-test-run-pagination'
+		);
+
+		this.$alerts.forEach( ( item ) => {
+			item.setAttribute( 'data-current', 'false' );
+		} );
+
+		$el.setAttribute( 'data-current', 'true' );
+		$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+
+		fetch( href )
+			.then( ( response ) => {
+				return response.text();
+			} )
+			.then( ( data ) => {
+				const parser = new window.DOMParser();
+				const $html = parser.parseFromString( data, 'text/html' );
+
+				const $newComparisons = $html.querySelector( 'vrts-comparisons' );
+				const $newPagination = $html.querySelector(
+					'vrts-test-run-pagination'
+				);
+
+				window.history.replaceState( {}, '', href );
+
+				window.scrollTo( {
+					top: $comparisons.offsetTop - 62,
+					behavior: 'smooth',
+				} );
+
+				if ( $newComparisons ) {
+					$comparisons.replaceWith( $newComparisons );
+				}
+
+				if ( $newPagination ) {
+					$pagination.replaceWith( $newPagination );
+				}
+			} );
 	}
 
 	handleActionClick( e ) {
@@ -91,6 +141,9 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	}
 
 	disconnectedCallback() {
+		this.$alerts?.forEach( ( item ) => {
+			item.removeEventListener( 'click', this.handleAlertClick );
+		} );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleActionClick );
 		} );

@@ -64,5 +64,5 @@
 			</svg>
 		</img-comparison-slider>
 	</div>
-
+	<span class="vrts-comparisons__loader"></span>
 </vrts-comparisons>

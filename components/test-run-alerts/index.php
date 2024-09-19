@@ -6,7 +6,7 @@ $unread_alerts = Alert::get_unread_count_by_test_run_ids( $data['run']->id );
 $unread_count = $unread_alerts[0]->count ?? 0;
 
 ?>
-<vrts-test-run-alerts class="vrts-test-run-alerts">
+<vrts-test-run-alerts class="vrts-test-run-alerts" data-vrts-current-alert="<?php echo esc_attr( isset( $data['alert']->id ) ? $data['alert']->id : 'false' ); ?>">
 	<div class="vrts-test-run-alerts__heading">
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-runs' ) ); ?>" class="vrts-test-run-alerts__heading-link">
 			<?php vrts()->icon( 'chevron-left' ); ?>
@@ -41,6 +41,7 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 					id="vrts-alert-<?php echo esc_attr( $alert->id ); ?>"
 					href="<?php echo esc_url( $alert_link ); ?>"
 					class="vrts-test-run-alerts__card"
+					data-vrts-alert
 					data-current="<?php echo esc_attr( $data['alert']->id === $alert->id ? 'true' : 'false' ); ?>"
 					data-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
 					data-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">

@@ -7,6 +7,35 @@
 	border-top: 0;
 	margin-bottom: 0;
 
+	&__loader {
+		position: absolute;
+		top: 1px;
+		left: 0;
+		width: 100%;
+		height: calc(100% - 1px);
+		background: linear-gradient(90deg, #fff, #ddd, #fff);
+		background-size: 200% 100%;
+		animation: vrts-shimmer 1.5s linear paused infinite;
+		transition: opacity .2s, visibility .2s;
+		visibility: hidden;
+		z-index: 10;
+
+		[data-vrts-loading="true"] & {
+			opacity: 0.6;
+			visibility: visible;
+			animation-play-state: running;
+		}
+
+		@keyframes vrts-shimmer {
+			0% {
+			  background-position: 100% 0;
+			}
+			100% {
+			  background-position: -100% 0;
+			}
+		}
+	}
+
 	&__header {
 		border-top: 1px solid $gray-10;
 		background-color: $white;
