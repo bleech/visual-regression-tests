@@ -7,10 +7,7 @@
 .vrts-test-run-wrap {
 
 	#wpfooter {
-
-		@media (min-width: 851px) {
-			left: 280px;
-		}
+		display: none;
 	}
 
 	#wpbody-content {
@@ -62,7 +59,7 @@
 
 	&__content {
 		flex: 1;
-		padding-bottom: 50px;
+		padding-bottom: 20px;
 
 		&-heading {
 			display: flex;
