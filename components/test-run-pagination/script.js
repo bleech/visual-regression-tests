@@ -13,33 +13,40 @@ class VrtsTestRunPagination extends window.HTMLElement {
 
 	bindFunctions() {
 		this.handleClick = this.handleClick.bind( this );
+		this.handleKeyDown = this.handleKeyDown.bind( this );
 	}
 
 	bindEvents() {
 		this.$buttons?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleClick );
 		} );
+
+		document.addEventListener( 'keydown', this.handleKeyDown );
 	}
 
 	handleClick( e ) {
 		e.preventDefault();
 		const $el = e.currentTarget;
-		const href = $el.getAttribute( 'href' );
-		const nextAlertId = $el.getAttribute( 'data-alert-id' );
+		const nextAlertId = $el.getAttribute( 'data-vrts-alert-id' );
 		const $nextAlert = document.getElementById(
 			`vrts-alert-${ nextAlertId }`
 		);
+
+		if ( ! $nextAlert ) {
+			return;
+		}
+
+		const href = $el.getAttribute( 'href' );
 		const $comparisons = document.querySelector( 'vrts-comparisons' );
 		const $sidebar = document.querySelector(
 			'.vrts-test-run-page__sidebar'
 		);
 
 		this.$alerts.forEach( ( item ) => {
-			item.setAttribute( 'data-current', 'false' );
+			item.setAttribute( 'data-vrts-current', 'false' );
 		} );
 
-		$nextAlert.setAttribute( 'data-current', 'true' );
-
+		$nextAlert.setAttribute( 'data-vrts-current', 'true' );
 		$comparisons.setAttribute( 'data-vrts-loading', 'true' );
 
 		$sidebar.scrollTo( {
@@ -68,7 +75,7 @@ class VrtsTestRunPagination extends window.HTMLElement {
 					behavior: 'smooth',
 				} );
 
-				$nextAlert.setAttribute( 'data-state', 'read' );
+				$nextAlert.setAttribute( 'data-vrts-state', 'read' );
 
 				if ( $newComparisons ) {
 					$comparisons.replaceWith( $newComparisons );
@@ -80,10 +87,24 @@ class VrtsTestRunPagination extends window.HTMLElement {
 			} );
 	}
 
+	handleKeyDown( e ) {
+		if ( e.key === 'ArrowUp' ) {
+			e.preventDefault();
+			this.querySelector( '[data-vrts-pagination="prev"]' ).click();
+		}
+
+		if ( e.key === 'ArrowDown' ) {
+			e.preventDefault();
+			this.querySelector( '[data-vrts-pagination="next"]' ).click();
+		}
+	}
+
 	disconnectedCallback() {
 		this.$buttons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleClick );
 		} );
+
+		document.removeEventListener( 'keydown', this.handleKeyDown );
 	}
 }
 
