@@ -3,12 +3,22 @@
 .vrts-list-table-page {
 
 	tbody {
-		background-color: #f6f7fb;
+		background-color: #f6f7f9;
+	}
+
+	tr {
+		position: relative;
 	}
 
 	th,
 	td {
-		border-bottom: 1px solid #ddd;
+		padding: 10px;
+		border-bottom: 1px solid $gray-10;
+
+		&:where(:not(.column-title)) > * {
+			position: relative;
+			z-index: 2;
+		}
 	}
 
 	.vrts-testing-status {
@@ -47,11 +57,6 @@
 	}
 
 	td {
-		cursor: pointer;
-
-		> * {
-			cursor: initial;
-		}
 
 		> div,
 		strong {
@@ -59,9 +64,7 @@
 			align-self: start;
 		}
 
-		// .vrts-test-runs-title-subline {
-		// 	clear: right;
-		// }
+
 		&.column-title {
 			display: flex;
 			flex-direction: column;
