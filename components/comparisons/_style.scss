@@ -175,9 +175,12 @@
 		outline: none;
 
 		[slot="handle"] {
-			position: absolute;
-			// opacity: 0;
+			display: none;
 			filter: drop-shadow(var(--default-handle-shadow));
+		}
+
+		&.rendered [slot="handle"] {
+			display: block;
 		}
 
 		.vrts-comparisons__figure {
