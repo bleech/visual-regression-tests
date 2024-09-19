@@ -83,12 +83,12 @@
 			width: 100%;
 		}
 
-		&[data-state="read"] {
+		&[data-vrts-state="read"] {
 			background: #f6f7f9;
 		}
 
 		&:hover,
-		&[data-current="true"] {
+		&[data-vrts-current="true"] {
 			border-color: var(--wp-admin-theme-color);
 			box-shadow: inset 0 0 0 1px var(--wp-admin-theme-color);
 		}
@@ -111,7 +111,7 @@
 			left: 10px;
 			visibility: hidden;
 
-			[data-false-positive="true"] & {
+			[data-vrts-false-positiv="true"] & {
 				visibility: visible;
 			}
 		}
@@ -139,11 +139,11 @@
 			margin-bottom: 4px;
 			text-decoration: none;
 
-			[data-state="read"] & {
+			[data-vrts-state="read"] & {
 				font-weight: 400;
 			}
 
-			[data-state="unread"] &::after {
+			[data-vrts-state="unread"] &::after {
 				content: "";
 				width: 8px;
 				height: 8px;

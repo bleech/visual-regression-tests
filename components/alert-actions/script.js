@@ -74,14 +74,14 @@ class VrtsAlertActions extends window.HTMLElement {
 				if ( $alert ) {
 					if ( 'false-positive' === action ) {
 						$alert.setAttribute(
-							'data-false-positive',
+							'data-vrts-false-positiv',
 							shouldSetAction ? 'true' : 'false'
 						);
 					}
 
 					if ( 'read-status' === action ) {
 						$alert.setAttribute(
-							'data-state',
+							'data-vrts-state',
 							shouldSetAction ? 'read' : 'unread'
 						);
 					}

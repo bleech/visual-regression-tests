@@ -42,7 +42,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			);
 
 			setTimeout( () => {
-				$alert.setAttribute( 'data-state', 'read' );
+				$alert.setAttribute( 'data-vrts-state', 'read' );
 			}, 1000 );
 		}
 	}
@@ -71,10 +71,10 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		);
 
 		this.$alerts.forEach( ( item ) => {
-			item.setAttribute( 'data-current', 'false' );
+			item.setAttribute( 'data-vrts-current', 'false' );
 		} );
 
-		$el.setAttribute( 'data-current', 'true' );
+		$el.setAttribute( 'data-vrts-current', 'true' );
 		$comparisons.setAttribute( 'data-vrts-loading', 'true' );
 
 		fetch( href )
@@ -98,7 +98,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 					behavior: 'smooth',
 				} );
 
-				$el.setAttribute( 'data-state', 'read' );
+				$el.setAttribute( 'data-vrts-state', 'read' );
 
 				if ( $newComparisons ) {
 					$comparisons.replaceWith( $newComparisons );
@@ -156,7 +156,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 
 				$alert.forEach( ( item ) => {
 					item.setAttribute(
-						'data-state',
+						'data-vrts-state',
 						shouldSetAction ? 'read' : 'unread'
 					);
 				} );
