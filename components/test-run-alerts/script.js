@@ -4,6 +4,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
+		this.unreadAlerts = new Set();
 	}
 
 	resolveElements() {
@@ -31,6 +32,15 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	connectedCallback() {
 		this.setCurrentAlertReadStatus();
 		this.checkHeadingSticky();
+		this.checkReadStatusChange();
+
+		this.$alerts.forEach( ( item ) => {
+			const isUnread =
+				item.getAttribute( 'data-vrts-state' ) === 'unread';
+			if ( isUnread ) {
+				this.unreadAlerts.add( item.getAttribute( 'data-vrts-alert' ) );
+			}
+		} );
 	}
 
 	setCurrentAlertReadStatus() {
@@ -59,6 +69,41 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		} );
 
 		observer.observe( this.$heading );
+	}
+
+	checkReadStatusChange() {
+		const observer = new window.MutationObserver( ( mutations ) => {
+			mutations.forEach( ( mutation ) => {
+				if (
+					mutation.type === 'attributes' &&
+					mutation.attributeName === 'data-vrts-state'
+				) {
+					const id =
+						mutation.target.getAttribute( 'data-vrts-alert' );
+					const state =
+						mutation.target.getAttribute( 'data-vrts-state' );
+
+					if ( 'unread' === state ) {
+						this.unreadAlerts.add( id );
+					} else {
+						this.unreadAlerts.delete( id );
+					}
+
+					this.querySelector(
+						'[data-vrts-test-run-action="read-status"]'
+					).setAttribute(
+						'data-vrts-action-state',
+						this.unreadAlerts.size > 0 ? 'primary' : 'secondary'
+					);
+				}
+			} );
+		} );
+
+		this.$alerts.forEach( ( item ) => {
+			observer.observe( item, {
+				attributes: true,
+			} );
+		} );
 	}
 
 	handleAlertClick( e ) {

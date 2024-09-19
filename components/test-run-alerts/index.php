@@ -41,10 +41,10 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 					id="vrts-alert-<?php echo esc_attr( $alert->id ); ?>"
 					href="<?php echo esc_url( $alert_link ); ?>"
 					class="vrts-test-run-alerts__card"
-					data-vrts-alert
+					data-vrts-alert="<?php echo esc_attr( $alert->id ); ?>"
 					data-vrts-current="<?php echo esc_attr( $data['alert']->id === $alert->id ? 'true' : 'false' ); ?>"
 					data-vrts-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
-					data-vrts-false-positiv="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
+					data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
 					<figure class="vrts-test-run-alerts__card-figure">
 						<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( $alert->comparison_screenshot_url ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
 						<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>

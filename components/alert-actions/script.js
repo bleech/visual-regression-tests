@@ -74,7 +74,7 @@ class VrtsAlertActions extends window.HTMLElement {
 				if ( $alert ) {
 					if ( 'false-positive' === action ) {
 						$alert.setAttribute(
-							'data-vrts-false-positiv',
+							'data-vrts-false-positive',
 							shouldSetAction ? 'true' : 'false'
 						);
 					}
