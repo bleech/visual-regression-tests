@@ -58,42 +58,9 @@ function saveQueuedTestIds( table ) {
 	);
 }
 
-function navigateToTestRun( table ) {
-	if ( ! table ) {
-		return;
-	}
-	// TODO: maybe add touchend as well?
-	table.addEventListener( 'click', ( event ) => {
-		// console.log('click', event.target, event.currentTarget);
-		const target = event.target;
-		if ( target.tagName === 'TD' ) {
-			const newClickEvent = new window.MouseEvent( 'click', {
-				bubbles: true,
-				cancelable: true,
-				view: window,
-				ctrlKey: event.ctrlKey,
-				shiftKey: event.shiftKey,
-				altKey: event.altKey,
-				metaKey: event.metaKey,
-				button: event.button, // Preserve which mouse button was pressed
-				clientX: event.clientX, // Preserve mouse position
-				clientY: event.clientY,
-			} );
-			target
-				.closest( 'tr' )
-				.querySelector( 'a' )
-				.dispatchEvent( newClickEvent );
-		}
-	});
-}
-
 highlightNewTestRuns(
 	document.querySelector( 'form .vrts-test-runs-list-table' )
 );
 saveQueuedTestIds(
 	document.querySelector( '.vrts-test-runs-list-queue-table' )
-);
-
-navigateToTestRun(
-	document.querySelector( 'form .vrts-test-runs-list-table' )
 );

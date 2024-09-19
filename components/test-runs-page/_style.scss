@@ -10,7 +10,7 @@
 
 .vrts-test-runs-list-table {
 
-	@keyframes scale-up-down {
+	@keyframes vrts-scale-up-down {
 
 		from,
 		0%,
@@ -71,7 +71,8 @@
 	}
 
 	.column-status {
-		@media screen and (max-width: 782px){
+
+		@media screen and (max-width: 782px) {
 			padding-bottom: 8px !important;
 		}
 	}
@@ -91,13 +92,25 @@
 		}
 
 		&--running {
-			animation: rotate 1.5s linear infinite;
+			animation: vrts-rotate 1.5s linear infinite;
 			color: $blue-50;
 		}
 	}
 
 	.row-title {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
 		color: $blue-50;
+
+		&::before {
+			content: "";
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
 	}
 
 	[data-vrts-test-run-status="running"] .row-title {
@@ -122,19 +135,21 @@
 	tr {
 
 		&[data-has-alerts] {
+
 			.row-title,
 			.vrts-test-run-trigger,
 			.vrts-testing-status-wrapper > *:first-child {
 				font-weight: 600;
 			}
 
-			// .check-column {
-			// 	border-left: 4px solid $blue-50;
-			// 	padding-left: 6px;
-			// }
-
 			.row-title::after {
-				content: "\25CF";
+				content: "";
+				width: 8px;
+				height: 8px;
+				background: var(--wp-admin-theme-color);
+				border-radius: 50%;
+				flex: 0 0 auto;
+				margin-top: 1px;
 			}
 		}
 
@@ -142,7 +157,7 @@
 			animation: color-highlight 3s ease;
 
 			.check-column .dashicons {
-				animation: scale-up-down 3s;
+				animation: vrts-scale-up-down 3s;
 			}
 		}
 

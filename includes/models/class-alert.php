@@ -352,8 +352,8 @@ class Alert {
 	 * @param int $new_alert_state the new state of the item.
 	 */
 	public static function set_alert_state( $id = 0, $new_alert_state = null ) {
-		// 0 = Open / 1 = Archived / 2 = False Positive.
-		if ( in_array( $new_alert_state, [ 0, 1, 2 ], true ) ) {
+		// 0 = Unread / 1 = Read
+		if ( in_array( $new_alert_state, [ 0, 1 ], true ) ) {
 			global $wpdb;
 
 			$alerts_table = Alerts_Table::get_table_name();
@@ -373,8 +373,8 @@ class Alert {
 	 * @param int $new_alert_state the new state of the item.
 	 */
 	public static function set_alert_state_for_post_id( $post_id = 0, $new_alert_state = null ) {
-		// 0 = Open / 1 = Archived / 2 = False Positive.
-		if ( in_array( $new_alert_state, [ 0, 1, 2 ], true ) ) {
+		// 0 = Unread / 1 = Read
+		if ( in_array( $new_alert_state, [ 0, 1 ], true ) ) {
 			global $wpdb;
 
 			$alerts_table = Alerts_Table::get_table_name();

@@ -1,11 +1,24 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 
 .vrts-list-table-page {
+
 	tbody {
-		background-color: #F6F7FB;
+		background-color: #f6f7f9;
 	}
-	th, td {
-		border-bottom: 1px solid #ddd;
+
+	tr {
+		position: relative;
+	}
+
+	th,
+	td {
+		padding: 10px;
+		border-bottom: 1px solid $gray-10;
+
+		&:where(:not(.column-title)) > * {
+			position: relative;
+			z-index: 2;
+		}
 	}
 
 	.vrts-testing-status {
@@ -38,24 +51,20 @@
 }
 
 .vrts-test-runs-list-table:not(.vrts-test-runs-list-queue-table) {
+
 	.test-run-row[data-has-alerts] {
-			background-color: #FFF;
+		background-color: #fff;
 	}
+
 	td {
-		cursor: pointer;
 
-		> * {
-			cursor: initial;
-		}
-
-		> div, strong {
+		> div,
+		strong {
 			display: inline-block;
 			align-self: start;
 		}
 
-		// .vrts-test-runs-title-subline {
-		// 	clear: right;
-		// }
+
 		&.column-title {
 			display: flex;
 			flex-direction: column;
@@ -216,7 +225,90 @@
 	}
 }
 
-@keyframes rotate {
+.vrts-action-button {
+	display: grid !important;
+	grid-template-columns: max-content max-content;
+
+	&__icons {
+		position: relative;
+		display: grid;
+	}
+
+	&__icon {
+		display: flex;
+		transition: opacity 0.3s, transform 0.3s;
+		grid-row: 1 / 1;
+		grid-column: 1 / 1;
+	}
+
+	&__info {
+		grid-row: 1 / 1;
+		grid-column: 2 / 3;
+		text-align: left;
+	}
+
+	&__spinner {
+		display: flex;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, calc(-50% + 5px));
+		z-index: 1;
+		visibility: hidden;
+		opacity: 0;
+		transition: all 0.3s;
+
+		svg {
+			overflow: visible;
+			width: 14px;
+			height: 14px;
+		}
+
+		circle {
+			stroke-width: 1.5px;
+			stroke: $gray-5;
+		}
+
+		path {
+			stroke-width: 1.5px;
+			animation: 1.4s linear 0s infinite normal both paused vrts-rotate;
+		}
+	}
+
+	&[data-vrts-loading="true"] {
+
+		.vrts-action-button__icon {
+			opacity: 0;
+			transform: translateY(5px);
+		}
+
+		.vrts-action-button__spinner {
+			visibility: visible;
+			opacity: 1;
+			transform: translate(-50%, -50%);
+
+			path {
+				animation-play-state: running;
+			}
+		}
+	}
+
+	&[data-vrts-action-state="primary"] {
+
+		[data-vrts-action-state-secondary] {
+			display: none;
+		}
+	}
+
+	&[data-vrts-action-state="secondary"] {
+
+		[data-vrts-action-state-primary] {
+			display: none;
+		}
+	}
+}
+
+@keyframes vrts-rotate {
 
 	0% {
 		transform: rotate(0deg);

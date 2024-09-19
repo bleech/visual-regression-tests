@@ -2,7 +2,7 @@
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
-Tested up to: 6.5
+Tested up to: 6.6
 Stable tag: 1.9.1
 Requires PHP: 7.0
 License: GPLv2 or later

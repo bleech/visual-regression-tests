@@ -4,14 +4,10 @@
 @import "@wordpress/base-styles/variables";
 @import "@wordpress/base-styles/default-custom-properties";
 
-@import './partials/alerts';
-@import './partials/info';
-@import './partials/pagination';
-@import './partials/comparisons';
-@import './partials/alert-actions';
-
 .vrts-test-run-wrap {
+
 	#wpfooter {
+
 		@media (min-width: 851px) {
 			left: 280px;
 		}
@@ -35,24 +31,18 @@
 	}
 
 	&__sidebar {
-		--vrts-scrollbar-border: #ddd;
-		--vrts-scrollbar-track-bacground: #f0f0f1;
-
-		-webkit-overflow-scrolling: touch;
-		overflow-x: scroll;
 
 		&::-webkit-scrollbar {
-			width: 4px;
-			height: 4px;
+			width: 2px;
+			height: 2px;
 		}
 
 		&::-webkit-scrollbar-track {
-			// background-color: #ddd;
-			background: linear-gradient(90deg, var(--vrts-scrollbar-track-bacground) 0%, var(--vrts-scrollbar-track-bacground) 1px, var(--vrts-scrollbar-track-bacground) 1px, var(--vrts-scrollbar-track-bacground) calc(100% - 1px), var(--vrts-scrollbar-border) calc(100% - 1px), var(--vrts-scrollbar-border) 100%);
+			background: linear-gradient(to right, #{$gray-10} 1px, transparent 1px);
 		}
 
 		&::-webkit-scrollbar-thumb {
-			background: $gray-300;
+			background: $gray-20;
 		}
 
 		@media (min-width: 851px) {
@@ -62,6 +52,7 @@
 			height: calc(100vh - 32px);
 			overflow-x: hidden;
 			overflow-y: scroll;
+			-webkit-overflow-scrolling: touch;
 
 			> *:last-child {
 				margin-bottom: 62px;
