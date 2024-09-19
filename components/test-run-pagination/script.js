@@ -68,6 +68,8 @@ class VrtsTestRunPagination extends window.HTMLElement {
 					behavior: 'smooth',
 				} );
 
+				$nextAlert.setAttribute( 'data-state', 'read' );
+
 				if ( $newComparisons ) {
 					$comparisons.replaceWith( $newComparisons );
 				}

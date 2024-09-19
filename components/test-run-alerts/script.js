@@ -98,6 +98,8 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 					behavior: 'smooth',
 				} );
 
+				$el.setAttribute( 'data-state', 'read' );
+
 				if ( $newComparisons ) {
 					$comparisons.replaceWith( $newComparisons );
 				}
