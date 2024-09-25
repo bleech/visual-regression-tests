@@ -2,6 +2,7 @@
 	animation: vrts-fade-in 200ms both;
 	display: flex;
 	padding: 15px;
+	outline: 0;
 	z-index: 9999999999;
 
 	&[aria-hidden='true'] {
@@ -55,12 +56,17 @@
 		background-image: url('data:image/svg+xml,<svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.2564 1.41L6.71644 4.95L10.2564 8.49L8.84645 9.9L5.30645 6.37L1.77644 9.9L0.356445 8.48L3.88645 4.95L0.356445 1.42L1.77644 0L5.30645 3.53L8.84645 0L10.2564 1.41Z" fill="%23757575"/></svg>'); // stylelint-disable-line
 		background-position: center;
 		background-repeat: no-repeat;
+		border-radius: 3px;
 		font-size: 0;
 		z-index: 1;
 		transition: opacity 0.2s;
 
 		&:hover {
 			opacity: 0.8;
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--wp-admin-theme-color);
 		}
 	}
 

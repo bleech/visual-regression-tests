@@ -40,7 +40,7 @@ class Manager {
 	 * @return mixed Option value.
 	 */
 	public function get_option( $id ) {
-		$default_value = isset( $this->settings[ $id ] ) ? $this->settings[ $id ]['default'] : false;
+		$default_value = isset( $this->settings[ $id ] ) ? $this->settings[ $id ]['default'] ?? '' : false;
 		return get_option( $id, $default_value );
 	}
 
@@ -97,14 +97,15 @@ class Manager {
 
 			add_settings_field(
 				$id,
-				$args['title'],
+				$args['title'] ?? '',
 				function() use ( $args ) {
 					$this->get_field( $args );
 				},
 				$this->get_section_page( $args['section'] ),
 				$args['section'],
 				[
-					'label_for' => ! in_array( $args['type'], [ 'checkbox', 'radio' ], true ) ? $id : '',
+					'class' => "vrts-settings-{$args['type']}",
+					'label_for' => ! in_array( $args['type'], [ 'info', 'checkbox', 'radio' ], true ) ? $id : '',
 				]
 			);
 		}//end foreach

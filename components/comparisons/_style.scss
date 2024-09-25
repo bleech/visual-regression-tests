@@ -32,6 +32,10 @@
 		background-color: $white;
 		z-index: 1;
 
+		&:has(:not(vrts-modal[aria-hidden="true"])) {
+			z-index: 999999;
+		}
+
 		@media (min-width: 850px) {
 			position: sticky;
 			top: calc(62px + var(--wp-admin--admin-bar--height));

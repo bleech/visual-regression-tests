@@ -29,7 +29,7 @@
 	<vrts-modal id="vrts-modal-hide-elements" class="vrts-modal vrts-alert-actions__modal" aria-hidden="true">
 		<div class="vrts-modal__overlay" data-a11y-dialog-hide></div>
 		<div class="vrts-modal__content" role="document">
-			<button type="button" class="vrts-modal__close" data-a11y-dialog-hide>modal__close</button>
+			<button type="button" class="vrts-modal__close" data-a11y-dialog-hide aria-label="<?php esc_attr_e( 'Close', 'visual-regression-tests' ); ?>"></button>
 			<h2 class="vrts-modal__title">
 				<?php vrts()->icon( 'hidden' ); ?>
 				<?php esc_html_e( 'Hide elements', 'visual-regression-tests' ); ?>
