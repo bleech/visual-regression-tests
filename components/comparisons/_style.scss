@@ -25,17 +25,6 @@
 			visibility: visible;
 			animation-play-state: running;
 		}
-
-		@keyframes vrts-shimmer {
-
-			0% {
-				background-position: 100% 0;
-			}
-
-			100% {
-				background-position: -100% 0;
-			}
-		}
 	}
 
 	&__header {
