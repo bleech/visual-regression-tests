@@ -118,6 +118,7 @@
 
 		&-image {
 			box-sizing: border-box;
+			display: block;
 			border: solid 1px #{$gray-lighten-20};
 			max-width: 100%;
 			margin: 0 auto;
