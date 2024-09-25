@@ -91,7 +91,7 @@ class Url_Helpers {
 	}
 
 	public static function get_tests_url() {
-		return admin_url( 'admin.php?page=vrts' );
+		return admin_url( 'admin.php?page=vrts-tests' );
 	}
 
 	public static function get_set_false_positive_url( $test_run_id, $alert_id, $is_false_positive = false ) {

@@ -174,7 +174,7 @@ class Onboarding {
 	 */
 	public function should_display_tests_welcome_onboarding() {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-		if ( 'vrts' === $page ) {
+		if ( 'vrts-tests' === $page ) {
 			$frontpage_id = get_option( 'page_on_front' );
 			$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 			$next_id = Test::get_autoincrement_value();
@@ -196,7 +196,7 @@ class Onboarding {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 		$is_new_test_added = isset( $_GET['new-test-added'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
-		if ( 'vrts' === $page && $is_new_test_added ) {
+		if ( 'vrts-tests' === $page && $is_new_test_added ) {
 			$frontpage_id = get_option( 'page_on_front' );
 			$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 			$next_id = Test::get_autoincrement_value();
@@ -218,7 +218,7 @@ class Onboarding {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 		$has_subscription = (bool) Subscription::get_subscription_status();
 
-		if ( 'vrts' === $page && $has_subscription ) {
+		if ( 'vrts-tests' === $page && $has_subscription ) {
 			$tests = Test::get_items();
 
 			foreach ( $tests as $test ) {
@@ -242,7 +242,7 @@ class Onboarding {
 		$action = sanitize_text_field( wp_unslash( $_GET['action'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 		$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
-		if ( 'vrts-alerts' === $page && 'edit' === $action && '' !== $alert_id ) {
+		if ( 'vrts-alerts-tests' === $page && 'edit' === $action && '' !== $alert_id ) {
 			$archived_alerts = Alert::get_items( [
 				'filter_status' => 'archived',
 			] );

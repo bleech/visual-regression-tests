@@ -113,7 +113,7 @@ class Enqueue_Scripts {
 					'remaining_tests' => Subscription::get_remaining_tests(),
 					'total_tests' => Subscription::get_total_tests(),
 					'upgrade_url' => admin_url( 'admin.php?page=vrts-upgrade' ),
-					'plugin_url' => admin_url( 'admin.php?page=vrts' ),
+					'plugin_url' => admin_url( 'admin.php?page=vrts-tests' ),
 					'is_connected' => Service::is_connected(),
 					'test_status' => Test::get_status_data( $test ),
 					'screenshot' => Test::get_screenshot_data( $test ),

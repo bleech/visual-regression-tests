@@ -47,7 +47,7 @@ class Bulk_Actions {
 
 		$service = new Test_Service();
 		$created_tests = $service->create_tests( $post_ids );
-		$vrts_url = admin_url( 'admin.php?page=vrts' );
+		$vrts_url = admin_url( 'admin.php?page=vrts-tests' );
 
 		if ( is_wp_error( $created_tests ) ) {
 			$redirect_to = add_query_arg([

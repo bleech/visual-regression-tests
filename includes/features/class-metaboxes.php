@@ -135,7 +135,7 @@ class Metaboxes {
 		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
-			'plugin_url' => admin_url( 'admin.php?page=vrts' ),
+			'plugin_url' => admin_url( 'admin.php?page=vrts-tests' ),
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
