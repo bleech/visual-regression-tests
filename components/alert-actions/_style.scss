@@ -76,4 +76,26 @@
 			border-bottom: 1px solid #ccc;
 		}
 	}
+
+	&__modal {
+
+		&-action {
+			margin-top: 15px;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.spinner {
+			margin: 0;
+		}
+
+		textarea {
+			border-color: #CCCCCC;
+		}
+
+		.description {
+			color: #757575;
+		}
+	}
 }

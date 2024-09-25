@@ -8,7 +8,10 @@
 			<?php vrts()->component( 'test-run-pagination', $data['pagination'] ); ?>
 		</div>
 		<?php if ( $data['alerts'] ) : ?>
-			<?php vrts()->component( 'comparisons', $data['alert'] ); ?>
+			<?php vrts()->component( 'comparisons', [
+				'alert' => $data['alert'],
+				'test_settings' => $data['test_settings'],
+				] ); ?>
 		<?php else : ?>
 			<?php vrts()->component( 'test-run-empty' ); ?>
 		<?php endif; ?>

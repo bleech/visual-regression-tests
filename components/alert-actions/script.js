@@ -13,23 +13,56 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.$actionButtons = this.querySelectorAll(
 			'[data-vrts-alert-action]'
 		);
+		this.$hideElementsForm = this.querySelector(
+			'[data-vrts-hide-elements-form]'
+		);
 	}
 
 	bindFunctions() {
-		this.handleActionClick = this.handleActionClick.bind( this );
+		this.onActionClick = this.onActionClick.bind( this );
+		this.onHideElementsFormSubmit =
+			this.onHideElementsFormSubmit.bind( this );
 	}
 
 	bindEvents() {
 		this.$actionButtons.forEach( ( item ) => {
-			item.addEventListener( 'click', this.handleActionClick );
+			item.addEventListener( 'click', this.onActionClick );
 		} );
+		this.$hideElementsForm.addEventListener(
+			'submit',
+			this.onHideElementsFormSubmit
+		);
 	}
 
 	connectedCallback() {
 		this.dropdown = Dropdown( this );
 	}
 
-	handleActionClick( e ) {
+	onHideElementsFormSubmit( e ) {
+		e.preventDefault();
+		const $form = e.currentTarget;
+		const $spinner = $form.querySelector( '.spinner' );
+		const formData = new window.FormData( $form );
+		const postId = formData.get( 'post_id' );
+
+		$spinner.classList.add( 'is-active' );
+
+		fetch( `${ window.vrts_admin_vars.rest_url }/tests/post/${ postId }`, {
+			method: 'PUT',
+			headers: {
+				'X-WP-Nonce': window.vrts_admin_vars.rest_nonce,
+			},
+			body: new URLSearchParams( formData ),
+		} )
+			.then( ( response ) => {
+				return response.json();
+			} )
+			.then( () => {
+				$spinner.classList.remove( 'is-active' );
+			} );
+	}
+
+	onActionClick( e ) {
 		const $el = e.currentTarget;
 		const isLoading = $el.getAttribute( 'data-vrts-loading' ) === 'true';
 		const state = $el.getAttribute( 'data-vrts-action-state' );
@@ -92,8 +125,12 @@ class VrtsAlertActions extends window.HTMLElement {
 	disconnectedCallback() {
 		this.dropdown?.();
 		this.$actionButtons?.forEach( ( item ) => {
-			item.removeEventListener( 'click', this.handleActionClick );
+			item.removeEventListener( 'click', this.onActionClick );
 		} );
+		this.$hideElementsForm?.removeEventListener(
+			'submit',
+			this.onHideElementsFormSubmit
+		);
 	}
 }
 

@@ -90,10 +90,13 @@ class Test_Runs_Page {
 			$service = new Test_Run_Service();
 			$service->update_latest_alert_for_all_tests( $run );
 
+			$alert = Alert::get_item( $alert_id );
+			$test = Test::get_item_by_post_id( $alert->post_id );
+
 			vrts()->component('test-run-page', [
 				'run' => $run,
 				'alerts' => $alerts,
-				'alert' => Alert::get_item( $alert_id ),
+				'alert' => $alert,
 				'pagination' => [
 					'prev_alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, $run_id ),
 					'next_alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
@@ -105,6 +108,10 @@ class Test_Runs_Page {
 					'next_link' => add_query_arg( [
 						'alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
 					], $base_link ),
+				],
+				'test_settings' => [
+					'test_id' => isset( $test->id ) ? $test->id : null,
+					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
 				],
 			]);
 		} else {
