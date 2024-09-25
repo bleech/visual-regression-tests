@@ -5,7 +5,10 @@ namespace Vrts\Features;
 use Vrts\List_Tables\Test_Runs_List_Table;
 use Vrts\List_Tables\Test_Runs_Queue_List_Table;
 use Vrts\Models\Alert;
+use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
+use Vrts\Services\Test_Run_Service;
+use Vrts\Services\Test_Service;
 
 class Test_Runs_Page {
 
@@ -84,6 +87,8 @@ class Test_Runs_Page {
 			], admin_url( 'admin.php?page=vrts-runs' ) );
 
 			Alert::set_alert_state( $alert_id, 1 );
+			$service = new Test_Run_Service();
+			$service->update_latest_alert_for_all_tests( $run );
 
 			vrts()->component('test-run-page', [
 				'run' => $run,

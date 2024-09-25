@@ -6,7 +6,9 @@ use Vrts\Features\Cron_Jobs;
 use Vrts\Features\Email_Notifications;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
+use Vrts\Tables\Alerts_Table;
 use Vrts\Tables\Tests_Table;
 use WP_Error;
 
@@ -464,6 +466,35 @@ class Test_Service {
 		} else {
 			Test::reset_base_screenshot( $test->id );
 			Service::resume_test( $post_id );
+		}
+	}
+
+	public function update_latest_alert( $post_id ) {
+		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $post_id );
+		return Test::set_alert( $post_id, $latest_alert_id );
+	}
+
+	public function update_latest_alerts( $test_ids ) {
+		$test_ids = array_map( 'intval', $test_ids );
+		$test_ids = array_filter( $test_ids );
+		if ( ! empty( $test_ids ) ) {
+			global $wpdb;
+			$table_test = Tests_Table::get_table_name();
+			$table_alert = Alerts_Table::get_table_name();
+
+			$placeholders = implode( ',', array_fill( 0, count( $test_ids ), '%d' ) );
+
+			$query = "UPDATE $table_test t
+				LEFT JOIN (
+					SELECT a.post_id, MAX(a.id) as latest_id
+					FROM $table_alert a
+					WHERE a.alert_state = 0
+					GROUP BY a.post_id
+				) a ON t.post_id = a.post_id
+				SET t.current_alert_id = a.latest_id
+				WHERE t.id IN ( $placeholders )";
+
+			return $wpdb->query( $wpdb->prepare( $query, $test_ids ) );
 		}
 	}
 }

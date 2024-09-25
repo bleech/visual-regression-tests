@@ -127,6 +127,7 @@ class Alert {
 						alert.differences,
 						alert.alert_state,
 						alert.test_run_id,
+						alert.meta,
 						$run_title
 					FROM $alerts_table as alert
 					LEFT JOIN $test_runs_table as run ON run.id = alert.test_run_id
@@ -229,6 +230,27 @@ class Alert {
 				LIMIT 1",
 				$alert_state,
 				$post_id
+			)
+		);
+	}
+
+	public static function get_latest_alert_ids_by_post_ids( $post_ids = [], $alert_state = 0 ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		$placeholders = implode( ', ', array_fill( 0, count( $post_ids ), '%d' ) );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT id, post_id FROM $alerts_table
+				WHERE alert_state = %d
+				AND post_id IN ($placeholders)
+				ORDER BY id DESC",
+				$alert_state,
+				$post_ids
 			)
 		);
 	}

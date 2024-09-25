@@ -2,6 +2,7 @@
 
 namespace Vrts\Core\Utilities;
 
+use Vrts\Models\Alert;
 use Vrts\Models\Test_Run;
 
 class Url_Helpers {
@@ -30,9 +31,16 @@ class Url_Helpers {
 	 *
 	 * @return string
 	 */
-	public static function get_alert_page( $alert_id ) {
-		$admin_url = get_admin_url();
-		return $admin_url . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id;
+	public static function get_alert_page( $alert_id, $test_run_id = null ) {
+		if ( is_null( $test_run_id ) ) {
+			$alert = Alert::get_item( $alert_id );
+			$test_run_id = $alert->test_run_id;
+		}
+		return add_query_arg( [
+			'page' => 'vrts-runs',
+			'run_id' => $test_run_id,
+			'alert_id' => $alert_id,
+		], admin_url( 'admin.php' ) );
 	}
 
 	/**
@@ -42,30 +50,28 @@ class Url_Helpers {
 	 *
 	 * @return string
 	 */
-	public static function get_alerts_page( $test_run = null ) {
-		$admin_url = get_admin_url();
-		$page = 'admin.php?page=vrts-alerts&status=all';
-		// phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
-		if ( is_numeric( $test_run ) && intval( $test_run ) == $test_run ) {
-			$test_run = Test_Run::get_item( $test_run );
-		}
-		if ( $test_run ) {
-			$page .= '&s=' . rawurlencode( $test_run->title );
-		}
-		return $admin_url . $page;
+	public static function get_alerts_page( $test_run ) {
+		$test_run_id = is_object( $test_run ) ? $test_run->ID : $test_run;
+		return add_query_arg( [
+			'page' => 'vrts-runs',
+			'run_id' => $test_run_id,
+		], admin_url( 'admin.php' ) );
 	}
 
 	public static function get_test_run_page( $test_run_id ) {
 		if ( is_object($test_run_id) ) {
 			$test_run_id = $test_run_id->ID;
 		} else
-		$admin_url = get_admin_url();
-		return $admin_url . 'admin.php?page=vrts-runs&run_id=' . $test_run_id;
+		return add_query_arg( [
+			'page' => 'vrts-runs',
+			'run_id' => $test_run_id,
+		], admin_url( 'admin.php' ) );
 	}
 
 	public static function get_test_runs_page() {
-		$admin_url = get_admin_url();
-		return $admin_url . 'admin.php?page=vrts-runs';
+		return add_query_arg( [
+			'page' => 'vrts-runs',
+		], admin_url( 'admin.php' ) );
 	}
 
 	public static function get_mark_as_read_url( $test_run_id, $redirect_to_overview = false ) {
@@ -94,5 +100,10 @@ class Url_Helpers {
 			'action' => $is_false_positive ? 'remove_false_positive' : 'flag_false_positive',
 			'redirect' => '',
 		], $url );
+	}
+
+	public static function get_thumbnail_url_for_comparison( $alert ) {
+		$preview_url = maybe_unserialize( $alert->meta )['preview_url'] ?? null;
+		return $preview_url ? $preview_url : $alert->comparison_screenshot_url;
 	}
 }

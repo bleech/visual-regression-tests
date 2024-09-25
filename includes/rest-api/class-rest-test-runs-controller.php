@@ -2,6 +2,7 @@
 
 namespace Vrts\Rest_Api;
 
+use Vrts\Services\Test_Run_Service;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -61,15 +62,18 @@ class Rest_Test_Runs_Controller extends WP_REST_Controller {
 	public function read_status_callback( WP_REST_Request $request ) {
 		$id = $request->get_param( 'id' );
 
-		$alert = Test_Run::get_item( $id );
+		$test_run = Test_Run::get_item( $id );
 
-		if ( ! $alert ) {
+		if ( ! $test_run ) {
 			return new WP_Error( 'error', esc_html__( 'Run not found.', 'visual-regression-tests' ), [ 'status' => 404 ] );
 		}
 
 		$should_mark_as_read = $request->get_method() === WP_REST_Server::CREATABLE ? 1 : 0;
 
 		Alert::set_read_status_by_test_run( $id, $should_mark_as_read );
+
+		$service = new Test_Run_Service();
+		$service->update_latest_alert_for_all_tests( $test_run );
 
 		// return rest_ensure_response( $response );
 		return new WP_REST_Response( true, 200 );

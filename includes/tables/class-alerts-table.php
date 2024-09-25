@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Alerts_Table {
 
-	const DB_VERSION = '1.3';
+	const DB_VERSION = '1.4';
 	const TABLE_NAME = 'vrts_alerts';
 
 	/**
@@ -51,6 +51,7 @@ class Alerts_Table {
 				differences int(4),
 				alert_state tinyint NOT NULL DEFAULT 0,
 				is_false_positive tinyint NOT NULL DEFAULT 0,
+				meta text,
 				PRIMARY KEY (id)
 			) $charset_collate;";
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';

@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Subscription;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
@@ -35,7 +36,7 @@ class Email_Notifications {
 			esc_html_x( 'New visual differences have been detected on the following page:', 'notification email', 'visual-regression-tests' ) . "\n\n" .
 			html_entity_decode( wp_specialchars_decode( get_the_title( $post_id ) ) ) . "\n\n" .
 			esc_html_x( 'View the alert:', 'notification email', 'visual-regression-tests' ) . "\n" .
-			esc_url( $admin_url ) . 'admin.php?page=vrts-alerts&action=edit&alert_id=' . $alert_id . "\n\n" .
+			esc_url( Url_Helpers::get_alert_page( $alert_id ) ) . "\n\n" .
 			sprintf(
 				/* translators: %1$s: the home url */
 				esc_html_x( 'This alert was sent by the Visual Regression Tests plugin on %1$s', 'notification email', 'visual-regression-tests' ), esc_url( $base_url )

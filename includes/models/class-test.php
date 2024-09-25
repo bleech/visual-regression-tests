@@ -3,6 +3,7 @@
 namespace Vrts\Models;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Tables\Alerts_Table;
@@ -900,12 +901,12 @@ class Test {
 				$alert = Alert::get_item( $test->current_alert_id );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
+				$alert_link = Url_Helpers::get_alert_page( $test->current_alert_id );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
 					esc_html__( '%1$s%2$s View Alert%3$s', 'visual-regression-tests' ),
-					'<a href="' . $base_link . $test->current_alert_id . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
+					'<a href="' . esc_url( $alert_link ) . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
 					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
 					'</a>'
 				);

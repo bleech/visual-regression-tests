@@ -44,7 +44,7 @@ use Vrts\Core\Utilities\Url_Helpers;
 							<?php $alert = $alerts[ $test->post_id ]; ?>
 							<li style="margin-top: 10px">
 								<span style="font-size: 14px; font-weight: 600; text-align: left; line-height: 20px; mso-line-height-rule: exactly"><?php echo get_the_title( $test->post_id ); ?></span><br />
-								<a href="<?php echo esc_url( Url_Helpers::get_alert_page( $alert->id ) ); ?>" style="font-size: 14px; font-weight: 400; color: #1954ed; text-align: left; line-height: 20px; mso-line-height-rule: exactly; text-decoration: none;"><?php echo esc_url( Url_Helpers::get_relative_permalink( $test->post_id ) ); ?></a>
+								<a href="<?php echo esc_url( Url_Helpers::get_alert_page( $alert->id, $test_run->id ) ); ?>" style="font-size: 14px; font-weight: 400; color: #1954ed; text-align: left; line-height: 20px; mso-line-height-rule: exactly; text-decoration: none;"><?php echo esc_url( Url_Helpers::get_relative_permalink( $test->post_id ) ); ?></a>
 							</li>
 						<?php endforeach; ?>
 					</ul>

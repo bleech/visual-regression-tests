@@ -1,6 +1,7 @@
 <?php
 
 use Vrts\Models\Alert;
+use Vrts\Core\Utilities\Url_Helpers;
 
 $unread_alerts = Alert::get_unread_count_by_test_run_ids( $data['run']->id );
 $unread_count = $unread_alerts[0]->count ?? 0;
@@ -46,7 +47,7 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 					data-vrts-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
 					data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
 					<figure class="vrts-test-run-alerts__card-figure">
-						<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( $alert->comparison_screenshot_url ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
+						<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( Url_Helpers::get_thumbnail_url_for_comparison( $alert ) ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
 						<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
 					</figure>
 					<span class="vrts-test-run-alerts__card-title">
