@@ -32,7 +32,7 @@ class Tests_Page {
 			'manage_options',
 			'vrts-tests',
 			[ $this, 'render_page' ],
-			2
+			1
 		);
 		remove_submenu_page( 'vrts', 'vrts' );
 
