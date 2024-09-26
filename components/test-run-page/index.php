@@ -2,7 +2,7 @@
 	<div class="vrts-test-run-page__sidebar">
 		<?php vrts()->component( 'test-run-alerts', $data ); ?>
 	</div>
-	<div class="vrts-test-run-page__content">
+	<div class="vrts-test-run-page__content" data-vrts-fullscreen="false">
 		<div class="vrts-test-run-page__content-heading">
 			<?php vrts()->component( 'test-run-info', $data['run'] ); ?>
 			<?php vrts()->component( 'test-run-pagination', $data['pagination'] ); ?>

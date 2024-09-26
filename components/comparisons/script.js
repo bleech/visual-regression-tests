@@ -1,4 +1,3 @@
-// import 'img-comparison-slider';
 import Tabs from '../../assets/scripts/tabs';
 
 class VrtsComparisons extends window.HTMLElement {
@@ -10,9 +9,7 @@ class VrtsComparisons extends window.HTMLElement {
 	}
 
 	resolveElements() {
-		this.$content = document.querySelector(
-			'.vrts-test-run-page__content'
-		);
+		this.$content = document.querySelector( '[data-vrts-fullscreen]' );
 		this.$fullscreen = this.querySelector( '[data-vrts-fullscreen-open]' );
 		this.$control = this.querySelector(
 			'[data-vrts-comparisons-slider-control]'
@@ -20,30 +17,40 @@ class VrtsComparisons extends window.HTMLElement {
 	}
 
 	bindFunctions() {
-		this.handleFullscreenOpen = this.handleFullscreenOpen.bind( this );
-		this.handleControlChange = this.handleControlChange.bind( this );
+		this.onFullscreenToggle = this.onFullscreenToggle.bind( this );
+		this.onControlChange = this.onControlChange.bind( this );
+		this.onFullScreenChange = this.onFullScreenChange.bind( this );
 	}
 
 	bindEvents() {
-		this.$fullscreen.addEventListener( 'click', this.handleFullscreenOpen );
-		this.$control.addEventListener( 'input', this.handleControlChange );
-
-		document.addEventListener( 'fullscreenchange', () => {
-			this.$content.setAttribute(
-				'data-vrts-fullscreen',
-				document.fullscreenElement === this.$content
-			);
-		} );
+		this.$fullscreen.addEventListener( 'click', this.onFullscreenToggle );
+		this.$control.addEventListener( 'input', this.onControlChange );
+		document.addEventListener(
+			'fullscreenchange',
+			this.onFullScreenChange
+		);
 	}
 
-	handleFullscreenOpen( e ) {
+	onFullscreenToggle( e ) {
 		e.preventDefault();
-		this.$content.requestFullscreen();
+
+		if ( document.fullscreenElement === this.$content ) {
+			document.exitFullscreen();
+		} else {
+			this.$content.requestFullscreen();
+		}
 	}
 
-	handleControlChange( e ) {
+	onFullScreenChange() {
+		this.$content.setAttribute(
+			'data-vrts-fullscreen',
+			document.fullscreenElement === this.$content
+		);
+	}
+
+	onControlChange( e ) {
 		this.style.setProperty(
-			'--vrts-comparisons-slider-control-position',
+			'--vrts-comparisons-slider-position',
 			`${ e.target.value }%`
 		);
 	}
@@ -54,12 +61,12 @@ class VrtsComparisons extends window.HTMLElement {
 
 	disconnectedCallback() {
 		this.tabs?.();
-		this.$fullscreen?.removeEventListener(
-			'click',
-			this.handleFullscreenOpen
+		this.$fullscreen?.removeEventListener( 'click', this.onFullscreenOpen );
+		this.$control?.removeEventListener( 'input', this.onControlChange );
+		document.removeEventListener(
+			'fullscreenchange',
+			this.onFullScreenChange
 		);
-		this.$control?.removeEventListener( 'input', this.handleControlChange );
-		document.removeEventListener( 'fullscreenchange' );
 	}
 }
 
