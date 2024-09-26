@@ -91,7 +91,7 @@ class Test_Runs_Page {
 			$service->update_latest_alert_for_all_tests( $run );
 
 			$alert = Alert::get_item( $alert_id );
-			$test = Test::get_item_by_post_id( $alert->post_id );
+			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
 
 			vrts()->component('test-run-page', [
 				'run' => $run,
