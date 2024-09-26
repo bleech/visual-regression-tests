@@ -17,7 +17,7 @@
 	<div class="vrts-comparisons__content">
 		<figure class="vrts-comparisons__figure">
 			<img data-type="comparison" class="vrts-comparisons__figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->comparison_screenshot_url ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
-			<span class="vrts-comparisons__slider-handle-clone"></span>
+			<span class="vrts-comparisons__slider-divider-clone"></span>
 		</figure>
 		<canvas class="vrts-comparisons__highligher"></canvas>
 		<div class="vrts-comparisons__slider">
@@ -27,6 +27,7 @@
 			<figure class="vrts-comparisons__figure" data-vrts-slot="second">
 				<img class="vrts-comparisons__figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->target_screenshot_url ); ?>" alt="<?php esc_html_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
 			</figure>
+			<span class="vrts-comparisons__slider-divider"></span>
 			<div class="vrts-comparisons__slider-handle">
 				<?php vrts()->icon( 'grip-dots' ); ?>
 			</div>

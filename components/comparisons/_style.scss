@@ -147,13 +147,10 @@
 
 	&__content {
 		display: grid;
+		grid-template-columns: repeat(3, minmax(0, max-content));
 		justify-content: center;
 		gap: 0.5rem;
 		padding: 1em;
-
-		@media (min-width: $break-medium) {
-			grid-template-columns: repeat(3, minmax(0, max-content));
-		}
 	}
 
 	&__figure {
@@ -180,7 +177,7 @@
 		position: relative;
 		display: grid;
 		border: solid 1px #{$gray-lighten-20};
-		overflow: hidden;
+		overflow: clip;
 
 		.vrts-comparisons__figure {
 			grid-column: 1 / 1;
@@ -198,29 +195,29 @@
 	}
 
 	&__slider-handle {
-		position: absolute;
-		top: 0;
-		left: calc(var(--vrts-comparisons-slider-position) - 1px);
-		width: 2px;
-		height: 100%;
+		position: sticky;
+		top: 50%;
+		width: 100%;
+		height: 44px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		grid-column: 1 / 1;
+		grid-row: 1 / 1;
+		margin-block: 20px;
 
-		&::before {
-			content: " ";
-			display: block;
-			height: 100%;
-			width: 1px;
-			background: var(--wp-admin-theme-color);
-			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		@media (min-width: 851px) {
+			top: calc((100vh - var(--wp-admin--admin-bar--height) + var(--vrts-test-run-page-offset) + 54px + 62px + 44px - 22px) / 2);
+		}
+
+		[data-vrts-fullscreen="true"] & {
+			top: calc((100vh + 62px + 44px - 22px) / 2);
 		}
 
 		svg {
 			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
+			top: 0;
+			left: calc(var(--vrts-comparisons-slider-position) - 21px);
 			width: 42px;
 			height: 42px;
 			border-radius: 50%;
@@ -230,11 +227,21 @@
 		}
 	}
 
-	&__slider-handle-clone {
+	&__slider-divider {
 		position: absolute;
 		top: 0;
 		left: calc(var(--vrts-comparisons-slider-position) - 0.5px);
-		width: 0px;
+		width: 1px;
+		height: 100%;
+		background: var(--wp-admin-theme-color);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	}
+
+	&__slider-divider-clone {
+		position: absolute;
+		top: 0;
+		left: calc(var(--vrts-comparisons-slider-position) - 0.5px);
+		width: 0;
 		height: 100%;
 		border-left: 1px dashed #c3c4c7;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);

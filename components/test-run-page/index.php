@@ -1,4 +1,4 @@
-<div class="vrts-test-run-page">
+<vrts-test-run-page class="vrts-test-run-page">
 	<div class="vrts-test-run-page__sidebar">
 		<?php vrts()->component( 'test-run-alerts', $data ); ?>
 	</div>
@@ -16,4 +16,4 @@
 			<?php vrts()->component( 'test-run-empty' ); ?>
 		<?php endif; ?>
 	</div>
-</div>
+</vrts-test-run-page>

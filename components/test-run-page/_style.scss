@@ -16,6 +16,8 @@
 }
 
 .vrts-test-run-page {
+	--vrts-test-run-page-offset: 54px; // our header height
+
 	display: flex;
 	gap: 20px;
 	margin-right: 10px;
@@ -47,7 +49,7 @@
 			width: 280px;
 			position: sticky;
 			top: var(--wp-admin--admin-bar--height);
-			height: calc(100vh - 32px);
+			height: calc(100vh - var(--wp-admin--admin-bar--height) - var(--vrts-test-run-page-offset));
 			overflow-x: hidden;
 			overflow-y: scroll;
 			-webkit-overflow-scrolling: touch;

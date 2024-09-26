@@ -5,6 +5,7 @@
 @import "@wordpress/base-styles/default-custom-properties";
 
 .vrts_admin_header_menu {
+	box-sizing: border-box;
 	background: $white;
 	border-bottom: 1px solid $light-gray-500;
 	margin-left: -10px;
@@ -23,6 +24,7 @@
 	@media (min-width: $break-medium) {
 		margin-left: -20px;
 		padding-left: 20px;
+		height: 54px;
 	}
 
 	+ #wpbody {
