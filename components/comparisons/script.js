@@ -13,10 +13,12 @@ class VrtsComparisons extends window.HTMLElement {
 		this.$control = this.querySelector(
 			'[data-vrts-comparisons-slider-control]'
 		);
-		this.$canvas = this.querySelector(
-			'canvas.vrts-comparisons__highligher'
+		this.$diffIndicator = this.querySelector(
+			'[data-vrts-comparisons-diff-inidicator]'
 		);
-		this.$comparison = this.querySelector( 'img[data-type="comparison"]' );
+		this.$comparison = this.querySelector(
+			'[data-vrts-comparisons-slot="comparison"] img'
+		);
 	}
 
 	bindFunctions() {
@@ -108,7 +110,7 @@ class VrtsComparisons extends window.HTMLElement {
 	}
 
 	highlightPixels( pixels ) {
-		const ctx = this.$canvas.getContext( '2d' );
+		const ctx = this.$diffIndicator.getContext( '2d' );
 		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
 		ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
 		pixels.forEach( ( y ) => {
@@ -133,6 +135,8 @@ class VrtsComparisons extends window.HTMLElement {
 			'fullscreenchange',
 			this.onFullScreenChange
 		);
+		this.worker?.terminate();
+		this.worker = null;
 	}
 }
 
