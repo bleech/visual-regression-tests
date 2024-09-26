@@ -1,5 +1,5 @@
 <nav class="vrts_admin_header_menu">
-	<a class="vrts_logo_link" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts' ) ); ?>">
+	<a class="vrts_logo_link" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-runs' ) ); ?>">
 		<h2>
 			<span class="vrts_logo">
 				<?php

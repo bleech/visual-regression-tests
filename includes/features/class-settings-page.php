@@ -57,6 +57,8 @@ class Settings_Page {
 	 * Register settings.
 	 */
 	public function add_settings() {
+		$has_subscription = (bool) Subscription::get_subscription_status();
+
 		vrts()->settings()->add_section([
 			'id' => 'vrts-settings-section-general',
 			'page' => $this->page_slug,
@@ -68,46 +70,27 @@ class Settings_Page {
 		// sanitize_callback can be a default wp sanitize function or a custom function from the Sanitization class.
 		// 'sanitize_callback' => '[ Sanitization::class, 'sanitize_checkbox' ]'.
 
-		$has_subscription = Subscription::get_subscription_status();
-		if ( '1' !== $has_subscription ) {
-			$email_notification_address_description = sprintf(
-				'%1$s<br>%2$s <a href="%3$s" title="%4$s">%4$s</a>',
-				esc_html__( 'Add a single email address.', 'visual-regression-tests' ),
-				esc_html__( 'Want to add more email addresses?', 'visual-regression-tests' ),
-				esc_url( admin_url( 'admin.php?page=vrts-upgrade' ) ),
-				esc_html__( 'Upgrade here.', 'visual-regression-tests' )
-			);
-		} else {
-			$email_notification_address_description = esc_html__( 'Add a single email address.', 'visual-regression-tests' );
-		}
-
 		vrts()->settings()->add_setting([
 			'type' => 'text',
-			'id' => 'vrts_email_notification_address',
-			'title' => esc_html__( 'Notification Email Address', 'visual-regression-tests' ),
-			'description' => $email_notification_address_description,
+			'id' => 'vrts_click_selectors',
+			'title' => esc_html__( 'Click Element', 'visual-regression-tests' ),
+			'description' => sprintf(
+				'%s<br>%s',
+				sprintf(
+					/* translators: %s: link wrapper. */
+					esc_html__( 'Add a %1$sCSS selector%2$s to click on the first element found before creating a new snapshot.', 'visual-regression-tests' ),
+					'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
+					'</a>'
+				),
+				esc_html__( 'Useful to accept cookie banners or anything else that should be clicked after page load.', 'visual-regression-tests' )
+			),
 			'section' => 'vrts-settings-section-general',
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest' => true,
 			'value_type' => 'string',
-			'default' => get_bloginfo( 'admin_email' ),
-			'placeholder' => esc_html__( 'Email address', 'visual-regression-tests' ),
+			'default' => '',
+			'placeholder' => esc_html__( 'e.g.: #accept-cookies', 'visual-regression-tests' ),
 		]);
-
-		if ( '1' === $has_subscription ) {
-			vrts()->settings()->add_setting([
-				'type' => 'text',
-				'id' => 'vrts_email_notification_cc_address',
-				'title' => esc_html__( 'Notification Email CC Address(es)', 'visual-regression-tests' ),
-				'description' => esc_html__( 'Add a single email address, or separate multiple email addresses with commas, i.e. info@example.com, admin@example.com.', 'visual-regression-tests' ),
-				'section' => 'vrts-settings-section-general',
-				'sanitize_callback' => 'sanitize_text_field',
-				'show_in_rest' => true,
-				'value_type' => 'string',
-				'default' => '',
-				'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
-			]);
-		}
 
 		vrts()->settings()->add_setting([
 			'type' => 'text',
@@ -128,57 +111,120 @@ class Settings_Page {
 		]);
 
 		vrts()->settings()->add_section([
-			'id' => 'vrts-settings-section-test-configuration',
+			'id' => 'vrts-settings-section-triggers',
 			'page' => $this->page_slug,
-			'title' => 'Test Configuration',
+			'title' => 'Triggers',
+			'title' => esc_html__( 'Triggers', 'visual-regression-tests' ) . '<span>' . esc_html__( 'Define when tests should run.', 'visual-regression-tests' ) . '</span>',
 		]);
 
 		vrts()->settings()->add_setting([
 			'type' => 'checkbox',
 			'id' => 'vrts_automatic_comparison',
-			'title' => esc_html__( 'Daily', 'visual-regression-tests' ),
-			'label' => esc_html__( 'Run daily scheduled tests.', 'visual-regression-tests' ),
-			'section' => 'vrts-settings-section-test-configuration',
+			'title' => esc_html__( 'Schedule', 'visual-regression-tests' ),
+			'label' => esc_html__( 'Run daily tests.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-triggers',
 			'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
 			'show_in_rest' => true,
 			'value_type' => 'boolean',
+			'disabled' => 1,
 			'default' => 1,
 		]);
 
-		if ( '1' === $has_subscription ) {
-			vrts()->settings()->add_setting([
-				'type' => 'checkbox',
-				'id' => 'vrts_updates_comparison',
-				'title' => esc_html__( 'Post Updates', 'visual-regression-tests' ),
-				'label' => esc_html__( 'Run tests automatically after WordPress has been updated to a new version.', 'visual-regression-tests' ),
-				'section' => 'vrts-settings-section-test-configuration',
-				'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
-				'show_in_rest' => true,
-				'value_type' => 'boolean',
-				'default' => 1,
-			]);
-		}//end if
+		vrts()->settings()->add_setting([
+			'type' => 'checkbox',
+			'id' => 'vrts_updates_comparison',
+			'title' => esc_html__( 'Update', 'visual-regression-tests' ),
+			'label' => esc_html__( 'Run tests after WordPress and plugin updates.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-triggers',
+			'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
+			'is_pro' => $has_subscription,
+			'show_in_rest' => true,
+			'value_type' => 'boolean',
+			'default' => 0,
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'info',
+			'id' => 'vrts-settings-api-info',
+			'title' => esc_html__( 'API', 'visual-regression-tests' ),
+			'description' => sprintf(
+				'<a href="%s" target="_blank">%s</a>',
+				esc_url( 'https://vrts.app/' ),
+				esc_html__( 'Read the docs.', 'visual-regression-tests' ),
+			),
+			'section' => 'vrts-settings-section-triggers',
+			'is_pro' => $has_subscription,
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'checkbox',
+			'id' => 'vrts_manual_comparison',
+			'title' => esc_html__( 'Manual', 'visual-regression-tests' ),
+			'label' => esc_html__( 'Run tests on demand.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-triggers',
+			'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
+			'is_pro' => $has_subscription,
+			'show_in_rest' => true,
+			'value_type' => 'boolean',
+			'disabled' => $has_subscription,
+			'readonly' => ! $has_subscription,
+			'default' => $has_subscription
+		]);
+
+		vrts()->settings()->add_section([
+			'id' => 'vrts-settings-section-notifications',
+			'page' => $this->page_slug,
+			'title' => esc_html__( 'Notifications', 'visual-regression-tests' ) . '<span>' . esc_html__( 'Notify team members based on specific trigger events.', 'visual-regression-tests' ) . '</span>',
+		]);
 
 		vrts()->settings()->add_setting([
 			'type' => 'text',
-			'id' => 'vrts_click_selectors',
-			'title' => esc_html__( 'Click Element', 'visual-regression-tests' ),
-			'description' => sprintf(
-				'%s<br>%s',
-				sprintf(
-					/* translators: %s: link wrapper. */
-					esc_html__( 'Add a %1$sCSS selector%2$s to click on the first element found before creating a new snapshot.', 'visual-regression-tests' ),
-					'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
-					'</a>'
-				),
-				esc_html__( 'Useful to accept cookie banners or anything else that should be clicked after page load.', 'visual-regression-tests' )
-			),
-			'section' => 'vrts-settings-section-test-configuration',
+			'id' => 'vrts_schedule_notification_email',
+			'title' => esc_html__( 'Schedule', 'visual-regression-tests' ),
+			'description' => esc_html__( 'Separate multiple email addresses with commas. Or leave blank to disable notifications.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-notifications',
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest' => true,
 			'value_type' => 'string',
+			'default' => get_bloginfo( 'admin_email' ),
+			'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'text',
+			'id' => 'vrts_update_notification_email',
+			'title' => esc_html__( 'Update', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-notifications',
+			'sanitize_callback' => 'sanitize_text_field',
+			'is_pro' => $has_subscription,
+			'show_in_rest' => true,
+			'value_type' => 'string',
+			'readonly' => ! $has_subscription,
 			'default' => '',
-			'placeholder' => esc_html__( 'e.g.: #accept-cookies', 'visual-regression-tests' ),
+			'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'text',
+			'id' => 'vrts_api_notification_email',
+			'title' => esc_html__( 'API', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-notifications',
+			'sanitize_callback' => 'sanitize_text_field',
+			'is_pro' => $has_subscription,
+			'show_in_rest' => true,
+			'value_type' => 'string',
+			'readonly' => ! $has_subscription,
+			'default' => '',
+			'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'info',
+			'id' => 'vrts_manual_notification_email',
+			'title' => esc_html__( 'Manul', 'visual-regression-tests' ),
+			'description' => esc_html__( 'Alerts are automatically sent to the user who triggers the manual test.', 'visual-regression-tests' ),
+			'section' => 'vrts-settings-section-notifications',
+			'is_pro' => $has_subscription,
 		]);
 	}
 

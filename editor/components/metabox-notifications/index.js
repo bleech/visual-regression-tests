@@ -134,7 +134,7 @@ const NotificationConnectionFailed = ( { pluginUrl = '' } ) => {
 						__html: DOMPurify.sanitize(
 							sprintf(
 								'<a href="%1$s" title="%2$s">%2$s</a>',
-								pluginUrl, //admin_url( 'admin.php?page=vrts' )
+								pluginUrl, //admin_url( 'admin.php?page=vrts-tests' )
 								__(
 									'Go to plugin page',
 									'visual-regression-tests'

@@ -39,7 +39,7 @@ class Admin {
 	 * @return array $links Plugin Action links.
 	 */
 	public function plugin_action_links( $links ) {
-		$links['tests'] = '<a href="' . esc_url( admin_url( 'admin.php?page=vrts' ) ) . '" aria-label="' . esc_attr__( 'Tests', 'visual-regression-tests' ) . '">' . esc_html__( 'Tests', 'visual-regression-tests' ) . '</a>';
+		$links['tests'] = '<a href="' . esc_url( admin_url( 'admin.php?page=vrts-tests' ) ) . '" aria-label="' . esc_attr__( 'Tests', 'visual-regression-tests' ) . '">' . esc_html__( 'Tests', 'visual-regression-tests' ) . '</a>';
 		$links['settings'] = '<a href="' . esc_url( admin_url( 'admin.php?page=vrts-settings' ) ) . '" aria-label="' . esc_attr__( 'Settings', 'visual-regression-tests' ) . '">' . esc_html__( 'Settings', 'visual-regression-tests' ) . '</a>';
 		return $links;
 	}

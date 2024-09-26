@@ -30,9 +30,9 @@ class Tests_Page {
 			__( 'Tests', 'visual-regression-tests' ),
 			__( 'Tests', 'visual-regression-tests' ),
 			'manage_options',
-			'vrts',
+			'vrts-tests',
 			[ $this, 'render_page' ],
-			1
+			2
 		);
 		remove_submenu_page( 'vrts', 'vrts' );
 
@@ -107,7 +107,7 @@ class Tests_Page {
 		}
 
 		$errors   = [];
-		$page_url = admin_url( 'admin.php?page=vrts' );
+		$page_url = admin_url( 'admin.php?page=vrts-tests' );
 
 		$post_id = isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : 0;
 
@@ -187,7 +187,7 @@ class Tests_Page {
 
 		$response = Service::retry_connection();
 
-		$page_url = admin_url( 'admin.php?page=vrts' );
+		$page_url = admin_url( 'admin.php?page=vrts-tests' );
 		wp_safe_redirect( $page_url );
 		exit;
 	}
@@ -209,7 +209,7 @@ class Tests_Page {
 		}
 
 		$errors   = [];
-		$page_url = admin_url( 'admin.php?page=vrts' );
+		$page_url = admin_url( 'admin.php?page=vrts-tests' );
 
 		$test_id = isset( $_GET['test_id'] ) ? sanitize_text_field( wp_unslash( $_GET['test_id'] ) ) : 0;
 		$action = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : 0;

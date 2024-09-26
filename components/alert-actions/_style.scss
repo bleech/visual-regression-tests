@@ -8,6 +8,8 @@
 		cursor: pointer;
 		line-height: 1;
 		padding: 0.5rem;
+		width: 42px;
+		height: 42px;
 
 		&::before {
 			position: absolute;
@@ -17,6 +19,7 @@
 			bottom: 5px;
 			content: "";
 			background: #f6f7f7;
+			border-radius: 2px;
 			opacity: 0;
 			z-index: -1;
 			transition: opacity 0.2s;
@@ -74,6 +77,28 @@
 
 		&:not(:last-child) {
 			border-bottom: 1px solid #ccc;
+		}
+	}
+
+	&__modal {
+
+		&-action {
+			margin-top: 15px;
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+
+		.spinner {
+			margin: 0;
+		}
+
+		textarea {
+			border-color: #CCCCCC;
+		}
+
+		.description {
+			color: #757575;
 		}
 	}
 }

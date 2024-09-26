@@ -5,13 +5,13 @@
 	}
 
 	&-overlay {
-		animation: vrts-onboarding-animate 0.2s ease-in-out;
+		animation: vrts-fade-in 0.2s ease-in-out;
 		pointer-events: none;
 	}
 
 	&-popover {
 		all: unset;
-		animation: vrts-onboarding-animate 0.2s;
+		animation: vrts-fade-in 0.2s;
 		box-sizing: border-box;
 		background-color: #fff;
 		color: #1e1e1e;
@@ -198,15 +198,4 @@
 
 .vrts-onboarding-nonblocking ~ .driver-overlay {
 	display: none;
-}
-
-@keyframes vrts-onboarding-animate {
-
-	0% {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
 }

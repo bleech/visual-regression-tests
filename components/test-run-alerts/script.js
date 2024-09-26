@@ -5,6 +5,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		this.bindFunctions();
 		this.bindEvents();
 		this.unreadAlerts = new Set();
+		this.currentAlertId = this.getAttribute( 'data-vrts-current-alert' );
 	}
 
 	resolveElements() {
@@ -44,16 +45,14 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	}
 
 	setCurrentAlertReadStatus() {
-		const currentAlertId = this.getAttribute( 'data-vrts-current-alert' );
-
-		if ( false !== currentAlertId ) {
+		if ( this.currentAlertId ) {
 			const $alert = document.getElementById(
-				`vrts-alert-${ currentAlertId }`
+				`vrts-alert-${ this.currentAlertId }`
 			);
 
 			setTimeout( () => {
 				$alert.setAttribute( 'data-vrts-state', 'read' );
-			}, 1000 );
+			}, 500 );
 		}
 	}
 
@@ -109,6 +108,14 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	handleAlertClick( e ) {
 		e.preventDefault();
 		const $el = e.currentTarget;
+		const id = $el.getAttribute( 'data-vrts-alert' );
+
+		if ( this.currentAlertId === id ) {
+			return;
+		}
+
+		this.currentAlertId = id;
+
 		const href = $el.getAttribute( 'href' );
 		const $comparisons = document.querySelector( 'vrts-comparisons' );
 		const $pagination = document.querySelector(

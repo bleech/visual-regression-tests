@@ -71,11 +71,13 @@ class VrtsTestRunPagination extends window.HTMLElement {
 				window.history.replaceState( {}, '', href );
 
 				window.scrollTo( {
-					top: 0,
+					top: $comparisons.offsetTop - 62,
 					behavior: 'smooth',
 				} );
 
-				$nextAlert.setAttribute( 'data-vrts-state', 'read' );
+				setTimeout( () => {
+					$nextAlert.setAttribute( 'data-vrts-state', 'read' );
+				}, 400 );
 
 				if ( $newComparisons ) {
 					$comparisons.replaceWith( $newComparisons );
