@@ -31,13 +31,23 @@ class VrtsComparisons extends window.HTMLElement {
 		);
 	}
 
+	requestFullscreen( element ) {
+		if ( element.requestFullscreen ) {
+			element.requestFullscreen();
+		} else if ( element.webkitRequestFullscreen ) {
+			element.webkitRequestFullscreen();
+		} else if ( element.msRequestFullscreen ) {
+			element.msRequestFullscreen();
+		}
+	}
+
 	onFullscreenToggle( e ) {
 		e.preventDefault();
 
 		if ( document.fullscreenElement === this.$content ) {
 			document.exitFullscreen();
 		} else {
-			this.$content.requestFullscreen();
+			this.requestFullscreen( this.$content );
 		}
 	}
 
