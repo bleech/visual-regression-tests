@@ -1,5 +1,3 @@
-import Tabs from '../../assets/scripts/tabs';
-
 class VrtsComparisons extends window.HTMLElement {
 	constructor() {
 		super();
@@ -65,13 +63,13 @@ class VrtsComparisons extends window.HTMLElement {
 		);
 	}
 
-	connectedCallback() {
-		this.tabs = Tabs( this );
-	}
+	connectedCallback() {}
 
 	disconnectedCallback() {
-		this.tabs?.();
-		this.$fullscreen?.removeEventListener( 'click', this.onFullscreenOpen );
+		this.$fullscreen?.removeEventListener(
+			'click',
+			this.onFullscreenToggle
+		);
 		this.$control?.removeEventListener( 'input', this.onControlChange );
 		document.removeEventListener(
 			'fullscreenchange',
