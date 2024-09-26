@@ -79,11 +79,29 @@ class VrtsComparisons extends window.HTMLElement {
 		}
 	}
 
+	exitFullscreen() {
+		if ( document.exitFullscreen ) {
+			document.exitFullscreen();
+		} else if ( document.webkitExitFullscreen ) {
+			document.webkitExitFullscreen();
+		} else if ( document.msExitFullscreen ) {
+			document.msExitFullscreen();
+		}
+	}
+
+	getFullscreenElement() {
+		return (
+			document.fullscreenElement ||
+			document.webkitFullscreenElement ||
+			document.msFullscreenElement
+		);
+	}
+
 	onFullscreenToggle( e ) {
 		e.preventDefault();
 
-		if ( document.fullscreenElement === this.$content ) {
-			document.exitFullscreen();
+		if ( this.getFullscreenElement() === this.$content ) {
+			this.exitFullscreen();
 		} else {
 			this.requestFullscreen( this.$content );
 		}
@@ -92,7 +110,7 @@ class VrtsComparisons extends window.HTMLElement {
 	onFullScreenChange() {
 		this.$content.setAttribute(
 			'data-vrts-fullscreen',
-			document.fullscreenElement === this.$content
+			this.getFullscreenElement() === this.$content
 		);
 	}
 
