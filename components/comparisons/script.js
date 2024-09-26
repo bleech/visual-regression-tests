@@ -4,6 +4,7 @@ class VrtsComparisons extends window.HTMLElement {
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
+		this.init();
 	}
 
 	resolveElements() {
@@ -12,12 +13,17 @@ class VrtsComparisons extends window.HTMLElement {
 		this.$control = this.querySelector(
 			'[data-vrts-comparisons-slider-control]'
 		);
+		this.$canvas = this.querySelector(
+			'canvas.vrts-comparisons__highligher'
+		);
+		this.$comparison = this.querySelector( 'img[data-type="comparison"]' );
 	}
 
 	bindFunctions() {
 		this.onFullscreenToggle = this.onFullscreenToggle.bind( this );
 		this.onControlChange = this.onControlChange.bind( this );
 		this.onFullScreenChange = this.onFullScreenChange.bind( this );
+		this.onLoadComparison = this.onLoadComparison.bind( this );
 	}
 
 	bindEvents() {
@@ -27,6 +33,38 @@ class VrtsComparisons extends window.HTMLElement {
 			'fullscreenchange',
 			this.onFullScreenChange
 		);
+	}
+
+	init() {
+		this.worker = new window.Worker(
+			new URL( 'worker.js', import.meta.url )
+		);
+		this.worker.onmessage = this.onWorkerMessage.bind( this );
+		if ( this.$comparison.complete ) {
+			this.onLoadComparison();
+		} else {
+			this.$comparison.onload = this.onLoadComparison;
+		}
+	}
+
+	onLoadComparison() {
+		const imageData = this.createOffscreenCanvarImageData(
+			this.$comparison
+		);
+		this.worker.postMessage( {
+			action: 'analyzeImage',
+			imageData,
+		} );
+	}
+
+	createOffscreenCanvarImageData( image ) {
+		const canvas = new window.OffscreenCanvas(
+			image.naturalWidth,
+			image.naturalHeight
+		);
+		const ctx = canvas.getContext( '2d' );
+		ctx.drawImage( image, 0, 0 );
+		return ctx.getImageData( 0, 0, canvas.width, canvas.height );
 	}
 
 	requestFullscreen( element ) {
@@ -61,6 +99,26 @@ class VrtsComparisons extends window.HTMLElement {
 			'--vrts-comparisons-slider-position',
 			`${ e.target.value }%`
 		);
+	}
+
+	onWorkerMessage( e ) {
+		if ( e.data?.action === 'analyzedImage' ) {
+			this.highlightPixels( e.data.coloredPixels );
+		}
+	}
+
+	highlightPixels( pixels ) {
+		const ctx = this.$canvas.getContext( '2d' );
+		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
+		ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+		pixels.forEach( ( y ) => {
+			ctx.fillRect(
+				0,
+				( y * ctx.canvas.height ) / this.$comparison.naturalHeight - 2,
+				ctx.canvas.width,
+				3
+			);
+		} );
 	}
 
 	connectedCallback() {}

@@ -16,7 +16,7 @@
 
 	<div class="vrts-comparisons__content">
 		<figure class="vrts-comparisons__figure">
-			<img class="vrts-comparisons__figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->comparison_screenshot_url ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+			<img data-type="comparison" class="vrts-comparisons__figure-image" crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->comparison_screenshot_url ); ?>" alt="<?php esc_html_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 			<span class="vrts-comparisons__slider-handle-clone"></span>
 		</figure>
 		<canvas class="vrts-comparisons__highligher"></canvas>
