@@ -43,6 +43,7 @@
 					<div class="vrts-alert-actions__modal-action">
 						<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Changes', 'visual-regression-tests' ); ?></button>
 						<span class="spinner"></span>
+						<span class="vrts-alert-actions__modal-action-success"><?php esc_html_e( 'Saved successfully.', 'visual-regression-tests' ); ?></span>
 					</div>
 				</form>
 			</div>

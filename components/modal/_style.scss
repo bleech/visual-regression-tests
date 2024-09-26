@@ -59,10 +59,10 @@
 		border-radius: 3px;
 		font-size: 0;
 		z-index: 1;
-		transition: opacity 0.2s;
+		transition: background-color 0.2s;
 
 		&:hover {
-			opacity: 0.8;
+			background-color: #f6f7f7;
 		}
 
 		&:focus-visible {

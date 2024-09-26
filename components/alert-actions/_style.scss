@@ -83,14 +83,30 @@
 	&__modal {
 
 		&-action {
-			margin-top: 15px;
+			margin-top: 10px;
 			display: inline-flex;
 			align-items: center;
 			gap: 0.5rem;
 		}
 
+		&-action-success {
+			color: #00a32a;
+			font-size: 0.75rem;
+			margin-left: 0.5rem;
+			display: none;
+
+			&.is-active {
+				display: block;
+			}
+		}
+
 		.spinner {
 			margin: 0;
+			display: none;
+
+			&.is-active {
+				display: block;
+			}
 		}
 
 		textarea {

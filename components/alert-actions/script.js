@@ -16,6 +16,10 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.$hideElementsForm = this.querySelector(
 			'[data-vrts-hide-elements-form]'
 		);
+		this.$spinner = this.querySelector( '.spinner' );
+		this.$success = this.querySelector(
+			'.vrts-alert-actions__modal-action-success'
+		);
 	}
 
 	bindFunctions() {
@@ -41,11 +45,10 @@ class VrtsAlertActions extends window.HTMLElement {
 	onHideElementsFormSubmit( e ) {
 		e.preventDefault();
 		const $form = e.currentTarget;
-		const $spinner = $form.querySelector( '.spinner' );
 		const formData = new window.FormData( $form );
 		const postId = formData.get( 'post_id' );
 
-		$spinner.classList.add( 'is-active' );
+		this.$spinner.classList.add( 'is-active' );
 
 		fetch( `${ window.vrts_admin_vars.rest_url }/tests/post/${ postId }`, {
 			method: 'PUT',
@@ -58,7 +61,11 @@ class VrtsAlertActions extends window.HTMLElement {
 				return response.json();
 			} )
 			.then( () => {
-				$spinner.classList.remove( 'is-active' );
+				this.$spinner.classList.remove( 'is-active' );
+				this.$success.classList.add( 'is-active' );
+				setTimeout( () => {
+					this.$success.classList.remove( 'is-active' );
+				}, 2000 );
 			} );
 	}
 
