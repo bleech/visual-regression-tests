@@ -51,7 +51,8 @@ class Date_Time_Helpers {
 			/* translators: Time format. See https://www.php.net/manual/datetime.format.php */
 			static::extract_time( $date )
 		);
-		return '<vrts-relative-time time="' . date_format( $date, 'c' ) . '">' . $formatted_date . '</vrts-relative-time>';
+		// return '<vrts-relative-time time="' . date_format( $date, 'c' ) . '">' . $formatted_date . '</vrts-relative-time>';
+		return $formatted_date;
 	}
 
 	/**
