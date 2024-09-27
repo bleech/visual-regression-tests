@@ -310,12 +310,8 @@ class Tests_List_Table extends \WP_List_Table {
 		$this->process_bulk_action();
 		$this->items = Test::get_items( $args );
 
-		$total_items = 0;
-		if ( null !== $args['filter_status'] ) {
-			$total_items = Test::get_total_items( $filter_status_query );
-		} else {
-			$total_items = Test::get_total_items();
-		}
+		$total_items = count( $this->items );
+
 
 		$this->set_pagination_args([
 			'total_items' => $total_items,

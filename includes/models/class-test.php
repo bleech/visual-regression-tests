@@ -42,7 +42,7 @@ class Test {
 
 		if ( isset( $args['s'] ) && null !== $args['s'] ) {
 			$where .= $wpdb->prepare(
-				' AND posts.post_title LIKE %s',
+				' AND tests.post_title LIKE %s',
 				'%' . $wpdb->esc_like( $args['s'] ) . '%'
 			);
 		}
