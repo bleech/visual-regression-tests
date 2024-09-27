@@ -946,7 +946,7 @@ class Test {
 				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts-tests' === $_GET['page'] ) {
 					$instructions .= sprintf(
 						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
-						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						Url_Helpers::get_run_manual_test_url( $test->id ),
 						$test->id,
 						esc_html__( 'Run Test', 'visual-regression-tests' ),
 						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
@@ -964,7 +964,7 @@ class Test {
 				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts-tests' === $_GET['page'] ) {
 					$instructions .= sprintf(
 						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
-						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						Url_Helpers::get_run_manual_test_url( $test->id ),
 						$test->id,
 						esc_html__( 'Run Test', 'visual-regression-tests' ),
 						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )

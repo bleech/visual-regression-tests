@@ -58,6 +58,22 @@ class Url_Helpers {
 		], admin_url( 'admin.php' ) );
 	}
 
+	public static function get_run_manual_test_url( $test_id ) {
+		return add_query_arg( [
+			'page' => 'vrts-tests',
+			'action' => 'run-manual-test',
+			'test_id' => $test_id,
+		], admin_url( 'admin.php' ) );
+	}
+
+	public static function get_disable_testing_url( $test_id ) {
+		return add_query_arg( [
+			'page' => 'vrts-tests',
+			'action' => 'disable-testing',
+			'test_id' => $test_id,
+		], admin_url( 'admin.php' ) );
+	}
+
 	public static function get_test_run_page( $test_run_id ) {
 		if ( is_object($test_run_id) ) {
 			$test_run_id = $test_run_id->ID;

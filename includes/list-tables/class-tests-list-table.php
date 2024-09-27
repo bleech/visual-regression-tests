@@ -3,6 +3,7 @@
 namespace Vrts\List_Tables;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
@@ -129,7 +130,7 @@ class Tests_List_Table extends \WP_List_Table {
 		if ( $is_connected ) {
 			$actions['trash'] = sprintf(
 				'<a href="%s" data-id="%d" title="%s">%s</a>',
-				admin_url( 'admin.php?page=vrts&action=disable-testing&test_id=' ) . $item->id,
+				Url_Helpers::get_disable_testing_url( $item->id ),
 				$item->id,
 				esc_html__( 'Disable testing for this page', 'visual-regression-tests' ),
 				esc_html__( 'Disable Testing', 'visual-regression-tests' )
