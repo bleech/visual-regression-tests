@@ -79,8 +79,6 @@ class VrtsAlertActions extends window.HTMLElement {
 			return;
 		}
 
-		$el.setAttribute( 'data-vrts-loading', 'true' );
-
 		const action = $el.getAttribute( 'data-vrts-alert-action' );
 		const id = $el.getAttribute( 'data-vrts-alert-id' );
 
@@ -90,6 +88,10 @@ class VrtsAlertActions extends window.HTMLElement {
 	handleAction( action, $el, id, shouldSetAction ) {
 		const restEndpoint = `${ window.vrts_admin_vars.rest_url }/alerts/${ id }/${ action }`;
 		const method = shouldSetAction ? 'POST' : 'DELETE';
+
+		const timeout = setTimeout( () => {
+			$el.setAttribute( 'data-vrts-loading', 'true' );
+		}, 150 );
 
 		fetch( restEndpoint, {
 			method,
@@ -126,6 +128,8 @@ class VrtsAlertActions extends window.HTMLElement {
 						);
 					}
 				}
+
+				clearTimeout( timeout );
 			} );
 	}
 

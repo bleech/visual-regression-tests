@@ -47,7 +47,10 @@ class VrtsTestRunPagination extends window.HTMLElement {
 		} );
 
 		$nextAlert.setAttribute( 'data-vrts-current', 'true' );
-		$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+
+		const timeout = setTimeout( () => {
+			$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+		}, 150 );
 
 		$sidebar.scrollTo( {
 			top: $nextAlert.offsetTop - 100,
@@ -86,6 +89,8 @@ class VrtsTestRunPagination extends window.HTMLElement {
 				if ( $newPagination ) {
 					this.replaceWith( $newPagination );
 				}
+
+				clearTimeout( timeout );
 			} );
 	}
 

@@ -237,7 +237,7 @@
 
 	&__icon {
 		display: flex;
-		transition: opacity 0.3s, transform 0.3s;
+		transition: opacity 0.3s;
 		grid-row: 1 / 1;
 		grid-column: 1 / 1;
 	}
@@ -253,7 +253,7 @@
 		position: absolute;
 		top: 50%;
 		left: 50%;
-		transform: translate(-50%, calc(-50% + 5px));
+		transform: translate(-50%, -50%);
 		z-index: 1;
 		visibility: hidden;
 		opacity: 0;
@@ -280,13 +280,11 @@
 
 		.vrts-action-button__icon {
 			opacity: 0;
-			transform: translateY(5px);
 		}
 
 		.vrts-action-button__spinner {
 			visibility: visible;
 			opacity: 1;
-			transform: translate(-50%, -50%);
 
 			path {
 				animation-play-state: running;

@@ -127,7 +127,10 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		} );
 
 		$el.setAttribute( 'data-vrts-current', 'true' );
-		$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+
+		const timeout = setTimeout( () => {
+			$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+		}, 150 );
 
 		fetch( href )
 			.then( ( response ) => {
@@ -159,6 +162,8 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				if ( $newPagination ) {
 					$pagination.replaceWith( $newPagination );
 				}
+
+				clearTimeout( timeout );
 			} );
 	}
 
@@ -172,8 +177,6 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			return;
 		}
 
-		$el.setAttribute( 'data-vrts-loading', 'true' );
-
 		const action = $el.getAttribute( 'data-vrts-test-run-action' );
 		const id = $el.getAttribute( 'data-vrts-test-run-id' );
 
@@ -183,6 +186,10 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	handleAction( action, $el, id, shouldSetAction ) {
 		const restEndpoint = `${ window.vrts_admin_vars.rest_url }/test-runs/${ id }/${ action }`;
 		const method = shouldSetAction ? 'POST' : 'DELETE';
+
+		const timeout = setTimeout( () => {
+			$el.setAttribute( 'data-vrts-loading', 'true' );
+		}, 150 );
 
 		fetch( restEndpoint, {
 			method,
@@ -202,16 +209,18 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 					shouldSetAction ? 'secondary' : 'primary'
 				);
 
-				const $alert = document.querySelectorAll(
+				const $alerts = document.querySelectorAll(
 					'.vrts-test-run-alerts__card'
 				);
 
-				$alert.forEach( ( item ) => {
+				$alerts.forEach( ( item ) => {
 					item.setAttribute(
 						'data-vrts-state',
 						shouldSetAction ? 'read' : 'unread'
 					);
 				} );
+
+				clearTimeout( timeout );
 			} );
 	}
 
