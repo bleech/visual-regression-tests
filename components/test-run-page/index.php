@@ -12,6 +12,11 @@
 				'alert' => $data['alert'],
 				'test_settings' => $data['test_settings'],
 				] ); ?>
+			<div class="vrts-test-run-page__content-navigation-info">
+				<?php esc_html_e( 'Navigate with arrow keys', 'visual-regression-tests' ); ?>
+				<?php vrts()->icon( 'arrow-up' ); ?>
+				<?php vrts()->icon( 'arrow-down' ); ?>
+			</div>
 		<?php else : ?>
 			<?php vrts()->component( 'test-run-empty' ); ?>
 		<?php endif; ?>

@@ -88,5 +88,23 @@
 				}
 			}
 		}
+
+		&-navigation-info {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.25rem;
+			margin-top: 1rem;
+			color: #757575;
+
+			svg {
+				color: $gray-70;
+				background: $gray-5;
+				border-radius: 3px;
+				padding: 5px;
+				width: 0.75rem;
+				height: 0.75rem;
+			}
+		}
 	}
 }
