@@ -129,15 +129,17 @@ class VrtsComparisons extends window.HTMLElement {
 
 	highlightPixels( pixels ) {
 		const ctx = this.$diffIndicator.getContext( '2d' );
-		ctx.clearRect( 0, 0, ctx.canvas.width, ctx.canvas.height );
-		ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+		this.$diffIndicator.width = this.$comparison.naturalWidth;
+		this.$diffIndicator.height = this.$comparison.naturalHeight;
+		ctx.clearRect(
+			0,
+			0,
+			this.$comparison.naturalWidth,
+			this.$comparison.naturalHeight
+		);
+		ctx.fillStyle = 'red';
 		pixels.forEach( ( y ) => {
-			ctx.fillRect(
-				0,
-				( y * ctx.canvas.height ) / this.$comparison.naturalHeight - 2,
-				ctx.canvas.width,
-				3
-			);
+			ctx.fillRect( 0, y, ctx.canvas.width, 1 );
 		} );
 	}
 
