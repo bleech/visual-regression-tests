@@ -10,7 +10,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 
 	resolveElements() {
 		this.$heading = this.querySelector( '.vrts-test-run-alerts__heading' );
-		this.$alerts = this.querySelectorAll( '.vrts-test-run-alerts__card' );
+		this.$alerts = this.querySelectorAll( '[data-vrts-alert]' );
 		this.$actionButtons = this.querySelectorAll(
 			'[data-vrts-test-run-action]'
 		);

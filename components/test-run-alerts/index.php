@@ -38,23 +38,25 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 				$tested_url = $parsed_tested_url['path'];
 
 				?>
-				<a
-					id="vrts-alert-<?php echo esc_attr( $alert->id ); ?>"
-					href="<?php echo esc_url( $alert_link ); ?>"
-					class="vrts-test-run-alerts__card"
-					data-vrts-alert="<?php echo esc_attr( $alert->id ); ?>"
-					data-vrts-current="<?php echo esc_attr( $data['alert']->id === $alert->id ? 'true' : 'false' ); ?>"
-					data-vrts-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
-					data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
-					<figure class="vrts-test-run-alerts__card-figure">
-						<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( Url_Helpers::get_thumbnail_url_for_comparison( $alert ) ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
-						<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
-					</figure>
-					<span class="vrts-test-run-alerts__card-title">
-						<span class="vrts-test-run-alerts__card-title-inner"><?php echo get_the_title( $alert->post_id ); ?></span>
-					</span>
-					<span class="vrts-test-run-alerts__card-path"><?php echo esc_html( $tested_url ); ?></span>
-				</a>
+				<div class="vrts-test-run-alerts__card">
+					<a
+						id="vrts-alert-<?php echo esc_attr( $alert->id ); ?>"
+						href="<?php echo esc_url( $alert_link ); ?>"
+						class="vrts-test-run-alerts__card-link"
+						data-vrts-alert="<?php echo esc_attr( $alert->id ); ?>"
+						data-vrts-current="<?php echo esc_attr( $data['alert']->id === $alert->id ? 'true' : 'false' ); ?>"
+						data-vrts-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
+						data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
+						<figure class="vrts-test-run-alerts__card-figure">
+							<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( Url_Helpers::get_thumbnail_url_for_comparison( $alert ) ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
+							<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
+						</figure>
+						<span class="vrts-test-run-alerts__card-title">
+							<span class="vrts-test-run-alerts__card-title-inner"><?php echo get_the_title( $alert->post_id ); ?></span>
+						</span>
+					</a>
+					<a href="<?php echo esc_url( get_permalink( $alert->post_id ) ); ?>" target="_blank" class="vrts-test-run-alerts__card-path"><?php echo esc_html( $tested_url ); ?></a>
+				</div>
 			<?php endforeach; ?>
 			<script>
 				const urlParams = new URLSearchParams( window.location.search );
