@@ -1,24 +1,7 @@
 <nav class="vrts_admin_header_menu">
 	<a class="vrts_logo_link" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-tests' ) ); ?>">
 		<h2>
-			<span class="vrts_logo">
-				<?php
-					echo wp_kses( vrts()->get_plugin_logo_icon( false ), [
-						'svg' => [
-							'xmlns' => [],
-							'width' => [],
-							'height' => [],
-							'viewbox' => [],
-							'style' => [],
-							'xml:space' => [],
-						],
-						'path' => [
-							'fill' => [],
-							'd' => [],
-						],
-					]);
-					?>
-			</span>
+			<span class="vrts_logo"><?php vrts()->logo(); ?></span>
 			<?php echo esc_html( $data['plugin_name'] ); ?>
 		</h2>
 	</a>

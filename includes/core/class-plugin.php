@@ -271,23 +271,34 @@ class Plugin {
 	}
 
 	/**
-	 * Get the plugin logo icon.
+	 * Get the plugin logo.
 	 *
-	 * @param boolean $base64 return base 64 encoded or not.
+	 * @param bool   $escape If true it will escape the logog.
 	 *
 	 * @return string the logo as string.
 	 */
-	public function get_plugin_logo_icon( $base64 = true ) {
-		$icon_path = $this->get_plugin_path( 'assets/icons/vrts-logo-icon.svg' );
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- It's a file.
-		$svg = file_get_contents( $icon_path );
+	public function get_logo( $escape = true ) {
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 
-		if ( $base64 ) {
-			// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- It's a file.
-			return 'data:image/svg+xml;base64,' . base64_encode( $svg );
+		$filesystem = new WP_Filesystem_Direct( null );
+		$logo = $filesystem->get_contents( $this->get_plugin_path( "assets/images/vrts-logo.svg" ) );
+
+		if ( $escape ) {
+			return wp_kses( $logo, $this->wp_kses_svg() );
 		}
 
-		return $svg;
+		return $logo;
+	}
+
+	/**
+	 * The plugin logo.
+	 */
+	public function logo() {
+		echo wp_kses(
+			$this->get_logo( false ),
+			$this->wp_kses_svg()
+		);
 	}
 
 	/**
@@ -342,6 +353,8 @@ class Plugin {
 				'xmlns' => true,
 				'aria-hidden' => true,
 				'focusable' => true,
+				'style' => [],
+				'xml:space' => [],
 			],
 			'path' => [
 				'd' => true,

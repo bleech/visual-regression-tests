@@ -26,7 +26,7 @@ class Admin {
 			'manage_options',
 			'vrts',
 			'',
-			vrts()->get_plugin_logo_icon(),
+			'data:image/svg+xml;base64,' . base64_encode( vrts()->get_logo() ),
 			80
 		);
 	}
