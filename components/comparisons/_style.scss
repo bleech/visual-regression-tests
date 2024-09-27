@@ -167,6 +167,9 @@
 	}
 
 	&__diff-inidicator {
+		background-color: #f0f0f1;
+		box-sizing: border-box;
+    	border-block: 1px solid transparent;
 		height: 100%;
 		width: 4px;
 	}

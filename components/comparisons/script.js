@@ -137,7 +137,7 @@ class VrtsComparisons extends window.HTMLElement {
 			this.$comparison.naturalWidth,
 			this.$comparison.naturalHeight
 		);
-		ctx.fillStyle = 'red';
+		ctx.fillStyle = '#cc1818';
 		pixels.forEach( ( y ) => {
 			ctx.fillRect( 0, y, ctx.canvas.width, 1 );
 		} );
