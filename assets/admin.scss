@@ -61,14 +61,24 @@
 
 		> div,
 		strong {
-			display: inline-block;
-			align-self: start;
+			align-self: flex-start;
+
+			@media (min-width: 783px) {
+				display: inline-block;
+			}
 		}
 
 
 		&.column-title {
 			display: flex;
 			flex-direction: column;
+		}
+
+		&.column-trigger,
+		&.column-status {
+			@media (max-width: 782px) {
+				padding-block: 10px !important;
+			}
 		}
 	}
 }

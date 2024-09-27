@@ -41,11 +41,9 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 */
 	public function no_items() {
 		printf(
-			/* translators: %1$s, %2$s and %3$s, %4$s: link wrapper. */
-			esc_html__( 'No runs in the queue at the moment. %1$sConfigure tests%2$s or check the customization options in the %3$splugin settings%4$s.', 'visual-regression-tests' ),
+			/* translators: %1$s, %2$s link wrapper. */
+			esc_html__( 'No Runs in the queue. %1$sAdd Tests%2$s to get started.', 'visual-regression-tests' ),
 			'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-tests' ) ) . '">',
-			'</a>',
-			'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-settings' ) ) . '">',
 			'</a>'
 		);
 	}
@@ -243,7 +241,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 				'<span>%s</span>',
 				sprintf(
 					// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
-					wp_kses( __( '%1$sRefresh page%2$s to see result', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
+					wp_kses( __( '%1$sRefresh page%2$s to see results', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
 					'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-runs' ) ) . '">',
 					'</a>'
 				)
@@ -260,7 +258,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 					$number_of_tests
 				),
 				esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
-				esc_html__( 'Edit Test Configuration', 'visual-regression-tests' )
+				esc_html__( 'Edit Configuration', 'visual-regression-tests' )
 			);
 		}
 		return sprintf(

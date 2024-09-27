@@ -461,7 +461,7 @@ class Test_Run {
 					'<span>%s</span>',
 					sprintf(
 						// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
-						wp_kses( __( '%1$sRefresh page%2$s to see result', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
+						wp_kses( __( '%1$sRefresh page%2$s to see results', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
 						'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-runs' ) ) . '">',
 						'</a>'
 					)

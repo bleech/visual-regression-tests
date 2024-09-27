@@ -55,7 +55,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @return void
 	 */
 	public function no_items() {
-		esc_html_e( 'There are no finished runs at the moment.', 'visual-regression-tests' );
+		esc_html_e( 'No Runs finished.', 'visual-regression-tests' );
 	}
 
 	/**
