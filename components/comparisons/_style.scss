@@ -191,6 +191,13 @@
 		[data-vrts-comparisons-slot="target"] {
 			clip-path: inset(0 0 0 var(--vrts-comparisons-slider-position));
 		}
+
+		&:has(input:focus-visible) {
+			.vrts-comparisons__slider-handle svg {
+				outline: 2px solid var(--wp-admin-theme-color);
+				outline-offset: 2px;
+			}
+		}
 	}
 
 	&__slider-handle {
