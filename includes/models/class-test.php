@@ -939,8 +939,9 @@ class Test {
 			case 'scheduled':
 				$class = 'waiting';
 				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
-				if ( $test->next_run_date ) {
-					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->next_run_date );
+				$next_run = Test_Run::get_next_scheduled_run();
+				if ( $next_run ) {
+					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $next_run->scheduled_at );
 				}
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
 				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts-tests' === $_GET['page'] ) {

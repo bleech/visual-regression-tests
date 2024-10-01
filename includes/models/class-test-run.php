@@ -377,7 +377,7 @@ class Test_Run {
 			return 'has-alerts';
 		}
 
-		if ( ! empty( $test_run->started_at && empty( $test_run->finished_at ) ) ) {
+		if ( ! empty( $test_run->started_at ) && empty( $test_run->finished_at ) ) {
 			return 'running';
 		}
 
@@ -530,5 +530,18 @@ class Test_Run {
 		} else {
 			return $test_run->trigger_notes ?? '';
 		}
+	}
+
+	public static function get_next_scheduled_run() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$test_run = $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT * FROM $test_runs_table WHERE finished_at IS NULL AND scheduled_at IS NOT NULL ORDER BY scheduled_at ASC LIMIT 1",
+		);
+		return empty( $test_run ) ? null : static::cast_values( $test_run );
 	}
 }
