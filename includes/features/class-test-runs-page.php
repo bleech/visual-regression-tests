@@ -8,7 +8,6 @@ use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 use Vrts\Services\Test_Run_Service;
-use Vrts\Services\Test_Service;
 
 class Test_Runs_Page {
 
@@ -81,7 +80,7 @@ class Test_Runs_Page {
 		if ( $run ) {
 			// $alerts_ids = maybe_unserialize( $run->alerts );
 			$alerts = Alert::get_items_by_test_run( $run_id );
-			$alert_id = isset( $_GET['alert_id'] ) ? intval( $_GET['alert_id'] ) : ( isset( $alerts[0] ) ? $alerts[0]->id : 0 );
+			[ $alert_id, $alert ] = $this->get_alert( $alerts );
 			$base_link = add_query_arg( [
 				'run_id' => $run_id,
 			], admin_url( 'admin.php?page=vrts-runs' ) );
@@ -90,7 +89,6 @@ class Test_Runs_Page {
 			$service = new Test_Run_Service();
 			$service->update_latest_alert_for_all_tests( $run );
 
-			$alert = Alert::get_item( $alert_id );
 			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
 
 			vrts()->component('test-run-page', [
@@ -122,6 +120,16 @@ class Test_Runs_Page {
 				'list_queue_table' => new Test_Runs_Queue_List_Table(),
 			]);
 		}//end if
+	}
+
+	private function get_alert( $alerts ) {
+		$alert_id = isset( $_GET['alert_id'] ) ? intval( $_GET['alert_id'] ) : ( isset( $alerts[0] ) ? $alerts[0]->id : 0 );
+		$alert = Alert::get_item( $alert_id );
+		if ( ! $alert ) {
+			$alert_id = isset( $alerts[0] ) ? $alerts[0]->id : 0;
+			$alert = Alert::get_item( $alert_id );
+		}
+		return [ $alert_id, $alert ];
 	}
 
 	/**
