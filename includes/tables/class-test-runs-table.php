@@ -44,6 +44,10 @@ class Test_Runs_Table {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 
+			if ( empty( $installed_version ) ) {
+				static::create_runs_from_alerts();
+			}
+
 			update_option( $option_name, self::DB_VERSION );
 		}//end if
 	}
@@ -59,5 +63,47 @@ class Test_Runs_Table {
 		$wpdb->query( $sql );
 
 		delete_option( self::TABLE_NAME . '_db_version' );
+	}
+
+	/**
+	 * Migrate alerts from the old table.
+	 */
+	public static function create_runs_from_alerts() {
+		global $wpdb;
+		$alerts_table = Alerts_Table::get_table_name();
+		$tests_table = Tests_Table::get_table_name();
+		$runs_table = self::get_table_name();
+
+		$sql = "SELECT
+				a.id as id,
+				a.target_screenshot_finish_date as finished_at,
+				t.id as test_id
+			FROM {$alerts_table} a
+			JOIN {$tests_table} t
+			ON t.post_id = a.post_id
+			WHERE a.test_run_id IS NULL;
+		";
+
+		$alerts = $wpdb->get_results( $sql );
+
+		$test_runs = array_map(function ($alert) {
+			return [
+				'tests' => maybe_serialize( [ $alert->test_id ] ),
+				'alerts' => maybe_serialize( [ $alert->id ] ),
+				'trigger' => 'legacy',
+				'started_at' => $alert->finished_at,
+				'finished_at' => $alert->finished_at,
+			];
+		}, $alerts);
+
+		$test_runs_values = implode( ',', array_map(function ($run) {
+			return "('" . implode( "','", array_map('esc_sql', $run)) . "')";
+		}, $test_runs));
+
+		// insert all test runs with single query
+		$wpdb->query( "INSERT INTO {$runs_table} (tests, alerts, `trigger`, started_at, finished_at) VALUES " . $test_runs_values . ';' );
+
+		// update test_run_id in alerts table from newly created test runs based on alerts column
+		$wpdb->query( "UPDATE {$alerts_table} a JOIN {$runs_table} r ON r.alerts LIKE CONCAT('%\"', a.id, '\"%') SET a.test_run_id = r.id;" );
 	}
 }

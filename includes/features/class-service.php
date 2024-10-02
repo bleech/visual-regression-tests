@@ -7,7 +7,7 @@ use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 
 class Service {
-	const DB_VERSION = '1.1';
+	const DB_VERSION = '1.2';
 	const SERVICE = 'vrts_service';
 	const BASE_URL = VRTS_SERVICE_ENDPOINT;
 
@@ -27,7 +27,7 @@ class Service {
 		if ( self::is_connected() && ! self::has_secret() ) {
 			self::create_secret();
 		}
-		if ( $installed_version && version_compare( $installed_version, '1.1', '<' ) ) {
+		if ( $installed_version && version_compare( $installed_version, '1.2', '<' ) ) {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_api_route = 'sites/' . $service_project_id;
 
