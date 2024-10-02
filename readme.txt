@@ -69,7 +69,7 @@ Unlock more features with our paid plans:
 * get **e-mail** support
 * and access to **new features**
 
-[See all pricing plans](https://bleech.de/en/products/visual-regression-tests/#pricing)
+[See all pricing plans](https://vrts.app/pricing/)
 
 
 = BUG-REPORT =
@@ -83,7 +83,7 @@ You want to learn more about VRTs?
 
 Official product page:
 
-[VRTs – Visual Regression Tests](https://bleech.de/en/products/visual-regression-tests/)
+[VRTs – Visual Regression Tests](https://vrts.app/)
 
 Resources:
 

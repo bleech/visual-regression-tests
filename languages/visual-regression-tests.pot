@@ -19,7 +19,7 @@ msgid "VRTs – Visual Regression Tests"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://bleech.de/en/products/visual-regression-tests/"
+msgid "https://vrts.app/"
 msgstr ""
 
 #. Description of the plugin
