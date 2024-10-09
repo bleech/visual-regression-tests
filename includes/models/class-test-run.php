@@ -310,6 +310,7 @@ class Test_Run {
 			'scheduled' => __( 'Schedule', 'visual-regression-tests' ),
 			'api' => __( 'API', 'visual-regression-tests' ),
 			'update' => __( 'Update', 'visual-regression-tests' ),
+			'legacy' => __( 'Legacy', 'visual-regression-tests' ),
 		];
 
 		return $trigger_titles[ $test_run->trigger ] ?? __( 'Unknown', 'visual-regression-tests' );
@@ -542,6 +543,6 @@ class Test_Run {
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 			"SELECT * FROM $test_runs_table WHERE finished_at IS NULL AND scheduled_at IS NOT NULL ORDER BY scheduled_at ASC LIMIT 1",
 		);
-		return empty( $test_run ) ? null : static::cast_values( $test_run );
+		return $test_run;
 	}
 }
