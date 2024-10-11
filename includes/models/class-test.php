@@ -697,16 +697,16 @@ class Test {
 		$has_comparison = ! empty( $test->last_comparison_date );
 		$is_running = (bool) $test->is_running;
 
-		if ( $test->current_alert_id ) {
-			return 'has-alert';
-		}
-
 		if ( false === (bool) $test->status && ( $no_tests_left || $has_remote_test ) ) {
 			return 'no-credit-left';
 		}
 
 		if ( ! $has_remote_test ) {
 			return 'post-not-published';
+		}
+
+		if ( $test->current_alert_id ) {
+			return 'has-alert';
 		}
 
 		if ( ! $has_base_screenshot ) {

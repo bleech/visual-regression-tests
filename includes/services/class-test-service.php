@@ -256,7 +256,7 @@ class Test_Service {
 	public function create_remote_test( $post, $test = [] ) {
 		if ( Service::is_connected() ) {
 			$existing_test = Test::get_item_by_post_id( $post->ID );
-			if ( $existing_test ) {
+			if ( $existing_test && $existing_test->service_test_id ) {
 				return $existing_test;
 			}
 			$service_project_id = get_option( 'vrts_project_id' );
