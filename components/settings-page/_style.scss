@@ -18,12 +18,6 @@
 		}
 	}
 
-	[data-a11y-dialog-show] {
-		> * {
-			pointer-events: none;
-		}
-	}
-
 	fieldset {
 		display: flex !important;
 		align-items: center;

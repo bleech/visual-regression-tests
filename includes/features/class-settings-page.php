@@ -18,11 +18,12 @@ class Settings_Page {
 	 */
 	public function __construct() {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
+		add_action( 'admin_init', [ $this, 'settings_migration' ] );
 		add_action( 'add_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
 		add_action( 'update_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
 		add_action( 'pre_update_option_vrts_license_key', [ $this, 'do_before_add_license_key' ], 10, 2 );
-		add_action( 'pre_update_option_vrts_email_update_notification_address', [ $this, 'do_before_updating_email_address' ], 10, 2 );
-		add_action( 'pre_update_option_vrts_email_api_notification_address', [ $this, 'do_before_updating_email_address' ], 10, 2 );
+		add_action( 'pre_update_option_vrts_email_update_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
+		add_action( 'pre_update_option_vrts_email_api_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
 		add_action( 'update_option_vrts_automatic_comparison', [ $this, 'do_after_update_vrts_automatic_comparison' ], 10, 2 );
 
 		$this->add_settings();
@@ -199,10 +200,11 @@ class Settings_Page {
 			'title' => esc_html__( 'Schedule', 'visual-regression-tests' ),
 			'description' => esc_html__( 'Separate multiple email addresses with commas. Or leave blank to disable notifications.', 'visual-regression-tests' ),
 			'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => [ Sanitization::class, 'sanitize_multiple_emails' ],
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => get_bloginfo( 'admin_email' ),
+			'return_value_callback' => [ $this, 'get_sanitized_emails' ],
 		]);
 
 		vrts()->settings()->add_setting([
@@ -211,12 +213,13 @@ class Settings_Page {
 			'section' => 'vrts-settings-section-notifications',
 			'title' => esc_html__( 'Update', 'visual-regression-tests' ),
 			'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => [ Sanitization::class, 'sanitize_multiple_emails' ],
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => '',
 			'readonly' => ! $has_subscription,
 			'is_pro' => $has_subscription,
+			'return_value_callback' => [ $this, 'get_sanitized_emails' ],
 		]);
 
 		vrts()->settings()->add_setting([
@@ -225,12 +228,13 @@ class Settings_Page {
 			'section' => 'vrts-settings-section-notifications',
 			'title' => esc_html__( 'API', 'visual-regression-tests' ),
 			'placeholder' => esc_html__( 'Email address(es)', 'visual-regression-tests' ),
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => [ Sanitization::class, 'sanitize_multiple_emails' ],
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => '',
 			'readonly' => ! $has_subscription,
 			'is_pro' => $has_subscription,
+			'return_value_callback' => [ $this, 'get_sanitized_emails' ],
 		]);
 
 		vrts()->settings()->add_setting([
@@ -241,6 +245,28 @@ class Settings_Page {
 			'description' => esc_html__( 'Alerts are automatically sent to the user who triggers the manual test.', 'visual-regression-tests' ),
 			'is_pro' => $has_subscription,
 		]);
+	}
+
+	/**
+	 * Settings migration.
+	 */
+	public function settings_migration() {
+		$old_cc_addresses = vrts()->settings()->get_option( 'vrts_email_notification_cc_address' );
+
+		if ( $old_cc_addresses ) {
+			$old_cc_addresses = $this->get_sanitized_emails( $old_cc_addresses );
+			$schedule_email = vrts()->settings()->get_option( 'vrts_email_notification_address' );
+			$schedule_email = array_unique( array_merge( $schedule_email, $old_cc_addresses ) );
+			$schedule_email = implode( ', ', $schedule_email );
+			update_option( 'vrts_email_notification_address', $schedule_email );
+			delete_option( 'vrts_email_notification_cc_address' );
+		}
+
+		if ( get_option( 'vrts_license_success' ) ) {
+			$schedule_email = vrts()->settings()->get_option( 'vrts_email_notification_address', false );
+			update_option( 'vrts_email_update_notification_address', $schedule_email );
+			update_option( 'vrts_email_api_notification_address', $schedule_email );
+		}
 	}
 
 	/**
@@ -305,14 +331,14 @@ class Settings_Page {
 		return $old;
 	}
 
-	public function do_before_updating_email_address( $old, $new ) {
+	/**
+	 * Prevent updating email address if there is no subscription
+	 *
+	 * @param string $value New value.
+	 */
+	public function do_before_updating_email_address( $value ) {
 		$has_subscription = (bool) Subscription::get_subscription_status();
-
-		if ( ! $has_subscription ) {
-			return '';
-		}
-
-		return $old;
+		return $has_subscription ? $value : '';
 	}
 
 	/**
@@ -388,5 +414,16 @@ class Settings_Page {
 	 */
 	public function render_notification_license_removed() {
 		Admin_Notices::render_notification( 'license_removed', false );
+	}
+
+	/**
+	 * Sanitize multiple emails.
+	 *
+	 * @param string $emails The emails.
+	 *
+	 * @return array
+	 */
+	public function get_sanitized_emails( $emails ) {
+		return array_filter( array_map( 'sanitize_email', explode( ',', $emails ) ) );
 	}
 }

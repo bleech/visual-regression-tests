@@ -58,4 +58,16 @@ class Sanitization {
 	public static function sanitize_url( $url ) {
 		return esc_url_raw( $url );
 	}
+
+	/**
+	 * Multiple emails sanitization callback.
+	 *
+	 * @param string $emails Comma-separated list of emails.
+	 *
+	 * @return string
+	 */
+	public static function sanitize_multiple_emails( $emails ) {
+		$emails = array_filter( array_map( 'sanitize_email', explode( ',', $emails ) ) );
+		return implode( ', ', $emails );
+	}
 }
