@@ -90,6 +90,7 @@ class Test_Runs_Page {
 			$service->update_latest_alert_for_all_tests( $run );
 
 			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
+			$tests = Test::get_items_by_ids( maybe_unserialize( $run->tests ) );
 
 			vrts()->component('test-run-page', [
 				'run' => $run,
@@ -107,6 +108,7 @@ class Test_Runs_Page {
 						'alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
 					], $base_link ),
 				],
+				'tests' => $tests,
 				'test_settings' => [
 					'test_id' => isset( $test->id ) ? $test->id : null,
 					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,

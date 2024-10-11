@@ -1,0 +1,161 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+
+.vrts-test-run-reciept {
+	position: relative;
+	padding: 0 12px;
+	margin: 8px 20px 20px;
+	background-color: #F6F7FB;
+	box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.1);
+
+	&::before,
+	&::after {
+		--mask: radial-gradient(10px at top,#0000 97%,#000) 50% / 18.5px 100%;
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 100%;
+		content: '';
+		mask: var(--mask);
+		display: block;
+		height: 10px;
+		background: inherit;
+	}
+
+	&::after {
+		--mask: radial-gradient(10px at bottom,#0000 97%,#000) 50% / 18.5px 100%;
+		bottom: -10px;
+	}
+
+	> * {
+		padding: 12px 0;
+
+		&:not(:last-child) {
+			border-bottom: 1px dashed #c3c4c7;
+		}
+	}
+
+	> svg {
+		width: 100%;
+		padding: 0;
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+	}
+
+	&__header {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding-top: 20px;
+
+		&-logo {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+			justify-content: center;
+			font-weight: 600;
+			font-size: 15px;
+
+			svg {
+				width: 20px;
+				height: 20px;
+
+				path {
+					fill: #2C3338;
+				}
+			}
+		}
+
+		&-info {
+			font-size: 14px;
+			display: flex;
+			flex-direction: column;
+			text-align: center;
+			gap: 2px;
+
+			a {
+				font-size: 11px;
+			}
+		}
+	}
+
+	&__info {
+		text-align: center;
+	}
+
+	&__pages-status {
+		a {
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 1;
+			display: -webkit-box;
+			color: inherit;
+			font-size: 13px;
+			line-height: 1.4;
+			max-block-size: calc(13px * 1.4);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: initial;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+
+	table {
+		width: 100%;
+
+		th,
+		td {
+			vertical-align: top;
+			padding-block: 2px;
+		}
+
+		tr > :first-child {
+			text-align: left;
+			padding-right: 5px;
+		}
+
+		tr > :last-child {
+			text-align: right;
+			padding-left: 5px;
+		}
+	}
+
+	&__total {
+		border-top: 1px dashed #c3c4c7;
+		margin-top: 2px;
+
+		th {
+			font-size: 15px;
+		}
+
+		&-success {
+			color: #4AB866;
+		}
+
+		&-failed {
+			color: #B32D2E;
+		}
+	}
+
+	&__trigger {
+		font-size: 11px;
+		line-height: 1.4;
+
+		.vrts-test-run-trigger {
+			font-size: inherit;
+		}
+
+		&-notes {
+			color: #757575;
+		}
+	}
+
+	&__footer {
+		text-transform: uppercase;
+		text-align: center;
+		font-weight: 700;
+	}
+}
