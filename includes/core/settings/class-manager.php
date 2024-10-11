@@ -61,7 +61,7 @@ class Manager {
 	 * @param array $args Setting args.
 	 */
 	private function get_field( $args ) {
-		$value = $this->get_option( $args['id'] );
+		$value = $args['value'] ?? $this->get_option( $args['id'] );
 		include vrts()->get_plugin_path( "includes/core/settings/field-{$args['type']}/index.php" );
 	}
 
