@@ -117,9 +117,4 @@ class Url_Helpers {
 			'redirect' => '',
 		], $url );
 	}
-
-	public static function get_thumbnail_url_for_comparison( $alert ) {
-		$preview_url = maybe_unserialize( $alert->meta )['preview_url'] ?? null;
-		return $preview_url ? $preview_url : $alert->comparison_screenshot_url;
-	}
 }

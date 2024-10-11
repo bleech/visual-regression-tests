@@ -130,7 +130,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 
 		const timeout = setTimeout( () => {
 			$comparisons.setAttribute( 'data-vrts-loading', 'true' );
-		}, 150 );
+		}, 200 );
 
 		fetch( href )
 			.then( ( response ) => {
@@ -187,9 +187,16 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		const restEndpoint = `${ window.vrts_admin_vars.rest_url }/test-runs/${ id }/${ action }`;
 		const method = shouldSetAction ? 'POST' : 'DELETE';
 
+		let loadingElapsedTime = 0;
+		let interval = null;
+
 		const timeout = setTimeout( () => {
 			$el.setAttribute( 'data-vrts-loading', 'true' );
-		}, 150 );
+			const loadingStartTime = window.Date.now();
+			interval = setInterval( () => {
+				loadingElapsedTime = window.Date.now() - loadingStartTime;
+			}, 50 );
+		}, 200 );
 
 		fetch( restEndpoint, {
 			method,
@@ -203,24 +210,31 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			.then( ( data ) => {
 				// console.log( data );
 
-				$el.setAttribute( 'data-vrts-loading', 'false' );
-				$el.setAttribute(
-					'data-vrts-action-state',
-					shouldSetAction ? 'secondary' : 'primary'
-				);
+				const loadingTimeoutTime =
+					loadingElapsedTime > 0
+						? Math.abs( loadingElapsedTime - 400 )
+						: 0;
 
-				const $alerts = document.querySelectorAll(
-					'.vrts-test-run-alerts__card'
-				);
-
-				$alerts.forEach( ( item ) => {
-					item.setAttribute(
-						'data-vrts-state',
-						shouldSetAction ? 'read' : 'unread'
+				setTimeout( () => {
+					$el.setAttribute( 'data-vrts-loading', 'false' );
+					$el.setAttribute(
+						'data-vrts-action-state',
+						shouldSetAction ? 'secondary' : 'primary'
 					);
-				} );
+
+					const $alerts =
+						document.querySelectorAll( '[data-vrts-alert]' );
+
+					$alerts.forEach( ( item ) => {
+						item.setAttribute(
+							'data-vrts-state',
+							shouldSetAction ? 'read' : 'unread'
+						);
+					} );
+				}, loadingTimeoutTime );
 
 				clearTimeout( timeout );
+				clearInterval( interval );
 			} );
 	}
 

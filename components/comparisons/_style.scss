@@ -15,10 +15,11 @@
 		left: 0;
 		width: 100%;
 		height: calc(100% - 1px);
-		background: linear-gradient(90deg, #fff, #ddd, #fff);
+		background: linear-gradient(90deg, #ddd, #fff, #ddd);
 		background-size: 200% 100%;
 		animation: vrts-shimmer 1.5s linear paused infinite;
 		transition: opacity 0.2s, visibility 0.2s;
+		opacity: 0;
 		visibility: hidden;
 		z-index: 10;
 
@@ -66,13 +67,14 @@
 		display: flex;
 		align-items: center;
 		padding-right: 0.25rem;
+		z-index: 1;
 
 		> *:not(:last-child) {
 			position: relative;
 
 			&::after {
 				position: absolute;
-				right: 0;
+				right: -0.5px;
 				content: "";
 				display: block;
 				width: 1px;
@@ -101,6 +103,10 @@
 		height: 42px;
 		align-items: center;
 		justify-content: center;
+
+		@media (max-width: 667px) {
+			display: none;
+		}
 
 		&::before {
 			position: absolute;
@@ -145,11 +151,12 @@
 	}
 
 	&__content {
+		container-type: inline-size;
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, max-content));
 		justify-content: center;
 		gap: 0.25rem;
-		padding: 1em;
+		padding: 15px;
 	}
 
 	&__figure {
@@ -162,21 +169,31 @@
 			box-sizing: border-box;
 			display: block;
 			max-width: 100%;
+			height: auto;
 			margin: 0 auto;
+		}
+
+		@container (max-width: 600px) {
+			&[data-vrts-comparisons-slot="comparison"] {
+				display: none;
+			}
 		}
 	}
 
 	&__diff-inidicator {
-		background-color: #f0f0f1;
 		box-sizing: border-box;
+		background: #f0f0f1;
     	border-block: 1px solid transparent;
 		height: 100%;
 		width: 4px;
 	}
 
  	&__slider {
+		--vrts-comparisons-slider-height: 100%;
+
 		position: relative;
 		display: grid;
+		align-items: start;
 		border: solid 1px #{$gray-lighten-20};
 		overflow: clip;
 
@@ -184,7 +201,6 @@
 			grid-column: 1 / 1;
 			grid-row: 1 / 1;
 			margin: 0;
-			background: #{$light-gray-500};
 			border: 0;
 			height: 100%;
 			width: 100%;
@@ -203,35 +219,45 @@
 	}
 
 	&__slider-handle {
+		--vrts-comparisons-offset: calc(62px + 42px);
+		--vrts-comparisons-handle-size: 32px;
+		--vrts-comparisons-handle-offest: 20px;
+		--vrts-comparisons-slider-centered: calc(100% / var(--vrts-comparisons-slider-aspect-ratio) / 2 - var(--vrts-comparisons-handle-size) / 2);
+		--vrts-comparisons-viewport-centered: calc(((100vh - var(--wp-admin--admin-bar--height) - 56px - 15px - var(--vrts-comparisons-offset)) / 2 - var(--vrts-comparisons-handle-size) / 2) + 15%);
+
+		box-sizing: border-box;
 		position: sticky;
-		top: 50%;
+		top: calc(var(--wp-admin--admin-bar--height) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
 		width: 100%;
-		height: 44px;
+		height: calc(var(--vrts-comparisons-handle-size) + 10px);
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 		grid-column: 1 / 1;
 		grid-row: 1 / 1;
-		margin-block: 20px;
+		margin-block: var(--vrts-comparisons-handle-offest);
+		margin-block-start: Max(var(--vrts-comparisons-handle-offest), Min(var(--vrts-comparisons-slider-centered), var(--vrts-comparisons-viewport-centered)));
 
 		@media (min-width: 851px) {
-			top: calc((100vh - var(--wp-admin--admin-bar--height) + var(--vrts-test-run-page-offset) + 54px + 62px + 44px - 22px) / 2);
+			top: calc(var(--wp-admin--admin-bar--height) + var(--vrts-comparisons-offset) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
 		}
 
 		[data-vrts-fullscreen="true"] & {
-			top: calc((100vh + 62px + 44px - 22px) / 2);
+			top: calc(var(--vrts-comparisons-offset) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
 		}
 
 		svg {
+			box-sizing: border-box;
 			position: absolute;
 			top: 0;
-			left: calc(var(--vrts-comparisons-slider-position) - 21px);
-			width: 42px;
-			height: 42px;
+			left: calc(var(--vrts-comparisons-slider-position) - (var(--vrts-comparisons-handle-size) / 2));
+			width: var(--vrts-comparisons-handle-size);
+			height: var(--vrts-comparisons-handle-size);
 			border-radius: 50%;
 			background: #fff;
 			border: 1px solid var(--wp-admin-theme-color);
 			color: var(--wp-admin-theme-color);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 		}
 	}
 
@@ -261,5 +287,15 @@
 		position: absolute;
 		inset: 0;
 		opacity: 0;
+
+		&::-webkit-slider-runnable-track {
+			height: 100%;
+		}
+
+		&::-webkit-slider-thumb {
+			appearance: none;
+			height: 100%;
+			width: 42px;
+		}
 	}
 }

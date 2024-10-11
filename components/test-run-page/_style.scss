@@ -73,13 +73,13 @@
 			column-gap: 2rem;
 			row-gap: 1rem;
 			padding: 1rem 0;
+			border-bottom: 1px solid $gray-10;
 
 			@media (min-width: 851px) {
 				box-sizing: border-box;
 				flex-wrap: nowrap;
 				position: sticky;
 				top: var(--wp-admin--admin-bar--height);
-				border-bottom: 1px solid $gray-10;
 				height: 62px;
 				padding: 0;
 				background: #f0f0f1;

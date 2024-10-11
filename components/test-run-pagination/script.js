@@ -48,9 +48,16 @@ class VrtsTestRunPagination extends window.HTMLElement {
 
 		$nextAlert.setAttribute( 'data-vrts-current', 'true' );
 
+		let loadingElapsedTime = 0;
+		let interval = null;
+
 		const timeout = setTimeout( () => {
 			$comparisons.setAttribute( 'data-vrts-loading', 'true' );
-		}, 150 );
+			const loadingStartTime = window.Date.now();
+			interval = setInterval( () => {
+				loadingElapsedTime = window.Date.now() - loadingStartTime;
+			}, 50 );
+		}, 200 );
 
 		$sidebar.scrollTo( {
 			top: $nextAlert.offsetTop - 100,
@@ -78,19 +85,27 @@ class VrtsTestRunPagination extends window.HTMLElement {
 					behavior: 'smooth',
 				} );
 
+				const loadingTimeoutTime =
+					loadingElapsedTime > 0
+						? Math.abs( loadingElapsedTime - 400 )
+						: 0;
+
 				setTimeout( () => {
-					$nextAlert.setAttribute( 'data-vrts-state', 'read' );
-				}, 400 );
+					setTimeout( () => {
+						$nextAlert.setAttribute( 'data-vrts-state', 'read' );
+					}, 400 );
 
-				if ( $newComparisons ) {
-					$comparisons.replaceWith( $newComparisons );
-				}
+					if ( $newComparisons ) {
+						$comparisons.replaceWith( $newComparisons );
+					}
 
-				if ( $newPagination ) {
-					this.replaceWith( $newPagination );
-				}
+					if ( $newPagination ) {
+						this.replaceWith( $newPagination );
+					}
+				}, loadingTimeoutTime );
 
 				clearTimeout( timeout );
+				clearInterval( interval );
 			} );
 	}
 
