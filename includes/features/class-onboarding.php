@@ -131,36 +131,15 @@ class Onboarding {
 				],
 			],
 			[
-				'id' => 'alerts',
-				'permission_callback' => [ $this, 'should_display_alerts_onboarding' ],
+				'id' => 'runs-introduction',
+				'permission_callback' => [ $this, 'should_display_runs_introduction_onboarding' ],
 				'steps' => [
 					[
-						'side' => 'top',
+						'side' => 'bottom',
 						'align' => 'center',
-						'element' => '#post-body-content .postbox-header',
-						'title' => wp_kses_post( __( '🔍 Compare Changes', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'Utilize the <strong>Difference, Split</strong>, and <strong>Side by Side views</strong> to accurately identify visual differences.', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'left',
-						'padding' => 10,
-						'element' => '.vrts-alert-settings-postbox',
-						'title' => wp_kses_post( __( '🛠️ Fine-tune Tests', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'If the Alert is not accurate, <strong>adjust the Test setup by excluding elements</strong> from the page when the snapshot is created.', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'left',
-						'padding' => 10,
-						'element' => '#delete-action',
-						'title' => wp_kses_post( __( '🚫 Mark as false positive', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'You may <strong>stop this Alert from happening again</strong>. Mark it as a false positive and the plugin will filter out matching Alerts in the future.', 'visual-regression-tests' ) ),
-					],
-					[
-						'side' => 'left',
-						'padding' => 10,
-						'element' => '#publishing-action',
-						'title' => wp_kses_post( __( '📦 Archive your Alerts', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'Organize your Alerts by <strong>archiving</strong> them after review, for easy access and future reference.', 'visual-regression-tests' ) ),
+						'element' => '.vrts_navigation_item a[href$="admin.php?page=vrts-runs"]',
+						'title' => wp_kses_post( __( '🚀 Meet the new Runs!', 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'Alerts are now bundled into Runs. Get a single report for each daily test, manual test, API trigger, or new: <strong>WordPress & plugin update (Pro)</strong>!', 'visual-regression-tests' ) ),
 					],
 				],
 			],
@@ -233,21 +212,17 @@ class Onboarding {
 	}
 
 	/**
-	 * Should display alerts onboarding.
+	 * Should display run introduction onboarding.
 	 *
 	 * @return bool
 	 */
-	public function should_display_alerts_onboarding() {
+	public function should_display_runs_introduction_onboarding() {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-		$action = sanitize_text_field( wp_unslash( $_GET['action'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-		$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
-		if ( 'vrts-alerts-tests' === $page && 'edit' === $action && '' !== $alert_id ) {
-			$archived_alerts = Alert::get_items( [
-				'filter_status' => 'archived',
-			] );
+		if ( in_array( $page, [ 'vrts-tests', 'vrts-runs', 'vrts-settings' ], true ) ) {
+			$has_migrated_alerts = get_option( 'vrts_test_runs_has_migrated_alerts');
 
-			if ( ! $archived_alerts ) {
+			if ( $has_migrated_alerts ) {
 				return true;
 			}
 		}

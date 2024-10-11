@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Test_Runs_Table {
 
-	const DB_VERSION = '1.1';
+	const DB_VERSION = '1.0';
 	const TABLE_NAME = 'vrts_test_runs';
 
 	/**
@@ -21,6 +21,7 @@ class Test_Runs_Table {
 	public static function install_table() {
 		$option_name = self::TABLE_NAME . '_db_version';
 		$installed_version = get_option( $option_name );
+
 		if ( self::DB_VERSION !== $installed_version ) {
 			global $wpdb;
 
@@ -44,8 +45,9 @@ class Test_Runs_Table {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta( $sql );
 
-			if ( empty( $installed_version ) ) {
+			if ( ! $installed_version ) {
 				static::create_runs_from_alerts();
+				update_option( 'vrts_test_runs_has_migrated_alerts', true );
 			}
 
 			update_option( $option_name, self::DB_VERSION );
@@ -63,6 +65,7 @@ class Test_Runs_Table {
 		$wpdb->query( $sql );
 
 		delete_option( self::TABLE_NAME . '_db_version' );
+		delete_option( 'vrts_test_runs_has_migrated_alerts' );
 	}
 
 	/**
