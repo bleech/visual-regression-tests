@@ -32,6 +32,7 @@
 
 	&__sidebar {
 		order: 2;
+		overflow: hidden;
 
 		&::-webkit-scrollbar {
 			width: 2px;
