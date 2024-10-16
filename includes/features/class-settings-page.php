@@ -117,7 +117,7 @@ class Settings_Page {
 			'id' => 'vrts-settings-section-triggers',
 			'page' => $this->page_slug,
 			'title' => 'Triggers',
-			'title' => esc_html__( 'Triggers', 'visual-regression-tests' ) . '<span>' . esc_html__( 'Define when tests should run.', 'visual-regression-tests' ) . '</span>',
+			'title' => esc_html__( 'Triggers', 'visual-regression-tests' ) . '<span>' . esc_html__( 'When your Tests are run.', 'visual-regression-tests' ) . '</span>',
 		]);
 
 		vrts()->settings()->add_setting([
@@ -190,7 +190,7 @@ class Settings_Page {
 		vrts()->settings()->add_section([
 			'id' => 'vrts-settings-section-notifications',
 			'page' => $this->page_slug,
-			'title' => esc_html__( 'Notifications', 'visual-regression-tests' ) . '<span>' . esc_html__( 'Notify team members based on specific trigger events.', 'visual-regression-tests' ) . '</span>',
+			'title' => esc_html__( 'Notifications', 'visual-regression-tests' ) . '<span>' . esc_html__( 'Notify team members based on specific Trigger events.', 'visual-regression-tests' ) . '</span>',
 		]);
 
 		vrts()->settings()->add_setting([
@@ -241,8 +241,8 @@ class Settings_Page {
 			'type' => 'info',
 			'id' => 'vrts_email_manual_notification_address',
 			'section' => 'vrts-settings-section-notifications',
-			'title' => esc_html__( 'Manul', 'visual-regression-tests' ),
-			'description' => esc_html__( 'Alerts are automatically sent to the user who triggers the manual test.', 'visual-regression-tests' ),
+			'title' => esc_html__( 'Manual', 'visual-regression-tests' ),
+			'description' => esc_html__( 'Alerts are automatically sent to the user who Triggers the Manual Test.', 'visual-regression-tests' ),
 			'is_pro' => $has_subscription,
 		]);
 	}
