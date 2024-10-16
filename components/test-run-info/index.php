@@ -13,7 +13,7 @@ $trigger_note = Test_Run::get_trigger_note( $data );
 			printf( esc_html__( 'Run #%s', 'visual-regression-tests' ), esc_html( $data->id ) );
 		?>
 	</strong>
-	<?php echo esc_html( Date_Time_Helpers::get_formatted_relative_date_time( $data->finished_at ) ); ?>
+	<?php echo wp_kses( Date_Time_Helpers::get_formatted_relative_date_time( $data->finished_at ), [ 'time' => [ 'datetime' => true ] ] ); ?>
 	<span class="vrts-test-run-info__trigger">
 		<span class="vrts-test-run-trigger vrts-test-run-trigger--<?php echo esc_attr( $data->trigger ); ?>">
 			<?php echo esc_html( Test_Run::get_trigger_title( $data ) ); ?>

@@ -249,7 +249,7 @@
 			top: calc(var(--vrts-comparisons-offset) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
 		}
 
-		svg {
+		svg { // stylelint-disable-line no-descending-specificity
 			box-sizing: border-box;
 			position: absolute;
 			top: 0;
