@@ -189,11 +189,15 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 */
 	public function single_row( $item ) {
 		$classes = 'iedit test-run-row';
+		$current_time = time();
+		$finished_at = strtotime( $item->finished_at );
+		$is_new_run = $current_time - $finished_at < 20 * MINUTE_IN_SECONDS;
 		?>
 		<tr
 			id="test-<?php echo esc_attr( $item->id ); ?>"
 			class="<?php echo esc_attr( $classes ); ?>"
 			data-test-run-id="<?php echo esc_attr( $item->id ); ?>"
+			data-test-run-new="<?php echo esc_attr( $is_new_run ? 'true' : 'false' ); ?>"
 			<?php echo $item->alerts_count > 0 ? 'data-has-alerts' : ''; ?>
 		>
 			<?php $this->single_row_columns( $item ); ?>

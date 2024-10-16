@@ -101,11 +101,7 @@
 		}
 
 		&.test-run-highlighted {
-			animation: vrts-color-highlight 3s ease;
-
-			.check-column .dashicons {
-				animation: vrts-scale-up-down 3s;
-			}
+			animation: vrts-color-highlight 2s ease;
 		}
 
 		&:hover {
