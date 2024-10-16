@@ -187,7 +187,7 @@ class Alert {
 	/**
 	 * Get multiple alerts from database by test run id
 	 *
-	 * @param array $run_id the id of the test run.
+	 * @param int $id the id of the test run.
 	 *
 	 * @return array
 	 */
@@ -234,6 +234,14 @@ class Alert {
 		);
 	}
 
+	/**
+	 * Get latest alert ids by post ids
+	 *
+	 * @param array $post_ids the ids of the posts.
+	 * @param int   $alert_state the state of the item.
+	 *
+	 * @return array
+	 */
 	public static function get_latest_alert_ids_by_post_ids( $post_ids = [], $alert_state = 0 ) {
 		global $wpdb;
 
@@ -243,14 +251,14 @@ class Alert {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT id, post_id FROM $alerts_table
-				WHERE alert_state = %d
-				AND post_id IN ($placeholders)
-				ORDER BY id DESC",
-				$alert_state,
-				$post_ids
+				"SELECT id, post_id FROM $alerts_table WHERE alert_state = %d AND post_id IN ($placeholders) ORDER BY id DESC",
+				array_merge(
+					$alert_state,
+					$post_ids
+				)
 			)
 		);
 	}
@@ -314,10 +322,9 @@ class Alert {
 	}
 
 	/**
-	 * Get total test items from database
+	 * Get total test items grouped by test run from database
 	 *
 	 * @param int $filter_status_query the id of status.
-	 * @param int $test_run_id the id of the test run.
 	 *
 	 * @return array
 	 */
@@ -354,13 +361,10 @@ class Alert {
 
 		$where = "{$status_where} AND test_run_id IS NOT NULL";
 
-
 		$query = "
 			SELECT COUNT(DISTINCT test_run_id) FROM $alerts_table
 			$where
 		";
-
-		// var_dump($query);die();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's prepared above
 		return (int) $wpdb->get_var( $query );
@@ -530,6 +534,7 @@ class Alert {
 		// 0 = Open
 		// 1 = Archived.
 		// 2 = False Positive.
+		//phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse -- It's ok.
 		return in_array( $alert->alert_state, [ 1, 2 ], false );
 	}
 
@@ -556,16 +561,19 @@ class Alert {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT test_run_id, COUNT(*) as count FROM $alerts_table
-				WHERE test_run_id IN ($placeholders)
-				AND alert_state = 0
-				GROUP BY test_run_id",
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				"SELECT test_run_id, COUNT(*) as count FROM $alerts_table WHERE test_run_id IN ($placeholders) AND alert_state = 0 GROUP BY test_run_id",
 				$test_run_ids
 			)
 		);
 	}
 
+	/**
+	 * Set read status by test run.
+	 *
+	 * @param int $test_run_id the id of the test run.
+	 * @param int $read_status the state of the item.
+	 */
 	public static function set_read_status_by_test_run( $test_run_id, $read_status = 1 ) {
 		global $wpdb;
 
@@ -575,7 +583,7 @@ class Alert {
 		return $wpdb->update(
 			$alerts_table,
 			[ 'alert_state' => $read_status ],
-			[ 'test_run_id' => intval($test_run_id) ]
+			[ 'test_run_id' => intval( $test_run_id ) ]
 		);
 	}
 

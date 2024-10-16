@@ -26,6 +26,7 @@ class Admin {
 			'manage_options',
 			'vrts',
 			'',
+			//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
 			'data:image/svg+xml;base64,' . base64_encode( vrts()->get_logo() ),
 			80
 		);

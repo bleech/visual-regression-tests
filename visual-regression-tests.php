@@ -54,10 +54,3 @@ vrts()->setup( 'vrts', [
 	'Vrts\\Tables\\' => 'includes/tables',
 	'Vrts\\Rest_Api\\' => 'includes/rest-api',
 ]);
-
-// add_action('admin_init', function () {
-// $test_run_id = 14;
-// $email_notifications = new Email_Notifications();
-// $email_notifications->send_test_run_email( $test_run_id );
-// die();
-// });

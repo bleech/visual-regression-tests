@@ -440,7 +440,6 @@ class Test_Run {
 
 		switch ( $test_run_status ) {
 			case 'has-alerts':
-				// echo '<script>console.log(' . json_encode($test_run) . ')</script>';
 				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
@@ -512,20 +511,27 @@ class Test_Run {
 		return $wpdb->delete( $test_runs_table, [ 'service_test_run_id' => $test_run_id ] );
 	}
 
+	/**
+	 * Get test run trigger note
+	 *
+	 * @param object $test_run test run object.
+	 *
+	 * @return string
+	 */
 	public static function get_trigger_note( $test_run ) {
 		if ( ( $test_run->trigger ?? null ) === 'update' ) {
 			$updates = maybe_unserialize( $test_run->trigger_meta ) ?? [];
-			$updates = array_merge(...$updates);
+			$updates = array_merge( ...$updates );
 
-			$trigger_notes = implode(', ', array_map(function ($update) {
-				if ( $update['type'] === 'core' ) {
-					$updateName = 'WordPress';
+			$trigger_notes = implode(', ', array_map(function ( $update ) {
+				if ( 'core' === $update['type'] ) {
+					$update_name = 'WordPress';
 				} else {
-					$updateName = $update['name'] ?? $update['slug'] ?? null;
+					$update_name = $update['name'] ?? $update['slug'] ?? null;
 				}
-				$updateInfo = $update['version'] ?? $update['language'] ?? null;
+				$update_info = $update['version'] ?? $update['language'] ?? null;
 
-				return $updateName . ( empty( $updateInfo ) ? '' : ' (' . $updateInfo . ')' );
+				return $update_name . ( empty( $update_info ) ? '' : ' (' . $update_info . ')' );
 			}, $updates));
 			return $trigger_notes;
 		} else {
@@ -533,6 +539,11 @@ class Test_Run {
 		}
 	}
 
+	/**
+	 * Get next scheduled run
+	 *
+	 * @return object
+	 */
 	public static function get_next_scheduled_run() {
 		global $wpdb;
 
@@ -541,7 +552,7 @@ class Test_Run {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		$test_run = $wpdb->get_row(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT * FROM $test_runs_table WHERE finished_at IS NULL AND scheduled_at IS NOT NULL ORDER BY scheduled_at ASC LIMIT 1",
+			"SELECT * FROM $test_runs_table WHERE finished_at IS NULL AND scheduled_at IS NOT NULL ORDER BY scheduled_at ASC LIMIT 1"
 		);
 		return $test_run;
 	}

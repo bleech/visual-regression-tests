@@ -129,6 +129,13 @@ class Test_Run_Service {
 		}
 	}
 
+	/**
+	 * Update latest alert for all tests.
+	 *
+	 * @param object $test_run Test run.
+	 *
+	 * @return void
+	 */
 	public function update_latest_alert_for_all_tests( $test_run ) {
 		$tests = maybe_unserialize( $test_run->tests );
 

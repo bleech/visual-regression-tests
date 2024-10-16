@@ -87,9 +87,10 @@ class Test_Runs_Table {
 			WHERE a.test_run_id IS NULL;
 		";
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 		$alerts = $wpdb->get_results( $sql );
 
-		$test_runs = array_map(function ($alert) {
+		$test_runs = array_map(function ( $alert ) {
 			return [
 				'tests' => maybe_serialize( [ $alert->test_id ] ),
 				'alerts' => maybe_serialize( [ $alert->id ] ),
@@ -99,14 +100,16 @@ class Test_Runs_Table {
 			];
 		}, $alerts);
 
-		$test_runs_values = implode( ',', array_map(function ($run) {
-			return "('" . implode( "','", array_map('esc_sql', $run)) . "')";
+		$test_runs_values = implode( ',', array_map(function ( $run ) {
+			return "('" . implode( "','", array_map( 'esc_sql', $run ) ) . "')";
 		}, $test_runs));
 
-		// insert all test runs with single query
+		// insert all test runs with single query.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "INSERT INTO {$runs_table} (tests, alerts, `trigger`, started_at, finished_at) VALUES " . $test_runs_values . ';' );
 
-		// update test_run_id in alerts table from newly created test runs based on alerts column
+		// update test_run_id in alerts table from newly created test runs based on alerts column.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "UPDATE {$alerts_table} a JOIN {$runs_table} r ON r.alerts LIKE CONCAT('%\"', a.id, '\"%') SET a.test_run_id = r.id;" );
 	}
 }

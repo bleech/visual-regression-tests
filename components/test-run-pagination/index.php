@@ -1,7 +1,7 @@
 <?php
 
-// don't show pagination if there is no previous or next alert
 if ( 0 === $data['prev_alert_id'] && 0 === $data['next_alert_id'] ) {
+	// don't show pagination if there is no previous or next alert.
 	return;
 }
 

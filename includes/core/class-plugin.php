@@ -273,7 +273,7 @@ class Plugin {
 	/**
 	 * Get the plugin logo.
 	 *
-	 * @param bool   $escape If true it will escape the logog.
+	 * @param bool $escape If true it will escape the logog.
 	 *
 	 * @return string the logo as string.
 	 */
@@ -282,7 +282,7 @@ class Plugin {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 
 		$filesystem = new WP_Filesystem_Direct( null );
-		$logo = $filesystem->get_contents( $this->get_plugin_path( "assets/images/vrts-logo.svg" ) );
+		$logo = $filesystem->get_contents( $this->get_plugin_path( 'assets/images/vrts-logo.svg' ) );
 
 		if ( $escape ) {
 			return wp_kses( $logo, $this->wp_kses_svg() );

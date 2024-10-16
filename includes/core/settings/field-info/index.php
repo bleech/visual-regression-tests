@@ -5,5 +5,6 @@
 		?>
 		<span class="vrts-settings__pro-label"><?php esc_html_e( 'Pro', 'visual-regression-tests' ); ?></span>
 		<?php
-	endif; ?>
+	endif;
+	?>
 </fieldset>

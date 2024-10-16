@@ -1,3 +1,4 @@
+/* global self */
 function getColoredPixelsWithLimit( imageData, xLimit, direction = 'left' ) {
 	const coloredPixels = new Set();
 	for ( let i = 0; i < imageData.data.length; i += 4 ) {

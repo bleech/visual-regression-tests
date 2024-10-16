@@ -8,10 +8,12 @@
 			<?php vrts()->component( 'test-run-pagination', $data['pagination'] ); ?>
 		</div>
 		<?php if ( $data['alerts'] ) : ?>
-			<?php vrts()->component( 'comparisons', [
+			<?php
+			vrts()->component( 'comparisons', [
 				'alert' => $data['alert'],
 				'test_settings' => $data['test_settings'],
-				] ); ?>
+			] );
+			?>
 			<div class="vrts-test-run-page__content-navigation-info">
 				<?php esc_html_e( 'Navigate with arrow keys', 'visual-regression-tests' ); ?>
 				<?php vrts()->icon( 'arrow-up' ); ?>

@@ -162,11 +162,11 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		$this->items = Test_Run::get_items( $args );
 		$test_run_ids = wp_list_pluck( $this->items, 'id' );
 		$alert_counts = [];
-		foreach (Alert::get_unread_count_by_test_run_ids( $test_run_ids ) as $alert_count) {
-			$alert_counts[$alert_count->test_run_id] = $alert_count->count;
+		foreach ( Alert::get_unread_count_by_test_run_ids( $test_run_ids ) as $alert_count ) {
+			$alert_counts[ $alert_count->test_run_id ] = $alert_count->count;
 		}
-		foreach ($this->items as $item) {
-			$item->alerts_count = $alert_counts[$item->id] ?? 0;
+		foreach ( $this->items as $item ) {
+			$item->alerts_count = $alert_counts[ $item->id ] ?? 0;
 		}
 
 		$total_items = 0;
@@ -194,7 +194,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			id="test-<?php echo esc_attr( $item->id ); ?>"
 			class="<?php echo esc_attr( $classes ); ?>"
 			data-test-run-id="<?php echo esc_attr( $item->id ); ?>"
-			<?php echo $item->alerts_count > 0 ? 'data-has-alerts' : '' ?>
+			<?php echo $item->alerts_count > 0 ? 'data-has-alerts' : ''; ?>
 		>
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
@@ -233,8 +233,8 @@ class Test_Runs_List_Table extends \WP_List_Table {
 		$output .= '</div>';
 
 		// $output .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' .
-		// 	/* translators: Hidden accessibility text. */
-		// 	esc_html__( 'Show more details', 'visual-regression-tests' ) .
+		// * translators: Hidden accessibility text. */
+		// esc_html__( 'Show more details', 'visual-regression-tests' ) .
 		// '</span></button>';
 
 		return $output;
@@ -274,44 +274,18 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	public function column_title( $item ) {
 		$actions = [];
 
-		// echo '<script>console.log(' . json_encode( $item ) . ')</script>';
-		// $actions['finished-at'] = sprintf(
-		// 	'<span>%s</span>',
-		// 	Date_Time_Helpers::get_formatted_relative_date_time( $item->finished_at )
-		// );
-
 		$actions['details'] = sprintf(
 			'<a class="vrts-show-test-run-details" href="%s">%s</a>',
 			esc_url( Url_Helpers::get_test_run_page( $item->id ) ),
 			esc_html__( 'Show Details', 'visual-regression-tests' )
 		);
 
-		// if ( $item->alerts_count > 0 ) {
-		// 	$actions['mark-read'] = sprintf(
-		// 		'<a class="vrts-mark-read" href="%s">%s</a>',
-		// 		esc_url( wp_nonce_url( Url_Helpers::get_mark_as_read_url( $item->id, true ), 'mark_as_read') ),
-		// 		sprintf(
-		// 			// translators: %s: number of alerts.
-		// 			esc_html( __( 'Mark as read', 'visual-regression-tests' ) ),
-		// 		)
-		// 	);
-		// } elseif (count(maybe_unserialize($item->alerts) ?? []) > 0) {
-		// 	$actions['mark-unread'] = sprintf(
-		// 		'<a class="vrts-mark-unread" href="%s">%s</a>',
-		// 		esc_url( wp_nonce_url( Url_Helpers::get_mark_as_unread_url( $item->id, true ), 'mark_as_unread') ),
-		// 		sprintf(
-		// 			// translators: %s: number of alerts.
-		// 			esc_html( __( 'Mark as unread', 'visual-regression-tests' ) ),
-		// 		)
-		// 	);
-		// }
-
 		$row_actions = sprintf(
 			'<strong><a class="row-title vrts-show-test-run-details" href="%1$s">%2$s</a></strong><div class="vrts-test-runs-title-subline">%3$s</div> %4$s',
 			esc_url( Url_Helpers::get_test_run_page( $item->id ) ),
 			sprintf( $item->title ),
 			Date_Time_Helpers::get_formatted_relative_date_time( $item->finished_at ),
-			$this->row_actions( $actions, true ),
+			$this->row_actions( $actions, true )
 		);
 
 		return $row_actions;
@@ -346,8 +320,8 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @return string
 	 */
 	public function column_status( $item ) {
-		$alerts_count = count(maybe_unserialize($item->alerts) ?? []);
-		$tests_count = count(maybe_unserialize($item->tests) ?? []);
+		$alerts_count = count( maybe_unserialize( $item->alerts ) ?? [] );
+		$tests_count = count( maybe_unserialize( $item->tests ) ?? [] );
 		if ( $alerts_count > 0 ) {
 			$status_class = 'paused';
 			$status_text = esc_html__( 'Changes detected ', 'visual-regression-tests' ) . sprintf( '(%s)', $alerts_count );

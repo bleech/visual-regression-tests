@@ -469,11 +469,25 @@ class Test_Service {
 		}
 	}
 
+	/**
+	 * Update latest alert.
+	 *
+	 * @param int $post_id Post id.
+	 *
+	 * @return int|false
+	 */
 	public function update_latest_alert( $post_id ) {
 		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $post_id );
 		return Test::set_alert( $post_id, $latest_alert_id );
 	}
 
+	/**
+	 * Update latest alerts.
+	 *
+	 * @param array $test_ids Test ids.
+	 *
+	 * @return int|false|void
+	 */
 	public function update_latest_alerts( $test_ids ) {
 		$test_ids = array_map( 'intval', $test_ids );
 		$test_ids = array_filter( $test_ids );
@@ -494,7 +508,8 @@ class Test_Service {
 				SET t.current_alert_id = a.latest_id
 				WHERE t.id IN ( $placeholders )";
 
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			return $wpdb->query( $wpdb->prepare( $query, $test_ids ) );
-		}
+		}//end if
 	}
 }

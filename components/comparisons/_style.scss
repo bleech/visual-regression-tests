@@ -140,6 +140,7 @@
 		}
 
 		[data-vrts-fullscreen="true"] & {
+
 			svg:first-child {
 				display: none;
 			}
@@ -174,6 +175,7 @@
 		}
 
 		@container (max-width: 600px) {
+
 			&[data-vrts-comparisons-slot="comparison"] {
 				display: none;
 			}
@@ -183,12 +185,12 @@
 	&__diff-inidicator {
 		box-sizing: border-box;
 		background: #f0f0f1;
-    	border-block: 1px solid transparent;
+		border-block: 1px solid transparent;
 		height: 100%;
 		width: 4px;
 	}
 
- 	&__slider {
+	&__slider {
 		--vrts-comparisons-slider-height: 100%;
 
 		position: relative;
@@ -211,6 +213,7 @@
 		}
 
 		&:has(input:focus-visible) {
+
 			.vrts-comparisons__slider-handle svg {
 				outline: 2px solid var(--wp-admin-theme-color);
 				outline-offset: 2px;
@@ -236,7 +239,7 @@
 		grid-column: 1 / 1;
 		grid-row: 1 / 1;
 		margin-block: var(--vrts-comparisons-handle-offest);
-		margin-block-start: Max(var(--vrts-comparisons-handle-offest), Min(var(--vrts-comparisons-slider-centered), var(--vrts-comparisons-viewport-centered)));
+		margin-block-start: max(var(--vrts-comparisons-handle-offest), min(var(--vrts-comparisons-slider-centered), var(--vrts-comparisons-viewport-centered)));
 
 		@media (min-width: 851px) {
 			top: calc(var(--wp-admin--admin-bar--height) + var(--vrts-comparisons-offset) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
@@ -279,7 +282,7 @@
 		height: 100%;
 		border-left: 1px dashed #c3c4c7;
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-		opacity: .4;
+		opacity: 0.4;
 	}
 
 	&__slider-control {

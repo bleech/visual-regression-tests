@@ -60,7 +60,7 @@ class Alerts_Table {
 			update_option( $option_name, self::DB_VERSION );
 
 		}//end if
-		if ($installed_version <= '1.2') {
+		if ( $installed_version <= '1.2' ) {
 			static::set_is_false_positive_from_alert_state();
 		}
 	}
@@ -79,11 +79,15 @@ class Alerts_Table {
 		delete_option( self::TABLE_NAME . '_db_version' );
 	}
 
+	/**
+	 * Set is_false_positive to 1 for all alerts that have alert_state set to 2.
+	 */
 	protected static function set_is_false_positive_from_alert_state() {
 		global $wpdb;
 		$table_name = self::get_table_name();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			"UPDATE {$table_name} SET is_false_positive = 1, alert_state = 1 WHERE alert_state = 2"
 		);
 	}

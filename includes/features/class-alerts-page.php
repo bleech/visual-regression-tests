@@ -16,9 +16,6 @@ class Alerts_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
-		// TODO: remove before release.
-		// add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
-		// add_filter( 'set-screen-option', [ $this, 'set_screen' ], 10, 3 );
 	}
 
 	/**
@@ -116,7 +113,7 @@ class Alerts_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
 		$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ?? '0' ) );
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- It's ok.
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- It's ok.
 		$search_query = sanitize_text_field( wp_unslash( $_REQUEST['s'] ?? '' ) );
 
 		// Render Edit Page or View page.

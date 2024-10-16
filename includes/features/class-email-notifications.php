@@ -162,10 +162,16 @@ class Email_Notifications {
 		return $context;
 	}
 
+	/**
+	 * Preview test run email.
+	 *
+	 * @param int $test_run_id the id of the test run.
+	 */
 	public function preview_test_run_email( $test_run_id ) {
 		$service = new Render_Template_Service();
 		$context = $this->get_test_run_email_context( $test_run_id );
 		$message = $service->render_template( 'emails/test-run', $context );
+		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $message;
 	}
 }

@@ -52,7 +52,6 @@ class Date_Time_Helpers {
 			static::extract_time( $date )
 		);
 		return '<time datetime="' . date_format( $date, 'c' ) . '">' . $formatted_date . '</time>';
-		// return '<vrts-relative-time time="' . date_format( $date, 'c' ) . '">' . $formatted_date . '</vrts-relative-time>';
 	}
 
 	/**
@@ -69,30 +68,44 @@ class Date_Time_Helpers {
 		return $date;
 	}
 
-	private static function extract_date($inputDate) {
-		// Get today's date at midnight
-		$today = new DateTime('today');
+	/**
+	 * Extract the date from a DateTime object.
+	 *
+	 * @param DateTime $input_date a DateTime object.
+	 *
+	 * @return string Formatted date.
+	 */
+	private static function extract_date( $input_date ) {
+		// Get today's date at midnight.
+		$today = new DateTime( 'today' );
 
-		// Clone input date and set time to midnight
-		$comparisonDate = clone $inputDate;
-		$comparisonDate->setTime(0, 0, 0);
+		// Clone input date and set time to midnight.
+		$comparison_date = clone $input_date;
+		$comparison_date->setTime( 0, 0, 0 );
 
-		// Calculate the difference in days
-		$differenceInSeconds = $comparisonDate->getTimestamp() - $today->getTimestamp();
-		$differenceInDays = (int) round($differenceInSeconds / (60 * 60 * 24));
+		// Calculate the difference in days.
+		$difference_in_seconds = $comparison_date->getTimestamp() - $today->getTimestamp();
+		$difference_in_days = (int) round( $difference_in_seconds / ( 60 * 60 * 24 ) );
 
-		// Determine if the date is today, tomorrow, or yesterday
-		if ($differenceInDays === 0) {
-			return __('Today', 'visual-regression-testing');
-		} elseif ($differenceInDays === 1) {
-			return __('Tomorrow', 'visual-regression-testing');
-		} elseif ($differenceInDays === -1) {
-			return __('Yesterday', 'visual-regression-testing');
+		// Determine if the date is today, tomorrow, or yesterday.
+		if ( 0 === $difference_in_days ) {
+			return __( 'Today', 'visual-regression-testing' );
+		} elseif ( 1 === $difference_in_days ) {
+			return __( 'Tomorrow', 'visual-regression-testing' );
+		} elseif ( -1 === $difference_in_days ) {
+			return __( 'Yesterday', 'visual-regression-testing' );
 		}
-		return $inputDate->format('D, Y/m/d');
+		return $input_date->format( 'D, Y/m/d' );
 	}
 
-	private static function extract_time($inputDate) {
-		return $inputDate->setTimezone(wp_timezone())->format('g:i a');
+	/**
+	 * Extract the time from a DateTime object.
+	 *
+	 * @param DateTime $input_date a DateTime object.
+	 *
+	 * @return string Formatted time.
+	 */
+	private static function extract_time( $input_date ) {
+		return $input_date->setTimezone( wp_timezone() )->format( 'g:i a' );
 	}
 }

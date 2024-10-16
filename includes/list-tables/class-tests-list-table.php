@@ -313,7 +313,6 @@ class Tests_List_Table extends \WP_List_Table {
 
 		$total_items = count( $this->items );
 
-
 		$this->set_pagination_args([
 			'total_items' => $total_items,
 			// we set it to a high number to avoid pagination.

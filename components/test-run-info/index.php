@@ -10,10 +10,10 @@ $trigger_note = Test_Run::get_trigger_note( $data );
 	<strong>
 		<?php
 			// translators: %s: the run number.
-			printf( esc_html__( 'Run #%s', 'visual-regression-tests' ), $data->id );
+			printf( esc_html__( 'Run #%s', 'visual-regression-tests' ), esc_html( $data->id ) );
 		?>
 	</strong>
-	<?php echo Date_Time_Helpers::get_formatted_relative_date_time( $data->finished_at ); ?>
+	<?php echo esc_html( Date_Time_Helpers::get_formatted_relative_date_time( $data->finished_at ) ); ?>
 	<span class="vrts-test-run-info__trigger">
 		<span class="vrts-test-run-trigger vrts-test-run-trigger--<?php echo esc_attr( $data->trigger ); ?>">
 			<?php echo esc_html( Test_Run::get_trigger_title( $data ) ); ?>

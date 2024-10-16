@@ -35,6 +35,7 @@ class Test_Runs_Page {
 			1
 		);
 
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
 		if ( ! isset( $_GET['run_id'] ) ) {
 			add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
 			add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
@@ -62,6 +63,7 @@ class Test_Runs_Page {
 	 * @param string $classes Body classes.
 	 */
 	public function add_body_class( $classes ) {
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
 		if ( isset( $_GET['run_id'] ) ) {
 			$classes .= ' vrts-test-run-wrap';
 		}
@@ -78,9 +80,8 @@ class Test_Runs_Page {
 		$run = Test_Run::get_item( $run_id );
 
 		if ( $run ) {
-			// $alerts_ids = maybe_unserialize( $run->alerts );
 			$alerts = Alert::get_items_by_test_run( $run_id );
-			[ $alert_id, $alert ] = $this->get_alert( $alerts );
+			list($alert_id, $alert) = $this->get_alert( $alerts );
 			$base_link = add_query_arg( [
 				'run_id' => $run_id,
 			], admin_url( 'admin.php?page=vrts-runs' ) );
@@ -124,7 +125,13 @@ class Test_Runs_Page {
 		}//end if
 	}
 
+	/**
+	 * Get alert.
+	 *
+	 * @param array $alerts Alerts.
+	 */
 	private function get_alert( $alerts ) {
+		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
 		$alert_id = isset( $_GET['alert_id'] ) ? intval( $_GET['alert_id'] ) : ( isset( $alerts[0] ) ? $alerts[0]->id : 0 );
 		$alert = Alert::get_item( $alert_id );
 		if ( ! $alert ) {

@@ -75,7 +75,6 @@ class Rest_Test_Runs_Controller extends WP_REST_Controller {
 		$service = new Test_Run_Service();
 		$service->update_latest_alert_for_all_tests( $test_run );
 
-		// return rest_ensure_response( $response );
 		return new WP_REST_Response( true, 200 );
 	}
 }

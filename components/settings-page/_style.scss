@@ -11,7 +11,7 @@
 
 		span {
 			display: block;
-			margin-top: .75rem;
+			margin-top: 0.75rem;
 			font-size: 13px;
 			line-height: 1.5;
 			font-weight: 400;
@@ -25,6 +25,7 @@
 	}
 
 	input {
+
 		&[readonly] {
 			border-color: #8c8f94;
 			background-color: #fff;
@@ -33,6 +34,7 @@
 	}
 
 	.form-table {
+
 		th,
 		td {
 			padding: 0 24px 24px 0;
@@ -56,6 +58,7 @@
 	}
 
 	&__modal {
+
 		&-info {
 			margin-top: 0;
 		}

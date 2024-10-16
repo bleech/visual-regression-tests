@@ -146,6 +146,8 @@ class Test {
 	/**
 	 * Get all running test items from database
 	 *
+	 * @param bool $return_count Optional.
+	 *
 	 * @return array
 	 */
 	public static function get_all_running( $return_count = false ) {
@@ -153,7 +155,7 @@ class Test {
 
 		$tests_table = Tests_Table::get_table_name();
 
-		if ($return_count) {
+		if ( $return_count ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			return $wpdb->get_var(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.

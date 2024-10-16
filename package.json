@@ -18,7 +18,7 @@
 		"url": "https://github.com/bleech/visual-regression-tests/issues"
 	},
 	"engines": {
-		"node": "16"
+		"node": "20"
 	},
 	"files": [
 		"assets",

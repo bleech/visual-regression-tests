@@ -220,7 +220,7 @@ class Onboarding {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
 		if ( in_array( $page, [ 'vrts-tests', 'vrts-runs', 'vrts-settings' ], true ) ) {
-			$has_migrated_alerts = get_option( 'vrts_test_runs_has_migrated_alerts');
+			$has_migrated_alerts = get_option( 'vrts_test_runs_has_migrated_alerts' );
 
 			if ( $has_migrated_alerts ) {
 				return true;

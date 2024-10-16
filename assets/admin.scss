@@ -1,5 +1,5 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
-@import './styles/animations';
+@import "./styles/animations";
 
 .vrts-list-table-page {
 
@@ -76,6 +76,7 @@
 
 		&.column-trigger,
 		&.column-status {
+
 			@media (max-width: 782px) {
 				padding-block: 10px !important;
 			}

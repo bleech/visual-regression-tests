@@ -18,6 +18,7 @@ class Render_Template_Service {
 			return '';
 		}
 
+		// phpcs:ignore WordPress.PHP.DontExtract.extract_extract -- It's ok.
 		extract( $context );
 
 		ob_start();

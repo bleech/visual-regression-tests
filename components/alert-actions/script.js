@@ -107,9 +107,7 @@ class VrtsAlertActions extends window.HTMLElement {
 			.then( ( response ) => {
 				return response.json();
 			} )
-			.then( ( data ) => {
-				// console.log( data );
-
+			.then( () => {
 				const loadingTimeoutTime =
 					loadingElapsedTime > 0
 						? Math.abs( loadingElapsedTime - 400 )

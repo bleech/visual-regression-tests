@@ -85,7 +85,6 @@ class Rest_Alerts_Controller extends WP_REST_Controller {
 			$service->unmark_alert_as_false_positive( $id );
 		}
 
-		// return rest_ensure_response( $response );
 		return new WP_REST_Response( true, 200 );
 	}
 
@@ -110,7 +109,6 @@ class Rest_Alerts_Controller extends WP_REST_Controller {
 		$test_service = new Test_Service();
 		$test_service->update_latest_alert( $alert->post_id );
 
-		// return rest_ensure_response( $response );
 		return new WP_REST_Response( true, 200 );
 	}
 }

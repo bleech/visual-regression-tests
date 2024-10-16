@@ -52,7 +52,7 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 							<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
 						</figure>
 						<span class="vrts-test-run-alerts__card-title">
-							<span class="vrts-test-run-alerts__card-title-inner"><?php echo get_the_title( $alert->post_id ); ?></span>
+							<span class="vrts-test-run-alerts__card-title-inner"><?php echo esc_html( get_the_title( $alert->post_id ) ); ?></span>
 						</span>
 					</a>
 					<a href="<?php echo esc_url( get_permalink( $alert->post_id ) ); ?>" target="_blank" class="vrts-test-run-alerts__card-path"><?php echo esc_html( $tested_url ); ?></a>
