@@ -1,40 +1,53 @@
-/**
- * @param {HTMLTableElement} table
- */
-function highlightNewTestRuns( table ) {
-	if ( ! table ) {
-		return;
+class VrtsTestRunsPage extends window.HTMLElement {
+	constructor() {
+		super();
+		this.resolveElements();
 	}
-	const { localStorage } = window;
-	const testRunIds = new Set(
-		JSON.parse( localStorage.getItem( 'vrtsNewTestRuns' ) || '[]' )
-	);
-	const rows = table.querySelectorAll( 'tr[data-test-run-id]' );
 
-	let staggerTimeout = 0;
+	resolveElements() {
+		this.$runsListTable = this.querySelector(
+			'form .vrts-test-runs-list-table'
+		);
+	}
 
-	rows.forEach( ( row ) => {
-		const testRunId = row.getAttribute( 'data-test-run-id' );
+	connectedCallback() {
+		this.highlightNewTestRuns();
+	}
 
-		if ( row.getAttribute( 'data-test-run-new' ) === 'true' ) {
-			if ( ! testRunIds.has( testRunId ) ) {
-				testRunIds.add( testRunId );
-				setTimeout( () => {
-					row.classList.add( 'test-run-highlighted' );
-				}, staggerTimeout );
-				staggerTimeout += 200;
+	highlightNewTestRuns() {
+		const testRunIds = new Set(
+			JSON.parse(
+				window.localStorage.getItem( 'vrtsNewTestRuns' ) || '[]'
+			)
+		);
+
+		const rows = this.$runsListTable.querySelectorAll(
+			'tr[data-test-run-id]'
+		);
+
+		let staggerTimeout = 0;
+
+		rows.forEach( ( row ) => {
+			const testRunId = row.getAttribute( 'data-test-run-id' );
+
+			if ( row.getAttribute( 'data-test-run-new' ) === 'true' ) {
+				if ( ! testRunIds.has( testRunId ) ) {
+					testRunIds.add( testRunId );
+					setTimeout( () => {
+						row.classList.add( 'test-run-highlighted' );
+					}, staggerTimeout );
+					staggerTimeout += 200;
+				}
+			} else if ( testRunIds.has( testRunId ) ) {
+				testRunIds.delete( testRunId );
 			}
-		} else if ( testRunIds.has( testRunId ) ) {
-			testRunIds.delete( testRunId );
-		}
-	} );
+		} );
 
-	localStorage.setItem(
-		'vrtsNewTestRuns',
-		JSON.stringify( [ ...testRunIds ] )
-	);
+		window.localStorage.setItem(
+			'vrtsNewTestRuns',
+			JSON.stringify( [ ...testRunIds ] )
+		);
+	}
 }
 
-highlightNewTestRuns(
-	document.querySelector( 'form .vrts-test-runs-list-table' )
-);
+window.customElements.define( 'vrts-test-runs-page', VrtsTestRunsPage );

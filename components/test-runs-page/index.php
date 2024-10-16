@@ -1,4 +1,4 @@
-<div class="wrap vrts-list-table-page vrts-test-runs-page">
+<vrts-test-runs-page class="wrap vrts-list-table-page vrts-test-runs-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Runs', 'visual-regression-tests' ); ?>
 	</h1>
@@ -36,4 +36,4 @@
 		Admin_Notices::render_notification( 'test_started', false, [] );
 	}
 	?>
-</div>
+</vrts-test-runs-page>
