@@ -188,6 +188,10 @@
 		border-block: 1px solid transparent;
 		height: 100%;
 		width: 4px;
+
+		@container (max-width: 600px) {
+			margin-left: -7.5px;
+		}
 	}
 
 	&__slider {
@@ -230,7 +234,7 @@
 
 		box-sizing: border-box;
 		position: sticky;
-		top: calc(var(--wp-admin--admin-bar--height) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
+		top: calc((var(--vrts-comparisons-handle-size) / 2) + 10%);
 		width: 100%;
 		height: calc(var(--vrts-comparisons-handle-size) + 10px);
 		display: flex;

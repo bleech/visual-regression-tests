@@ -31,6 +31,7 @@
 	}
 
 	&__sidebar {
+		order: 2;
 
 		&::-webkit-scrollbar {
 			width: 2px;
@@ -46,6 +47,7 @@
 		}
 
 		@media (min-width: 851px) {
+			order: -1;
 			width: 280px;
 			position: sticky;
 			top: var(--wp-admin--admin-bar--height);
@@ -58,12 +60,17 @@
 
 	&__content {
 		flex: 1;
+		padding-top: 10px;
 		padding-bottom: 20px;
 
 		&[data-vrts-fullscreen="true"] {
 			overflow: auto;
 			padding: 0 20px 20px 20px;
 			background-color: #f0f0f1;
+		}
+
+		@media (min-width: 851px) {
+			padding-top: 0;
 		}
 
 		&-heading {
