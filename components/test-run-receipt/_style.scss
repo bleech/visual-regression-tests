@@ -1,6 +1,6 @@
 @import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
 
-.vrts-test-run-reciept {
+.vrts-test-run-receipt {
 	position: relative;
 	padding: 0 12px;
 	margin: 8px 20px 20px;
@@ -81,22 +81,43 @@
 
 	&__info {
 		text-align: center;
+		font-size: 11px;
 	}
 
-	&__pages-status {
+	&__pages-status,
+	&__total {
+		line-height: 16px;
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+
+		&-heading,
+		&-row {
+			display: flex;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		&-heading {
+			font-size: 12px;
+			font-weight: 700;
+		}
+
+		&-row {
+			font-size: 11px;
+		}
 
 		a {
 			-webkit-box-orient: vertical;
 			-webkit-line-clamp: 1;
 			display: -webkit-box;
 			color: inherit;
-			font-size: 13px;
-			line-height: 1.4;
-			max-block-size: calc(13px * 1.4);
+			max-block-size: 16px;
 			overflow: hidden;
 			text-overflow: ellipsis;
-			white-space: initial;
 			text-decoration: none;
+			white-space: initial;
+			word-break: break-all;
 
 			&:hover {
 				text-decoration: underline;
@@ -104,40 +125,24 @@
 		}
 	}
 
-	table {
-		width: 100%;
-
-		th,
-		td {
-			vertical-align: top;
-			padding-block: 2px;
-		}
-
-		tr > :first-child {
-			text-align: left;
-			padding-right: 5px;
-		}
-
-		tr > :last-child {
-			text-align: right;
-			padding-left: 5px;
-		}
-	}
-
 	&__total {
 		border-top: 1px dashed #c3c4c7;
 		margin-top: 2px;
 
-		th {
-			font-size: 15px;
+		&-heading {
+			font-size: 14px;
 		}
 
-		&-success {
-			color: #4ab866;
-		}
+		&-row {
+			font-size: 12px;
 
-		&-failed {
-			color: #b32d2e;
+			&--success {
+				color: #4ab866;
+			}
+
+			&--failed {
+				color: #b32d2e;
+			}
 		}
 	}
 

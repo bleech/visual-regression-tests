@@ -80,5 +80,5 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 			</script>
 		</div>
 	<?php endif; ?>
-	<?php vrts()->component( 'test-run-reciept', $data ); ?>
+	<?php vrts()->component( 'test-run-receipt', $data ); ?>
 </vrts-test-run-alerts>
