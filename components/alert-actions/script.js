@@ -16,6 +16,9 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.$hideElementsForm = this.querySelector(
 			'[data-vrts-hide-elements-form]'
 		);
+		this.$hideElementsModal = document.getElementById(
+			'vrts-modal-hide-elements'
+		);
 		this.$spinner = this.querySelector( '.spinner' );
 		this.$success = this.querySelector(
 			'.vrts-alert-actions__modal-action-success'
@@ -26,6 +29,8 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.onActionClick = this.onActionClick.bind( this );
 		this.onHideElementsFormSubmit =
 			this.onHideElementsFormSubmit.bind( this );
+		this.onHideElementsModalClose =
+			this.onHideElementsModalClose.bind( this );
 	}
 
 	bindEvents() {
@@ -35,6 +40,10 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.$hideElementsForm.addEventListener(
 			'submit',
 			this.onHideElementsFormSubmit
+		);
+		this.$hideElementsModal.addEventListener(
+			'hide',
+			this.onHideElementsModalClose
 		);
 	}
 
@@ -65,6 +74,10 @@ class VrtsAlertActions extends window.HTMLElement {
 				this.$spinner.classList.remove( 'is-active' );
 				this.$success.classList.add( 'is-active' );
 			} );
+	}
+
+	onHideElementsModalClose() {
+		this.$success.classList.remove( 'is-active' );
 	}
 
 	onActionClick( e ) {
@@ -155,6 +168,10 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.$hideElementsForm?.removeEventListener(
 			'submit',
 			this.onHideElementsFormSubmit
+		);
+		this.$hideElementsModal?.removeEventListener(
+			'hide',
+			this.onHideElementsModalClose
 		);
 	}
 }
