@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Alerts_Table {
 
-	const DB_VERSION = '1.4';
+	const DB_VERSION = '1.2';
 	const TABLE_NAME = 'vrts_alerts';
 
 	/**
@@ -54,17 +54,17 @@ class Alerts_Table {
 				meta text,
 				PRIMARY KEY (id)
 			) $charset_collate;";
+
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
 			dbDelta( $sql );
+
+			if ( $installed_version && version_compare( $installed_version, '1.2', '<' ) ) {
+				static::set_is_false_positive_from_alert_state();
+			}
+
 			update_option( $option_name, self::DB_VERSION );
-
 		}//end if
-		if ( $installed_version <= '1.2' ) {
-			static::set_is_false_positive_from_alert_state();
-		}
 	}
-
 
 	/**
 	 * Drop the database table for tests.
