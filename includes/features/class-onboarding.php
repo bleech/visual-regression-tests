@@ -153,7 +153,7 @@ class Onboarding {
 	 */
 	public function should_display_tests_welcome_onboarding() {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
-		if ( 'vrts-tests' === $page ) {
+		if ( 'vrts' === $page ) {
 			$frontpage_id = get_option( 'page_on_front' );
 			$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 			$next_id = Test::get_autoincrement_value();
@@ -175,7 +175,7 @@ class Onboarding {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 		$is_new_test_added = isset( $_GET['new-test-added'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
-		if ( 'vrts-tests' === $page && $is_new_test_added ) {
+		if ( 'vrts' === $page && $is_new_test_added ) {
 			$frontpage_id = get_option( 'page_on_front' );
 			$is_front_page_added = ! is_null( Test::get_item_id( $frontpage_id ) );
 			$next_id = Test::get_autoincrement_value();
@@ -197,7 +197,7 @@ class Onboarding {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 		$has_subscription = (bool) Subscription::get_subscription_status();
 
-		if ( 'vrts-tests' === $page && $has_subscription ) {
+		if ( 'vrts' === $page && $has_subscription ) {
 			$tests = Test::get_items();
 
 			foreach ( $tests as $test ) {
@@ -219,7 +219,7 @@ class Onboarding {
 	public function should_display_runs_introduction_onboarding() {
 		$page = sanitize_text_field( wp_unslash( $_GET['page'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 
-		if ( in_array( $page, [ 'vrts-tests', 'vrts-runs', 'vrts-settings' ], true ) ) {
+		if ( in_array( $page, [ 'vrts', 'vrts-runs', 'vrts-settings' ], true ) ) {
 			$has_migrated_alerts = get_option( 'vrts_test_runs_has_migrated_alerts' );
 
 			if ( $has_migrated_alerts ) {

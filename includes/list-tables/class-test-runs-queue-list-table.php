@@ -43,7 +43,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		printf(
 			/* translators: %1$s, %2$s link wrapper. */
 			esc_html__( 'No Runs in the queue. %1$sAdd Tests%2$s to get started.', 'visual-regression-tests' ),
-			'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-tests' ) ) . '">',
+			'<a href="' . esc_url( Url_Helpers::get_page_url( 'tests' ) ) . '">',
 			'</a>'
 		);
 	}
@@ -251,7 +251,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 			$instructions = sprintf(
 				'<a href="%1$s">%2$s</a> | <a href="%3$s">%4$s</a>',
 				// translators: %s: number of tests.
-				esc_url( Url_Helpers::get_tests_url() ),
+				esc_url( Url_Helpers::get_page_url( 'tests' ) ),
 				sprintf(
 					/* translators: %s Test. Test count */
 					esc_html( _n( '%s Test', '%s Tests', $number_of_tests, 'visual-regression-tests' ) ),

@@ -1,5 +1,10 @@
+<?php
+
+use Vrts\Core\Utilities\Url_Helpers;
+
+?>
 <nav class="vrts_admin_header_menu">
-	<a class="vrts_logo_link" href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-tests' ) ); ?>">
+	<a class="vrts_logo_link" href="<?php echo esc_url( Url_Helpers::get_page_url( 'tests' ) ); ?>">
 		<h2>
 			<span class="vrts_logo"><?php vrts()->logo(); ?></span>
 			<?php echo esc_html( $data['plugin_name'] ); ?>

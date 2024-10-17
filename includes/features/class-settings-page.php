@@ -242,7 +242,7 @@ class Settings_Page {
 			'id' => 'vrts_email_manual_notification_address',
 			'section' => 'vrts-settings-section-notifications',
 			'title' => esc_html__( 'Manual', 'visual-regression-tests' ),
-			'description' => esc_html__( 'Alerts are automatically sent to the user who Triggers the Manual Test.', 'visual-regression-tests' ),
+			'description' => esc_html__( 'Alerts are automatically sent to the user who triggers the Manual Test.', 'visual-regression-tests' ),
 			'is_pro' => $has_subscription,
 		]);
 	}

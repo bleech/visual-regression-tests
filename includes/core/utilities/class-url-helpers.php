@@ -25,6 +25,17 @@ class Url_Helpers {
 	}
 
 	/**
+	 * Get the page URL.
+	 *
+	 * @param string $page Page.
+	 *
+	 * @return string
+	 */
+	public static function get_page_url( $page ) {
+		return admin_url( 'admin.php?page=' . $page );
+	}
+
+	/**
 	 * Get the alert page URL.
 	 *
 	 * @param int|Alert $alert_id Alert ID.
@@ -68,7 +79,7 @@ class Url_Helpers {
 	 */
 	public static function get_run_manual_test_url( $test_id ) {
 		return add_query_arg( [
-			'page' => 'vrts-tests',
+			'page' => 'vrts',
 			'action' => 'run-manual-test',
 			'test_id' => $test_id,
 		], admin_url( 'admin.php' ) );
@@ -83,7 +94,7 @@ class Url_Helpers {
 	 */
 	public static function get_disable_testing_url( $test_id ) {
 		return add_query_arg( [
-			'page' => 'vrts-tests',
+			'page' => 'vrts',
 			'action' => 'disable-testing',
 			'test_id' => $test_id,
 		], admin_url( 'admin.php' ) );
@@ -105,74 +116,5 @@ class Url_Helpers {
 			'page' => 'vrts-runs',
 			'run_id' => $test_run_id,
 		], admin_url( 'admin.php' ) );
-	}
-
-	/**
-	 * Get the test runs page URL.
-	 *
-	 * @return string
-	 */
-	public static function get_test_runs_page() {
-		return add_query_arg( [
-			'page' => 'vrts-runs',
-		], admin_url( 'admin.php' ) );
-	}
-
-	/**
-	 * Get the mark run as read page URL.
-	 *
-	 * @param int  $test_run_id Test run id.
-	 * @param bool $redirect_to_overview Redirect to overview.
-	 *
-	 * @return string
-	 */
-	public static function get_mark_as_read_url( $test_run_id, $redirect_to_overview = false ) {
-		$url = static::get_test_run_page( $test_run_id );
-		return add_query_arg( [
-			'action' => 'mark_as_read',
-			'redirect' => $redirect_to_overview ? 'overview' : '',
-		], $url );
-	}
-
-	/**
-	 * Get the mark run as unread page URL.
-	 *
-	 * @param int  $test_run_id Test run id.
-	 * @param bool $redirect_to_overview Redirect to overview.
-	 *
-	 * @return string
-	 */
-	public static function get_mark_as_unread_url( $test_run_id, $redirect_to_overview = false ) {
-		$url = static::get_test_run_page( $test_run_id );
-		return add_query_arg( [
-			'action' => 'mark_as_unread',
-			'redirect' => $redirect_to_overview ? 'overview' : '',
-		], $url );
-	}
-
-	/**
-	 * Get the tests page URL.
-	 *
-	 * @return string
-	 */
-	public static function get_tests_url() {
-		return admin_url( 'admin.php?page=vrts-tests' );
-	}
-
-	/**
-	 * Get the set false positive page URL.
-	 *
-	 * @param int  $test_run_id Test run id.
-	 * @param int  $alert_id Alert id.
-	 * @param bool $is_false_positive Is false positive.
-	 *
-	 * @return string
-	 */
-	public static function get_set_false_positive_url( $test_run_id, $alert_id, $is_false_positive = false ) {
-		$url = static::get_test_run_page( $test_run_id ) . '&alert_id=' . $alert_id;
-		return add_query_arg( [
-			'action' => $is_false_positive ? 'remove_false_positive' : 'flag_false_positive',
-			'redirect' => '',
-		], $url );
 	}
 }

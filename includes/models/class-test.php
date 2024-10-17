@@ -947,7 +947,7 @@ class Test {
 					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $next_run->scheduled_at );
 				}
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
-				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts-tests' === $_GET['page'] ) {
+				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
 					$instructions .= sprintf(
 						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
 						Url_Helpers::get_run_manual_test_url( $test->id ),
@@ -965,7 +965,7 @@ class Test {
 					$instructions .= Date_Time_Helpers::get_formatted_relative_date_time( $test->last_comparison_date );
 				}
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
-				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts-tests' === $_GET['page'] ) {
+				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
 					$instructions .= sprintf(
 						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
 						Url_Helpers::get_run_manual_test_url( $test->id ),

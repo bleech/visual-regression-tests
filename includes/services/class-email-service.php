@@ -2,7 +2,6 @@
 
 namespace Vrts\Services;
 
-use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;

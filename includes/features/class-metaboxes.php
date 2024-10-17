@@ -5,10 +5,8 @@ namespace Vrts\Features;
 use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Core\Utilities\Image_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
-use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
-use WP_Error;
 
 class Metaboxes {
 
@@ -136,7 +134,7 @@ class Metaboxes {
 		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
-			'plugin_url' => admin_url( 'admin.php?page=vrts-tests' ),
+			'plugin_url' => Url_Helpers::get_page_url( 'tests' ),
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
