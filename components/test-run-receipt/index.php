@@ -56,7 +56,8 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 				printf(
 					/* translators: %s. Number of tests */
 					esc_html( _n( '%s Test', '%s Tests', count( $data['tests'] ), 'visual-regression-tests' ) ), count( $data['tests'] )
-				); ?>
+				);
+				?>
 			</span>
 		</div>
 		<div class="vrts-test-run-receipt__total-row vrts-test-run-receipt__total-row--success">
