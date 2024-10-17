@@ -52,7 +52,7 @@ class Url_Helpers {
 	 * @return string
 	 */
 	public static function get_alerts_page( $test_run ) {
-		$test_run_id = is_object( $test_run ) ? $test_run->ID : $test_run;
+		$test_run_id = is_object( $test_run ) ? $test_run->id : $test_run;
 		return add_query_arg( [
 			'page' => 'vrts-runs',
 			'run_id' => $test_run_id,
@@ -98,13 +98,13 @@ class Url_Helpers {
 	 */
 	public static function get_test_run_page( $test_run_id ) {
 		if ( is_object( $test_run_id ) ) {
-			$test_run_id = $test_run_id->ID;
-		} else {
-			return add_query_arg( [
-				'page' => 'vrts-runs',
-				'run_id' => $test_run_id,
-			], admin_url( 'admin.php' ) );
+			$test_run_id = $test_run_id->id;
 		}
+
+		return add_query_arg( [
+			'page' => 'vrts-runs',
+			'run_id' => $test_run_id,
+		], admin_url( 'admin.php' ) );
 	}
 
 	/**

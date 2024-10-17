@@ -52,7 +52,9 @@ class Manual_Test_Service {
 			return $test->service_test_id;
 		}, $tests );
 		self::set_option();
-		$request = Service::run_manual_tests( $service_test_ids );
+		$request = Service::run_manual_tests( $service_test_ids, [
+			'trigger_meta' => [ 'user_id' => get_current_user_id() ],
+		] );
 
 		$test_ids = array_map( function( $test ) {
 			return $test->id;

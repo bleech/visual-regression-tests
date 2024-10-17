@@ -258,7 +258,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 					$number_of_tests
 				),
 				esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
-				esc_html__( 'Edit Configuration', 'visual-regression-tests' )
+				esc_html__( 'Edit configuration', 'visual-regression-tests' )
 			);
 		}//end if
 		return sprintf(
