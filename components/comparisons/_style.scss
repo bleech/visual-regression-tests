@@ -4,6 +4,7 @@
 .vrts-comparisons {
 	--vrts-comparisons-slider-position: 50%;
 
+	container-type: inline-size;
 	display: block;
 	box-sizing: border-box;
 	border-top: 0;
@@ -152,12 +153,16 @@
 	}
 
 	&__content {
-		container-type: inline-size;
 		display: grid;
 		grid-template-columns: repeat(3, minmax(0, max-content));
 		justify-content: center;
 		gap: 0.25rem;
 		padding: 15px;
+
+		@container (max-width: 600px) {
+			gap: 0;
+			grid-template-columns: repeat(2, minmax(0, max-content));
+		}
 	}
 
 	&__figure {
@@ -190,7 +195,7 @@
 		width: 4px;
 
 		@container (max-width: 600px) {
-			margin-left: -7.5px;
+			margin-left: -9.5px;
 		}
 	}
 
@@ -210,6 +215,10 @@
 			border: 0;
 			height: 100%;
 			width: 100%;
+		}
+
+		[data-vrts-comparisons-slot="base"] {
+			clip-path: inset(0 calc(100% - var(--vrts-comparisons-slider-position)) 0 0);
 		}
 
 		[data-vrts-comparisons-slot="target"] {
@@ -302,7 +311,7 @@
 		&::-webkit-slider-thumb {
 			appearance: none;
 			height: 100%;
-			width: 42px;
+			width: 56px;
 		}
 	}
 }

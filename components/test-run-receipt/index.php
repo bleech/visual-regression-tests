@@ -1,6 +1,7 @@
 <?php
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test_Run;
 
 $alerts_post_ids = wp_list_pluck( $data['alerts'], 'post_id' );
@@ -30,22 +31,28 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 	</div>
 	<div class="vrts-test-run-receipt__pages-status">
 		<div class="vrts-test-run-receipt__pages-status-heading">
-			<span><?php esc_html_e( 'Pages', 'visual-regression-tests' ); ?></span>
+			<span><?php esc_html_e( 'Page', 'visual-regression-tests' ); ?></span>
 			<span><?php esc_html_e( 'Difference', 'visual-regression-tests' ); ?></span>
 		</div>
 		<?php
 		foreach ( $data['tests'] as $test ) :
-			$parsed_tested_url = wp_parse_url( get_permalink( $test->post_id ) );
-			$tested_url = $parsed_tested_url['path'];
 			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
 				return $alert->post_id === $test->post_id;
 			} ) );
 			$difference = $alert ? ceil( $alert[0]->differences / 4 ) : 0;
 			?>
 			<div class="vrts-test-run-receipt__pages-status-row">
-				<a href="<?php echo esc_url( get_permalink( $test->post_id ) ); ?>"><?php echo esc_html( $tested_url ); ?></a>
-				<span><?php echo $alert ? esc_html( sprintf( /* translators: %s. Test run receipt diff in pixels */ _x( '%spx', 'test run receipt difference', 'visual-regression-tests' ), esc_html( number_format_i18n( $difference ) ) ) ) : '-'; ?></span>
-				</div>
+				<a href="<?php echo esc_url( get_permalink( $test->post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $test->post_id ) ); ?></a>
+				<span>
+					<?php
+					printf(
+						/* translators: %s. Test run receipt diff in pixels */
+						esc_html_x( '%spx', 'test run receipt difference', 'visual-regression-tests' ),
+						esc_html( number_format_i18n( $difference ) )
+					);
+					?>
+				</span>
+			</div>
 		<?php endforeach; ?>
 	</div>
 	<div class="vrts-test-run-receipt__total">
@@ -62,11 +69,27 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 		</div>
 		<div class="vrts-test-run-receipt__total-row vrts-test-run-receipt__total-row--success">
 			<span><?php esc_html_e( 'Passed', 'visual-regression-tests' ); ?></span>
-			<span><?php echo esc_html( count( $tests_post_ids ) - count( $alerts_post_ids ) ); ?></span>
+			<span>
+				<?php
+				$passed_tests_count = count( $tests_post_ids ) - count( $alerts_post_ids );
+				printf(
+					/* translators: %s. Number of tests */
+					esc_html( _n( '%s Test', '%s Tests', $passed_tests_count, 'visual-regression-tests' ) ), esc_html( $passed_tests_count )
+				);
+				?>
+			</span>
 		</div>
 		<div class="vrts-test-run-receipt__total-row vrts-test-run-receipt__total-row--failed">
-			<span><?php esc_html_e( 'Changes Detected', 'visual-regression-tests' ); ?></span>
-			<span><?php echo esc_html( count( $alerts_post_ids ) ); ?></span>
+			<span><?php esc_html_e( 'Changes detected', 'visual-regression-tests' ); ?></span>
+			<span>
+			<?php
+				$changed_detected_count = count( $alerts_post_ids );
+				printf(
+					/* translators: %s. Number of tests */
+					esc_html( _n( '%s Test', '%s Tests', $changed_detected_count, 'visual-regression-tests' ) ), esc_html( $changed_detected_count )
+				);
+				?>
+			</span>
 		</div>
 	</div>
 	<div class="vrts-test-run-receipt__trigger">

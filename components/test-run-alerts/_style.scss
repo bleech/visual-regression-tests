@@ -9,6 +9,7 @@
 		background: #f0f0f1;
 		padding: 0;
 		height: 62px;
+		overflow: hidden;
 		transition: box-shadow 0.2s;
 
 		&[data-is-sticky="true"] {
@@ -63,7 +64,8 @@
 	&__list {
 		display: flex;
 		gap: 10px;
-		padding-bottom: 10px;
+		padding: 0 10px 10px 10px;
+		margin: 0 -10px;
 		overflow-x: scroll;
 		-webkit-overflow-scrolling: touch;
 
@@ -71,7 +73,7 @@
 			flex-direction: column;
 			overflow: visible;
 			padding: 0 20px;
-			margin-bottom: 21px;
+			margin: 0 0 20px 0;
 		}
 	}
 

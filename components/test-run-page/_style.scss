@@ -19,12 +19,12 @@
 	--vrts-test-run-page-offset: 54px; // our header height
 
 	display: flex;
-	gap: 20px;
 	margin-right: 10px;
 	flex-direction: column;
 	min-height: 100vh;
 
 	@media (min-width: 851px) {
+		gap: 20px;
 		flex-direction: row;
 		margin-left: -20px;
 		margin-right: 20px;
@@ -32,7 +32,6 @@
 
 	&__sidebar {
 		order: 2;
-		overflow: hidden;
 
 		&::-webkit-scrollbar {
 			width: 2px;
@@ -100,12 +99,16 @@
 		}
 
 		&-navigation-info {
-			display: flex;
+			display: none;
 			align-items: center;
 			justify-content: center;
 			gap: 0.25rem;
 			margin-top: 1rem;
 			color: #757575;
+
+			@media (min-width: 851px) {
+				display: flex;
+			}
 
 			svg {
 				color: $gray-70;

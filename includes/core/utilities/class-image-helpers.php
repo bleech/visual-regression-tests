@@ -32,7 +32,7 @@ class Image_Helpers {
 			return round( $meta['width'] / $meta['height'], 2 );
 		}
 
-		return 0;
+		return 0.5;
 	}
 
 	/**

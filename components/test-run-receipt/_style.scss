@@ -3,11 +3,13 @@
 .vrts-test-run-receipt {
 	position: relative;
 	padding: 0 12px;
-	margin: 30px 0 30px 0;
+	margin: 30px auto 30px auto;
 	background-color: #f6f7fb;
 	box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+	max-width: 280px;
 
 	@media (min-width: 851px) {
+		max-width: 100%;
 		margin: 8px 20px 20px;
 	}
 
@@ -84,7 +86,9 @@
 	}
 
 	&__info {
-		text-align: center;
+		display: flex;
+		gap: 10px;
+		justify-content: center;
 		font-size: 11px;
 	}
 
@@ -105,6 +109,7 @@
 		&-heading {
 			font-size: 12px;
 			font-weight: 700;
+			line-height: 1.6;
 		}
 
 		&-row {
@@ -135,6 +140,10 @@
 
 		&-heading {
 			font-size: 14px;
+
+			& > :first-child {
+				text-transform: uppercase;
+			}
 		}
 
 		&-row {
@@ -156,6 +165,8 @@
 
 		.vrts-test-run-trigger {
 			font-size: inherit;
+			margin-left: 5px;
+			margin-right: 5px;
 		}
 
 		&-notes {
