@@ -3,7 +3,7 @@
  * Plugin Name:       VRTs – Visual Regression Tests
  * Plugin URI:        https://vrts.app/
  * Description:       Test your website for unwanted visual changes. Run automatic tests and spot differences.
- * Version:           2.0.0
+ * Version:           2.0.0-beta.1
  * Requires at least: 5.0
  * Requires PHP:      7.0
  * Author:            Bleech
@@ -14,8 +14,6 @@
  */
 
 use Vrts\Core\Plugin;
-use Vrts\Features\Email_Notifications;
-use Vrts\Services\Render_Template_Service;
 
 defined( 'ABSPATH' ) || exit;
 
