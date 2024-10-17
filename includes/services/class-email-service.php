@@ -17,9 +17,10 @@ class Email_Service {
 	 */
 	public function send_test_run_email( $test_run_id ) {
 		$subject = sprintf(
-			/* translators: %1$s: the id of the alert, %2$s: the test url */
-			esc_html_x( 'VRTs: Alert for Test Run #%1$s', 'test run notification email subject', 'visual-regression-tests' ),
-			$test_run_id
+			/* translators: %1$s: the id of the test run, %2$s: home url */
+			esc_html_x( 'VRTs: Changes detected in Run #%1$s (%2$s)', 'test run notification email subject', 'visual-regression-tests' ),
+			$test_run_id,
+			esc_url( home_url() )
 		);
 
 		$data = $this->get_test_run_email_data( $test_run_id );
