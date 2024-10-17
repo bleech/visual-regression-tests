@@ -1,3 +1,9 @@
+<?php
+
+use Vrts\Features\Admin_Notices;
+use Vrts\Services\Manual_Test_Service;
+
+?>
 <vrts-test-runs-page class="wrap vrts-list-table-page vrts-test-runs-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Runs', 'visual-regression-tests' ); ?>
@@ -12,8 +18,6 @@
 	$list_table->display();
 	?>
 
-	<form id="vrts-filter-alerts-form" action="<?php echo esc_url( admin_url( 'admin.php?page=vrts-alerts' ) ); ?>" method="post"></form>
-
 	<form method="post">
 		<?php
 		$list_table = $data['list_table'];
@@ -27,9 +31,6 @@
 		?>
 	</form>
 	<?php
-	use Vrts\Features\Admin_Notices;
-	use Vrts\Services\Manual_Test_Service;
-
 	$vrts_manual_test_service = new Manual_Test_Service();
 	$test_status = $vrts_manual_test_service->get_option();
 	if ( $test_status ) {

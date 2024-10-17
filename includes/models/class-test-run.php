@@ -462,7 +462,7 @@ class Test_Run {
 					sprintf(
 						// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
 						wp_kses( __( '%1$sRefresh page%2$s to see results', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
-						'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-runs' ) ) . '">',
+						'<a href="' . esc_url( Url_Helpers::get_page_url( 'runs' ) ) . '">',
 						'</a>'
 					)
 				);
@@ -472,7 +472,7 @@ class Test_Run {
 				$text = esc_html__( 'Pending', 'visual-regression-tests' );
 				$instructions .= sprintf(
 					'<a href="%1$s">%2$s</a>',
-					esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
+					esc_url( Url_Helpers::get_page_url( 'settings' ) ),
 					esc_html__( 'Edit Test Configuration', 'visual-regression-tests' )
 				);
 				break;

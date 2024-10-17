@@ -103,7 +103,7 @@ const NotificationUpgradeRequired = ( { upgradeUrl = '' } ) => {
 									'Looks like you need a bigger plan to add more tests.',
 									'visual-regression-tests'
 								),
-								upgradeUrl, //admin_url( 'admin.php?page=vrts-upgrade' )
+								upgradeUrl,
 								__( 'Upgrade here!', 'visual-regression-tests' )
 							)
 						),

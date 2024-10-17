@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\List_Tables\Test_Runs_List_Table;
 use Vrts\List_Tables\Test_Runs_Queue_List_Table;
 use Vrts\Models\Alert;
@@ -84,7 +85,7 @@ class Test_Runs_Page {
 			list($alert_id, $alert) = $this->get_alert( $alerts );
 			$base_link = add_query_arg( [
 				'run_id' => $run_id,
-			], admin_url( 'admin.php?page=vrts-runs' ) );
+			], Url_Helpers::get_page_url( 'runs' ) );
 
 			Alert::set_alert_state( $alert_id, 1 );
 			$service = new Test_Run_Service();

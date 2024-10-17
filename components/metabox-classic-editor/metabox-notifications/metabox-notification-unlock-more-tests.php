@@ -1,3 +1,8 @@
+<?php
+
+use Vrts\Core\Utilities\Url_Helpers;
+
+?>
 <div class="vrts-metabox-notice vrts-metabox-notice-is-info">
 	<p><strong><?php esc_html_e( 'Unlock more tests', 'visual-regression-tests' ); ?></strong></p>
 	<p>
@@ -13,7 +18,7 @@
 			sprintf(
 				/* translators: %1$s, %2$s: link wrapper. */
 				esc_html__( 'Upgrade %1$shere%2$s to add more tests to your website!', 'visual-regression-tests' ),
-				'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-upgrade' ) ) . '" target="_blank">',
+				'<a href="' . esc_url( Url_Helpers::get_page_url( 'upgrade' ) ) . '" target="_blank">',
 				'</a>'
 			)
 		)

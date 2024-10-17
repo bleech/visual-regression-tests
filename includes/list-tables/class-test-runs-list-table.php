@@ -94,7 +94,7 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_views() {
-		$base_link = admin_url( 'admin.php?page=vrts-runs' );
+		$base_link = Url_Helpers::get_page_url( 'runs' );
 
 		$links = [
 			'all' => [

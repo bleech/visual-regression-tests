@@ -2,13 +2,10 @@
 
 namespace Vrts\List_Tables;
 
-use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use Vrts\Models\Alert;
-use Vrts\Services\Manual_Test_Service;
 use Vrts\Services\Test_Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {

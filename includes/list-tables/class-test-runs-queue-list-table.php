@@ -70,7 +70,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_views() {
-		$base_link = admin_url( 'admin.php?page=vrts-runs' );
+		$base_link = Url_Helpers::get_page_url( 'runs' );
 
 		$links = [
 			'all' => [
@@ -241,7 +241,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 				sprintf(
 					// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
 					wp_kses( __( '%1$sRefresh page%2$s to see results', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
-					'<a href="' . esc_url( admin_url( 'admin.php?page=vrts-runs' ) ) . '">',
+					'<a href="' . esc_url( Url_Helpers::get_page_url( 'runs' ) ) . '">',
 					'</a>'
 				)
 			);
@@ -257,7 +257,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 					esc_html( _n( '%s Test', '%s Tests', $number_of_tests, 'visual-regression-tests' ) ),
 					$number_of_tests
 				),
-				esc_url( admin_url( 'admin.php?page=vrts-settings' ) ),
+				esc_url( Url_Helpers::get_page_url( 'settings' ) ),
 				esc_html__( 'Edit configuration', 'visual-regression-tests' )
 			);
 		}//end if

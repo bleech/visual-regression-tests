@@ -1,3 +1,8 @@
+<?php
+
+use Vrts\Core\Utilities\Url_Helpers;
+
+?>
 <vrts-alert-actions class="vrts-alert-actions">
 	<button type="button" data-vrts-dropdown-open class="vrts-alert-actions__trigger" aria-expanded="false" aria-controls="vrts-alert-actions-dropdown">
 		<?php vrts()->icon( 'more-horizontal' ); ?>
@@ -36,7 +41,7 @@
 				<?php esc_html_e( 'Hide elements', 'visual-regression-tests' ); ?>
 			</h2>
 			<div class="vrts-modal__content-inner">
-				<form data-vrts-hide-elements-form action="<?php echo esc_url( admin_url( 'admin.php?page=vrts-runs' ) ); ?>" method="put">
+				<form data-vrts-hide-elements-form action="<?php echo esc_url( Url_Helpers::get_page_url( 'runs' ) ); ?>" method="put">
 					<input type="hidden" name="post_id" value="<?php echo esc_attr( $data['alert']->post_id ); ?>">
 					<input type="hidden" name="test_id" value="<?php echo esc_attr( $data['test_settings']['test_id'] ); ?>">
 					<textarea class="widefat" name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>

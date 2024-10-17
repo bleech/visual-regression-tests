@@ -3,6 +3,7 @@
 namespace Vrts\Features;
 
 use Vrts\Core\Utilities\Sanitization;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Subscription;
 
 class Settings_Page {
@@ -103,7 +104,7 @@ class Settings_Page {
 			'description' => sprintf(
 				'%1$s <a href="%2$s" title="%3$s">%3$s</a>',
 				esc_html__( 'No license key yet?', 'visual-regression-tests' ),
-				esc_url( admin_url( 'admin.php?page=vrts-upgrade' ) ),
+				esc_url( Url_Helpers::get_page_url( 'upgrade' ) ),
 				esc_html__( 'Upgrade here.', 'visual-regression-tests' )
 			),
 			'placeholder' => esc_html_x( 'XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX', 'license key placeholder', 'visual-regression-tests' ),

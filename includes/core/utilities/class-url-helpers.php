@@ -32,6 +32,7 @@ class Url_Helpers {
 	 * @return string
 	 */
 	public static function get_page_url( $page ) {
+		$page = 'tests' === $page ? 'vrts' : 'vrts-' . $page;
 		return admin_url( 'admin.php?page=' . $page );
 	}
 

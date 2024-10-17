@@ -917,7 +917,7 @@ class Test {
 			case 'no-credit-left':
 				$class = 'paused';
 				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
+				$base_link = Url_Helpers::get_page_url( 'upgrade' );
 				$instructions = sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
 					esc_html__( '%1$sUpgrade plugin%2$s to resume testing', 'visual-regression-tests' ),

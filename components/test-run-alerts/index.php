@@ -2,6 +2,7 @@
 
 use Vrts\Models\Alert;
 use Vrts\Core\Utilities\Image_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 
 $unread_alerts = Alert::get_unread_count_by_test_run_ids( $data['run']->id );
 $unread_count = $unread_alerts[0]->count ?? 0;
@@ -9,7 +10,7 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 ?>
 <vrts-test-run-alerts class="vrts-test-run-alerts" data-vrts-current-alert="<?php echo esc_attr( isset( $data['alert']->id ) ? $data['alert']->id : 'false' ); ?>">
 	<div class="vrts-test-run-alerts__heading">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=vrts-runs' ) ); ?>" class="vrts-test-run-alerts__heading-link">
+		<a href="<?php echo esc_url( Url_Helpers::get_page_url( 'runs' ) ); ?>" class="vrts-test-run-alerts__heading-link">
 			<?php vrts()->icon( 'chevron-left' ); ?>
 			<?php esc_html_e( 'All Runs', 'visual-regression-tests' ); ?>
 		</a>
@@ -32,7 +33,7 @@ $unread_count = $unread_alerts[0]->count ?? 0;
 				$alert_link = add_query_arg( [
 					'run_id' => $data['run']->id,
 					'alert_id' => $alert->id,
-				], admin_url( 'admin.php?page=vrts-runs' ) );
+				], Url_Helpers::get_page_url( 'runs' ) );
 
 				$parsed_tested_url = wp_parse_url( get_permalink( $alert->post_id ) );
 				$tested_url = $parsed_tested_url['path'];
