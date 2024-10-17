@@ -15,15 +15,17 @@ class Manual_Test_Service {
 	 *
 	 * @return bool
 	 */
-	public function is_active() {
-		return (bool) get_option( self::OPTION_NAME_STATUS );
+	public function get_option() {
+		return get_option( self::OPTION_NAME_STATUS );
 	}
 
 	/**
 	 * Sets the option.
+	 *
+	 * @param int $status Status 1 for success, 2 for failure.
 	 */
-	public function set_option() {
-		update_option( self::OPTION_NAME_STATUS, true );
+	public function set_option( $status = 1 ) {
+		update_option( self::OPTION_NAME_STATUS, $status );
 	}
 
 	/**
@@ -51,7 +53,6 @@ class Manual_Test_Service {
 		$service_test_ids = array_map( function( $test ) {
 			return $test->service_test_id;
 		}, $tests );
-		self::set_option();
 		$request = Service::run_manual_tests( $service_test_ids );
 
 		$test_ids = array_map( function( $test ) {
@@ -59,6 +60,7 @@ class Manual_Test_Service {
 		}, $tests );
 
 		if ( 201 === $request['status_code'] ) {
+			self::set_option( 1 );
 			$response = $request['response'];
 			$service = new Test_Run_Service();
 			$id = $service->create_test_run( $response['id'], [
@@ -67,6 +69,8 @@ class Manual_Test_Service {
 				'started_at' => current_time( 'mysql' ),
 			] );
 			Cron_Jobs::schedule_initial_fetch_test_run_updates( $id );
+		} else {
+			self::set_option( 2 );
 		}
 	}
 }
