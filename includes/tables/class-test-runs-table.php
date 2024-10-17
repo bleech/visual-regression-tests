@@ -46,8 +46,9 @@ class Test_Runs_Table {
 			dbDelta( $sql );
 
 			if ( ! $installed_version ) {
-				static::create_runs_from_alerts();
-				update_option( 'vrts_test_runs_has_migrated_alerts', true );
+				if ( static::create_runs_from_alerts() ) {
+					update_option( 'vrts_test_runs_has_migrated_alerts', true );
+				}
 			}
 
 			update_option( $option_name, self::DB_VERSION );
@@ -90,6 +91,10 @@ class Test_Runs_Table {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 		$alerts = $wpdb->get_results( $sql );
 
+		if ( null === $alerts ) {
+			return false;
+		}
+
 		$test_runs = array_map(function ( $alert ) {
 			return [
 				'tests' => maybe_serialize( [ $alert->test_id ] ),
@@ -111,5 +116,7 @@ class Test_Runs_Table {
 		// update test_run_id in alerts table from newly created test runs based on alerts column.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "UPDATE {$alerts_table} a JOIN {$runs_table} r ON r.alerts LIKE CONCAT('%\"', a.id, '\"%') SET a.test_run_id = r.id;" );
+
+		return true;
 	}
 }
