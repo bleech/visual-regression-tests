@@ -3,6 +3,7 @@
 namespace Vrts\Features;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Image_Helpers;
 use Vrts\List_Tables\Alerts_List_Table;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
@@ -133,8 +134,8 @@ class Alerts_Page {
 				'alert_id' => $alert_id,
 				'alert' => $alert,
 				'permalink' => $permalink,
-				'base_screenshot_url' => $alert->base_screenshot_url,
-				'target_screenshot_url' => $alert->target_screenshot_url,
+				'base_screenshot_url' => Image_Helpers::get_cloudfront_url( $alert->base_screenshot_url ),
+				'target_screenshot_url' => Image_Helpers::get_cloudfront_url( $alert->target_screenshot_url ),
 				'target_screenshot_finish_date' => Date_Time_Helpers::get_formatted_date_time( $alert->target_screenshot_finish_date ),
 				'comparison_screenshot_url' => $alert->comparison_screenshot_url,
 				'comparison_id' => $alert->comparison_id,

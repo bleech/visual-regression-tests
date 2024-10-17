@@ -46,4 +46,15 @@ class Image_Helpers {
 		$preview_url = maybe_unserialize( $alert->meta )['preview_url'] ?? null;
 		return $preview_url ? $preview_url : $alert->comparison_screenshot_url;
 	}
+
+	/**
+	 * Get the cloudfront URL.
+	 *
+	 * @param string $url The URL.
+	 *
+	 * @return string
+	 */
+	public static function get_cloudfront_url( $url ) {
+		return str_replace( 'https://screenshotter-dev.s3.eu-central-1.amazonaws.com/', 'https://images.vrts.app/', $url );
+	}
 }

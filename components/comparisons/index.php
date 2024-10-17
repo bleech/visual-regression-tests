@@ -28,10 +28,10 @@ use Vrts\Core\Utilities\Image_Helpers;
 		<canvas class="vrts-comparisons__diff-inidicator" data-vrts-comparisons-diff-inidicator></canvas>
 		<div class="vrts-comparisons__slider" style="--vrts-comparisons-slider-aspect-ratio: <?php echo esc_attr( Image_Helpers::alert_image_aspect_ratio( $data['alert'] ) ); ?>">
 			<figure class="vrts-comparisons__figure" data-vrts-comparisons-slot="base">
-				<img class="vrts-comparisons__figure-image" <?php echo wp_kses_post( Image_Helpers::alert_image_hwstring( $data['alert'] ) ); ?> crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->base_screenshot_url ); ?>" alt="<?php esc_attr_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+				<img class="vrts-comparisons__figure-image" <?php echo wp_kses_post( Image_Helpers::alert_image_hwstring( $data['alert'] ) ); ?> crossorigin="anonymous" src="<?php echo esc_url( Image_Helpers::get_cloudfront_url( $data['alert']->base_screenshot_url ) ); ?>" alt="<?php esc_attr_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 			</figure>
 			<figure class="vrts-comparisons__figure" data-vrts-comparisons-slot="target">
-				<img class="vrts-comparisons__figure-image" <?php echo wp_kses_post( Image_Helpers::alert_image_hwstring( $data['alert'] ) ); ?> crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->target_screenshot_url ); ?>" alt="<?php esc_attr_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
+				<img class="vrts-comparisons__figure-image" <?php echo wp_kses_post( Image_Helpers::alert_image_hwstring( $data['alert'] ) ); ?> crossorigin="anonymous" src="<?php echo esc_url( Image_Helpers::get_cloudfront_url( $data['alert']->target_screenshot_url ) ); ?>" alt="<?php esc_attr_e( 'Screenshot', 'visual-regression-tests' ); ?>" />
 			</figure>
 			<span class="vrts-comparisons__slider-divider"></span>
 			<div class="vrts-comparisons__slider-handle">
