@@ -62,9 +62,14 @@ use Vrts\Services\Manual_Test_Service;
 		}
 
 		$vrts_manual_test_service = new Manual_Test_Service();
-		if ( $vrts_manual_test_service->is_active() ) {
+		$test_status = $vrts_manual_test_service->get_option();
+		if ( $test_status ) {
 			$vrts_manual_test_service->delete_option();
-			Admin_Notices::render_notification( 'test_started', false, [] );
+			if ( '1' === $test_status ) {
+				Admin_Notices::render_notification( 'test_started', false, [] );
+			} elseif ( '2' === $test_status ) {
+				Admin_Notices::render_notification( 'test_failed', false, [] );
+			}
 		}
 		?>
 	</form>

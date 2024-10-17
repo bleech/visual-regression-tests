@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\List_Tables\Tests_List_Table;
 use Vrts\Models\Test;
 use Vrts\Features\Subscription;
@@ -164,7 +165,7 @@ class Tests_Page {
 		$service = new Manual_Test_Service();
 		$service->run_tests();
 
-		$page_url = admin_url( 'admin.php?page=vrts-runs' );
+		$page_url = Url_Helpers::get_test_runs_page();
 		wp_safe_redirect( $page_url );
 		exit;
 	}
@@ -508,7 +509,7 @@ class Tests_Page {
 
 			$manual_test_service = new Manual_Test_Service();
 			$manual_test_service->run_tests( $test_ids );
-			$page_url = admin_url( 'admin.php?page=vrts-runs' );
+			$page_url = Url_Helpers::get_test_runs_page();
 			wp_safe_redirect( $page_url );
 			exit;
 		}
