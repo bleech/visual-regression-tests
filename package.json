@@ -32,23 +32,20 @@
 		"visual-regression-tests.php"
 	],
 	"dependencies": {
-		"@wordpress/components": "^22.1.0",
-		"@wordpress/dom-ready": "^3.56.0",
-		"@wordpress/edit-post": "^6.19.0",
-		"@wordpress/element": "^4.20.0",
-		"@wordpress/i18n": "^4.22.0",
-		"@wordpress/icons": "^9.47.0",
-		"@wordpress/plugins": "^4.20.0",
+		"@wordpress/components": "^28.10.0",
+		"@wordpress/dom-ready": "^4.10.0",
+		"@wordpress/edit-post": "^8.10.0",
+		"@wordpress/element": "^6.10.0",
+		"@wordpress/i18n": "^5.10.0",
+		"@wordpress/icons": "^10.10.0",
+		"@wordpress/plugins": "^7.10.0",
 		"a11y-dialog": "^8.1.1",
-		"dompurify": "^2.4.1",
+		"dompurify": "^3.1.7",
 		"driver.js": "^1.3.1",
-		"iframe-resizer": "^4.3.2",
-		"img-comparison-slider": "^7.8.1"
+		"iframe-resizer": "4.3"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^30.0.2",
-		"browser-sync": "^3.0.3",
-		"browser-sync-webpack-plugin": "^2.3.0",
+		"@wordpress/scripts": "^30.2.0",
 		"eslint-import-resolver-alias": "^1.1.2",
 		"npm-run-all": "^4.1.5"
 	},

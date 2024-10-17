@@ -41,7 +41,6 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 				return $alert->post_id === $test->post_id;
 			} ) );
 			$difference = $alert ? ceil( $alert[0]->differences / 4 ) : 0;
-			$status_why = in_array( $test->post_id, $alerts_post_ids, true ) ? __( 'Failed', 'visual-regression-tests' ) : __( 'Passed', 'visual-regression-tests' );
 			?>
 			<div class="vrts-test-run-receipt__pages-status-row">
 				<a href="<?php echo esc_url( get_permalink( $test->post_id ) ); ?>"><?php echo esc_html( $tested_url ); ?></a>
@@ -52,7 +51,13 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 	<div class="vrts-test-run-receipt__total">
 		<div class="vrts-test-run-receipt__total-heading">
 			<span><?php esc_html_e( 'Total', 'visual-regression-tests' ); ?></span>
-			<span><?php printf( esc_html( /* translators: %s. Number of tests */ _n( '%s Test', '%s Tests', count( $data['tests'] ), 'visual-regression-tests' ) ), count( $data['tests'] ) ); ?></span>
+			<span>
+				<?php
+				printf(
+					/* translators: %s. Number of tests */
+					esc_html( _n( '%s Test', '%s Tests', count( $data['tests'] ), 'visual-regression-tests' ) ), count( $data['tests'] )
+				); ?>
+			</span>
 		</div>
 		<div class="vrts-test-run-receipt__total-row vrts-test-run-receipt__total-row--success">
 			<span><?php esc_html_e( 'Passed', 'visual-regression-tests' ); ?></span>

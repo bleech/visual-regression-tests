@@ -3,13 +3,13 @@
 namespace Vrts\Services;
 
 use Vrts\Features\Cron_Jobs;
-use Vrts\Features\Email_Notifications;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Tables\Alerts_Table;
 use Vrts\Tables\Tests_Table;
+use Vrts\Services\Email_Service;
 use WP_Error;
 
 class Test_Service {
@@ -100,8 +100,8 @@ class Test_Service {
 				$test_service->update_test_from_comparison( $alert_id, $test_id, $data );
 				if ( $alert_id ) {
 					// Send e-mail notification.
-					$email_notifications = new Email_Notifications();
-					$email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
+					$email_service = new Email_Service();
+					$email_service->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
 				}//end if
 			}//end if
 			return true;

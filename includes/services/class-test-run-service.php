@@ -2,12 +2,11 @@
 
 namespace Vrts\Services;
 
-use Vrts\Features\Email_Notifications;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
+use Vrts\Services\Email_Service;
 
 class Test_Run_Service {
 
@@ -46,8 +45,8 @@ class Test_Run_Service {
 		], true);
 
 		if ( $test_run_just_finished && ! empty( $alert_ids ) ) {
-			$email_notifications = new Email_Notifications();
-			$email_notifications->send_test_run_email( $test_run_id );
+			$email_service = new Email_Service();
+			$email_service->send_test_run_email( $test_run_id );
 		}
 
 		return true;
