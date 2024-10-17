@@ -1,4 +1,3 @@
-
 <?php
 
 use Vrts\Core\Utilities\Url_Helpers;
