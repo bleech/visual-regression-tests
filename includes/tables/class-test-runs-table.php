@@ -91,7 +91,7 @@ class Test_Runs_Table {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 		$alerts = $wpdb->get_results( $sql );
 
-		if ( null === $alerts ) {
+		if ( empty( $alerts ) ) {
 			return false;
 		}
 
