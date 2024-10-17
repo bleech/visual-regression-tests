@@ -10,46 +10,7 @@ use Vrts\Models\Test_Run;
 class Email_Service {
 
 	/**
-	 * Send email.
-	 *
-	 * @param int $differences the number of differences.
-	 * @param int $post_id the id of the post.
-	 * @param int $alert_id the id of the alert.
-	 */
-	public function send_email( $differences, $post_id, $alert_id ) {
-		$notification_email = sanitize_email( vrts()->settings()->get_option( 'vrts_email_notification_address' ) );
-		$site_url = get_site_url();
-		$parse_url = wp_parse_url( $site_url );
-		$base_url  = $parse_url['scheme'] . '://' . $parse_url['host'];
-
-		$subject = sprintf(
-			/* translators: %1$s: the id of the alert, %2$s: the test url */
-			esc_html_x( 'VRTs: Alert %1$s (%2$s)', 'notification email subject', 'visual-regression-tests' ),
-			$alert_id,
-			esc_url( get_the_permalink( $post_id ) )
-		);
-
-		$message = esc_html_x( 'Howdy,', 'notification email', 'visual-regression-tests' ) . "\n\n" .
-			esc_html_x( 'New visual differences have been detected on the following page:', 'notification email', 'visual-regression-tests' ) . "\n\n" .
-			html_entity_decode( wp_specialchars_decode( get_the_title( $post_id ) ) ) . "\n\n" .
-			esc_html_x( 'View the alert:', 'notification email', 'visual-regression-tests' ) . "\n" .
-			esc_url( Url_Helpers::get_alert_page( $alert_id ) ) . "\n\n" .
-			sprintf(
-				/* translators: %1$s: the home url */
-				esc_html_x( 'This alert was sent by the Visual Regression Tests plugin on %1$s', 'notification email', 'visual-regression-tests' ), esc_url( $base_url )
-			);
-
-		$emails = vrts()->settings()->get_option( 'vrts_email_notification_address' );
-
-		if ( $emails ) {
-			return wp_mail( $notification_email, wp_specialchars_decode( $subject ), $message );
-		}
-
-		return false;
-	}
-
-	/**
-	 * Send email.
+	 * Send Test Run email.
 	 *
 	 * @param int $test_run_id the id of the test run.
 	 *
