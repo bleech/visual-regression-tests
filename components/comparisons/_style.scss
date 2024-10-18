@@ -192,6 +192,7 @@
 		background: #f0f0f1;
 		border-block: 1px solid transparent;
 		height: 100%;
+		image-rendering: pixelated;
 		width: 4px;
 
 		@container (max-width: 600px) {
