@@ -117,27 +117,23 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	updateRunsCount( unreadAlerts ) {
 		let unreadRuns = this.unreadRuns;
 
-		if ( unreadAlerts > 0 ) {
-			if ( this.initialUnreadAlerts <= 1 ) {
-				unreadRuns += 1;
-			}
-		} else if ( this.initialUnreadAlerts > 1 ) {
+		if ( unreadAlerts > 0 && this.initialUnreadAlerts === 0 ) {
+			unreadRuns += 1;
+		} else if ( unreadAlerts === 0 && this.initialUnreadAlerts > 0 ) {
 			unreadRuns -= 1;
 		}
 
 		this.$runsMenuItems.forEach( ( item ) => {
 			if ( item ) {
 				item.querySelector( '.update-plugins' )?.remove();
+				item.textContent = item.textContent.replace( /\u00A0/g, '' );
 
 				if ( unreadRuns > 0 ) {
 					const $count = document.createElement( 'span' );
 					const nbsp = document.createTextNode( '\u00A0' );
 					$count.classList.add( 'update-plugins' );
 					$count.textContent = unreadRuns;
-					item.textContent = item.textContent.replace(
-						/\u00A0/g,
-						''
-					);
+
 					item.appendChild( nbsp );
 					item.appendChild( $count );
 				}
