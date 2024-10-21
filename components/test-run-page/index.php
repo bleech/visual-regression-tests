@@ -20,7 +20,7 @@
 				<?php vrts()->icon( 'arrow-down' ); ?>
 			</div>
 		<?php else : ?>
-			<?php vrts()->component( 'test-run-empty' ); ?>
+			<?php vrts()->component( 'test-run-success' ); ?>
 		<?php endif; ?>
 	</div>
 </vrts-test-run-page>

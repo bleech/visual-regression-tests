@@ -1,0 +1,37 @@
+.vrts-test-run-success {
+	display: block;
+	padding: 50px 20px;
+	border-top: 0;
+
+	&__inner {
+		margin-bottom: 1.5rem;
+		max-width: 600px;
+		margin-inline: auto;
+	}
+
+	&__lottie-player {
+		position: relative;
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 10 / 8;
+		margin-top: calc(100% / (10 / 8) * 0.3 * -1);
+
+		svg {
+			position: absolute;
+			inset: 0;
+		}
+	}
+
+	&__content {
+		text-align: center;
+		margin-top: calc(100% / (10 / 8) * 0.3 * -1);
+
+		p {
+			font-size: 16px;
+			font-weight: 600;
+			margin: 0;
+		}
+	}
+}

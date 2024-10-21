@@ -52,6 +52,7 @@ class Enqueue_Scripts {
 				[
 					'rest_url' => esc_url_raw( rest_url( 'vrts/v1' ) ),
 					'rest_nonce' => wp_create_nonce( 'wp_rest' ),
+					'pluginUrl' => vrts()->get_plugin_url(),
 					'currentUserId' => get_current_user_id(),
 					'onboarding' => apply_filters( 'vrts_onboarding', null ),
 				]
