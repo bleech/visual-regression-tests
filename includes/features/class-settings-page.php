@@ -252,21 +252,35 @@ class Settings_Page {
 	 * Settings migration.
 	 */
 	public function settings_migration() {
-		$old_cc_addresses = vrts()->settings()->get_option( 'vrts_email_notification_cc_address' );
+		$has_subscription = (bool) Subscription::get_subscription_status();
+		$old_cc_email = get_option( 'vrts_email_notification_cc_address' );
+		$update_email = get_option( 'vrts_email_update_notification_address' );
+		$api_email = get_option( 'vrts_email_api_notification_address' );
 
-		if ( $old_cc_addresses ) {
-			$old_cc_addresses = $this->get_sanitized_emails( $old_cc_addresses );
+		if ( $old_cc_email ) {
+			$old_cc_email = $this->get_sanitized_emails( $old_cc_email );
 			$schedule_email = vrts()->settings()->get_option( 'vrts_email_notification_address' );
-			$schedule_email = array_unique( array_merge( $schedule_email, $old_cc_addresses ) );
+			$schedule_email = array_unique( array_merge( $schedule_email, $old_cc_email ) );
 			$schedule_email = implode( ', ', $schedule_email );
 			update_option( 'vrts_email_notification_address', $schedule_email );
 			delete_option( 'vrts_email_notification_cc_address' );
 		}
 
-		if ( get_option( 'vrts_license_success' ) ) {
+		if ( $has_subscription ) {
 			$schedule_email = vrts()->settings()->get_option( 'vrts_email_notification_address', false );
-			update_option( 'vrts_email_update_notification_address', $schedule_email );
-			update_option( 'vrts_email_api_notification_address', $schedule_email );
+
+			if ( false === $update_email ) {
+				update_option( 'vrts_email_update_notification_address', $schedule_email );
+			}
+
+			if ( false === $api_email ) {
+				update_option( 'vrts_email_api_notification_address', $schedule_email );
+			}
+
+			if ( get_option( 'vrts_license_success' ) ) {
+				update_option( 'vrts_email_update_notification_address', $schedule_email );
+				update_option( 'vrts_email_api_notification_address', $schedule_email );
+			}
 		}
 	}
 
