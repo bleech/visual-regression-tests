@@ -87,7 +87,6 @@ class Test_Runs_Page {
 				'run_id' => $run_id,
 			], Url_Helpers::get_page_url( 'runs' ) );
 
-			Alert::set_alert_state( $alert_id, 1 );
 			$service = new Test_Run_Service();
 			$service->update_latest_alert_for_all_tests( $run );
 
@@ -134,6 +133,7 @@ class Test_Runs_Page {
 	private function get_alert( $alerts ) {
 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
 		$alert_id = isset( $_GET['alert_id'] ) ? intval( $_GET['alert_id'] ) : ( isset( $alerts[0] ) ? $alerts[0]->id : 0 );
+		Alert::set_alert_state( $alert_id, 1 );
 		$alert = Alert::get_item( $alert_id );
 		if ( ! $alert ) {
 			$alert_id = isset( $alerts[0] ) ? $alerts[0]->id : 0;

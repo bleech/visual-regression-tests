@@ -5,6 +5,11 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		this.bindFunctions();
 		this.bindEvents();
 		this.unreadAlerts = new Set();
+		this.initialUnreadAlerts = 0;
+		this.unreadRuns = parseInt(
+			this.getAttribute( 'data-vrts-unread-runs' ),
+			10
+		);
 		this.currentAlertId = this.getAttribute( 'data-vrts-current-alert' );
 	}
 
@@ -14,11 +19,24 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		this.$actionButtons = this.querySelectorAll(
 			'[data-vrts-test-run-action]'
 		);
+
+		this.$runsMenuItems = [
+			document.querySelector(
+				'.vrts_navigation_link[href*="page=vrts-runs"]'
+			),
+			document.querySelector(
+				'#adminmenu .menu-top[href*="page=vrts"] .wp-menu-name'
+			),
+			document.querySelector(
+				'#adminmenu .wp-submenu a[href*="page=vrts-runs"]'
+			),
+		];
 	}
 
 	bindFunctions() {
 		this.handleAlertClick = this.handleAlertClick.bind( this );
 		this.handleActionClick = this.handleActionClick.bind( this );
+		this.updateRunsCount = this.updateRunsCount.bind( this );
 	}
 
 	bindEvents() {
@@ -42,6 +60,8 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				this.unreadAlerts.add( item.getAttribute( 'data-vrts-alert' ) );
 			}
 		} );
+
+		this.initialUnreadAlerts = this.unreadAlerts.size;
 	}
 
 	setCurrentAlertReadStatus() {
@@ -94,6 +114,8 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 						'data-vrts-action-state',
 						this.unreadAlerts.size > 0 ? 'primary' : 'secondary'
 					);
+
+					this.updateRunsCount( this.unreadAlerts.size );
 				}
 			} );
 		} );
@@ -102,6 +124,37 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			observer.observe( item, {
 				attributes: true,
 			} );
+		} );
+	}
+
+	updateRunsCount( unreadAlerts ) {
+		let unreadRuns = this.unreadRuns;
+
+		if ( unreadAlerts > 0 ) {
+			if ( this.initialUnreadAlerts <= 1 ) {
+				unreadRuns += 1;
+			}
+		} else if ( this.initialUnreadAlerts > 1 ) {
+			unreadRuns -= 1;
+		}
+
+		this.$runsMenuItems.forEach( ( item ) => {
+			if ( item ) {
+				item.querySelector( '.update-plugins' )?.remove();
+
+				if ( unreadRuns > 0 ) {
+					const $count = document.createElement( 'span' );
+					const nbsp = document.createTextNode( '\u00A0' );
+					$count.classList.add( 'update-plugins' );
+					$count.textContent = unreadRuns;
+					item.textContent = item.textContent.replace(
+						/\u00A0/g,
+						''
+					);
+					item.appendChild( nbsp );
+					item.appendChild( $count );
+				}
+			}
 		} );
 	}
 

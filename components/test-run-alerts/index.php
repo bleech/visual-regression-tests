@@ -6,9 +6,13 @@ use Vrts\Core\Utilities\Url_Helpers;
 
 $unread_alerts = Alert::get_unread_count_by_test_run_ids( $data['run']->id );
 $unread_count = $unread_alerts[0]->count ?? 0;
+$unred_runs_count = Alert::get_total_items_grouped_by_test_run();
 
 ?>
-<vrts-test-run-alerts class="vrts-test-run-alerts" data-vrts-current-alert="<?php echo esc_attr( isset( $data['alert']->id ) ? $data['alert']->id : 'false' ); ?>">
+<vrts-test-run-alerts
+	class="vrts-test-run-alerts"
+	data-vrts-current-alert="<?php echo esc_attr( isset( $data['alert']->id ) ? $data['alert']->id : 'false' ); ?>"
+	data-vrts-unread-runs="<?php echo esc_attr( $unred_runs_count ); ?>">
 	<div class="vrts-test-run-alerts__heading">
 		<a href="<?php echo esc_url( Url_Helpers::get_page_url( 'runs' ) ); ?>" class="vrts-test-run-alerts__heading-link">
 			<?php vrts()->icon( 'chevron-left' ); ?>
