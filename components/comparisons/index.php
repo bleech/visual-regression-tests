@@ -22,7 +22,7 @@ use Vrts\Core\Utilities\Image_Helpers;
 
 	<div class="vrts-comparisons__content">
 		<figure class="vrts-comparisons__figure" data-vrts-comparisons-slot="comparison">
-			<img class="vrts-comparisons__figure-image" <?php echo wp_kses_post( Image_Helpers::alert_image_hwstring( $data['alert'] ) ); ?> crossorigin="anonymous" src="<?php echo esc_url( $data['alert']->comparison_screenshot_url ); ?>" alt="<?php esc_attr_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
+			<img class="vrts-comparisons__figure-image" <?php echo wp_kses_post( Image_Helpers::alert_image_hwstring( $data['alert'] ) ); ?> crossorigin="anonymous" src="<?php echo esc_url( Image_Helpers::get_screenshot_url( $data['alert'], 'comparison' ) ); ?>" alt="<?php esc_attr_e( 'Snapshot', 'visual-regression-tests' ); ?>" />
 			<span class="vrts-comparisons__slider-divider-clone"></span>
 		</figure>
 		<canvas class="vrts-comparisons__diff-inidicator" data-vrts-comparisons-diff-inidicator></canvas>
