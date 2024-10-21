@@ -10,7 +10,6 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			this.getAttribute( 'data-vrts-unread-runs' ),
 			10
 		);
-		this.currentAlertId = this.getAttribute( 'data-vrts-current-alert' );
 	}
 
 	resolveElements() {
@@ -144,13 +143,11 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	handleAlertClick( e ) {
 		e.preventDefault();
 		const $el = e.currentTarget;
-		const id = $el.getAttribute( 'data-vrts-alert' );
+		const isCurrent = $el.getAttribute( 'data-vrts-current' ) === 'true';
 
-		if ( this.currentAlertId === id ) {
+		if ( isCurrent ) {
 			return;
 		}
-
-		this.currentAlertId = id;
 
 		const href = $el.getAttribute( 'href' );
 		const $comparisons = document.querySelector( 'vrts-comparisons' );
