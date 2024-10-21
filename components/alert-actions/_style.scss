@@ -83,6 +83,14 @@
 
 	&__modal {
 
+		.vrts-modal__content {
+			max-width: 450px;
+		}
+
+		.vrts-modal__content-inner {
+			padding-top: 15px;
+		}
+
 		&-action {
 			margin-top: 10px;
 			display: inline-flex;
