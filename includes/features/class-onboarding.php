@@ -139,7 +139,7 @@ class Onboarding {
 						'align' => 'center',
 						'element' => '.vrts_navigation_item a[href$="admin.php?page=vrts-runs"]',
 						'title' => wp_kses_post( __( '🚀 Meet the new Runs!', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'Alerts are now bundled into Runs. Get a single report for each daily test, manual test, API trigger, or new: <strong>WordPress & plugin update</strong>!', 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'Alerts are now bundled into Runs. Get a single report for each daily test, manual test, API trigger, or new: <strong>WordPress & plugin update (Pro)</strong>!', 'visual-regression-tests' ) ),
 					],
 				],
 			],
