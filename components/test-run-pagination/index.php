@@ -1,7 +1,9 @@
 <?php
 
-if ( 0 === $data['prev_alert_id'] && 0 === $data['next_alert_id'] ) {
-	// don't show pagination if there is no previous or next alert.
+use Vrts\Core\Utilities\Url_Helpers;
+
+// don't show pagination if there is no previous or next alert.
+if ( 0 === $data['pagination']['total'] ) {
 	return;
 }
 
@@ -10,21 +12,25 @@ if ( 0 === $data['prev_alert_id'] && 0 === $data['next_alert_id'] ) {
 	<span class="screen-reader-text"><?php esc_html_e( 'Current Page', 'visual-regression-tests' ); ?></span>
 	<span class="vrts-test-run-pagination__text">
 		<?php
-		printf(
-			/* translators: %d: pages. */
-			esc_html_x( 'Alert %1$d of %2$d', 'e.g. Alert 1 of 2', 'visual-regression-tests' ),
-			esc_html( $data['current'] ),
-			esc_html( $data['total'] )
-		);
+		if ( $data['is_receipt'] ) {
+			esc_html_e( 'Test Receipt', 'visual-regression-tests' );
+		} else {
+			printf(
+				/* translators: %d: pages. */
+				esc_html_x( 'Alert %1$d of %2$d', 'e.g. Alert 1 of 2', 'visual-regression-tests' ),
+				esc_html( $data['pagination']['current'] ),
+				esc_html( $data['pagination']['total'] )
+			);
+		}
 		?>
 	</span>
-	<a data-vrts-pagination="prev" data-vrts-alert-id="<?php echo esc_attr( $data['prev_alert_id'] ); ?>" class="button <?php echo ( 0 === $data['prev_alert_id'] ) ? 'button-disabled' : ''; ?>"
-		<?php echo ( 0 !== $data['prev_alert_id'] ) ? 'href="' . esc_url( $data['prev_link'] ) . '"' : ''; ?>>
+	<a data-vrts-pagination="prev" data-vrts-alert-id="<?php echo esc_attr( $data['pagination']['prev_alert_id'] ); ?>" class="button <?php echo ( 0 === $data['pagination']['prev_alert_id'] ) ? 'button-disabled' : ''; ?>"
+		<?php echo ( 0 !== $data['pagination']['prev_alert_id'] ) ? 'href="' . esc_url( Url_Helpers::get_alert_page( $data['pagination']['prev_alert_id'], $data['run']->id ) ) . '"' : ''; ?>>
 		<span class="screen-reader-text"><?php esc_html_e( 'Previous alert', 'visual-regression-tests' ); ?></span>
 		<span aria-hidden="true">‹</span>
 	</a>
-	<a data-vrts-pagination="next" data-vrts-alert-id="<?php echo esc_attr( $data['next_alert_id'] ); ?>" class="button <?php echo ( 0 === $data['next_alert_id'] ) ? 'button-disabled' : ''; ?>"
-		<?php echo ( 0 !== $data['next_alert_id'] ) ? 'href="' . esc_url( $data['next_link'] ) . '"' : ''; ?>>
+	<a data-vrts-pagination="next" data-vrts-alert-id="<?php echo esc_attr( $data['pagination']['next_alert_id'] ); ?>" class="button <?php echo ( 0 === $data['pagination']['next_alert_id'] ) ? 'button-disabled' : ''; ?>"
+		<?php echo ( 0 !== $data['pagination']['next_alert_id'] ) ? 'href="' . esc_url( Url_Helpers::get_alert_page( $data['pagination']['next_alert_id'], $data['run']->id ) ) . '"' : ''; ?>>
 		<span class="screen-reader-text"><?php esc_html_e( 'Next alert', 'visual-regression-tests' ); ?></span>
 		<span aria-hidden="true">›</span>
 	</a>

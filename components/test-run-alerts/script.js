@@ -150,7 +150,9 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		}
 
 		const href = $el.getAttribute( 'href' );
-		const $comparisons = document.querySelector( 'vrts-comparisons' );
+		const $content =
+			document.querySelector( 'vrts-comparisons' ) ||
+			document.querySelector( 'vrts-test-run-success' );
 		const $pagination = document.querySelector(
 			'vrts-test-run-pagination'
 		);
@@ -162,7 +164,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		$el.setAttribute( 'data-vrts-current', 'true' );
 
 		const timeout = setTimeout( () => {
-			$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+			$content.setAttribute( 'data-vrts-loading', 'true' );
 		}, 200 );
 
 		fetch( href )
@@ -173,8 +175,9 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				const parser = new window.DOMParser();
 				const $html = parser.parseFromString( data, 'text/html' );
 
-				const $newComparisons =
-					$html.querySelector( 'vrts-comparisons' );
+				const $newContent =
+					$html.querySelector( 'vrts-comparisons' ) ||
+					$html.querySelector( 'vrts-test-run-success' );
 				const $newPagination = $html.querySelector(
 					'vrts-test-run-pagination'
 				);
@@ -182,12 +185,12 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				window.history.replaceState( {}, '', href );
 
 				window.scrollTo( {
-					top: $comparisons.offsetTop - 62,
+					top: $content.offsetTop - 62,
 					behavior: 'smooth',
 				} );
 
-				if ( $newComparisons ) {
-					$comparisons.replaceWith( $newComparisons );
+				if ( $newContent ) {
+					$content.replaceWith( $newContent );
 				}
 
 				if ( $newPagination ) {

@@ -63,27 +63,35 @@ $unred_runs_count = Alert::get_total_items_grouped_by_test_run();
 					<a href="<?php echo esc_url( get_permalink( $alert->post_id ) ); ?>" target="_blank" class="vrts-test-run-alerts__card-path"><?php echo esc_html( $tested_url ); ?></a>
 				</div>
 			<?php endforeach; ?>
-			<script>
-				const urlParams = new URLSearchParams( window.location.search );
-				const currentAlertId = urlParams.get( 'alert_id' );
-
-				if ( currentAlertId ) {
-					const $sidebar = document.querySelector(
-						'.vrts-test-run-page__sidebar'
-					);
-					const $alert = document.getElementById(
-						`vrts-alert-${ currentAlertId }`
-					);
-
-					if ( $alert ) {
-						$sidebar.scrollTo( {
-							left: 0,
-							top: $alert.offsetTop - 100,
-						} );
-					}
-				}
-			</script>
 		</div>
 	<?php endif; ?>
 	<?php vrts()->component( 'test-run-receipt', $data ); ?>
+	<script>
+		const urlParams = new URLSearchParams( window.location.search );
+		const currentAlertId = urlParams.get( 'alert_id' );
+
+		if ( currentAlertId ) {
+			const $sidebar = document.querySelector(
+				'.vrts-test-run-page__sidebar'
+			);
+
+			let $alert = document.getElementById(
+				`vrts-alert-${ currentAlertId }`
+			);
+
+			let offsetTop = 0;
+
+			while ( $alert && $alert !== $sidebar ) {
+				offsetTop += $alert.offsetTop;
+				$alert = $alert.offsetParent;
+			}
+
+			if ( $alert ) {
+				$sidebar.scrollTo( {
+					left: 0,
+					top: offsetTop - 82,
+				} );
+			}
+		}
+	</script>
 </vrts-test-run-alerts>

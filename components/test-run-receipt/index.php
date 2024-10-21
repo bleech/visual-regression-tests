@@ -12,6 +12,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 ?>
 
 <div class="vrts-test-run-receipt">
+	<a id="vrts-alert-receipt" class="vrts-test-run-receipt__link" data-vrts-alert="receipt" href="<?php echo esc_url( Url_Helpers::get_alert_page( 'receipt', $data['run']->id ) ); ?>"></a>
 	<div class="vrts-test-run-receipt__header">
 		<div class="vrts-test-run-receipt__header-logo">
 			<?php vrts()->logo(); ?>

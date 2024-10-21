@@ -5,37 +5,43 @@
 	padding: 0 12px;
 	margin: 30px auto 30px auto;
 	background-color: #f6f7fb;
-	box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.07);
 	max-width: 280px;
+	transition: box-shadow 0.2s;
 
 	@media (min-width: 851px) {
 		max-width: 100%;
 		margin: 8px 20px 20px;
 	}
 
+	&:hover,
+	&:has(:focus-within) {
+		box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.15);
+	}
+
 	&::before,
 	&::after {
-		--mask: radial-gradient(10px at top, #0000 97%, #000) 50% / 18.5px 100%;
+		--vrts-test-run-receipt-mask: radial-gradient(10px at top, #0000 97%, #000) 50% / 18.5px 100%;
 		position: absolute;
 		left: 0;
 		right: 0;
 		bottom: 100%;
 		content: "";
-		mask: var(--mask);
+		mask: var(--vrts-test-run-receipt-mask);
 		display: block;
 		height: 10px;
 		background: inherit;
 	}
 
 	&::after {
-		--mask: radial-gradient(10px at bottom, #0000 97%, #000) 50% / 18.5px 100%;
+		--vrts-test-run-receipt-mask: radial-gradient(10px at bottom, #0000 97%, #000) 50% / 18.5px 100%;
 		bottom: -10px;
 	}
 
 	> * {
 		padding: 12px 0;
 
-		&:not(:last-child) {
+		&:where(:not(:last-child)) {
 			border-bottom: 1px dashed #c3c4c7;
 		}
 	}
@@ -46,6 +52,22 @@
 		position: absolute;
 		bottom: 100%;
 		left: 0;
+	}
+
+	a {
+		z-index: 2;
+	}
+
+	&__link {
+		display: block;
+		border: none;
+		position: absolute;
+		inset: 0;
+
+		&:focus {
+			outline: 0;
+			box-shadow: none;
+		}
 	}
 
 	&__header {

@@ -83,9 +83,6 @@ class Test_Runs_Page {
 		if ( $run ) {
 			$alerts = Alert::get_items_by_test_run( $run_id );
 			list($alert_id, $alert) = $this->get_alert( $alerts );
-			$base_link = add_query_arg( [
-				'run_id' => $run_id,
-			], Url_Helpers::get_page_url( 'runs' ) );
 
 			$service = new Test_Run_Service();
 			$service->update_latest_alert_for_all_tests( $run );
@@ -93,21 +90,33 @@ class Test_Runs_Page {
 			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
 			$tests = Test::get_items_by_ids( maybe_unserialize( $run->tests ) );
 
+			$is_receipt = 'receipt' === $alert_id;
+
+			if ( $is_receipt ) {
+				$current_pagination = count( $alerts );
+				$prev_alert_id = isset( $alerts[ count( $alerts ) - 1 ] ) ? $alerts[ count( $alerts ) - 1 ]->id : 0;
+
+				$next_alert_id = 0;
+			} else {
+				$current_pagination = Alert::get_pagination_current_position( $alert_id, $run_id );
+				$prev_alert_id = Alert::get_pagination_prev_alert_id( $alert_id, $run_id );
+				$next_alert_id = Alert::get_pagination_next_alert_id( $alert_id, $run_id );
+
+				if ( ! $next_alert_id ) {
+					$next_alert_id = 'receipt';
+				}
+			}
+
 			vrts()->component('test-run-page', [
 				'run' => $run,
 				'alerts' => $alerts,
 				'alert' => $alert,
+				'is_receipt' => $is_receipt,
 				'pagination' => [
-					'prev_alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, $run_id ),
-					'next_alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
-					'current' => Alert::get_pagination_current_position( $alert_id, $run_id ),
+					'prev_alert_id' => $prev_alert_id,
+					'next_alert_id' => $next_alert_id,
+					'current' => $current_pagination,
 					'total' => count( $alerts ),
-					'prev_link' => add_query_arg( [
-						'alert_id' => Alert::get_pagination_prev_alert_id( $alert_id, $run_id ),
-					], $base_link ),
-					'next_link' => add_query_arg( [
-						'alert_id' => Alert::get_pagination_next_alert_id( $alert_id, $run_id ),
-					], $base_link ),
 				],
 				'tests' => $tests,
 				'test_settings' => [
@@ -131,13 +140,22 @@ class Test_Runs_Page {
 	 * @param array $alerts Alerts.
 	 */
 	private function get_alert( $alerts ) {
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
-		$alert_id = isset( $_GET['alert_id'] ) ? intval( $_GET['alert_id'] ) : ( isset( $alerts[0] ) ? $alerts[0]->id : 0 );
+		$first_alert_id = isset( $alerts[0] ) ? $alerts[0]->id : 0;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+		$alert_id = sanitize_text_field( wp_unslash( $_GET['alert_id'] ?? $first_alert_id ) );
+
+		if ( 'receipt' === $alert_id ) {
+			return [ 'receipt', null ];
+		}
+
 		$alert = Alert::get_item( $alert_id );
+
 		if ( ! $alert ) {
-			$alert_id = isset( $alerts[0] ) ? $alerts[0]->id : 0;
+			$alert_id = $first_alert_id;
 			$alert = Alert::get_item( $alert_id );
 		}
+
 		return [ $alert_id, $alert ];
 	}
 

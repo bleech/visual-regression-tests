@@ -28,7 +28,7 @@ class VrtsTestRunPagination extends window.HTMLElement {
 		e.preventDefault();
 		const $el = e.currentTarget;
 		const nextAlertId = $el.getAttribute( 'data-vrts-alert-id' );
-		const $nextAlert = document.getElementById(
+		let $nextAlert = document.getElementById(
 			`vrts-alert-${ nextAlertId }`
 		);
 
@@ -37,7 +37,9 @@ class VrtsTestRunPagination extends window.HTMLElement {
 		}
 
 		const href = $el.getAttribute( 'href' );
-		const $comparisons = document.querySelector( 'vrts-comparisons' );
+		const $content =
+			document.querySelector( 'vrts-comparisons' ) ||
+			document.querySelector( 'vrts-test-run-success' );
 		const $sidebar = document.querySelector(
 			'.vrts-test-run-page__sidebar'
 		);
@@ -52,15 +54,22 @@ class VrtsTestRunPagination extends window.HTMLElement {
 		let interval = null;
 
 		const timeout = setTimeout( () => {
-			$comparisons.setAttribute( 'data-vrts-loading', 'true' );
+			$content.setAttribute( 'data-vrts-loading', 'true' );
 			const loadingStartTime = window.Date.now();
 			interval = setInterval( () => {
 				loadingElapsedTime = window.Date.now() - loadingStartTime;
 			}, 50 );
 		}, 200 );
 
+		let offsetTop = 0;
+
+		while ( $nextAlert && $nextAlert !== $sidebar ) {
+			offsetTop += $nextAlert.offsetTop;
+			$nextAlert = $nextAlert.offsetParent;
+		}
+
 		$sidebar.scrollTo( {
-			top: $nextAlert.offsetTop - 100,
+			top: offsetTop - 82,
 			behavior: 'smooth',
 		} );
 
@@ -72,8 +81,9 @@ class VrtsTestRunPagination extends window.HTMLElement {
 				const parser = new window.DOMParser();
 				const $html = parser.parseFromString( data, 'text/html' );
 
-				const $newComparisons =
-					$html.querySelector( 'vrts-comparisons' );
+				const $newContent =
+					$html.querySelector( 'vrts-comparisons' ) ||
+					$html.querySelector( 'vrts-test-run-success' );
 				const $newPagination = $html.querySelector(
 					'vrts-test-run-pagination'
 				);
@@ -81,7 +91,7 @@ class VrtsTestRunPagination extends window.HTMLElement {
 				window.history.replaceState( {}, '', href );
 
 				window.scrollTo( {
-					top: $comparisons.offsetTop - 62,
+					top: $content.offsetTop - 62,
 					behavior: 'smooth',
 				} );
 
@@ -91,8 +101,8 @@ class VrtsTestRunPagination extends window.HTMLElement {
 						: 0;
 
 				setTimeout( () => {
-					if ( $newComparisons ) {
-						$comparisons.replaceWith( $newComparisons );
+					if ( $newContent ) {
+						$content.replaceWith( $newContent );
 					}
 
 					if ( $newPagination ) {
