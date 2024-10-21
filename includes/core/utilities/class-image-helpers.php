@@ -32,19 +32,22 @@ class Image_Helpers {
 			return round( $meta['width'] / $meta['height'], 2 );
 		}
 
-		return 0.5;
+		return 1.25;
 	}
 
 	/**
-	 * Get comparison thumbnail URL.
+	 * Get screenshot URL.
 	 *
-	 * @param object $alert The alert object.
+	 * @param object $object The alert or test object.
+	 * @param string $type Image type - base, target, comparison.
+	 * @param string $size The size of the image.
 	 *
 	 * @return string
 	 */
-	public static function get_comparison_thumbnail_url( $alert ) {
-		$preview_url = maybe_unserialize( $alert->meta )['preview_url'] ?? null;
-		return $preview_url ? $preview_url : $alert->comparison_screenshot_url;
+	public static function get_screenshot_url( $object, $type, $size = 'full' ) {
+		$property = "${type}_screenshot_url";
+		$url = 'preview' === $size ? maybe_unserialize( $object->meta )['preview_url'] ?? $object->$property : $object->$property;
+		return self::get_cloudfront_url( $url );
 	}
 
 	/**

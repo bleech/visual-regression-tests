@@ -98,14 +98,15 @@ class Test {
 					SELECT
 						tests.id,
 						tests.status,
-						tests.base_screenshot_date,
 						tests.post_id,
 						tests.current_alert_id,
 						tests.service_test_id,
-						tests.hide_css_selectors,
-						tests.next_run_date,
+						tests.base_screenshot_url,
+						tests.base_screenshot_date,
 						tests.last_comparison_date,
+						tests.next_run_date,
 						tests.is_running,
+						tests.hide_css_selectors,
 						posts.post_title,
 						CASE
 							WHEN tests.current_alert_id is not null THEN '6-has-alert'
@@ -453,28 +454,6 @@ class Test {
 		);
 
 		return null === $current_alert_id ? false : true;
-	}
-
-	/**
-	 * Get the target screenshot url
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return string
-	 */
-	public static function get_base_screenshot_url( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT base_screenshot_url FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
 	}
 
 	/**
@@ -1031,7 +1010,7 @@ class Test {
 			default:
 				$text = sprintf(
 					'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a>',
-					esc_url( Image_Helpers::get_cloudfront_url( self::get_base_screenshot_url( $test->post_id ) ) ),
+					esc_url( Image_Helpers::get_screenshot_url( $test, 'base' ) ),
 					esc_attr( $test->id ),
 					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
 					esc_html__( 'View Snapshot', 'visual-regression-tests' )
@@ -1039,10 +1018,10 @@ class Test {
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->base_screenshot_date );
 				$screenshot = sprintf(
 					'<a href="%s" target="_blank" data-id="%d" title="%s"><img class="figure-image" src="%s" alt="%s"></a>',
-					esc_url( Image_Helpers::get_cloudfront_url( self::get_base_screenshot_url( $test->post_id ) ) ),
+					esc_url( Image_Helpers::get_screenshot_url( $test, 'base' ) ),
 					esc_attr( $test->id ),
 					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
-					esc_url( Image_Helpers::get_cloudfront_url( self::get_base_screenshot_url( $test->post_id ) ) ),
+					esc_url( Image_Helpers::get_screenshot_url( $test, 'base' ) ),
 					esc_html__( 'View Snapshot', 'visual-regression-tests' )
 				);
 				break;

@@ -138,7 +138,7 @@ class Metaboxes {
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
 			'has_post_alert' => Test::has_post_alert( $post_id ),
-			'base_screenshot_url' => Image_Helpers::get_cloudfront_url( Test::get_base_screenshot_url( $post_id ) ),
+			'base_screenshot_url' => Image_Helpers::get_screenshot_url( $test, 'base' ),
 			'base_screenshot_date' => $base_screenshot_date,
 			'testing_status_instructions' => $testing_status_instructions,
 			'is_new_test' => self::is_new_test( $post_id ),

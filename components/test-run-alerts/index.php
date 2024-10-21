@@ -53,7 +53,7 @@ $unred_runs_count = Alert::get_total_items_grouped_by_test_run();
 						data-vrts-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
 						data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
 						<figure class="vrts-test-run-alerts__card-figure">
-							<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( Image_Helpers::get_comparison_thumbnail_url( $alert ) ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
+							<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( Image_Helpers::get_screenshot_url( $alert, 'comparison', 'preview' ) ); ?>" alt="<?php esc_attr_e( 'Comparison Screenshot', 'visual-regression-tests' ); ?>">
 							<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
 						</figure>
 						<span class="vrts-test-run-alerts__card-title">
