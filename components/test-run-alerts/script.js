@@ -49,7 +49,6 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	}
 
 	connectedCallback() {
-		this.setCurrentAlertReadStatus();
 		this.checkHeadingSticky();
 		this.checkReadStatusChange();
 
@@ -62,18 +61,6 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		} );
 
 		this.initialUnreadAlerts = this.unreadAlerts.size;
-	}
-
-	setCurrentAlertReadStatus() {
-		if ( this.currentAlertId ) {
-			const $alert = document.getElementById(
-				`vrts-alert-${ this.currentAlertId }`
-			);
-
-			setTimeout( () => {
-				$alert.setAttribute( 'data-vrts-state', 'read' );
-			}, 500 );
-		}
 	}
 
 	checkHeadingSticky() {
@@ -205,8 +192,6 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 					top: $comparisons.offsetTop - 62,
 					behavior: 'smooth',
 				} );
-
-				$el.setAttribute( 'data-vrts-state', 'read' );
 
 				if ( $newComparisons ) {
 					$comparisons.replaceWith( $newComparisons );

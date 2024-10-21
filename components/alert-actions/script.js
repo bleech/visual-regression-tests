@@ -4,6 +4,7 @@ class VrtsAlertActions extends window.HTMLElement {
 	constructor() {
 		super();
 		this.dropdown = null;
+		this.setAsReadTimeout = null;
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
@@ -49,6 +50,23 @@ class VrtsAlertActions extends window.HTMLElement {
 
 	connectedCallback() {
 		this.dropdown = Dropdown( this );
+		this.setAsReadOnView();
+	}
+
+	setAsReadOnView() {
+		this.$actionButtons.forEach( ( action ) => {
+			const isReadStatusAction =
+				action.getAttribute( 'data-vrts-alert-action' ) ===
+				'read-status';
+			const isUnread =
+				action.getAttribute( 'data-vrts-action-state' ) === 'primary';
+
+			if ( isReadStatusAction && isUnread ) {
+				this.setAsReadTimeout = setTimeout( () => {
+					action.click();
+				}, 500 );
+			}
+		} );
 	}
 
 	onHideElementsFormSubmit( e ) {
@@ -162,6 +180,7 @@ class VrtsAlertActions extends window.HTMLElement {
 
 	disconnectedCallback() {
 		this.dropdown?.();
+		clearTimeout( this.setAsReadTimeout );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.onActionClick );
 		} );

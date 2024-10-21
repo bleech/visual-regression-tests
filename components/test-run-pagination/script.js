@@ -91,10 +91,6 @@ class VrtsTestRunPagination extends window.HTMLElement {
 						: 0;
 
 				setTimeout( () => {
-					setTimeout( () => {
-						$nextAlert.setAttribute( 'data-vrts-state', 'read' );
-					}, 400 );
-
 					if ( $newComparisons ) {
 						$comparisons.replaceWith( $newComparisons );
 					}
