@@ -457,28 +457,6 @@ class Test {
 	}
 
 	/**
-	 * Get the target snapshot date
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return string
-	 */
-	public static function get_base_screenshot_date( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT base_screenshot_date FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
-	}
-
-	/**
 	 * Get total test items from database
 	 *
 	 * @param int $filter_status_query the id of status.
