@@ -10,4 +10,5 @@
 			<p><?php esc_html_e( "You're good to go.", 'visual-regression-tests' ); ?></p>
 		</div>
 	</div>
+	<span class="vrts-gradient-loader"></span>
 </vrts-test-run-success>

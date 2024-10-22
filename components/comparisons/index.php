@@ -40,5 +40,5 @@ use Vrts\Core\Utilities\Image_Helpers;
 			<input type="range" step="0.078125" class="vrts-comparisons__slider-control" data-vrts-comparisons-slider-control>
 		</div>
 	</div>
-	<span class="vrts-comparisons__loader"></span>
+	<span class="vrts-gradient-loader"></span>
 </vrts-comparisons>
