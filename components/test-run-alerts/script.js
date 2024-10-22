@@ -88,6 +88,10 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 					const state =
 						mutation.target.getAttribute( 'data-vrts-state' );
 
+					if ( id === 'receipt' ) {
+						return;
+					}
+
 					if ( 'unread' === state ) {
 						this.unreadAlerts.add( id );
 					} else {

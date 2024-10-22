@@ -95,7 +95,6 @@ class Test_Runs_Page {
 			if ( $is_receipt ) {
 				$current_pagination = count( $alerts );
 				$prev_alert_id = isset( $alerts[ count( $alerts ) - 1 ] ) ? $alerts[ count( $alerts ) - 1 ]->id : 0;
-
 				$next_alert_id = 0;
 			} else {
 				$current_pagination = Alert::get_pagination_current_position( $alert_id, $run_id );
