@@ -7,11 +7,12 @@ use Vrts\Core\Utilities\Url_Helpers;
 $unread_alerts = Alert::get_unread_count_by_test_run_ids( $data['run']->id );
 $unread_count = $unread_alerts[0]->count ?? 0;
 $unred_runs_count = Alert::get_total_items_grouped_by_test_run();
+$current_alert_id = isset( $data['alert']->id ) ? $data['alert']->id : 0;
 
 ?>
 <vrts-test-run-alerts
 	class="vrts-test-run-alerts"
-	data-vrts-current-alert="<?php echo esc_attr( isset( $data['alert']->id ) ? $data['alert']->id : 'false' ); ?>"
+	data-vrts-current-alert="<?php echo esc_attr( $current_alert_id ? $current_alert_id : 'false' ); ?>"
 	data-vrts-unread-runs="<?php echo esc_attr( $unred_runs_count ); ?>">
 	<div class="vrts-test-run-alerts__heading">
 		<a href="<?php echo esc_url( Url_Helpers::get_page_url( 'runs' ) ); ?>" class="vrts-test-run-alerts__heading-link">
@@ -49,7 +50,7 @@ $unred_runs_count = Alert::get_total_items_grouped_by_test_run();
 						href="<?php echo esc_url( $alert_link ); ?>"
 						class="vrts-test-run-alerts__card-link"
 						data-vrts-alert="<?php echo esc_attr( $alert->id ); ?>"
-						data-vrts-current="<?php echo esc_attr( $data['alert']->id === $alert->id ? 'true' : 'false' ); ?>"
+						data-vrts-current="<?php echo esc_attr( $current_alert_id === $alert->id ? 'true' : 'false' ); ?>"
 						data-vrts-state="<?php echo esc_attr( intval( $alert->alert_state ) === 0 ? 'unread' : 'read' ); ?>"
 						data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
 						<figure class="vrts-test-run-alerts__card-figure">
