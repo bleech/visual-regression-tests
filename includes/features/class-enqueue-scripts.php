@@ -110,7 +110,7 @@ class Enqueue_Scripts {
 					'rest_url' => esc_url_raw( rest_url() ),
 					'has_post_alert' => Test::has_post_alert( $post->ID ),
 					'base_screenshot_url' => Image_Helpers::get_screenshot_url( $test, 'base' ),
-					'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( $test->base_screenshot_date ),
+					'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( $test->base_screenshot_date ?? null ),
 					'remaining_tests' => Subscription::get_remaining_tests(),
 					'total_tests' => Subscription::get_total_tests(),
 					'upgrade_url' => Url_Helpers::get_page_url( 'upgrade' ),

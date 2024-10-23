@@ -46,6 +46,11 @@ class Image_Helpers {
 	 */
 	public static function get_screenshot_url( $object, $type, $size = 'full' ) {
 		$property = "${type}_screenshot_url";
+
+		if ( ! property_exists( $object, $property ) ) {
+			return '';
+		}
+
 		$url = 'preview' === $size ? maybe_unserialize( $object->meta )['preview_url'] ?? $object->$property : $object->$property;
 		return self::get_cloudfront_url( $url );
 	}
