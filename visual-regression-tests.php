@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       VRTs – Visual Regression Tests
  * Plugin URI:        https://vrts.app/
- * Description:       Test your website for unwanted visual changes. Run automatic tests and spot differences.
+ * Description:       Keep your WordPress websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.
  * Version:           2.0.0-beta.3
  * Requires at least: 5.0
  * Requires PHP:      7.0

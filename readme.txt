@@ -8,11 +8,11 @@ Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Test your website for unwanted visual changes. Run automatic tests and spot differences.
+Keep your WordPress websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.
 
 == Description ==
 
-VRTs - Visual Regression Tests is a plugin to test your website for unwanted visual changes. The plugin runs automatic daily tests for chosen pages and posts. The tool creates daily comparison screenshots and compares them with a reference snapshot. If there is a difference between the screenshots, you'll be automatically notified via email. Use three comparison modes to spot the differences easily.
+Keep your WordPress websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates. Select the pages of your choice for continuous monitoring. The plugin immediately notifies you of any visual changes it detects.
 
 **Please note:** The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly.
 
