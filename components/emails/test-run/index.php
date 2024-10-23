@@ -87,34 +87,56 @@ use Vrts\Models\Test_Run;
 	<![endif]-->
   </head>
   <body style="width:100%;height:100%;padding:0;Margin:0">
-	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; padding-top: 20px;">
+	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 20px;">
+		<tr>
+			<td style="padding: 0 20px;">
+				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( 'Howdy 👋', 'visual-regression-tests' ); ?></p>
+				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( "We've detected visual changes on your website.", 'visual-regression-tests' ); ?></p>
+			</td>
+		</tr>
+	</table>
+	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 10px;">
 	  <tr>
-		<td width="600" style="padding: 0 20px;">
-			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; padding-bottom: 10px; border-spacing: 0;">
-				<tr>
-					<td>
-						<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( 'Howdy 👋', 'visual-regression-tests' ); ?></p>
-						<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( "We've detected visual changes on your website.", 'visual-regression-tests' ); ?></p>
-					</td>
-				</tr>
-			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 260px; padding: 15px; border-spacing: 0; background-color: #F6F7FB; border-radius: 2px; box-shadow: 0px 0px 6px 2px rgba(0, 0, 0, 0.1);">
+		<td width="400" style="padding: 0 20px;">
+			<div style="background-color:#fff;">
+				<!--[if gte mso 9]>
+				<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+					<v:fill type="tile" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/receipt-top.png' ) ); ?>" color="#fff"/>
+				</v:background>
+				<![endif]-->
+				<table height="7px" width="100%" cellpadding="0" cellspacing="0" border="0">
+					<tr>
+						<td valign="top" align="left" background="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/receipt-top.png' ) ); ?>"></td>
+					</tr>
+				</table>
+			</div>
+			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; padding: 15px; border-spacing: 0; background-color: #F6F7FB;">
 				<tr>
 					<td style="border-bottom: 1px dashed #c3c4c7; padding-bottom: 12px">
 						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0;">
 							<tr>
 								<td></td>
-								<td width="22" style="padding-right: 10px;">
-									<img src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" width="22" height="22" alt="VRTs logo" style="width: 22px; height: 22px; display: block" />
+								<td width="22" style="padding-right: 5px;">
+									<div>
+										<!--[if gte mso 9]>
+										<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+											<v:fill type="tile" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" color="#fff"/>
+										</v:background>
+										<![endif]-->
+										<table height="22px" width="22px" cellpadding="0" cellspacing="0" border="0">
+											<tr>
+												<td valign="top" align="left" background="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" style="background-size: 22px;"></td>
+											</tr>
+										</table>
+									</div>
 								</td>
-								<td width="90">
-									<p style="font-size: 16px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly"><?php esc_html_e( 'VRTs Plugin', 'visual-regression-tests' ); ?></p>
+								<td width="100">
+									<p style="font-size: 16px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly; text-align: center;"><strong><?php esc_html_e( 'VRTs Plugin', 'visual-regression-tests' ); ?></strong></p>
 								</td>
 								<td></td>
 							</tr>
 						</table>
-						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0; padding-top: 15px">
+						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0; padding-top: 10px">
 							<tr>
 								<td style="text-align: center">
 									<p style="font-size: 14px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly"><?php esc_html_e( 'Test Receipt', 'visual-regression-tests' ); ?></p>
@@ -127,11 +149,13 @@ use Vrts\Models\Test_Run;
 				<tr>
 					<td style="border-bottom: 1px dashed #c3c4c7; padding-top: 12px; padding-bottom: 12px; text-align: center;">
 						<p style="font-size: 11px; line-height: 16px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly">
+							<span style="padding-right: 10px">
 							<?php
 								// translators: %s: the run number.
 								printf( esc_html__( 'Run #%s', 'visual-regression-tests' ), esc_html( $data['run']->id ) );
 							?>
-							<?php echo wp_kses( Date_Time_Helpers::get_formatted_relative_date_time( $data['run']->finished_at ), [ 'time' => [ 'datetime' => true ] ] ); ?>
+							</span>
+							<?php echo wp_kses( Date_Time_Helpers::get_formatted_date_time( $data['run']->finished_at ), [ 'time' => [ 'datetime' => true ] ] ); ?>
 						</p>
 					</td>
 				</tr>
@@ -148,16 +172,27 @@ use Vrts\Models\Test_Run;
 							$tests_post_ids = wp_list_pluck( $data['tests'], 'post_id' );
 
 							foreach ( $data['tests'] as $test ) :
-								$parsed_tested_url = wp_parse_url( get_permalink( $test->post_id ) );
-								$tested_url = $parsed_tested_url['path'];
 								$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
 									return $alert->post_id === $test->post_id;
 								} ) );
 								$difference = $alert ? ceil( $alert[0]->differences / 4 ) : 0;
 								?>
 								<tr>
-									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;"><a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( get_permalink( $test->post_id ) ); ?>"><?php echo esc_html( $tested_url ); ?></a></td>
-									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: right;"><?php echo $alert ? esc_html( sprintf( /* translators: %s. Test run receipt diff in pixels */ _x( '%spx', 'test run receipt difference', 'visual-regression-tests' ), esc_html( number_format_i18n( $difference ) ) ) ) : '-'; ?></td>
+									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;">
+										<a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( get_permalink( $test->post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $test->post_id ) ); ?></a>
+									</td>
+									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: right;">
+										<?php $difference_url = $difference ? Url_Helpers::get_alert_page( $alert[0]->id, $data['run']->id ) : Url_Helpers::get_alerts_page( $data['run']->id ); ?>
+										<a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( $difference_url ); ?>">
+											<?php
+											printf(
+												/* translators: %s. Test run receipt diff in pixels */
+												esc_html_x( '%spx', 'test run receipt difference', 'visual-regression-tests' ),
+												esc_html( number_format_i18n( $difference ) )
+											);
+											?>
+										</a>
+									</td>
 								</tr>
 							<?php endforeach; ?>
 						</table>
@@ -192,7 +227,7 @@ use Vrts\Models\Test_Run;
 						<table>
 							<tr>
 								<td><?php esc_html_e( 'Trigger', 'visual-regression-tests' ); ?></td>
-								<td>
+								<td style="padding-left: 5px;">
 									<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#f0e8f8" width="100.00%" style="border-radius: 100px; background-color: <?php echo Test_Run::get_trigger_background_color( $data['run'] ); ?>; width: 100%;  border-spacing: 0; border-collapse: separate">
 										<tr>
 											<td align="center" valign="middle">
@@ -230,25 +265,25 @@ use Vrts\Models\Test_Run;
 					</td>
 				</tr>
 			</table>
-
-			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; padding-top: 10px; padding-bottom: 20px; border-spacing: 0;">
-				<tr>
-					<td>
-						<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( 'Your VRTs squad! 🚀', 'visual-regression-tests' ); ?></p>
-						<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly">
-							<?php
-								printf(
-									/* translators: %s: Home URL */
-									wp_kses_post( 'This alert was sent by the VRTs plugin on %s.', 'visual-regression-tests' ),
-									'<a href="' .esc_url( home_url() ) .'">[' . esc_html( home_url() ) . ']</a>'
-								);
-							?>
-						</p>
-					</td>
-				</tr>
-			</table>
 		</td>
+		<td></td>
 	  </tr>
+	</table>
+	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 10px; margin-bottom: 20px;">
+		<tr>
+			<td style="padding: 0 20px;">
+				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( 'Your VRTs squad! 🚀', 'visual-regression-tests' ); ?></p>
+				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly">
+					<?php
+						printf(
+							/* translators: %s: Home URL */
+							wp_kses_post( 'This alert was sent by the VRTs plugin on %s.', 'visual-regression-tests' ),
+							'<a href="' . esc_url( home_url() ) .'">' . esc_html( home_url() ) . '</a>'
+						);
+					?>
+				</p>
+			</td>
+		</tr>
 	</table>
   </body>
 </html>
