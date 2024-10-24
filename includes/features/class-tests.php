@@ -35,31 +35,31 @@ class Tests {
 		if ( 'update' === $options['action'] ) {
 			switch ( $options['type'] ) {
 				case 'plugin':
-					foreach ( $options['plugins'] as $plugin ) {
-						$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
-						$new_version = $plugin_data['Version'];
-						$name = $plugin_data['Name'];
-						$slug = dirname( plugin_basename( $plugin ) );
-						$updates[] = [
-							'type' => 'plugin',
-							'name' => $name,
-							'slug' => $slug,
-							'version' => $new_version,
-						];
+					if ( isset( $options['plugins'] ) ) {
+						if ( is_array( $options['plugins'] ) ) {
+							foreach ( $options['plugins'] as $plugin ) {
+								$updates[] = static::add_plugin( $plugin );
+							}
+						} else {
+							$updates[] = static::add_plugin( $options['plugins'] );
+						}
+					}
+					if ( isset( $options['plugin'] ) ) {
+						$updates[] = static::add_plugin( $options['plugin'] );
 					}
 					break;
 				case 'theme':
-					foreach ( $options['themes'] as $theme ) {
-						$theme_data = wp_get_theme( $theme );
-						$new_version = $theme_data->get( 'Version' );
-						$name = $theme_data->get( 'Name' );
-						$slug = $theme;
-						$updates[] = [
-							'type' => 'theme',
-							'name' => $name,
-							'slug' => $slug,
-							'version' => $new_version,
-						];
+					if ( isset( $options['themes'] ) ) {
+						if ( is_array( $options['themes'] ) ) {
+							foreach ( $options['themes'] as $theme ) {
+								$updates[] = static::add_theme( $theme );
+							}
+						} else {
+							$updates[] = static::add_theme( $options['themes'] );
+						}
+					}
+					if ( isset( $options['theme'] ) ) {
+						$updates[] = static::add_theme( $options['theme'] );
 					}
 					break;
 				case 'core':
@@ -70,26 +70,17 @@ class Tests {
 					];
 					break;
 				case 'translation':
-					$translations = $options['translations'] ?? [];
-					foreach ( $translations as $translation ) {
-						$type = $translation['type'];
-						$slug = $translation['slug'];
-						$language = $translation['language'];
-						if ( 'plugin' === $type ) {
-							$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $slug . '/' . $slug . '.php' );
-							$name = $plugin_data['Name'];
-						} elseif ( 'theme' === $type ) {
-							$theme_data = wp_get_theme( $slug );
-							$name = $theme_data->get( 'Name' );
+					if ( isset( $options['translations'] ) ) {
+						if ( is_array( $options['translations'] ) ) {
+							foreach ( $options['translations'] as $translation ) {
+								$updates[] = static::add_translation( $translation );
+							}
 						} else {
-							$name = 'WordPress';
+							$updates[] = static::add_translation( $options['translations'] );
 						}
-						$updates[] = [
-							'type' => $type,
-							'name' => $name,
-							'slug' => $slug,
-							'language' => $language,
-						];
+					}
+					if ( isset( $options['translation'] ) ) {
+						$updates[] = static::add_translation( $options['translation'] );
 					}
 					break;
 			}//end switch
@@ -97,6 +88,53 @@ class Tests {
 		if ( ! empty( $updates ) ) {
 			self::run_tests( 'update', null, $updates );
 		}
+	}
+
+	private static function add_plugin( $plugin ) {
+		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
+		$new_version = $plugin_data['Version'];
+		$name = $plugin_data['Name'];
+		$slug = dirname( plugin_basename( $plugin ) );
+		return [
+			'type' => 'plugin',
+			'name' => $name,
+			'slug' => $slug,
+			'version' => $new_version,
+		];
+	}
+
+	private static function add_theme( $theme ) {
+		$theme_data = wp_get_theme( $theme );
+		$new_version = $theme_data->get( 'Version' );
+		$name = $theme_data->get( 'Name' );
+		$slug = $theme;
+		return [
+			'type' => 'theme',
+			'name' => $name,
+			'slug' => $slug,
+			'version' => $new_version,
+		];
+	}
+
+	private static function add_translation( $translation ) {
+		$type = $translation['type'];
+		$slug = $translation['slug'];
+		$language = $translation['language'];
+		if ( 'plugin' === $type ) {
+			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $slug );
+			$name = $plugin_data['Name'];
+		} elseif ( 'theme' === $type ) {
+			$theme_data = wp_get_theme( $slug );
+			$name = $theme_data->get( 'Name' );
+		} else {
+			$name = 'WordPress';
+		}
+		return [
+			'type' => $type,
+			'name' => $name,
+			'slug' => $slug,
+			'language' => $language,
+		];
 	}
 
 	/**
