@@ -10,7 +10,7 @@ use Vrts\Core\Utilities\Image_Helpers;
 		<div class="vrts-comparisons__info">
 			<div class="vrts-comparisons__difference">
 				<?php /* translators: %s: the count of pixels with a visual difference. */ ?>
-				<?php echo esc_html( sprintf( __( '%spx Difference', 'visual-regression-tests' ), esc_html( number_format_i18n( ceil( $data['alert']->differences / 4 ) ) ) ) ); ?>
+				<?php echo esc_html( sprintf( __( '%spx Difference', 'visual-regression-tests' ), esc_html( number_format_i18n( ceil( $data['alert']->differences ) ) ) ) ); ?>
 			</div>
 			<button type="button" title="<?php esc_html_e( 'Expand', 'visual-regression-tests' ); ?>" class="vrts-comparisons__expand-button" data-vrts-fullscreen-open>
 				<?php vrts()->icon( 'expand' ); ?>

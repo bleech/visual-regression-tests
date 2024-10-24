@@ -175,7 +175,7 @@ use Vrts\Models\Test_Run;
 								$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
 									return $alert->post_id === $test->post_id;
 								} ) );
-								$difference = $alert ? ceil( $alert[0]->differences / 4 ) : 0;
+								$difference = $alert ? ceil( $alert[0]->differences ) : 0;
 								?>
 								<tr>
 									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;">
