@@ -4,9 +4,6 @@ use Vrts\Core\Utilities\Date_Time_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test_Run;
 
-$alerts_post_ids = wp_list_pluck( $data['alerts'], 'post_id' );
-$tests_post_ids = wp_list_pluck( $data['tests'], 'post_id' );
-
 $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 
 ?>
@@ -38,14 +35,14 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 			<span><?php esc_html_e( 'Difference', 'visual-regression-tests' ); ?></span>
 		</div>
 		<?php
-		foreach ( $data['tests'] as $test ) :
-			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
-				return $alert->post_id === $test->post_id;
+		foreach ( $data['test_post_ids'] as $post_id ) :
+			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $post_id ) {
+				return $alert->post_id === $post_id;
 			} ) );
 			$difference = $alert ? ceil( $alert[0]->differences ) : 0;
 			?>
 			<div class="vrts-test-run-receipt__pages-status-row">
-				<a href="<?php echo esc_url( get_permalink( $test->post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $test->post_id ) ); ?></a>
+				<a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $post_id ) ); ?></a>
 				<span>
 					<?php
 					printf(
@@ -65,7 +62,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 				<?php
 				printf(
 					/* translators: %s. Number of tests */
-					esc_html( _n( '%s Test', '%s Tests', count( $data['tests'] ), 'visual-regression-tests' ) ), count( $data['tests'] )
+					esc_html( _n( '%s Test', '%s Tests', count( $data['test_post_ids'] ), 'visual-regression-tests' ) ), count( $data['test_post_ids'] )
 				);
 				?>
 			</span>
@@ -74,7 +71,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 			<span><?php esc_html_e( 'Passed', 'visual-regression-tests' ); ?></span>
 			<span>
 				<?php
-				$passed_tests_count = count( $tests_post_ids ) - count( $alerts_post_ids );
+				$passed_tests_count = count( $data['test_post_ids'] ) - count( $data['alerts'] );
 				printf(
 					/* translators: %s. Number of tests */
 					esc_html( _n( '%s Test', '%s Tests', $passed_tests_count, 'visual-regression-tests' ) ), esc_html( $passed_tests_count )
@@ -86,7 +83,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 			<span><?php esc_html_e( 'Changes detected', 'visual-regression-tests' ); ?></span>
 			<span>
 			<?php
-				$changed_detected_count = count( $alerts_post_ids );
+				$changed_detected_count = count( $data['alerts'] );
 				printf(
 					/* translators: %s. Number of tests */
 					esc_html( _n( '%s Test', '%s Tests', $changed_detected_count, 'visual-regression-tests' ) ), esc_html( $changed_detected_count )

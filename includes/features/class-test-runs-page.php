@@ -88,7 +88,7 @@ class Test_Runs_Page {
 			$service->update_latest_alert_for_all_tests( $run );
 
 			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
-			$tests = Test::get_items_by_ids( maybe_unserialize( $run->tests ) );
+			$test_post_ids = maybe_unserialize( $run->tests );
 
 			$is_receipt = 'receipt' === $alert_id;
 
@@ -117,7 +117,7 @@ class Test_Runs_Page {
 					'current' => $current_pagination,
 					'total' => count( $alerts ),
 				],
-				'tests' => $tests,
+				'test_post_ids' => $test_post_ids,
 				'test_settings' => [
 					'test_id' => isset( $test->id ) ? $test->id : null,
 					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,

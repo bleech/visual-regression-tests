@@ -202,7 +202,7 @@ class Alert {
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT a.* FROM $alerts_table a JOIN $tests_table t ON a.post_id = t.post_id WHERE a.test_run_id = %d ORDER BY t.id DESC",
+				"SELECT a.* FROM $alerts_table a LEFT JOIN $tests_table t ON a.post_id = t.post_id WHERE a.test_run_id = %d ORDER BY t.id DESC",
 				$id
 			)
 		);

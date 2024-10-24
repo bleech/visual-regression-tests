@@ -79,12 +79,12 @@ class Email_Service {
 	 */
 	private function get_test_run_email_data( $run_id ) {
 		$run = Test_Run::get_item( $run_id );
-		$tests = Test::get_items_by_ids( maybe_unserialize( $run->tests ) );
+		$test_post_ids = maybe_unserialize( $run->tests );
 		$alerts = Alert::get_items_by_test_run( $run_id );
 
 		$data = [
 			'run' => $run,
-			'tests' => $tests,
+			'test_post_ids' => $test_post_ids,
 			'alerts' => $alerts,
 		];
 
