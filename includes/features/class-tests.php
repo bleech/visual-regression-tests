@@ -90,6 +90,13 @@ class Tests {
 		}
 	}
 
+	/**
+	 * Prepare plugin for updates.
+	 *
+	 * @param string $plugin Plugin.
+	 *
+	 * @return array
+	 */
 	private static function add_plugin( $plugin ) {
 		$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 		$new_version = $plugin_data['Version'];
@@ -103,6 +110,13 @@ class Tests {
 		];
 	}
 
+	/**
+	 * Prepare theme for updates.
+	 *
+	 * @param string $theme Theme.
+	 *
+	 * @return array
+	 */
 	private static function add_theme( $theme ) {
 		$theme_data = wp_get_theme( $theme );
 		$new_version = $theme_data->get( 'Version' );
@@ -116,6 +130,13 @@ class Tests {
 		];
 	}
 
+	/**
+	 * Prepare translation for updates.
+	 *
+	 * @param array $translation Translation.
+	 *
+	 * @return array
+	 */
 	private static function add_translation( $translation ) {
 		$type = $translation['type'];
 		$slug = $translation['slug'];
