@@ -139,7 +139,7 @@ class VrtsComparisons extends window.HTMLElement {
 		);
 		ctx.fillStyle = '#cc1818';
 		pixels.forEach( ( y ) => {
-			ctx.fillRect( 0, y, ctx.canvas.width, 1 );
+			ctx.fillRect( 0, y - 2, ctx.canvas.width, 3 );
 		} );
 	}
 

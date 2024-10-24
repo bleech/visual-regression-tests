@@ -6,7 +6,7 @@ function getColoredPixelsWithLimit( imageData, xLimit, direction = 'left' ) {
 		const g = imageData.data[ i + 1 ];
 		const b = imageData.data[ i + 2 ];
 		const a = imageData.data[ i + 3 ];
-		if ( ( r !== g || g !== b ) && a !== 0 ) {
+		if ( r === 255 && g === 0 && b === 0 && a === 255 ) {
 			const x = ( i / 4 ) % imageData.width;
 			if ( direction === 'left' ? x < xLimit : x > xLimit ) {
 				// push x and y coordinates
