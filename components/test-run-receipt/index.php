@@ -35,14 +35,14 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 			<span><?php esc_html_e( 'Difference', 'visual-regression-tests' ); ?></span>
 		</div>
 		<?php
-		foreach ( $data['test_post_ids'] as $post_id ) :
-			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $post_id ) {
-				return $alert->post_id === $post_id;
+		foreach ( $data['test_post_ids'] as $test_post_id ) :
+			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test_post_id ) {
+				return $alert->post_id === $test_post_id;
 			} ) );
 			$difference = $alert ? ceil( $alert[0]->differences ) : 0;
 			?>
 			<div class="vrts-test-run-receipt__pages-status-row">
-				<a href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $post_id ) ); ?></a>
+				<a href="<?php echo esc_url( get_permalink( $test_post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $test_post_id ) ); ?></a>
 				<span>
 					<?php
 					printf(
