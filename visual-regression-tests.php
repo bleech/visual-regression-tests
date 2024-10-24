@@ -33,13 +33,15 @@ if ( file_exists( plugin_dir_path( VRTS_PLUGIN_FILE ) . 'vendor/autoload.php' ) 
 // Custom autoloader.
 require plugin_dir_path( VRTS_PLUGIN_FILE ) . 'includes/autoload.php';
 
-/**
- * Main function responsible for accessing plugin functionalities.
- *
- * @return Plugin Class instance.
- */
-function vrts() {
-	return Plugin::get_instance();
+if ( ! function_exists( 'vrts' ) ) {
+	/**
+	 * Main function responsible for accessing plugin functionalities.
+	 *
+	 * @return Plugin Class instance.
+	 */
+	function vrts() {
+		return Plugin::get_instance();
+	}
 }
 
 /**
