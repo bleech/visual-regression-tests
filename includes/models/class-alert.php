@@ -4,6 +4,7 @@ namespace Vrts\Models;
 use Vrts\Tables\Alerts_Table;
 use Vrts\Services\Test_Service;
 use Vrts\Tables\Test_Runs_Table;
+use Vrts\Tables\Tests_Table;
 
 /**
  * Model Alert Page.
@@ -195,12 +196,13 @@ class Alert {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
+		$tests_table = Tests_Table::get_table_name();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $alerts_table WHERE test_run_id = %d",
+				"SELECT a.* FROM $alerts_table a JOIN $tests_table t ON a.post_id = t.post_id WHERE a.test_run_id = %d ORDER BY t.post_id ASC",
 				$id
 			)
 		);
