@@ -109,7 +109,8 @@
 
 	&__info {
 		display: flex;
-		gap: 10px;
+		flex-wrap: wrap;
+		column-gap: 10px;
 		justify-content: center;
 		font-size: 11px;
 	}
