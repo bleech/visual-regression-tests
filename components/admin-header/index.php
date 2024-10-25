@@ -24,7 +24,7 @@ use Vrts\Core\Utilities\Url_Helpers;
 				esc_url( $menu_item['url'] ),
 				wp_kses( $menu_item['text'], $allowed_html_into_title ),
 				wp_kses( $menu_item['text'], $allowed_html_into_text ),
-				strpos( $menu_item['url'], 'vrts-upgrade' ) !== false ? 'button' : 'link'
+				esc_attr( strpos( $menu_item['url'], 'vrts-upgrade' ) !== false ? 'button' : 'link' )
 			);
 		}
 		?>
