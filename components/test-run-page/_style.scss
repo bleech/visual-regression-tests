@@ -12,6 +12,11 @@
 
 	#wpbody-content {
 		padding-bottom: 0;
+
+		@media (min-width: 851px) {
+			position: sticky;
+			top: 0;
+		}
 	}
 }
 
