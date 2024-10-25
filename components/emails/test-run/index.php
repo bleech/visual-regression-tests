@@ -1,6 +1,7 @@
 <?php
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\String_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test_Run;
 
@@ -97,41 +98,18 @@ use Vrts\Models\Test_Run;
 	</table>
 	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 10px;">
 	  <tr>
-		<td width="400" style="padding: 0 20px;">
-			<div style="background-color:#fff;">
-				<!--[if gte mso 9]>
-				<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-					<v:fill type="tile" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/receipt-top.png' ) ); ?>" color="#fff"/>
-				</v:background>
-				<![endif]-->
-				<table height="7px" width="100%" cellpadding="0" cellspacing="0" border="0">
-					<tr>
-						<td valign="top" align="left" background="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/receipt-top.png' ) ); ?>"></td>
-					</tr>
-				</table>
-			</div>
+		<td width="280" style="padding: 0 20px;">
 			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; padding: 15px; border-spacing: 0; background-color: #F6F7FB;">
 				<tr>
 					<td style="border-bottom: 1px dashed #c3c4c7; padding-bottom: 12px">
 						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0;">
 							<tr>
 								<td></td>
-								<td width="22" style="padding-right: 5px;">
-									<div>
-										<!--[if gte mso 9]>
-										<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
-											<v:fill type="tile" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" color="#fff"/>
-										</v:background>
-										<![endif]-->
-										<table height="22px" width="22px" cellpadding="0" cellspacing="0" border="0">
-											<tr>
-												<td valign="top" align="left" background="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" style="background-size: 22px;"></td>
-											</tr>
-										</table>
-									</div>
+								<td width="22" style="padding-right: 8px;">
+									<img width="22" height="22" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" alt="Logo">
 								</td>
 								<td width="100">
-									<p style="font-size: 16px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly; text-align: center;"><strong><?php esc_html_e( 'VRTs Plugin', 'visual-regression-tests' ); ?></strong></p>
+									<p style="font-size: 16px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly;"><strong><?php esc_html_e( 'VRTs Plugin', 'visual-regression-tests' ); ?></strong></p>
 								</td>
 								<td></td>
 							</tr>
@@ -177,7 +155,7 @@ use Vrts\Models\Test_Run;
 								<tr>
 									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;">
 										<?php if ( $test['permalink'] ) : ?>
-											<a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( $test['permalink'] ); ?>"><?php echo esc_html( Url_Helpers::make_relative( $test['permalink'] ) ); ?></a>
+											<a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( $test['permalink'] ); ?>"><?php echo esc_html( String_Helpers::truncate( Url_Helpers::make_relative( $test['permalink'] ), 30 ) ); ?></a>
 										<?php else : ?>
 											N/A
 										<?php endif; ?>
