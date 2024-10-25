@@ -159,7 +159,7 @@ class Settings_Page {
 			'label' => sprintf(
 				/* translators: %1$s, %2$s: link wrapper. */
 				wp_kses_post( __( 'Run Tests with your favorite apps. %1$sRead the docs%2$s.', 'visual-regression-tests' ) ),
-				'<a href="' . esc_url( 'https://vrts.app/' ) . '" target="_blank">',
+				'<a href="' . esc_url( 'https://vrts.app/docs/' ) . '" target="_blank">',
 				'</a>'
 			),
 			'sanitize_callback' => [ Sanitization::class, 'sanitize_checkbox' ],
