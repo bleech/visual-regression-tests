@@ -2,7 +2,7 @@
 
 namespace Vrts\Features;
 
-class Admin_Header_Navigation {
+class Admin_Header {
 	/**
 	 * Constructor.
 	 */
@@ -48,7 +48,7 @@ class Admin_Header_Navigation {
 			}
 		}//end if
 
-		vrts()->component( 'admin-header-navigation', [
+		vrts()->component( 'admin-header', [
 			'plugin_name' => vrts()->get_plugin_info( 'name' ),
 			'menu_items' => $menu_items,
 		]);
