@@ -1,6 +1,8 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+
 .vrts-test-run-success {
 	display: block;
-	padding: max(50px, 12%) 20px;
+	padding: max(50px, 8%) 20px;
 	border-top: 0;
 
 	&__inner {
@@ -28,10 +30,30 @@
 		text-align: center;
 		margin-top: calc(100% / (10 / 8) * 0.3 * -1);
 
-		p {
+		> p {
 			font-size: 16px;
 			font-weight: 600;
 			margin: 0;
+		}
+
+		blockquote {
+			margin: 2rem auto 0 auto;
+			max-width: 350px;
+
+			p,
+			cite {
+				color: $gray-50;
+				margin: 5px;
+				// font-style: italic;
+				font-size: 1rem;
+				line-height: 1.5;
+				letter-spacing: 0.01em;
+			}
+
+			cite {
+				color: $gray-700;
+				font-size: 0.875rem;
+			}
 		}
 	}
 }
