@@ -96,7 +96,7 @@
 
 	$random_quote = $quotes[ array_rand( $quotes ) ];
 
-?>
+	?>
 
 <vrts-test-run-success class="vrts-test-run-success postbox">
 	<div class="vrts-test-run-success__inner">
