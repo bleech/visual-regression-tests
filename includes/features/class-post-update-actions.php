@@ -82,6 +82,13 @@ class Post_Update_Actions {
 		}
 	}
 
+	/**
+	 * Update test URL when post slug is updated.
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post_after Post object after update.
+	 * @param WP_Post $post_before Post object before update.
+	 */
 	public function on_post_updated_action( $post_id, $post_after, $post_before ) {
 		$test = Test::get_item_by_post_id( $post_id );
 		if ( $test ) {

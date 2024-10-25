@@ -35,13 +35,31 @@ $current_alert_id = isset( $data['alert']->id ) ? $data['alert']->id : 0;
 		<div class="vrts-test-run-alerts__list">
 			<?php
 			foreach ( $data['alerts'] as $alert ) :
+				$test = null;
+				foreach ( $data['tests'] as $some_test ) {
+					if ( $some_test['post_id'] === $alert->post_id ) {
+						$test = $some_test;
+						break;
+					}
+				}
 				$alert_link = add_query_arg( [
 					'run_id' => $data['run']->id,
 					'alert_id' => $alert->id,
 				], Url_Helpers::get_page_url( 'runs' ) );
 
-				$parsed_tested_url = wp_parse_url( get_permalink( $alert->post_id ) );
-				$tested_url = $parsed_tested_url['path'];
+				$alert_permalink = '';
+				$alert_post_title = '';
+				if ( $test ) {
+					$alert_permalink = $test['permalink'];
+					$alert_post_title = $test['post_title'];
+				}
+				if ( ! $alert_permalink ) {
+					$alert_permalink = get_permalink( $alert->post_id );
+				}
+				if ( ! $alert_post_title ) {
+					$alert_post_title = get_the_title( $alert->post_id ) ?: 'N/A';
+				}
+				$alert_relative_permalink = Url_Helpers::make_relative( $alert_permalink );
 
 				?>
 				<div class="vrts-test-run-alerts__card">
@@ -58,10 +76,10 @@ $current_alert_id = isset( $data['alert']->id ) ? $data['alert']->id : 0;
 							<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
 						</figure>
 						<span class="vrts-test-run-alerts__card-title">
-							<span class="vrts-test-run-alerts__card-title-inner"><?php echo esc_html( get_the_title( $alert->post_id ) ); ?></span>
+							<span class="vrts-test-run-alerts__card-title-inner"><?php echo esc_html( $alert_post_title ); ?></span>
 						</span>
 					</a>
-					<a href="<?php echo esc_url( get_permalink( $alert->post_id ) ); ?>" target="_blank" class="vrts-test-run-alerts__card-path"><?php echo esc_html( $tested_url ); ?></a>
+					<a href="<?php echo esc_url( get_permalink( $alert->post_id ) ); ?>" target="_blank" class="vrts-test-run-alerts__card-path"><?php echo esc_html( $alert_relative_permalink ); ?></a>
 				</div>
 			<?php endforeach; ?>
 		</div>

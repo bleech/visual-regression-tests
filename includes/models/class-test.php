@@ -71,7 +71,7 @@ class Test {
 		$whitelist_orderby = [ 'id', 'post_title', 'status', 'base_screenshot_date' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];
 
-		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'id';
+		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'post_id';
 		$order = in_array( $args['order'], $whitelist_order, true ) ? $args['order'] : 'DESC';
 
 		if ( 'status' === $orderby ) {
@@ -367,11 +367,11 @@ class Test {
 	/**
 	 * Get post id by test id
 	 *
-	 * @param int $snapshot_test_id the id of the post.
+	 * @param int $id the id of the post.
 	 *
 	 * @return int
 	 */
-	public static function get_post_id( $snapshot_test_id = 0 ) {
+	public static function get_post_id( $id = 0 ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
@@ -380,8 +380,8 @@ class Test {
 		return $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT post_id FROM $tests_table WHERE snapshot_test_id = %d",
-				$snapshot_test_id
+				"SELECT post_id FROM $tests_table WHERE id = %d",
+				$id
 			)
 		);
 	}

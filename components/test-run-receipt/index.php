@@ -35,14 +35,18 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 			<span><?php esc_html_e( 'Difference', 'visual-regression-tests' ); ?></span>
 		</div>
 		<?php
-		foreach ( $data['test_post_ids'] as $test_post_id ) :
-			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test_post_id ) {
-				return $alert->post_id === $test_post_id;
+		foreach ( $data['tests'] as $test ) :
+			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
+				return $alert->post_id === $test['post_id'];
 			} ) );
 			$difference = $alert ? ceil( $alert[0]->differences ) : 0;
 			?>
 			<div class="vrts-test-run-receipt__pages-status-row">
-				<a href="<?php echo esc_url( get_permalink( $test_post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $test_post_id ) ); ?></a>
+				<?php if ( $test['permalink'] ) : ?>
+					<a href="<?php echo esc_url( $test['permalink'] ); ?>"><?php echo esc_html( Url_Helpers::make_relative( $test['permalink'] ) ); ?></a>
+				<?php else : ?>
+					N/A
+				<?php endif; ?>
 				<span>
 					<?php
 					printf(
@@ -62,7 +66,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 				<?php
 				printf(
 					/* translators: %s. Number of tests */
-					esc_html( _n( '%s Test', '%s Tests', count( $data['test_post_ids'] ), 'visual-regression-tests' ) ), count( $data['test_post_ids'] )
+					esc_html( _n( '%s Test', '%s Tests', count( $data['tests'] ), 'visual-regression-tests' ) ), count( $data['tests'] )
 				);
 				?>
 			</span>
@@ -71,7 +75,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 			<span><?php esc_html_e( 'Passed', 'visual-regression-tests' ); ?></span>
 			<span>
 				<?php
-				$passed_tests_count = count( $data['test_post_ids'] ) - count( $data['alerts'] );
+				$passed_tests_count = count( $data['tests'] ) - count( $data['alerts'] );
 				printf(
 					/* translators: %s. Number of tests */
 					esc_html( _n( '%s Test', '%s Tests', $passed_tests_count, 'visual-regression-tests' ) ), esc_html( $passed_tests_count )

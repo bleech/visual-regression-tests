@@ -15,6 +15,17 @@ class Url_Helpers {
 	 */
 	public static function get_relative_permalink( $post_id ) {
 		$permalink = get_permalink( $post_id );
+		return self::make_relative( $permalink );
+	}
+
+	/**
+	 * Make a permalink relative.
+	 *
+	 * @param int $permalink A permalink.
+	 *
+	 * @return string
+	 */
+	public static function make_relative( $permalink ) {
 		$home_url = home_url();
 
 		if ( 0 === strpos( $permalink, $home_url ) ) {

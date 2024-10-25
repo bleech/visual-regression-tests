@@ -2,6 +2,7 @@
 
 namespace Vrts\Services;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Models\Test;
@@ -30,7 +31,12 @@ class Test_Run_Service {
 		}
 
 		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function( $test ) {
-			return $test->id;
+			return [
+				'id' => $test->id,
+				'post_id' => $test->post_id,
+				'post_title' => get_the_title( $test->post_id ),
+				'permalink' => get_permalink( $test->post_id ),
+			];
 		}, Test::get_by_service_test_ids( $data['comparison_schedule_ids'] ));
 
 		$test_run_id = $this->create_test_run( $data['run_id'], [

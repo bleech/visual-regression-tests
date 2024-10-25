@@ -79,12 +79,28 @@ class Email_Service {
 	 */
 	private function get_test_run_email_data( $run_id ) {
 		$run = Test_Run::get_item( $run_id );
-		$test_post_ids = maybe_unserialize( $run->tests );
+		$tests = maybe_unserialize( $run->tests );
 		$alerts = Alert::get_items_by_test_run( $run_id );
+
+		if ( is_array( $tests ) && count( $tests ) > 0 && ! is_array( $tests[0] ) ) {
+			$tests = array_map( function( $test ) {
+				$test = (int) $test;
+				$post_id = Test::get_post_id( $test );
+				return [
+					'id' => $test,
+					'post_id' => $post_id,
+					'post_title' => get_the_title( $post_id ),
+					'permalink' => get_permalink( $post_id ),
+				];
+			}, $tests );
+		}
+		usort( $tests, function( $a, $b ) {
+			return $a['post_id'] > $b['post_id'] ? -1 : 1;
+		} );
 
 		$data = [
 			'run' => $run,
-			'test_post_ids' => $test_post_ids,
+			'tests' => $tests,
 			'alerts' => $alerts,
 		];
 

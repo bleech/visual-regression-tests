@@ -168,15 +168,19 @@ use Vrts\Models\Test_Run;
 							</tr>
 							<?php
 
-							foreach ( $data['test_post_ids'] as $post_id ) :
-								$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $post_id ) {
-									return $alert->post_id === $post_id;
+							foreach ( $data['tests'] as $test ) :
+								$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
+									return $alert->post_id === $test['post_id'];
 								} ) );
 								$difference = $alert ? ceil( $alert[0]->differences ) : 0;
 								?>
 								<tr>
 									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;">
-										<a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>"><?php echo esc_html( Url_Helpers::get_relative_permalink( $post_id ) ); ?></a>
+										<?php if ( $test['permalink'] ) : ?>
+											<a style="color: #2C3338; text-decoration: none" href="<?php echo esc_url( $test['permalink'] ); ?>"><?php echo esc_html( Url_Helpers::make_relative( $test['permalink'] ) ); ?></a>
+										<?php else : ?>
+											N/A
+										<?php endif; ?>
 									</td>
 									<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: right;">
 										<?php $difference_url = $difference ? Url_Helpers::get_alert_page( $alert[0]->id, $data['run']->id ) : Url_Helpers::get_alerts_page( $data['run']->id ); ?>
@@ -204,13 +208,13 @@ use Vrts\Models\Test_Run;
 									<?php
 									printf(
 										/* translators: %s. Number of tests */
-										esc_html(  _n( '%s Test', '%s Tests', count( $data['test_post_ids'] ), 'visual-regression-tests' ) ), count( $data['test_post_ids'] )
+										esc_html(  _n( '%s Test', '%s Tests', count( $data['tests'] ), 'visual-regression-tests' ) ), count( $data['tests'] )
 									); ?>
 								</th>
 							</tr>
 							<tr>
 								<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #4ab866; mso-line-height-rule: exactly; text-align: left;"><?php esc_html_e( 'Passed', 'visual-regression-tests' ); ?></td>
-								<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #4ab866; mso-line-height-rule: exactly; text-align: right;"><?php echo esc_html( count( $data['test_post_ids'] ) - count( $data['alerts'] ) ); ?></td>
+								<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #4ab866; mso-line-height-rule: exactly; text-align: right;"><?php echo esc_html( count( $data['tests'] ) - count( $data['alerts'] ) ); ?></td>
 							</tr>
 							<tr>
 								<td style="padding-top: 2px; padding-bottom: 2px; vertical-align: top; font-size: 12px; line-height: 16px; color: #b32d2e; mso-line-height-rule: exactly; text-align: left;"><?php esc_html_e( 'Changes Detected', 'visual-regression-tests' ); ?></td>

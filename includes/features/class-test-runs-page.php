@@ -88,7 +88,22 @@ class Test_Runs_Page {
 			$service->update_latest_alert_for_all_tests( $run );
 
 			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
-			$test_post_ids = maybe_unserialize( $run->tests );
+			$tests = maybe_unserialize( $run->tests );
+			if ( is_array( $tests ) && count( $tests ) > 0 && ! is_array( $tests[0] ) ) {
+				$tests = array_map( function( $test ) {
+					$test = (int) $test;
+					$post_id = Test::get_post_id( $test );
+					return [
+						'id' => $test,
+						'post_id' => $post_id,
+						'post_title' => get_the_title( $post_id ),
+						'permalink' => get_permalink( $post_id ),
+					];
+				}, $tests );
+			}
+			usort( $tests, function( $a, $b ) {
+				return $a['post_id'] > $b['post_id'] ? -1 : 1;
+			} );
 
 			$is_receipt = 'receipt' === $alert_id;
 
@@ -117,7 +132,7 @@ class Test_Runs_Page {
 					'current' => $current_pagination,
 					'total' => count( $alerts ),
 				],
-				'test_post_ids' => $test_post_ids,
+				'tests' => $tests,
 				'test_settings' => [
 					'test_id' => isset( $test->id ) ? $test->id : null,
 					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,

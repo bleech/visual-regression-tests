@@ -196,13 +196,12 @@ class Alert {
 		global $wpdb;
 
 		$alerts_table = Alerts_Table::get_table_name();
-		$tests_table = Tests_Table::get_table_name();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT a.* FROM $alerts_table a LEFT JOIN $tests_table t ON a.post_id = t.post_id WHERE a.test_run_id = %d ORDER BY t.id DESC",
+				"SELECT * FROM $alerts_table WHERE test_run_id = %d ORDER BY post_id DESC",
 				$id
 			)
 		);

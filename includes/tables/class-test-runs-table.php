@@ -97,7 +97,14 @@ class Test_Runs_Table {
 
 		$test_runs = array_map(function ( $alert ) {
 			return [
-				'tests' => maybe_serialize( [ $alert->test_id ] ),
+				'tests' => maybe_serialize( [
+					[
+						'id' => $alert->test_id,
+						'post_id' => $alert->post_id,
+						'post_title' => get_the_title( $alert->post_id ),
+						'permalink' => get_permalink( $alert->post_id ),
+					],
+				] ),
 				'alerts' => maybe_serialize( [ $alert->id ] ),
 				'trigger' => 'legacy',
 				'started_at' => $alert->finished_at,
