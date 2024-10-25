@@ -1,6 +1,6 @@
 {
 	"name": "@bleech/visual-regression-tests",
-	"version": "2.0.0-beta.3",
+	"version": "2.0.0-beta.4",
 	"description": "Keep your WordPress websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.",
 	"author": "Bleech <hello@bleech.de>",
 	"license": "GPL-2.0-or-later",
