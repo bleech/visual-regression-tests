@@ -92,19 +92,7 @@ class Test_Runs_Page {
 
 			$is_receipt = 'receipt' === $alert_id;
 
-			if ( $is_receipt ) {
-				$current_pagination = count( $alerts );
-				$prev_alert_id = isset( $alerts[ count( $alerts ) - 1 ] ) ? $alerts[ count( $alerts ) - 1 ]->id : 0;
-				$next_alert_id = 0;
-			} else {
-				$current_pagination = Alert::get_pagination_current_position( $alert_id, $run_id );
-				$prev_alert_id = Alert::get_pagination_prev_alert_id( $alert_id, $run_id );
-				$next_alert_id = Alert::get_pagination_next_alert_id( $alert_id, $run_id );
-
-				if ( ! $next_alert_id ) {
-					$next_alert_id = 'receipt';
-				}
-			}
+			list( $current_pagination, $prev_alert_id, $next_alert_id ) = $this->get_pagination( $alerts, $alert_id );
 
 			vrts()->component('test-run-page', [
 				'run' => $run,
@@ -184,6 +172,32 @@ class Test_Runs_Page {
 			$sorted_alerts = array_merge( $sorted_alerts, $remaining_alert );
 		}
 		return $sorted_alerts;
+	}
+
+	/**
+	 * Get pagination.
+	 *
+	 * @param array $alerts   Alerts.
+	 * @param int   $alert_id Alert ID.
+	 */
+	private function get_pagination( $alerts, $alert_id ) {
+		if ( 'receipt' === $alert_id ) {
+			$current_pagination = count( $alerts );
+			$prev_alert_id = $alerts[ count( $alerts ) - 1 ]->id ?? 0;
+			$next_alert_id = 0;
+		} else {
+			$current_index = ( array_keys( array_filter( $alerts, function ( $alert ) use ( $alert_id ) {
+				return $alert->id === $alert_id;
+			} ) )[0] ?? 0 );
+			$prev_alert_id = $alerts[ $current_index - 1 ]->id ?? 0;
+			$next_alert_id = $alerts[ $current_index + 1 ]->id ?? 0;
+			$current_pagination = $current_index + 1;
+
+			if ( ! $next_alert_id ) {
+				$next_alert_id = 'receipt';
+			}
+		}
+		return [ $current_pagination, $prev_alert_id, $next_alert_id ];
 	}
 
 	/**
