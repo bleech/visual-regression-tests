@@ -87,8 +87,8 @@ class Onboarding {
 						'description' => wp_kses_post( __( "With our VRTs plugin, you can effortlessly maintain your website's visual consistency. <br><br><strong>Automatically detect visual changes</strong> and <strong>receive Alerts</strong> to achieve pixel-perfect precision.", 'visual-regression-tests' ) ),
 					],
 					[
-						'title' => wp_kses_post( __( '⏰ Daily Checks, automatic Alerts', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( "Our <strong>daily Test Run</strong> takes screenshots of your <strong>Test pages</strong> and performs <strong>split-screen comparisons</strong>. <br><br>Rest assured, you'll be <strong>notified via email</strong>, as soon as a visual change is detected.", 'visual-regression-tests' ) ),
+						'title' => wp_kses_post( __( '⏰ Daily Tests & Pro Automations', 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( "The <strong>Daily Test Run</strong> captures screenshots of your <strong>test pages</strong> and performs <strong>side-by-side comparisons</strong> to instantly spot changes.<br><br><strong>Upgrade to Pro</strong> to automate Tests for WordPress and plugin updates, integrate deployment pipelines, and run <strong>Manual Tests</strong> on demand.", 'visual-regression-tests' ) ),
 					],
 					[
 						'side' => 'right',
