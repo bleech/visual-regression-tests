@@ -71,7 +71,7 @@ class Test {
 		$whitelist_orderby = [ 'id', 'post_title', 'status', 'base_screenshot_date' ];
 		$whitelist_order = [ 'ASC', 'DESC' ];
 
-		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'post_id';
+		$orderby = in_array( $args['orderby'], $whitelist_orderby, true ) ? $args['orderby'] : 'id';
 		$order = in_array( $args['order'], $whitelist_order, true ) ? $args['order'] : 'DESC';
 
 		if ( 'status' === $orderby ) {

@@ -81,29 +81,14 @@ class Test_Runs_Page {
 		$run = Test_Run::get_item( $run_id );
 
 		if ( $run ) {
-			$alerts = Alert::get_items_by_test_run( $run_id );
-			list($alert_id, $alert) = $this->get_alert( $alerts );
-
 			$service = new Test_Run_Service();
 			$service->update_latest_alert_for_all_tests( $run );
 
+			$tests = $this->prepare_tests( maybe_unserialize( $run->tests ) );
+			$alerts = $this->prepare_alerts( $run_id, $tests );
+
+			list($alert_id, $alert) = $this->get_alert( $alerts );
 			$test = $alert ? Test::get_item_by_post_id( $alert->post_id ) : null;
-			$tests = maybe_unserialize( $run->tests );
-			if ( is_array( $tests ) && count( $tests ) > 0 && ! is_array( $tests[0] ) ) {
-				$tests = array_map( function( $test ) {
-					$test = (int) $test;
-					$post_id = Test::get_post_id( $test );
-					return [
-						'id' => $test,
-						'post_id' => $post_id,
-						'post_title' => get_the_title( $post_id ),
-						'permalink' => get_permalink( $post_id ),
-					];
-				}, $tests );
-			}
-			usort( $tests, function( $a, $b ) {
-				return $a['post_id'] > $b['post_id'] ? -1 : 1;
-			} );
 
 			$is_receipt = 'receipt' === $alert_id;
 
@@ -146,6 +131,59 @@ class Test_Runs_Page {
 				'list_queue_table' => new Test_Runs_Queue_List_Table(),
 			]);
 		}//end if
+	}
+
+	/**
+	 * Prepare alerts.
+	 *
+	 * @param array $tests Tests.
+	 */
+	private function prepare_tests( $tests ) {
+		if ( is_array( $tests ) && count( $tests ) > 0 && ! is_array( $tests[0] ) ) {
+			$tests = array_map( function( $test ) {
+				$test = (int) $test;
+				$post_id = Test::get_post_id( $test );
+				return [
+					'id' => $test,
+					'post_id' => $post_id,
+					'post_title' => get_the_title( $post_id ),
+					'permalink' => get_permalink( $post_id ),
+				];
+			}, $tests );
+		}
+		usort( $tests, function( $a, $b ) {
+			return $a['id'] > $b['id'] ? -1 : 1;
+		} );
+		return $tests;
+	}
+
+	/**
+	 * Prepare alerts.
+	 *
+	 * @param int   $run_id Run ID.
+	 * @param array $tests Tests.
+	 */
+	private function prepare_alerts( $run_id, $tests ) {
+		$alerts = Alert::get_items_by_test_run( $run_id );
+		$alerts_by_post_id = [];
+		foreach ( $alerts as $alert ) {
+			$alerts_by_post_id[ $alert->post_id ][] = $alert;
+		}
+		$sorted_alerts = [];
+		foreach ( $tests as $test ) {
+			if ( isset( $alerts_by_post_id[ $test['post_id'] ] ) ) {
+				$sorted_alerts = array_merge( $sorted_alerts, $alerts_by_post_id[ $test['post_id'] ] );
+				unset( $alerts_by_post_id[ $test['post_id'] ] );
+			}
+		}
+		$remaining_alerts = array_values( $alerts_by_post_id );
+		usort( $remaining_alerts, function( $a, $b ) {
+			return $a[0]->post_id > $b[0]->post_id ? -1 : 1;
+		} );
+		foreach ( $remaining_alerts as $remaining_alert ) {
+			$sorted_alerts = array_merge( $sorted_alerts, $remaining_alert );
+		}
+		return $sorted_alerts;
 	}
 
 	/**
