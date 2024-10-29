@@ -23,7 +23,7 @@ msgid "https://vrts.app/"
 msgstr ""
 
 #. Description of the plugin
-msgid "Keep your WordPress websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates."
+msgid "Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates."
 msgstr ""
 
 #. Author of the plugin

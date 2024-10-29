@@ -1,6 +1,6 @@
 # VRTs - Visual Regression Tests
 
-VRTs is a WordPress plugin to keep your websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates. Select the pages of your choice for continuous monitoring. The plugin immediately notifies you of any visual changes it detects.
+Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates. Select the pages of your choice for continuous monitoring. The plugin immediately notifies you of any visual changes it detects.
 
 > [!IMPORTANT]
 > This repository is for **development purposes**. You need to run the build process for it to work. See the section [Development](#development) for further instructions. To use the plugin on your website, see the section [Installation](#installation).
