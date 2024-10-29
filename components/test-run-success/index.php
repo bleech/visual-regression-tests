@@ -146,6 +146,7 @@
 		],
 	];
 
+	mt_srand( $data['run']->id );
 	$random_quote = $quotes[ array_rand( $quotes ) ];
 
 	?>
