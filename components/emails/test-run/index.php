@@ -88,44 +88,47 @@ use Vrts\Models\Test_Run;
 	<![endif]-->
   </head>
   <body style="width:100%;height:100%;padding:0;Margin:0">
-	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 20px;">
+	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 		<tr>
-			<td style="padding: 0 20px;">
+			<td style="padding: 20px;">
 				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( 'Howdy 👋', 'visual-regression-tests' ); ?></p>
-				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( "We've detected visual changes on your website.", 'visual-regression-tests' ); ?></p>
+				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly; margin: 0"><?php esc_html_e( "We've detected visual changes on your website.", 'visual-regression-tests' ); ?></p>
 			</td>
 		</tr>
 	</table>
-	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 10px;">
+	<table border="0" cellspacing="0" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 	  <tr>
+	  	<td width="1"></td>
 		<td width="280" style="padding: 0 20px;">
-			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; padding: 15px; border-spacing: 0; background-color: #F6F7FB;">
+			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; border-spacing: 0; background-color: #F6F7FB;">
+			<tr><td style="padding: 0 15px;">
+			<table cellpadding="0" cellspacing="0" border="0" role="presentation" style="width: 100%; border-spacing: 0; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 				<tr>
-					<td style="border-bottom: 1px dashed #c3c4c7; padding-bottom: 12px">
-						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0;">
-							<tr>
-								<td></td>
-								<td width="22" style="padding-right: 8px;">
-									<img width="22" height="22" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" alt="Logo">
-								</td>
-								<td width="100">
-									<p style="font-size: 16px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly;"><strong><?php esc_html_e( 'VRTs Plugin', 'visual-regression-tests' ); ?></strong></p>
-								</td>
-								<td></td>
-							</tr>
-						</table>
-						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0; padding-top: 10px">
+					<td style="border-bottom: 1px dashed #c3c4c7; padding: 12px 0">
+						<center>
+							<table cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
+								<tr>
+									<td width="22" style="padding-right: 8px;">
+										<img width="22" height="22" src="<?php echo esc_url( vrts()->get_plugin_url( 'assets/images/vrts-logo.png' ) ); ?>" alt="Logo">
+									</td>
+									<td width="100">
+										<p style="font-size: 16px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly;"><strong><?php esc_html_e( 'VRTs Plugin', 'visual-regression-tests' ); ?></strong></p>
+									</td>
+								</tr>
+							</table>
+						</center>
+						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0; padding-top: 10px; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 							<tr>
 								<td style="text-align: center">
 									<p style="font-size: 14px; line-height: 20px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly"><?php esc_html_e( 'Test Receipt', 'visual-regression-tests' ); ?></p>
-									<a style="font-size: 11px; line-height: 16px; display: block; margin-top: 4px; mso-line-height-rule: exactly" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html( home_url( '/' ) ); ?></a>
+									<a style="font-size: 11px; line-height: 16px; display: block; padding-top: 4px; mso-line-height-rule: exactly" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php echo esc_html( home_url( '/' ) ); ?></a>
 								</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 				<tr>
-					<td style="border-bottom: 1px dashed #c3c4c7; padding-top: 12px; padding-bottom: 12px; text-align: center;">
+					<td style="border-bottom: 1px dashed #c3c4c7; padding: 12px 0; text-align: center;">
 						<p style="font-size: 11px; line-height: 16px; color: #2C3338; display: block; margin: 0; mso-line-height-rule: exactly">
 							<span style="padding-right: 10px">
 							<?php
@@ -138,8 +141,8 @@ use Vrts\Models\Test_Run;
 					</td>
 				</tr>
 				<tr>
-					<td style="border-bottom: 1px dashed #c3c4c7; padding-top: 12px; padding-bottom: 12px;">
-						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0;">
+					<td style="border-bottom: 1px dashed #c3c4c7; padding: 12px 0;">
+						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 							<tr>
 								<th style="font-size: 12px; padding-bottom: 4px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;">Pages</th>
 								<th style="font-size: 12px; padding-bottom: 4px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: right;">Difference</th>
@@ -178,8 +181,8 @@ use Vrts\Models\Test_Run;
 					</td>
 				</tr>
 				<tr>
-					<td style="border-bottom: 1px dashed #c3c4c7; padding-top: 12px; padding-bottom: 12px;">
-						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0;">
+					<td style="border-bottom: 1px dashed #c3c4c7; padding: 12px 0;">
+						<table cellpadding="0" cellspacing="0" border="0" style="width: 100%; border-spacing: 0; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 							<tr>
 								<th style="font-size: 14px; padding-bottom: 4px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: left;">Total</th>
 								<th style="font-size: 14px; padding-bottom: 4px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly; text-align: right;">
@@ -202,12 +205,12 @@ use Vrts\Models\Test_Run;
 					</td>
 				</tr>
 				<tr>
-					<td style="border-bottom: 1px dashed #c3c4c7; padding-top: 12px; padding-bottom: 12px; font-size: 11px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly;">
+					<td style="border-bottom: 1px dashed #c3c4c7; padding: 12px 0; font-size: 11px; line-height: 16px; color: #2C3338; mso-line-height-rule: exactly;">
 						<table>
 							<tr>
 								<td><?php esc_html_e( 'Trigger', 'visual-regression-tests' ); ?></td>
 								<td style="padding-left: 5px;">
-									<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#f0e8f8" width="100.00%" style="border-radius: 100px; background-color: <?php echo Test_Run::get_trigger_background_color( $data['run'] ); ?>; width: 100%;  border-spacing: 0; border-collapse: separate">
+									<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#f0e8f8" width="100.00%" style="border-radius: 100px; background-color: <?php echo Test_Run::get_trigger_background_color( $data['run'] ); ?>; width: 100%;  border-spacing: 0; border-collapse: separate; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 										<tr>
 											<td align="center" valign="middle">
 												<p style="font-size: 12px; font-weight: 400; line-height: 16px; color: <?php echo Test_Run::get_trigger_text_color( $data['run'] ); ?>; mso-line-height-alt: 16px; margin: 0; padding: 4px 10px"><?php echo esc_html( Test_Run::get_trigger_title( $data['run'] ) ); ?></p>
@@ -233,25 +236,27 @@ use Vrts\Models\Test_Run;
 					</td>
 				</tr>
 				<tr>
-					<td width="1">
-						<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#1954ed" width="100.00%" style="border-radius: 2px; background-color: #1954ed; width: 100%; border-spacing: 0; border-collapse: separate">
+					<td width="1" style="padding-bottom: 12px;">
+						<table cellpadding="0" cellspacing="0" border="0" role="presentation" bgcolor="#1954ed" width="100.00%" style="border-radius: 2px; background-color: #1954ed; width: 100%; border-spacing: 0; border-collapse: separate; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 							<tr>
-								<td align="center" valign="middle">
-									<a href="<?php echo Url_Helpers::get_test_run_page( $data['run'] ); ?>" style="font-size: 14px; font-weight: 600; color: white; margin: 0; padding: 0; line-height: 20px; mso-line-height-alt: 20px; text-decoration: none; display: block; padding: 8px 12px;"><?php esc_html_e( 'View Details', 'visual-regression-tests' ); ?></a>
+								<td align="center" valign="middle" style="padding: 8px 24px;">
+									<a href="<?php echo Url_Helpers::get_test_run_page( $data['run'] ); ?>" style="font-size: 14px; font-weight: 600; color: white; margin: 0; padding: 0; line-height: 20px; mso-line-height-alt: 20px; text-decoration: none; display: block;"><?php esc_html_e( 'View Details', 'visual-regression-tests' ); ?></a>
 								</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 			</table>
+			</td></tr>
+			</table>
 		</td>
 		<td></td>
 	  </tr>
 	</table>
-	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui; margin-top: 10px; margin-bottom: 20px;">
+	<table border="0" cellspacing="0" width="100%" bgcolor="#ffffff" style="background-color: #ffffff; font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, sans-serif, Tahoma, system-ui;">
 		<tr>
-			<td style="padding: 0 20px;">
-				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly"><?php esc_html_e( 'Your VRTs squad! 🚀', 'visual-regression-tests' ); ?></p>
+			<td style="padding: 20px 20px;">
+				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly; margin: 0"><?php esc_html_e( 'Your VRTs squad! 🚀', 'visual-regression-tests' ); ?></p>
 				<p style="font-size: 14px; line-height: 16px; color: #2C3338; display: block; mso-line-height-rule: exactly">
 					<?php
 						printf(

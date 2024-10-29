@@ -90,10 +90,7 @@ class VrtsTestRunPagination extends window.HTMLElement {
 
 				window.history.replaceState( {}, '', href );
 
-				window.scrollTo( {
-					top: $content.offsetTop - 62,
-					behavior: 'smooth',
-				} );
+				this.scrollTo( $content.offsetTop - 62 );
 
 				const loadingTimeoutTime =
 					loadingElapsedTime > 0
@@ -125,6 +122,19 @@ class VrtsTestRunPagination extends window.HTMLElement {
 			e.preventDefault();
 			this.querySelector( '[data-vrts-pagination="next"]' ).click();
 		}
+	}
+
+	scrollTo( offset ) {
+		const $el =
+			document.fullscreenElement ||
+			document.webkitFullscreenElement ||
+			document.msFullscreenElement ||
+			window;
+
+		$el.scrollTo( {
+			top: offset,
+			behavior: 'smooth',
+		} );
 	}
 
 	disconnectedCallback() {

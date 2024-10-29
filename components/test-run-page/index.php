@@ -28,6 +28,7 @@
 		<?php else : ?>
 			<?php
 			vrts()->component( 'test-run-success', [
+				'run' => $data['run'],
 				'is_receipt' => $data['is_receipt'],
 			] );
 			?>

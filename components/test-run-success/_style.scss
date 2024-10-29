@@ -40,12 +40,12 @@
 		blockquote {
 			margin: 2rem auto 0 auto;
 			max-width: 350px;
+			text-wrap: balance;
 
 			p,
 			cite {
 				color: $gray-50;
 				margin: 5px;
-				// font-style: italic;
 				font-size: 1rem;
 				line-height: 1.5;
 				letter-spacing: 0.01em;

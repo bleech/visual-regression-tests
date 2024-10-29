@@ -21,7 +21,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 
 		this.$runsMenuItems = [
 			document.querySelector(
-				'.vrts_navigation_link[href*="page=vrts-runs"]'
+				'.vrts-admin-header [href*="page=vrts-runs"]'
 			),
 			document.querySelector(
 				'#adminmenu .menu-top[href*="page=vrts"] .wp-menu-name'
@@ -188,10 +188,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 
 				window.history.replaceState( {}, '', href );
 
-				window.scrollTo( {
-					top: $content.offsetTop - 62,
-					behavior: 'smooth',
-				} );
+				this.scrollTo( $content.offsetTop - 62 );
 
 				if ( $newContent ) {
 					$content.replaceWith( $newContent );
@@ -272,6 +269,19 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 				clearTimeout( timeout );
 				clearInterval( interval );
 			} );
+	}
+
+	scrollTo( offset ) {
+		const $el =
+			document.fullscreenElement ||
+			document.webkitFullscreenElement ||
+			document.msFullscreenElement ||
+			window;
+
+		$el.scrollTo( {
+			top: offset,
+			behavior: 'smooth',
+		} );
 	}
 
 	disconnectedCallback() {
