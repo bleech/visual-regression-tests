@@ -16,8 +16,20 @@ class Test_Runs_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
+		add_action( 'admin_init', [ $this, 'remove_admin_notices' ] );
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
+
+
+	}
+
+	/**
+	 * Remove admin notices.
+	 */
+	public function remove_admin_notices() {
+		if ( isset( $_GET['page'] ) && 'vrts-runs' === $_GET['page'] && isset( $_GET['run_id'] ) ) {
+			remove_all_actions( 'admin_notices' );
+		}
 	}
 
 	/**
