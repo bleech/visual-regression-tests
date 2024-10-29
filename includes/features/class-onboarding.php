@@ -88,7 +88,7 @@ class Onboarding {
 					],
 					[
 						'title' => wp_kses_post( __( '⏰ Daily Tests & Pro Automations', 'visual-regression-tests' ) ),
-						'description' => wp_kses_post( __( 'The <strong>Daily Test Run</strong> captures screenshots of your <strong>test pages</strong> and performs <strong>side-by-side comparisons</strong> to instantly spot changes.<br><br><strong>Upgrade to Pro</strong> to automate Tests for WordPress and plugin updates, integrate deployment pipelines, and run <strong>Manual Tests</strong> on demand.', 'visual-regression-tests' ) ),
+						'description' => wp_kses_post( __( 'The <strong>Daily Test Run</strong> captures screenshots of your <strong>Test pages</strong> and performs <strong>side-by-side comparisons</strong> to instantly spot changes.<br><br><strong>Upgrade to Pro</strong> to automate Tests for WordPress and plugin updates, integrate deployment pipelines via API, and run Manual Tests on demand.', 'visual-regression-tests' ) ),
 					],
 					[
 						'side' => 'right',
