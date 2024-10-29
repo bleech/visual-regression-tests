@@ -2,13 +2,13 @@
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.6.2
 Stable tag: 1.9.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.
+Keep your WordPress websites bug-free with automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.
 
 == Description ==
 
@@ -16,18 +16,18 @@ Find issues before others do – every time. With automatic screenshots, daily c
 
 **Please note:** The website must be publicly accessible in order to set up and run the tests. Password protection or any kind of firewall might prevent the plugin from working correctly.
 
-= YOUR STRATEGY TO SPOT UNWANTED CHANGES =
+= Your strategy to spot unwanted changes =
 
-How do you usually check your website after updates and code changes? Do you go manually through all pages or do you just hope everything will run ok? Visual regression testing provides you a method that helps you find errors and visual abnormalities. The VRTs plugin gives you an environment to automate your process.
+How do you check your website after updates and code changes? Do you manually go through pages, or do you just cross your fingers, hoping everything will be okay? Visual regression testing provides a better way to spot issues and detect visual changes. The VRTs plugin automates testing for you with a click of a button.
 
-1. **Activate daily tests for any page or post:** Upon activation, a reference screenshot is taken. This will be renewed when a post is saved or updated.
-2. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will create an alert and notify you via email. The daily test will be paused, until the alert is resolved.
-3. **Compare two screenshots:** Detect differences between the two snapshots with the difference, split screen or side-by-side view.
-4. **Exclude elements:** Prevent false positives by excluding dynamic elements, ads and animations from snapshots.
-5. **Resolve tests:** After fixing an issue, mark the alert as resolved. A new snapshot will be generated and the test will start running again.
+1. **Activate Tests for any page or post:** Upon activation, a reference screenshot is taken. This will be renewed when a post is saved or updated.
+2. **VRTs monitors your pages:** Every day, VRTs captures and compares screenshots of your selected pages. Upgrade to Pro to automate Tests for WordPress updates, integrate deployment pipelines via API, and run Manual Tests on demand.
+2. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will notify you via email. 
+3. **Review changes:** The difference view makes it easy to spot changes, while the comparison slider lets you inspect the details.
+4. **Hide elements:** Prevent false positives by excluding dynamic elements, ads and animations from snapshots.
 
 
-= USE CASES =
+= Use cases =
 
 In which cases can visual regression testing help you spot issues?
 
@@ -39,56 +39,53 @@ In which cases can visual regression testing help you spot issues?
 * Missing quality assurance
 
 
-= FEATURES =
+= Features =
 
-* **Instant first test:** After plugin activation, the homepage is immediately monitored and alerts are sent to the stored admin email.
-* **Daily Tests:** The plugin automatically scans selected posts and pages daily. It validates the visual content by comparing two screenshots.
-* **3 comparison modi:** Choose between three ways to compare snapshots - Difference, Split, Side-by-Side view.
-* **Instant alerts:** As soon as a change is detected between the snapshot and the comparison screenshot, you will be notified via email.
-* **GDPR compliant:** Snapshots are stored on European servers. We do not collect any personal data.
-* **Cross-team:** Team members with admin rights can create and view tests and work together on the immediate solution.
+* **No setup:** After plugin activation, the frontpage is immediately monitored and alerts are sent to the WordPress admin email.
+* **Daily Tests:** The plugin monitors selected posts and pages and compares screenshots daily.
+* **Hide Elements:** Hide dynamic or irrelevant elements to prevent false positives in your Tests.
+* **Click Element:** Define an element that should be clicked before taking a screenshot. This is useful for closing cookie banners or modals.
+* **Email Notifications:** As soon as a change is detected between the snapshot and the comparison screenshot, you will be notified via email.
+* **Fullscreen Review:** Inspect changes up close using the difference view and comparison slider in fullscreen mode.
+* **Read / Unread:** Keep track of Test results that require further attention by marking Alerts as unread.
+* **Flag False Positives:** Identify acceptable changes or non-issues to minimize unnecessary notifications.
+* **Update Automation (Pro):** Automatically trigger Tests on WordPress core , plugin, theme, or language updates and  catch any issues right away.
+* **Manual Testing (Pro):** Run Tests manually on demand, either for all configured pages or for specific pages, to verify any changes or global edits immediately.
+* **API integration (Pro):** Trigger Tests via PHP scripts or WP CLI for integration with other tools, deployment pipelines or custom automations.
+* **Customizable Notifications (Pro):** Specify email addresses for each trigger, to set up notifications for various teams or stakeholders.
 
 
-= FREE FOREVER =
+= Free forever =
 * test up to **3 pages**
 * on **one** domain
-* **automatic daily** tests
+* **automatic daily** Tests
 
 
-= GO PRO =
+= Go Pro =
 
-Do you like VRTs and want to run more tests?
+Do you like VRTs and want to run more Tests?
 Unlock more features with our paid plans:
 
 * test up to **500 pages** in total
 * on **multiple** domains
-* with **automatic daily** test
-* and **unlimited manual tests**
-* run tests programmatically with **do_action( 'vrts_run_tests' )**
-* add **multiple alert** recipients
-* get **e-mail** support
-* and access to **new features**
+* **Scheduled daily** Tests
+* **Multiple** alert recipient groups by alert type
+* **Manual Tests** (unlimited)
+* **API access** (unlimited) [Read the docs.](https://vrts.app/docs/)
+* **Automatic Tests** after WordPress updates, Plugin updates and Plugin installations
 
-[See all pricing plans](https://vrts.app/pricing/)
+[See pricing plans](https://vrts.app/pricing/)
 
 
-= BUG-REPORT =
+= Bug reports =
 
 You found a bug? Please report it by creating an issue on the [support forum](https://wordpress.org/support/plugin/visual-regression-tests/).
 
 
-= READ MORE =
+= Read more =
 
-You want to learn more about VRTs?
-
-Official product page:
-
-[VRTs – Visual Regression Tests](https://vrts.app/)
-
-Resources:
-
-[How does visual regression testing work?](https://bleech.de/en/blog/how-does-visual-regression-testing-work/)
-
+Want to learn more about VRTs?
+Visit our website: [vrts.app](https://vrts.app/)
 
 
 == Frequently Asked Questions ==
@@ -123,7 +120,7 @@ The VRTs plugin primarily supports WordPress pages and posts. Automated visual t
 
 * Create a new blank page or post in WordPress.
 * Set up a redirect from this page to your desired URL.
-* Configure a test for this page. The screenshotter will follow the redirect.
+* Configure a Test for this page. The screenshotter will follow the redirect.
 
 = How do I prevent screenshots from getting blocked? =
 
@@ -174,16 +171,21 @@ For Cloudflare, follow these steps:
 
 == Screenshots ==
 
-1. Start a test by toggling on Run Tests in the sidebar of your WordPress page or post.
-2. Get an overview of all running and paused tests.
-3. Get an overview of your alerts. Review and resolve them one by one.
-4. The **difference view** merges the reference snapshot and the newly created screenshot. Differences between them are highlighted in red.
-5. In the **split view** you can compare two snapshots with a vertical slider.
-6. The **side by side view** displays two snapshots next to each other.
-7. Run unlimited manual tests.
+1. Review changes using the difference view and comparison slider. 
+2. Get an overview of all past Test Runs, their Triggers and detected changes.
+3. Manage all your registered Test pages.
+4. Activate Tests right within the editor.
+5. Specify multiple alert recipients for each Trigger.
+6. Run unlimited Manual Tests at any time (Pro Feature).
 
 
 == Changelog ==
+
+= 2.0.0 =
+* Introduced Runs
+* New Test Review experience
+* Automatic Tests on WordPress and plugin updates
+* Customizable notification recipients for each Trigger
 
 = 1.9.1 =
 * Fixed alerts pagination SQL query compatibility with MySQL 5.7 and lower.
