@@ -2,6 +2,7 @@
 
 namespace Vrts\Services;
 
+use Vrts\Features\Cron_Jobs;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Models\Test;
@@ -14,15 +15,17 @@ class Manual_Test_Service {
 	 *
 	 * @return bool
 	 */
-	public function is_active() {
-		return (bool) get_option( self::OPTION_NAME_STATUS );
+	public function get_option() {
+		return get_option( self::OPTION_NAME_STATUS );
 	}
 
 	/**
 	 * Sets the option.
+	 *
+	 * @param int $status Status 1 for success, 2 for failure.
 	 */
-	public function set_option() {
-		update_option( self::OPTION_NAME_STATUS, true );
+	public function set_option( $status = 1 ) {
+		update_option( self::OPTION_NAME_STATUS, $status );
 	}
 
 	/**
@@ -51,15 +54,26 @@ class Manual_Test_Service {
 			return $test->service_test_id;
 		}, $tests );
 		self::set_option();
-		$request = Service::run_manual_tests( $service_test_ids );
-		if ( 200 === $request['status_code'] ) {
+		$request = Service::run_manual_tests( $service_test_ids, [
+			'trigger_meta' => [ 'user_id' => get_current_user_id() ],
+		] );
+
+		$test_ids = array_map( function( $test ) {
+			return $test->id;
+		}, $tests );
+
+		if ( 201 === $request['status_code'] ) {
+			self::set_option( 1 );
 			$response = $request['response'];
-			if ( array_key_exists( 'triggered_ids', $response ) ) {
-				$triggered_ids = $response['triggered_ids'];
-				if ( ! empty( $triggered_ids ) ) {
-					Test::set_tests_running( $triggered_ids );
-				}
-			}
+			$service = new Test_Run_Service();
+			$id = $service->create_test_run( $response['id'], [
+				'tests' => maybe_serialize( $test_ids ),
+				'trigger' => 'manual',
+				'started_at' => current_time( 'mysql' ),
+			] );
+			Cron_Jobs::schedule_initial_fetch_test_run_updates( $id );
+		} else {
+			self::set_option( 2 );
 		}
 	}
 }

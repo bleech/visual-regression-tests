@@ -43,7 +43,7 @@ class Admin_Columns {
 		$added_columns = [];
 		$added_columns['vrts_testing_status'] = sprintf(
 			'<span class="vrts-status" title="%2$s %3$s">%1$s<span class="screen-reader-text">%2$s %3$s</span></span>',
-			vrts()->get_plugin_logo_icon( false ),
+			vrts()->get_logo(),
 			vrts()->get_plugin_info( 'name' ),
 			__( 'Status', 'visual-regression-tests' )
 		);

@@ -1,0 +1,194 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+@import "@wordpress/base-styles/mixins";
+@import "@wordpress/base-styles/breakpoints";
+@import "@wordpress/base-styles/variables";
+@import "@wordpress/base-styles/default-custom-properties";
+
+.vrts-admin-header {
+	box-sizing: border-box;
+	background: $white;
+	border-bottom: 1px solid $light-gray-500;
+	margin-left: -20px;
+	padding-left: 20px;
+	padding-top: 0;
+	height: 54px;
+	display: flex;
+	gap: 25px;
+
+	@media (max-width: $break-small) {
+		height: calc(54px + 46px);
+		padding-top: 46px;
+	}
+
+	@media (max-width: $break-medium) {
+		margin-left: -10px;
+		padding-left: 10px;
+	}
+
+	+ #wpbody {
+
+		@media (max-width: 600px) {
+			padding-top: 0;
+		}
+	}
+
+	&__logo {
+		position: relative;
+		top: -1px;
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		text-decoration: none;
+
+		&-icon {
+			width: 20px;
+			height: 20px;
+
+			svg {
+
+				path {
+					fill: $gray-700;
+				}
+			}
+		}
+
+		&-text {
+			display: inline-block;
+			font-size: 16px;
+
+			@media (max-width: $break-medium) {
+				display: none;
+			}
+		}
+	}
+
+	&__navigation {
+		font-size: 13px;
+		display: flex;
+		margin: 0;
+		white-space: nowrap;
+
+		@media (max-width: $break-medium) {
+			gap: 20px;
+			overflow: auto;
+			-ms-overflow-style: none;
+			scrollbar-width: none;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+
+		&-item {
+			display: flex;
+			margin: 0;
+			text-align: center;
+		}
+
+		&-link {
+			position: relative;
+			padding: 16px 20px;
+			text-decoration: none;
+
+			&::after {
+				content: "";
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				height: 3px;
+				background: var(--vrts-admin-theme-color);
+				opacity: 0;
+				transition: opacity 0.2s;
+			}
+
+			[aria-current="true"] & {
+				border-bottom-color: var(--vrts-admin-theme-color);
+				font-weight: 600;
+
+				&::after {
+					opacity: 1;
+				}
+			}
+
+			@media (max-width: 480px) {
+				padding: 16px 0;
+			}
+
+			&:hover,
+			&:focus {
+				color: var(--vrts-admin-theme-color);
+			}
+
+			&:focus {
+				box-shadow: inset 0 0 0 2px var(--vrts-admin-theme-color);
+			}
+
+			// required to match the color scheme
+			&:not(:hover):not(:focus) {
+				color: $gray-text;
+			}
+		}
+
+		&-button {
+			align-self: center;
+			border: 1px solid var(--vrts-admin-theme-color);
+			border-radius: 50px;
+			padding: 8px 14px;
+			margin-left: 20px;
+			color: var(--vrts-admin-theme-color);
+			text-decoration: none;
+
+			&::after {
+				content: attr(title);
+				position: relative;
+				display: block;
+				font-weight: 700;
+				height: 1px;
+				color: transparent;
+				overflow: hidden;
+				visibility: hidden;
+			}
+
+			[aria-current="true"] & {
+				border: 1px solid var(--vrts-admin-theme-color);
+				background: rgba(var(--vrts-admin-theme-color--rgb), 0.1);
+				font-weight: initial;
+			}
+
+			@media (max-width: $break-medium) {
+				margin-left: 0;
+			}
+
+			&:focus {
+				box-shadow: 0 0 0 2px var(--vrts-admin-theme-color);
+			}
+		}
+	}
+
+	.update-plugins {
+		background-color: $alert-red;
+		border-radius: 9px;
+		box-sizing: border-box;
+		color: $white;
+		display: inline-block;
+		font-size: 11px;
+		height: 18px;
+		line-height: 1.6;
+		margin: 0 0 -1px 0;
+		min-width: 18px;
+		padding: 0 5px;
+		text-align: center;
+		vertical-align: top;
+
+		&::after {
+			display: block;
+			content: attr(title);
+			font-weight: 700;
+			height: 1px;
+			color: transparent;
+			overflow: hidden;
+			visibility: hidden;
+		}
+	}
+}

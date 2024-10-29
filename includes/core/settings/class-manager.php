@@ -36,12 +36,19 @@ class Manager {
 	 * Get option.
 	 *
 	 * @param string $id Settings setting ID.
+	 * @param bool   $transform_value Transform value.
 	 *
 	 * @return mixed Option value.
 	 */
-	public function get_option( $id ) {
-		$default_value = isset( $this->settings[ $id ] ) ? $this->settings[ $id ]['default'] : false;
-		return get_option( $id, $default_value );
+	public function get_option( $id, $transform_value = true ) {
+		$default_value = isset( $this->settings[ $id ] ) ? $this->settings[ $id ]['default'] ?? '' : false;
+		$value = get_option( $id, $default_value );
+
+		if ( $transform_value && isset( $this->settings[ $id ]['return_value_callback'] ) ) {
+			$value = call_user_func( $this->settings[ $id ]['return_value_callback'], $value );
+		}
+
+		return $value;
 	}
 
 	/**
@@ -61,7 +68,7 @@ class Manager {
 	 * @param array $args Setting args.
 	 */
 	private function get_field( $args ) {
-		$value = $this->get_option( $args['id'] );
+		$value = $args['value'] ?? $this->get_option( $args['id'], false );
 		include vrts()->get_plugin_path( "includes/core/settings/field-{$args['type']}/index.php" );
 	}
 
@@ -97,14 +104,15 @@ class Manager {
 
 			add_settings_field(
 				$id,
-				$args['title'],
+				$args['title'] ?? '',
 				function() use ( $args ) {
 					$this->get_field( $args );
 				},
 				$this->get_section_page( $args['section'] ),
 				$args['section'],
 				[
-					'label_for' => ! in_array( $args['type'], [ 'checkbox', 'radio' ], true ) ? $id : '',
+					'class' => "vrts-settings-{$args['type']}",
+					'label_for' => ! in_array( $args['type'], [ 'info', 'checkbox', 'radio' ], true ) ? $id : '',
 				]
 			);
 		}//end foreach

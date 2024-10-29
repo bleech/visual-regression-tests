@@ -1,7 +1,7 @@
 {
 	"name": "@bleech/visual-regression-tests",
-	"version": "1.9.1",
-	"description": "Test your website for unwanted visual changes. Run automatic tests and spot differences.",
+	"version": "2.0.0-rc.1",
+	"description": "Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.",
 	"author": "Bleech <hello@bleech.de>",
 	"license": "GPL-2.0-or-later",
 	"keywords": [
@@ -18,7 +18,7 @@
 		"url": "https://github.com/bleech/visual-regression-tests/issues"
 	},
 	"engines": {
-		"node": "16"
+		"node": "20"
 	},
 	"files": [
 		"assets",
@@ -32,22 +32,21 @@
 		"visual-regression-tests.php"
 	],
 	"dependencies": {
-		"@wordpress/components": "^22.1.0",
-		"@wordpress/dom-ready": "^3.56.0",
-		"@wordpress/edit-post": "^6.19.0",
-		"@wordpress/element": "^4.20.0",
-		"@wordpress/i18n": "^4.22.0",
-		"@wordpress/icons": "^9.47.0",
-		"@wordpress/plugins": "^4.20.0",
-		"dompurify": "^2.4.1",
+		"@wordpress/components": "^28.10.0",
+		"@wordpress/dom-ready": "^4.10.0",
+		"@wordpress/edit-post": "^8.10.0",
+		"@wordpress/element": "^6.10.0",
+		"@wordpress/i18n": "^5.10.0",
+		"@wordpress/icons": "^10.10.0",
+		"@wordpress/plugins": "^7.10.0",
+		"a11y-dialog": "^8.1.1",
+		"dompurify": "^3.1.7",
 		"driver.js": "^1.3.1",
-		"iframe-resizer": "^4.3.2",
-		"img-comparison-slider": "^7.8.1"
+		"iframe-resizer": "4.3",
+		"lottie-web": "^5.12.2"
 	},
 	"devDependencies": {
-		"@wordpress/scripts": "^24.6.0",
-		"browser-sync": "^2.27.10",
-		"browser-sync-webpack-plugin": "^2.3.0",
+		"@wordpress/scripts": "^30.2.0",
 		"eslint-import-resolver-alias": "^1.1.2",
 		"npm-run-all": "^4.1.5"
 	},
@@ -73,6 +72,7 @@
 		"plugin-zip": "wp-scripts plugin-zip",
 		"test:e2e": "wp-scripts test-e2e",
 		"test:unit": "wp-scripts test-unit-js",
-		"makepot": "./vendor/bin/wp i18n make-pot . --skip-audit --exclude=\".github,.wordpress-org,build,node_modules,vendor,svn\" --headers='{\"Last-Translator\":\"hello@bleech.de\",\"Report-Msgid-Bugs-To\":\"https://github.com/visual-regression-tests/issues\"}' languages/visual-regression-tests.pot"
+		"makepot": "./vendor/bin/wp i18n make-pot . --skip-audit --exclude=\".github,.wordpress-org,build,node_modules,vendor,svn\" --headers='{\"Last-Translator\":\"hello@bleech.de\",\"Report-Msgid-Bugs-To\":\"https://github.com/visual-regression-tests/issues\"}' languages/visual-regression-tests.pot",
+		"zip": "run-s build && zip -r visual-regression-tests.zip ./ -x '.*' '__MACOSX' 'node_modules/*' 'vendor/*' 'composer.json' 'composer.lock' 'package.json' 'package-lock.json' 'phpcs.xml' 'webpack.config.js' 'README.md'"
 	}
 }

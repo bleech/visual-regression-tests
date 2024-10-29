@@ -1,0 +1,300 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+@import "@wordpress/base-styles/breakpoints";
+
+.vrts-comparisons {
+	--vrts-comparisons-slider-position: 50%;
+
+	display: block;
+	box-sizing: border-box;
+	border-top: 0;
+	margin-bottom: 0;
+
+	&__header {
+		background-color: $white;
+		z-index: 1;
+		gap: 1rem;
+
+		&:has(vrts-modal:not([aria-hidden="true"])) {
+			z-index: 999999;
+		}
+
+		@media (min-width: 850px) {
+			position: sticky;
+			top: calc(62px + var(--wp-admin--admin-bar--height));
+
+			[data-vrts-fullscreen="true"] & {
+				top: 62px;
+			}
+		}
+	}
+
+	&__title {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 1;
+		display: -webkit-box;
+		font-size: 13px;
+		font-weight: 500;
+		line-height: 1.4;
+		max-block-size: calc(13px * 1.4);
+		white-space: initial;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding-left: 15px;
+	}
+
+	&__info {
+		display: flex;
+		align-items: center;
+		padding-right: 0.25rem;
+		z-index: 1;
+
+		> *:not(:last-child) {
+			position: relative;
+
+			&::after {
+				position: absolute;
+				right: -0.5px;
+				content: "";
+				display: block;
+				width: 1px;
+				height: 1rem;
+				background: $gray-10;
+				margin-left: 0.75rem;
+			}
+		}
+	}
+
+	&__difference {
+		display: flex;
+		align-items: center;
+		color: #b32d2e;
+		padding-right: 0.75rem;
+		white-space: nowrap;
+	}
+
+	&__expand-button {
+		background: transparent;
+		border: 0;
+		padding: 0;
+		cursor: pointer;
+		display: flex;
+		width: 42px;
+		height: 42px;
+		align-items: center;
+		justify-content: center;
+
+		@media (max-width: 667px) {
+			display: none;
+		}
+
+		&::before {
+			position: absolute;
+			top: 5px;
+			left: 5px;
+			right: 5px;
+			bottom: 5px;
+			content: "";
+			background: #f6f7f7;
+			border-radius: 2px;
+			opacity: 0;
+			z-index: -1;
+			transition: opacity 0.2s;
+		}
+
+		&:hover,
+		&:focus-visible {
+
+			&::before {
+				opacity: 1;
+			}
+		}
+
+		svg {
+			height: 14px;
+			width: auto;
+
+			&:last-child {
+				display: none;
+			}
+		}
+
+		[data-vrts-fullscreen="true"] & {
+
+			svg:first-child {
+				display: none;
+			}
+
+			svg:last-child {
+				display: block;
+			}
+		}
+	}
+
+	&__content {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, max-content));
+		justify-content: center;
+		gap: 0.25rem;
+		padding: 15px;
+
+		@container (max-width: 600px) {
+			gap: 0;
+			grid-template-columns: repeat(2, minmax(0, max-content));
+		}
+
+		&-container {
+			container-type: inline-size;
+		}
+	}
+
+	&__figure {
+		margin: 0;
+		position: relative;
+		border: solid 1px #{$gray-lighten-20};
+		min-height: 100px;
+
+		&-image {
+			box-sizing: border-box;
+			display: block;
+			max-width: 100%;
+			height: auto;
+			margin: 0 auto;
+		}
+
+		@container (max-width: 600px) {
+
+			&[data-vrts-comparisons-slot="comparison"] {
+				display: none;
+			}
+		}
+	}
+
+	&__diff-inidicator {
+		box-sizing: border-box;
+		background: #f0f0f1;
+		border-block: 1px solid transparent;
+		height: 100%;
+		image-rendering: pixelated;
+		width: 4px;
+
+		@container (max-width: 600px) {
+			margin-left: -9.5px;
+		}
+	}
+
+	&__slider {
+		--vrts-comparisons-slider-height: 100%;
+
+		position: relative;
+		display: grid;
+		align-items: start;
+		border: solid 1px #{$gray-lighten-20};
+		overflow: clip;
+
+		.vrts-comparisons__figure {
+			grid-column: 1 / 1;
+			grid-row: 1 / 1;
+			margin: 0;
+			border: 0;
+			height: 100%;
+			width: 100%;
+		}
+
+		[data-vrts-comparisons-slot="base"] {
+			clip-path: inset(0 calc(100% - var(--vrts-comparisons-slider-position)) 0 0);
+		}
+
+		[data-vrts-comparisons-slot="target"] {
+			clip-path: inset(0 0 0 var(--vrts-comparisons-slider-position));
+		}
+
+		&:has(input:focus-visible) {
+
+			.vrts-comparisons__slider-handle svg {
+				outline: 2px solid var(--vrts-admin-theme-color);
+				outline-offset: 2px;
+			}
+		}
+	}
+
+	&__slider-handle {
+		--vrts-comparisons-offset: calc(62px + 42px);
+		--vrts-comparisons-handle-size: 32px;
+		--vrts-comparisons-handle-offest: 20px;
+		--vrts-comparisons-slider-centered: calc(100% / var(--vrts-comparisons-slider-aspect-ratio) / 2 - var(--vrts-comparisons-handle-size) / 2);
+		--vrts-comparisons-viewport-centered: calc(((100vh - var(--wp-admin--admin-bar--height) - 56px - 15px - var(--vrts-comparisons-offset)) / 2 - var(--vrts-comparisons-handle-size) / 2) + 15%);
+
+		box-sizing: border-box;
+		position: sticky;
+		top: calc((var(--vrts-comparisons-handle-size) / 2) + 10%);
+		width: 100%;
+		height: calc(var(--vrts-comparisons-handle-size) + 10px);
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		grid-column: 1 / 1;
+		grid-row: 1 / 1;
+		margin-block: var(--vrts-comparisons-handle-offest);
+		margin-block-start: max(var(--vrts-comparisons-handle-offest), min(var(--vrts-comparisons-slider-centered), var(--vrts-comparisons-viewport-centered)));
+
+		@media (min-width: 851px) {
+			top: calc(var(--wp-admin--admin-bar--height) + var(--vrts-comparisons-offset) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
+		}
+
+		[data-vrts-fullscreen="true"] & {
+			top: calc(var(--vrts-comparisons-offset) + (var(--vrts-comparisons-handle-size) / 2) + 10%);
+		}
+
+		svg { // stylelint-disable-line no-descending-specificity
+			box-sizing: border-box;
+			position: absolute;
+			top: 0;
+			left: calc(var(--vrts-comparisons-slider-position) - (var(--vrts-comparisons-handle-size) / 2));
+			width: var(--vrts-comparisons-handle-size);
+			height: var(--vrts-comparisons-handle-size);
+			border-radius: 50%;
+			background: #fff;
+			border: 1px solid var(--vrts-admin-theme-color);
+			color: var(--vrts-admin-theme-color);
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		}
+	}
+
+	&__slider-divider {
+		position: absolute;
+		top: 0;
+		left: calc(var(--vrts-comparisons-slider-position) - 0.5px);
+		width: 1px;
+		height: 100%;
+		background: var(--vrts-admin-theme-color);
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	}
+
+	&__slider-divider-clone {
+		position: absolute;
+		top: 0;
+		left: calc(var(--vrts-comparisons-slider-position) - 0.5px);
+		width: 0;
+		height: 100%;
+		border-left: 1px dashed #c3c4c7;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+		opacity: 0.4;
+	}
+
+	&__slider-control {
+		appearance: none;
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+
+		&::-webkit-slider-runnable-track {
+			height: 100%;
+		}
+
+		&::-webkit-slider-thumb {
+			appearance: none;
+			height: 100%;
+			width: 56px;
+		}
+	}
+}

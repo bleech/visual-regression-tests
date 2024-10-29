@@ -1,6 +1,6 @@
 // Native
 import { Flex, Icon, ToggleControl } from '@wordpress/components';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { select, subscribe } from '@wordpress/data';
 import { info as infoIcon } from '@wordpress/icons';
 import { __, sprintf } from '@wordpress/i18n';
@@ -98,7 +98,7 @@ const Metabox = () => {
 			setLoading( false );
 		}
 		fetchAndSetTest();
-	}, [ postStatus ] );
+	}, [ postStatus, postId ] );
 
 	useEffect( () => {
 		async function fetchAndSetCredits() {
@@ -115,7 +115,7 @@ const Metabox = () => {
 		fetchAndSetCredits();
 	}, [ postStatus ] );
 
-	let wasSavingPost = select( 'core/editor' ).isSavingPost();
+	const wasSavingPost = useRef( select( 'core/editor' ).isSavingPost() );
 
 	useEffect( () => {
 		subscribe( () => {
@@ -123,15 +123,15 @@ const Metabox = () => {
 				select( 'core/editor' ).getEditedPostAttribute( 'status' );
 			const isSavingPost = select( 'core/editor' ).isSavingPost();
 			if (
-				wasSavingPost &&
+				wasSavingPost.current &&
 				! isSavingPost &&
 				newPostStatus !== postStatus
 			) {
 				setPostStatus( newPostStatus );
 			}
-			wasSavingPost = isSavingPost;
+			wasSavingPost.current = isSavingPost;
 		} );
-	}, [] );
+	}, [ postStatus ] );
 
 	let metaboxNotification = null;
 	if ( true === newTest ) {

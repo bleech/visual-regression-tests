@@ -7,7 +7,7 @@ use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 
 class Service {
-	const DB_VERSION = '1.1';
+	const DB_VERSION = '1.2';
 	const SERVICE = 'vrts_service';
 	const BASE_URL = VRTS_SERVICE_ENDPOINT;
 
@@ -27,7 +27,7 @@ class Service {
 		if ( self::is_connected() && ! self::has_secret() ) {
 			self::create_secret();
 		}
-		if ( $installed_version && version_compare( $installed_version, '1.1', '<' ) ) {
+		if ( $installed_version && version_compare( $installed_version, '1.2', '<' ) ) {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_api_route = 'sites/' . $service_project_id;
 
@@ -253,13 +253,14 @@ class Service {
 	 * Run manual tests.
 	 *
 	 * @param string[] $service_test_ids the service test ids.
+	 * @param array    $options the options.
 	 */
-	public static function run_manual_tests( $service_test_ids ) {
+	public static function run_manual_tests( $service_test_ids, $options = [] ) {
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id . '/trigger';
-		return self::rest_service_request( $service_api_route, [
+		return self::rest_service_request( $service_api_route, array_merge( $options, [
 			'ids' => $service_test_ids,
-		], 'post' );
+		]), 'post' );
 	}
 
 	/**

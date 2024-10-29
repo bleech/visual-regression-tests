@@ -22,6 +22,7 @@ require_once 'includes/services/class-manual-test-service.php';
 
 require_once 'includes/tables/class-alerts-table.php';
 require_once 'includes/tables/class-tests-table.php';
+require_once 'includes/tables/class-test-runs-table.php';
 
 Vrts\Features\Admin_Notices::delete_dismissed_options();
 Vrts\Features\Metaboxes::delete_meta_keys();
@@ -34,3 +35,4 @@ $vrts_manual_test_service->delete_option();
 
 Vrts\Tables\Alerts_Table::uninstall_table();
 Vrts\Tables\Tests_Table::uninstall_table();
+Vrts\Tables\Test_Runs_Table::uninstall_table();

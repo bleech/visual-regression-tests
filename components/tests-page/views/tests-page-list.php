@@ -6,14 +6,14 @@ use Vrts\Services\Manual_Test_Service;
 
 ?>
 
-<div class="wrap vrts_list_table_page">
+<div class="wrap vrts-list-table-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Tests', 'visual-regression-tests' ); ?>
 	</h1>
 
 	<menu class="page-title-actions">
 		<li>
-			<button type="button" class="page-title-action button-primary"
+			<button type="button" class="page-title-action vrts-page-title-action button-primary"
 				id="<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? 'modal-add-new-disabled' : 'show-modal-add-new'; ?>"
 				<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? ' disabled' : ''; ?>>
 				<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
@@ -62,9 +62,14 @@ use Vrts\Services\Manual_Test_Service;
 		}
 
 		$vrts_manual_test_service = new Manual_Test_Service();
-		if ( $vrts_manual_test_service->is_active() ) {
+		$test_status = $vrts_manual_test_service->get_option();
+		if ( $test_status ) {
 			$vrts_manual_test_service->delete_option();
-			Admin_Notices::render_notification( 'test_started', false, [] );
+			if ( '1' === $test_status ) {
+				Admin_Notices::render_notification( 'test_started', false, [] );
+			} elseif ( '2' === $test_status ) {
+				Admin_Notices::render_notification( 'test_failed', false, [] );
+			}
 		}
 		?>
 	</form>

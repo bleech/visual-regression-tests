@@ -5,8 +5,8 @@
 		<?php
 		printf(
 			/* translators: %1$s, %2$s: link wrapper. */
-			esc_html__( 'We could not verify the license key you entered. Please check the entry for typos and try again. A license key can only be used on one website at a time. If you are already using the license key on another website, you need to remove it there first. Please don\'t hesitate to %1$scontact us%2$s for assistance.', 'visual-regression-tests' ),
-			'<a href="mailto:products@bleech.de" target="_blank">',
+			esc_html__( 'We could not verify the license key you entered. Please check for typos and try again. If the issue persists, %1$scontact us%2$s for assistance. We’re here to help!', 'visual-regression-tests' ),
+			'<a href="https://vrts.app/contact/" target="_blank">',
 			'</a>'
 		);
 		?>

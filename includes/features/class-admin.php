@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Alert;
 
 class Admin {
@@ -18,7 +19,7 @@ class Admin {
 	 * Add main menu where other sub menus can be added to.
 	 */
 	public function add_main_menu() {
-		$count = Alert::get_total_items();
+		$count = Alert::get_total_items_grouped_by_test_run();
 
 		add_menu_page(
 			'VRTs',
@@ -26,7 +27,8 @@ class Admin {
 			'manage_options',
 			'vrts',
 			'',
-			vrts()->get_plugin_logo_icon(),
+			//phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+			'data:image/svg+xml;base64,' . base64_encode( vrts()->get_logo() ),
 			80
 		);
 	}
@@ -39,8 +41,8 @@ class Admin {
 	 * @return array $links Plugin Action links.
 	 */
 	public function plugin_action_links( $links ) {
-		$links['tests'] = '<a href="' . esc_url( admin_url( 'admin.php?page=vrts' ) ) . '" aria-label="' . esc_attr__( 'Tests', 'visual-regression-tests' ) . '">' . esc_html__( 'Tests', 'visual-regression-tests' ) . '</a>';
-		$links['settings'] = '<a href="' . esc_url( admin_url( 'admin.php?page=vrts-settings' ) ) . '" aria-label="' . esc_attr__( 'Settings', 'visual-regression-tests' ) . '">' . esc_html__( 'Settings', 'visual-regression-tests' ) . '</a>';
+		$links['tests'] = '<a href="' . esc_url( Url_Helpers::get_page_url( 'tests' ) ) . '" aria-label="' . esc_attr__( 'Tests', 'visual-regression-tests' ) . '">' . esc_html__( 'Tests', 'visual-regression-tests' ) . '</a>';
+		$links['settings'] = '<a href="' . esc_url( Url_Helpers::get_page_url( 'settings' ) ) . '" aria-label="' . esc_attr__( 'Settings', 'visual-regression-tests' ) . '">' . esc_html__( 'Settings', 'visual-regression-tests' ) . '</a>';
 		return $links;
 	}
 }

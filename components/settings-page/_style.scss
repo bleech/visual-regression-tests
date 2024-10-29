@@ -1,0 +1,66 @@
+.vrts-settings {
+	display: block;
+
+	h1 {
+		margin-bottom: 20px;
+	}
+
+	form h2 {
+		font-weight: 400;
+		font-size: 20px;
+
+		span {
+			display: block;
+			margin-top: 0.75rem;
+			font-size: 13px;
+			line-height: 1.5;
+			font-weight: 400;
+		}
+	}
+
+	fieldset {
+		display: flex !important;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	input {
+
+		&[readonly] {
+			border-color: #8c8f94;
+			background-color: #fff;
+			color: #2c3338;
+		}
+	}
+
+	.form-table {
+
+		th,
+		td {
+			padding: 0 24px 24px 0;
+		}
+
+		td fieldset label {
+			margin: 0 !important;
+		}
+	}
+
+	&__pro-label {
+		display: inline-block;
+		padding: 0.25rem 0.5rem;
+		font-size: 11px;
+		line-height: 1;
+		font-weight: 600;
+		text-transform: uppercase;
+		color: #fff;
+		background: #757575;
+		border-radius: 35px;
+	}
+
+	&__modal {
+
+		&-info {
+			margin-top: 0;
+		}
+	}
+}

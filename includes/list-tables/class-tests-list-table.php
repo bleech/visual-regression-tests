@@ -2,12 +2,10 @@
 
 namespace Vrts\List_Tables;
 
-use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use Vrts\Models\Alert;
-use Vrts\Services\Manual_Test_Service;
 use Vrts\Services\Test_Service;
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -34,7 +32,7 @@ class Tests_List_Table extends \WP_List_Table {
 	 * Get table classes.
 	 */
 	public function get_table_classes() {
-		return [ 'widefat', 'fixed', 'striped', $this->_args['plural'] ];
+		return [ 'widefat', 'fixed', $this->_args['plural'] ];
 	}
 
 	/**
@@ -129,7 +127,7 @@ class Tests_List_Table extends \WP_List_Table {
 		if ( $is_connected ) {
 			$actions['trash'] = sprintf(
 				'<a href="%s" data-id="%d" title="%s">%s</a>',
-				admin_url( 'admin.php?page=vrts&action=disable-testing&test_id=' ) . $item->id,
+				Url_Helpers::get_disable_testing_url( $item->id ),
 				$item->id,
 				esc_html__( 'Disable testing for this page', 'visual-regression-tests' ),
 				esc_html__( 'Disable Testing', 'visual-regression-tests' )
@@ -203,12 +201,6 @@ class Tests_List_Table extends \WP_List_Table {
 			return;
 		}
 
-		if ( 'run-manual-test' === $this->current_action() ) {
-			$manual_test_service = new Manual_Test_Service();
-			$manual_test_service->run_tests( $test_ids );
-			return;
-		}
-
 		if ( 'set-status-disable' === $this->current_action() ) {
 			foreach ( $test_ids as $test_id ) {
 				$item = Test::get_item( $test_id );
@@ -240,7 +232,7 @@ class Tests_List_Table extends \WP_List_Table {
 	 * @return array
 	 */
 	public function get_views() {
-		$base_link = admin_url( 'admin.php?page=vrts' );
+		$base_link = Url_Helpers::get_page_url( 'tests' );
 
 		$links = [
 			'all' => [
@@ -316,12 +308,7 @@ class Tests_List_Table extends \WP_List_Table {
 		$this->process_bulk_action();
 		$this->items = Test::get_items( $args );
 
-		$total_items = 0;
-		if ( null !== $args['filter_status'] ) {
-			$total_items = Test::get_total_items( $filter_status_query );
-		} else {
-			$total_items = Test::get_total_items();
-		}
+		$total_items = count( $this->items );
 
 		$this->set_pagination_args([
 			'total_items' => $total_items,

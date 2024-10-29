@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name:       VRTs – Visual Regression Tests
- * Plugin URI:        https://bleech.de/en/products/visual-regression-tests/
- * Description:       Test your website for unwanted visual changes. Run automatic tests and spot differences.
- * Version:           1.9.1
+ * Plugin URI:        https://vrts.app/
+ * Description:       Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.
+ * Version:           2.0.0-rc.1
  * Requires at least: 5.0
  * Requires PHP:      7.0
  * Author:            Bleech
@@ -33,13 +33,15 @@ if ( file_exists( plugin_dir_path( VRTS_PLUGIN_FILE ) . 'vendor/autoload.php' ) 
 // Custom autoloader.
 require plugin_dir_path( VRTS_PLUGIN_FILE ) . 'includes/autoload.php';
 
-/**
- * Main function responsible for accessing plugin functionalities.
- *
- * @return Plugin Class instance.
- */
-function vrts() {
-	return Plugin::get_instance();
+if ( ! function_exists( 'vrts' ) ) {
+	/**
+	 * Main function responsible for accessing plugin functionalities.
+	 *
+	 * @return Plugin Class instance.
+	 */
+	function vrts() {
+		return Plugin::get_instance();
+	}
 }
 
 /**

@@ -9,11 +9,12 @@ class Alert_Service {
 	/**
 	 * Create alert from comparison.
 	 *
-	 * @param int   $post_id Post ID.
-	 * @param int   $test_id Test ID.
-	 * @param array $comparison Comparison.
+	 * @param int    $post_id Post ID.
+	 * @param int    $test_id Test ID.
+	 * @param array  $comparison Comparison.
+	 * @param object $test_run Test run.
 	 */
-	public function create_alert_from_comparison( $post_id, $test_id, $comparison ) {
+	public function create_alert_from_comparison( $post_id, $test_id, $comparison, $test_run = null ) {
 		global $wpdb;
 		$table_alert = Alerts_Table::get_table_name();
 
@@ -27,6 +28,8 @@ class Alert_Service {
 		$prepare_alert['comparison_screenshot_url'] = $comparison['image_url'];
 		$prepare_alert['comparison_id'] = $comparison['id'];
 		$prepare_alert['differences'] = $comparison['pixels_diff'];
+		$prepare_alert['test_run_id'] = $test_run ? $test_run->id : null;
+		$prepare_alert['meta'] = maybe_serialize( $comparison['meta'] ?? [] );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- It's ok.
 		if ( $wpdb->insert( $table_alert, $prepare_alert ) ) {

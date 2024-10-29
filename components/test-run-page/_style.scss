@@ -1,0 +1,128 @@
+@import "@wordpress/base-styles/colors.native"; // stylelint-disable-line scss/at-import-partial-extension
+@import "@wordpress/base-styles/mixins";
+@import "@wordpress/base-styles/breakpoints";
+@import "@wordpress/base-styles/variables";
+@import "@wordpress/base-styles/default-custom-properties";
+
+.vrts-test-run-wrap {
+
+	#wpfooter {
+		display: none;
+	}
+
+	#wpbody-content {
+		padding-bottom: 0;
+
+		@media (min-width: 851px) {
+			position: sticky;
+			top: 0;
+		}
+	}
+}
+
+.vrts-test-run-page {
+	--vrts-test-run-page-offset: 54px; // our header height
+
+	display: flex;
+	margin-right: 10px;
+	flex-direction: column;
+	min-height: 100vh;
+
+	@media (min-width: 851px) {
+		gap: 20px;
+		flex-direction: row;
+		margin-left: -20px;
+		margin-right: 20px;
+	}
+
+	&__sidebar {
+		order: 2;
+
+		&::-webkit-scrollbar {
+			width: 2px;
+			height: 2px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: linear-gradient(to right, #{$gray-10} 1px, transparent 1px);
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: $gray-20;
+		}
+
+		@media (min-width: 851px) {
+			order: -1;
+			width: 280px;
+			position: sticky;
+			top: var(--wp-admin--admin-bar--height);
+			height: calc(100vh - var(--wp-admin--admin-bar--height) - var(--vrts-test-run-page-offset));
+			overflow-x: hidden;
+			overflow-y: scroll;
+			-webkit-overflow-scrolling: touch;
+		}
+	}
+
+	&__content {
+		flex: 1;
+		padding-top: 10px;
+		padding-bottom: 20px;
+
+		&[data-vrts-fullscreen="true"] {
+			overflow: auto;
+			padding: 0 20px 20px 20px;
+			background-color: #f0f0f1;
+		}
+
+		@media (min-width: 851px) {
+			padding-top: 0;
+		}
+
+		&-heading {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+			column-gap: 2rem;
+			row-gap: 1rem;
+			padding: 1rem 0;
+			border-bottom: 1px solid $gray-10;
+
+			@media (min-width: 851px) {
+				box-sizing: border-box;
+				flex-wrap: nowrap;
+				position: sticky;
+				top: var(--wp-admin--admin-bar--height);
+				height: 62px;
+				padding: 0;
+				background: #f0f0f1;
+				z-index: 1;
+
+				[data-vrts-fullscreen="true"] & {
+					top: 0;
+				}
+			}
+		}
+
+		&-navigation-info {
+			display: none;
+			align-items: center;
+			justify-content: center;
+			gap: 0.25rem;
+			margin-top: 1rem;
+			color: #757575;
+
+			@media (min-width: 851px) {
+				display: flex;
+			}
+
+			svg {
+				color: $gray-70;
+				background: $gray-5;
+				border-radius: 3px;
+				padding: 5px;
+				width: 0.75rem;
+				height: 0.75rem;
+			}
+		}
+	}
+}

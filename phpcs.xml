@@ -16,6 +16,7 @@
 	<exclude-pattern>*/svn/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>includes/core/libraries/*</exclude-pattern>
+	<exclude-pattern>components/emails/*</exclude-pattern>
 
 	<!-- Strip the file paths down to the relevant bit -->
 	<arg name="basepath" value="./" />

@@ -3,10 +3,11 @@
 namespace Vrts\Services;
 
 use Vrts\Features\Cron_Jobs;
-use Vrts\Features\Email_Notifications;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
+use Vrts\Tables\Alerts_Table;
 use Vrts\Tables\Tests_Table;
 use WP_Error;
 
@@ -96,11 +97,6 @@ class Test_Service {
 				}//end if
 				$test_service = new Test_Service();
 				$test_service->update_test_from_comparison( $alert_id, $test_id, $data );
-				if ( $alert_id ) {
-					// Send e-mail notification.
-					$email_notifications = new Email_Notifications();
-					$email_notifications->send_email( $comparison['pixels_diff'], $post_id, $alert_id );
-				}//end if
 			}//end if
 			return true;
 		}//end if
@@ -254,7 +250,7 @@ class Test_Service {
 	public function create_remote_test( $post, $test = [] ) {
 		if ( Service::is_connected() ) {
 			$existing_test = Test::get_item_by_post_id( $post->ID );
-			if ( $existing_test ) {
+			if ( $existing_test && $existing_test->service_test_id ) {
 				return $existing_test;
 			}
 			$service_project_id = get_option( 'vrts_project_id' );
@@ -465,5 +461,49 @@ class Test_Service {
 			Test::reset_base_screenshot( $test->id );
 			Service::resume_test( $post_id );
 		}
+	}
+
+	/**
+	 * Update latest alert.
+	 *
+	 * @param int $post_id Post id.
+	 *
+	 * @return int|false
+	 */
+	public function update_latest_alert( $post_id ) {
+		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $post_id );
+		return Test::set_alert( $post_id, $latest_alert_id );
+	}
+
+	/**
+	 * Update latest alerts.
+	 *
+	 * @param array $test_ids Test ids.
+	 *
+	 * @return int|false|void
+	 */
+	public function update_latest_alerts( $test_ids ) {
+		$test_ids = array_map( 'intval', $test_ids );
+		$test_ids = array_filter( $test_ids );
+		if ( ! empty( $test_ids ) ) {
+			global $wpdb;
+			$table_test = Tests_Table::get_table_name();
+			$table_alert = Alerts_Table::get_table_name();
+
+			$placeholders = implode( ',', array_fill( 0, count( $test_ids ), '%d' ) );
+
+			$query = "UPDATE $table_test t
+				LEFT JOIN (
+					SELECT a.post_id, MAX(a.id) as latest_id
+					FROM $table_alert a
+					WHERE a.alert_state = 0
+					GROUP BY a.post_id
+				) a ON t.post_id = a.post_id
+				SET t.current_alert_id = a.latest_id
+				WHERE t.id IN ( $placeholders )";
+
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->query( $wpdb->prepare( $query, $test_ids ) );
+		}//end if
 	}
 }

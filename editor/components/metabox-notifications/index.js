@@ -103,7 +103,7 @@ const NotificationUpgradeRequired = ( { upgradeUrl = '' } ) => {
 									'Looks like you need a bigger plan to add more tests.',
 									'visual-regression-tests'
 								),
-								upgradeUrl, //admin_url( 'admin.php?page=vrts-upgrade' )
+								upgradeUrl,
 								__( 'Upgrade here!', 'visual-regression-tests' )
 							)
 						),
@@ -134,7 +134,7 @@ const NotificationConnectionFailed = ( { pluginUrl = '' } ) => {
 						__html: DOMPurify.sanitize(
 							sprintf(
 								'<a href="%1$s" title="%2$s">%2$s</a>',
-								pluginUrl, //admin_url( 'admin.php?page=vrts' )
+								pluginUrl,
 								__(
 									'Go to plugin page',
 									'visual-regression-tests'

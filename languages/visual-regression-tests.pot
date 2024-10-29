@@ -19,11 +19,11 @@ msgid "VRTs – Visual Regression Tests"
 msgstr ""
 
 #. Plugin URI of the plugin
-msgid "https://bleech.de/en/products/visual-regression-tests/"
+msgid "https://vrts.app/"
 msgstr ""
 
 #. Description of the plugin
-msgid "Test your website for unwanted visual changes. Run automatic tests and spot differences."
+msgid "Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates."
 msgstr ""
 
 #. Author of the plugin

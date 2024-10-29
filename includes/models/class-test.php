@@ -3,6 +3,8 @@
 namespace Vrts\Models;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Image_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Tables\Alerts_Table;
@@ -41,7 +43,7 @@ class Test {
 
 		if ( isset( $args['s'] ) && null !== $args['s'] ) {
 			$where .= $wpdb->prepare(
-				' AND posts.post_title LIKE %s',
+				' AND tests.post_title LIKE %s',
 				'%' . $wpdb->esc_like( $args['s'] ) . '%'
 			);
 		}
@@ -56,6 +58,14 @@ class Test {
 			if ( 'scheduled' === $args['filter_status'] ) {
 				$where .= " AND calculated_status = '4-scheduled'";
 			}
+		}
+
+		if ( isset( $args['ids'] ) ) {
+			$where .= $wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				' AND id IN (' . implode( ',', array_fill( 0, count( $args['ids'] ), '%d' ) ) . ')',
+				$args['ids']
+			);
 		}
 
 		$whitelist_orderby = [ 'id', 'post_title', 'status', 'base_screenshot_date' ];
@@ -88,14 +98,15 @@ class Test {
 					SELECT
 						tests.id,
 						tests.status,
-						tests.base_screenshot_date,
 						tests.post_id,
 						tests.current_alert_id,
 						tests.service_test_id,
-						tests.hide_css_selectors,
-						tests.next_run_date,
+						tests.base_screenshot_url,
+						tests.base_screenshot_date,
 						tests.last_comparison_date,
+						tests.next_run_date,
 						tests.is_running,
+						tests.hide_css_selectors,
 						posts.post_title,
 						CASE
 							WHEN tests.current_alert_id is not null THEN '6-has-alert'
@@ -137,18 +148,28 @@ class Test {
 	/**
 	 * Get all running test items from database
 	 *
+	 * @param bool $return_count Optional.
+	 *
 	 * @return array
 	 */
-	public static function get_all_running() {
+	public static function get_all_running( $return_count = false ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_results(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT * FROM $tests_table WHERE status != 0"
-		);
+		if ( $return_count ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->get_var(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT COUNT(*) FROM $tests_table WHERE status != 0"
+			);
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+			return $wpdb->get_results(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE status != 0"
+			);
+		}
 	}
 
 	/**
@@ -206,7 +227,7 @@ class Test {
 		return $wpdb->get_results(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $tests_table WHERE id IN (" . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) . ')',
+				"SELECT * FROM $tests_table WHERE id IN (" . implode( ',', array_fill( 0, count( $ids ), '%d' ) ) . ') ORDER BY id DESC',
 				$ids
 			)
 		);
@@ -346,11 +367,11 @@ class Test {
 	/**
 	 * Get post id by test id
 	 *
-	 * @param int $snapshot_test_id the id of the post.
+	 * @param int $id the id of the post.
 	 *
 	 * @return int
 	 */
-	public static function get_post_id( $snapshot_test_id = 0 ) {
+	public static function get_post_id( $id = 0 ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
@@ -359,8 +380,8 @@ class Test {
 		return $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT post_id FROM $tests_table WHERE snapshot_test_id = %d",
-				$snapshot_test_id
+				"SELECT post_id FROM $tests_table WHERE id = %d",
+				$id
 			)
 		);
 	}
@@ -433,50 +454,6 @@ class Test {
 		);
 
 		return null === $current_alert_id ? false : true;
-	}
-
-	/**
-	 * Get the target screenshot url
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return string
-	 */
-	public static function get_base_screenshot_url( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT base_screenshot_url FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
-	}
-
-	/**
-	 * Get the target snapshot date
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return string
-	 */
-	public static function get_base_screenshot_date( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT base_screenshot_date FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
 	}
 
 	/**
@@ -680,16 +657,16 @@ class Test {
 		$has_comparison = ! empty( $test->last_comparison_date );
 		$is_running = (bool) $test->is_running;
 
-		if ( $test->current_alert_id ) {
-			return 'has-alert';
-		}
-
 		if ( false === (bool) $test->status && ( $no_tests_left || $has_remote_test ) ) {
 			return 'no-credit-left';
 		}
 
 		if ( ! $has_remote_test ) {
 			return 'post-not-published';
+		}
+
+		if ( $test->current_alert_id ) {
+			return 'has-alert';
 		}
 
 		if ( ! $has_base_screenshot ) {
@@ -884,12 +861,12 @@ class Test {
 				$alert = Alert::get_item( $test->current_alert_id );
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-alerts&action=edit&alert_id=' );
+				$alert_link = Url_Helpers::get_alert_page( $test->current_alert_id );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $alert->target_screenshot_finish_date );
 				$instructions .= sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
 					esc_html__( '%1$s%2$s View Alert%3$s', 'visual-regression-tests' ),
-					'<a href="' . $base_link . $test->current_alert_id . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
+					'<a href="' . esc_url( $alert_link ) . '" title="' . esc_attr__( 'View Alert', 'visual-regression-tests' ) . '">',
 					'<i class="dashicons dashicons-image-flip-horizontal"></i>',
 					'</a>'
 				);
@@ -897,7 +874,7 @@ class Test {
 			case 'no-credit-left':
 				$class = 'paused';
 				$text = esc_html__( 'Disabled', 'visual-regression-tests' );
-				$base_link = admin_url( 'admin.php?page=vrts-upgrade' );
+				$base_link = Url_Helpers::get_page_url( 'upgrade' );
 				$instructions = sprintf(
 					/* translators: %1$s and %2$s: link wrapper. */
 					esc_html__( '%1$sUpgrade plugin%2$s to resume testing', 'visual-regression-tests' ),
@@ -922,14 +899,15 @@ class Test {
 			case 'scheduled':
 				$class = 'waiting';
 				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
-				if ( $test->next_run_date ) {
-					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->next_run_date );
+				$next_run = Test_Run::get_next_scheduled_run();
+				if ( $next_run ) {
+					$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $next_run->scheduled_at );
 				}
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is not required here.
 				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
 					$instructions .= sprintf(
 						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
-						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						Url_Helpers::get_run_manual_test_url( $test->id ),
 						$test->id,
 						esc_html__( 'Run Test', 'visual-regression-tests' ),
 						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
@@ -947,7 +925,7 @@ class Test {
 				if ( $has_subscription && isset( $_GET['page'] ) && 'vrts' === $_GET['page'] ) {
 					$instructions .= sprintf(
 						'<a class="vrts-run-test" href="%s" data-id="%d" title="%s">%s</a>',
-						admin_url( 'admin.php?page=vrts&action=run-manual-test&test_id=' ) . $test->id,
+						Url_Helpers::get_run_manual_test_url( $test->id ),
 						$test->id,
 						esc_html__( 'Run Test', 'visual-regression-tests' ),
 						'<i class="dashicons dashicons-update"></i> ' . esc_html__( 'Run Test', 'visual-regression-tests' )
@@ -1010,18 +988,18 @@ class Test {
 			default:
 				$text = sprintf(
 					'<a href="%s" target="_blank" data-id="%d" title="%s">%s</a>',
-					self::get_base_screenshot_url( $test->post_id ),
-					$test->id,
+					esc_url( Image_Helpers::get_screenshot_url( $test, 'base' ) ),
+					esc_attr( $test->id ),
 					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
 					esc_html__( 'View Snapshot', 'visual-regression-tests' )
 				);
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test->base_screenshot_date );
 				$screenshot = sprintf(
 					'<a href="%s" target="_blank" data-id="%d" title="%s"><img class="figure-image" src="%s" alt="%s"></a>',
-					esc_url( self::get_base_screenshot_url( $test->post_id ) ),
+					esc_url( Image_Helpers::get_screenshot_url( $test, 'base' ) ),
 					esc_attr( $test->id ),
 					esc_html__( 'View this snapshot', 'visual-regression-tests' ),
-					esc_url( self::get_base_screenshot_url( $test->post_id ) ),
+					esc_url( Image_Helpers::get_screenshot_url( $test, 'base' ) ),
 					esc_html__( 'View Snapshot', 'visual-regression-tests' )
 				);
 				break;
@@ -1033,5 +1011,27 @@ class Test {
 			'instructions' => $instructions,
 			'screenshot' => $screenshot,
 		];
+	}
+
+	/**
+	 * Get tests by service test ids.
+	 *
+	 * @param array $service_test_ids Service test ids.
+	 *
+	 * @return array
+	 */
+	public static function get_by_service_test_ids( $service_test_ids ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $tests_table WHERE service_test_id IN (" . implode( ',', array_fill( 0, count( $service_test_ids ), '%s' ) ) . ')',
+				$service_test_ids
+			)
+		);
 	}
 }

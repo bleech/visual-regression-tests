@@ -5,13 +5,13 @@
 	}
 
 	&-overlay {
-		animation: vrts-onboarding-animate 0.2s ease-in-out;
+		animation: vrts-fade-in 0.2s ease-in-out;
 		pointer-events: none;
 	}
 
 	&-popover {
 		all: unset;
-		animation: vrts-onboarding-animate 0.2s;
+		animation: vrts-fade-in 0.2s;
 		box-sizing: border-box;
 		background-color: #fff;
 		color: #1e1e1e;
@@ -31,33 +31,34 @@
 	&-popover-title {
 		font-size: 1rem;
 		font-weight: 600;
+		line-height: 1.5;
 		padding-right: 25px;
 	}
 
 	&-popover-description {
 		font-size: 0.8125rem;
 		margin-top: 10px;
-		padding-right: 15px;
 	}
 
 	&-popover-close-btn {
 		all: unset;
 		position: absolute;
-		top: 15px;
-		right: 15px;
+		top: 7px;
+		right: 7px;
 		width: 32px;
 		height: 32px;
 		cursor: pointer;
 		display: block !important;
 		background-image: url('data:image/svg+xml,<svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.2564 1.41L6.71644 4.95L10.2564 8.49L8.84645 9.9L5.30645 6.37L1.77644 9.9L0.356445 8.48L3.88645 4.95L0.356445 1.42L1.77644 0L5.30645 3.53L8.84645 0L10.2564 1.41Z" fill="%23757575"/></svg>'); // stylelint-disable-line
-		background-position: top right;
+		background-position: center;
 		background-repeat: no-repeat;
+		border-radius: 3px;
 		font-size: 0;
 		z-index: 1;
-		transition: opacity 0.2s;
+		transition: background-color 0.2s;
 
 		&:hover {
-			opacity: 0.8;
+			background-color: #f6f7f7;
 		}
 	}
 
@@ -198,15 +199,4 @@
 
 .vrts-onboarding-nonblocking ~ .driver-overlay {
 	display: none;
-}
-
-@keyframes vrts-onboarding-animate {
-
-	0% {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 1;
-	}
 }

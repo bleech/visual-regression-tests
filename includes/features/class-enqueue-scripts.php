@@ -3,10 +3,10 @@
 namespace Vrts\Features;
 
 use Vrts\Core\Utilities\Date_Time_Helpers;
+use Vrts\Core\Utilities\Image_Helpers;
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test;
-use Vrts\Features\Metaboxes;
 use Vrts\Features\Subscription;
-use Vrts\Models\Alert;
 
 class Enqueue_Scripts {
 	/**
@@ -50,7 +50,9 @@ class Enqueue_Scripts {
 				'vrts-admin',
 				'vrts_admin_vars',
 				[
-					'rest_url' => esc_url_raw( rest_url() ),
+					'rest_url' => esc_url_raw( rest_url( 'vrts/v1' ) ),
+					'rest_nonce' => wp_create_nonce( 'wp_rest' ),
+					'pluginUrl' => vrts()->get_plugin_url(),
 					'currentUserId' => get_current_user_id(),
 					'onboarding' => apply_filters( 'vrts_onboarding', null ),
 				]
@@ -107,12 +109,12 @@ class Enqueue_Scripts {
 					'plugin_name' => vrts()->get_plugin_info( 'name' ),
 					'rest_url' => esc_url_raw( rest_url() ),
 					'has_post_alert' => Test::has_post_alert( $post->ID ),
-					'base_screenshot_url' => Test::get_base_screenshot_url( $post->ID ),
-					'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( Test::get_base_screenshot_date( $post->ID ) ),
+					'base_screenshot_url' => Image_Helpers::get_screenshot_url( $test, 'base' ),
+					'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( $test->base_screenshot_date ?? null ),
 					'remaining_tests' => Subscription::get_remaining_tests(),
 					'total_tests' => Subscription::get_total_tests(),
-					'upgrade_url' => admin_url( 'admin.php?page=vrts-upgrade' ),
-					'plugin_url' => admin_url( 'admin.php?page=vrts' ),
+					'upgrade_url' => Url_Helpers::get_page_url( 'upgrade' ),
+					'plugin_url' => Url_Helpers::get_page_url( 'tests' ),
 					'is_connected' => Service::is_connected(),
 					'test_status' => Test::get_status_data( $test ),
 					'screenshot' => Test::get_screenshot_data( $test ),

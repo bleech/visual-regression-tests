@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Services\Test_Service;
 
 class Bulk_Actions {
@@ -47,7 +48,7 @@ class Bulk_Actions {
 
 		$service = new Test_Service();
 		$created_tests = $service->create_tests( $post_ids );
-		$vrts_url = admin_url( 'admin.php?page=vrts' );
+		$vrts_url = Url_Helpers::get_page_url( 'tests' );
 
 		if ( is_wp_error( $created_tests ) ) {
 			$redirect_to = add_query_arg([

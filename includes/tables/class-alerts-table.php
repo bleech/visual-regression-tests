@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Alerts_Table {
 
-	const DB_VERSION = '1.1';
+	const DB_VERSION = '1.2';
 	const TABLE_NAME = 'vrts_alerts';
 
 	/**
@@ -40,6 +40,7 @@ class Alerts_Table {
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				title text,
 				post_id bigint(20),
+				test_run_id bigint(20),
 				screenshot_test_id varchar(40),
 				target_screenshot_url varchar(2048),
 				target_screenshot_finish_date datetime,
@@ -49,16 +50,21 @@ class Alerts_Table {
 				comparison_id varchar(40),
 				differences int(4),
 				alert_state tinyint NOT NULL DEFAULT 0,
+				is_false_positive tinyint NOT NULL DEFAULT 0,
+				meta text,
 				PRIMARY KEY (id)
 			) $charset_collate;";
+
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
 			dbDelta( $sql );
-			update_option( $option_name, self::DB_VERSION );
 
+			if ( $installed_version && version_compare( $installed_version, '1.2', '<' ) ) {
+				static::set_is_false_positive_from_alert_state();
+			}
+
+			update_option( $option_name, self::DB_VERSION );
 		}//end if
 	}
-
 
 	/**
 	 * Drop the database table for tests.
@@ -71,5 +77,18 @@ class Alerts_Table {
 		$wpdb->query( $sql );
 
 		delete_option( self::TABLE_NAME . '_db_version' );
+	}
+
+	/**
+	 * Set is_false_positive to 1 for all alerts that have alert_state set to 2.
+	 */
+	protected static function set_is_false_positive_from_alert_state() {
+		global $wpdb;
+		$table_name = self::get_table_name();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$wpdb->query(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"UPDATE {$table_name} SET is_false_positive = 1, alert_state = 1 WHERE alert_state = 2"
+		);
 	}
 }

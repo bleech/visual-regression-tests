@@ -147,4 +147,18 @@ class String_Helpers {
 
 		return implode( '', $lines ) . "\n{$end_tabs}";
 	}
+
+	/**
+	 * Truncate a string.
+	 *
+	 * @param string $string The string to truncate.
+	 * @param int    $length The length to truncate to.
+	 * @param string $append The string to append.
+	 *
+	 * @return string
+	 */
+	public static function truncate( $string, $length = 100, $append = '...' ) {
+		$string = trim( $string );
+		return ( strlen( $string ) > $length ) ? substr( $string, 0, $length - strlen( $append ) ) . $append : $string;
+	}
 }
