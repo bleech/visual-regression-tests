@@ -81,7 +81,8 @@ class Test_Runs_Table {
 		$sql = "SELECT
 				a.id as id,
 				a.target_screenshot_finish_date as finished_at,
-				t.id as test_id
+				t.id as test_id,
+				a.post_id as post_id
 			FROM {$alerts_table} a
 			JOIN {$tests_table} t
 			ON t.post_id = a.post_id
