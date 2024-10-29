@@ -64,7 +64,7 @@ class VrtsAlertActions extends window.HTMLElement {
 			if ( isReadStatusAction && isUnread ) {
 				this.setAsReadTimeout = setTimeout( () => {
 					action.click();
-				}, 500 );
+				}, 1000 );
 			}
 		} );
 	}
