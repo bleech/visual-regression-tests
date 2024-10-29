@@ -33,6 +33,7 @@ class Email_Service {
 		$emails = $this->get_test_run_emails( $data['run'] );
 
 		if ( $emails ) {
+			remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
 			return wp_mail( $emails, wp_specialchars_decode( $subject ), $message, $headers );
 		}
 
