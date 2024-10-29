@@ -16,7 +16,7 @@ class Test_Runs_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'admin_init', [ $this, 'remove_admin_notices' ] );
+		add_action( 'admin_init', [ $this, 'remove_admin_notices' ], 99 );
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
 
