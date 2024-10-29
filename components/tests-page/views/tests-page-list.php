@@ -13,7 +13,7 @@ use Vrts\Services\Manual_Test_Service;
 
 	<menu class="page-title-actions">
 		<li>
-			<button type="button" class="page-title-action button-primary"
+			<button type="button" class="page-title-action vrts-page-title-action button-primary"
 				id="<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? 'modal-add-new-disabled' : 'show-modal-add-new'; ?>"
 				<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? ' disabled' : ''; ?>>
 				<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>

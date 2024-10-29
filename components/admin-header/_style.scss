@@ -97,13 +97,13 @@
 				left: 0;
 				width: 100%;
 				height: 3px;
-				background: var(--wp-admin-theme-color);
+				background: var(--vrts-admin-theme-color);
 				opacity: 0;
 				transition: opacity 0.2s;
 			}
 
 			[aria-current="true"] & {
-				border-bottom-color: var(--wp-admin-theme-color);
+				border-bottom-color: var(--vrts-admin-theme-color);
 				font-weight: 600;
 
 				&::after {
@@ -117,11 +117,11 @@
 
 			&:hover,
 			&:focus {
-				color: var(--wp-admin-theme-color);
+				color: var(--vrts-admin-theme-color);
 			}
 
 			&:focus {
-				box-shadow: inset 0 0 0 2px var(--wp-admin-theme-color);
+				box-shadow: inset 0 0 0 2px var(--vrts-admin-theme-color);
 			}
 
 			// required to match the color scheme
@@ -132,11 +132,11 @@
 
 		&-button {
 			align-self: center;
-			border: 1px solid var(--wp-admin-theme-color);
+			border: 1px solid var(--vrts-admin-theme-color);
 			border-radius: 50px;
 			padding: 8px 14px;
 			margin-left: 20px;
-			color: var(--wp-admin-theme-color);
+			color: var(--vrts-admin-theme-color);
 			text-decoration: none;
 
 			&::after {
@@ -151,8 +151,8 @@
 			}
 
 			[aria-current="true"] & {
-				border: 1px solid var(--wp-admin-theme-color);
-				background: rgba(var(--wp-admin-theme-color--rgb), 0.1);
+				border: 1px solid var(--vrts-admin-theme-color);
+				background: rgba(var(--vrts-admin-theme-color--rgb), 0.1);
 				font-weight: initial;
 			}
 
@@ -161,7 +161,7 @@
 			}
 
 			&:focus {
-				box-shadow: 0 0 0 2px var(--wp-admin-theme-color);
+				box-shadow: 0 0 0 2px var(--vrts-admin-theme-color);
 			}
 		}
 	}
