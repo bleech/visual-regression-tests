@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 1.9.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 2.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-05-24T12:10:12+00:00\n"
+"POT-Creation-Date: 2024-10-29T17:06:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: visual-regression-tests\n"
@@ -35,13 +35,13 @@ msgid "https://bleech.de"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:2
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:2
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:7
 #: editor/components/metabox-notifications/index.js:123
 msgid "Connection failed"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-connection-failed.php:3
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:3
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:8
 #: editor/components/metabox-notifications/index.js:127
 msgid "Something went wrong while trying to connect to the external service."
 msgstr ""
@@ -59,11 +59,11 @@ msgid "Click “Add New“ to create a Visual Regression Test for your Website a
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-license-added.php:3
-msgid "Thank you for Upgrading!"
+msgid "License activated!"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-license-added.php:4
-msgid "You have successfully upgraded your plan."
+msgid "Enjoy your upgraded features for seamless visual testing."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-license-not-added.php:3
@@ -72,7 +72,7 @@ msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
 #: components/admin-notification/views/admin-notification-license-not-added.php:8
-msgid "We could not verify the license key you entered. Please check the entry for typos and try again. A license key can only be used on one website at a time. If you are already using the license key on another website, you need to remove it there first. Please don't hesitate to %1$scontact us%2$s for assistance."
+msgid "We could not verify the license key you entered. Please check for typos and try again. If the issue persists, %1$scontact us%2$s for assistance. We’re here to help!"
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-new-test-added.php:3
@@ -84,20 +84,20 @@ msgstr ""
 msgid "Tests will be run for the following page: %s"
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-new-test-failed.php:2
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:2
+#: components/admin-notification/views/admin-notification-new-test-failed.php:7
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:7
 #: editor/components/metabox-notifications/index.js:91
 msgid "Ready for an Upgrade?"
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-new-test-failed.php:7
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:7
+#: components/admin-notification/views/admin-notification-new-test-failed.php:12
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:12
 #: editor/components/metabox-notifications/index.js:102
 msgid "Looks like you need a bigger plan to add more tests."
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-new-test-failed.php:9
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:9
+#: components/admin-notification/views/admin-notification-new-test-failed.php:14
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-upgrade-required.php:14
 #: editor/components/metabox-notifications/index.js:107
 msgid "Upgrade here!"
 msgstr ""
@@ -111,12 +111,12 @@ msgstr ""
 msgid "Tests will be run for the following pages: %s"
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-plugin-activated.php:3
+#: components/admin-notification/views/admin-notification-plugin-activated.php:8
 msgid "VRTs Plugin successfully activated!"
 msgstr ""
 
 #. translators: %1$s, %2$s and %3$s, %4$s: link wrapper.
-#: components/admin-notification/views/admin-notification-plugin-activated.php:7
+#: components/admin-notification/views/admin-notification-plugin-activated.php:12
 msgid "Start to %1$sconfigure tests%2$s, or check the customization options in the %3$splugin settings%4$s."
 msgstr ""
 
@@ -141,208 +141,195 @@ msgstr ""
 msgid "Undo"
 msgstr ""
 
+#: components/admin-notification/views/admin-notification-test-failed.php:3
+msgid "Test couldn’t be started"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-test-failed.php:4
+msgid "A Test is already in progress. Please wait for the current Test to finish, then try again."
+msgstr ""
+
 #: components/admin-notification/views/admin-notification-test-started.php:3
-msgid "Testing has started"
+msgid "Testing has started 🚀"
+msgstr ""
+
+#: components/admin-notification/views/admin-notification-test-started.php:4
+msgid "New screenshots are being taken and compared with the previous version."
 msgstr ""
 
 #: components/admin-notification/views/admin-notification-test-started.php:5
-msgid "If the testing detects any visual differences, we will notify you via e-mail alerts."
+msgid "This may take a moment. You’ll receive an email if any visual changes are detected."
 msgstr ""
 
-#: components/admin-notification/views/admin-notification-unlock-more-tests.php:2
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:2
+#: components/admin-notification/views/admin-notification-unlock-more-tests.php:7
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:7
 #: editor/components/metabox-notifications/index.js:50
 msgid "Unlock more tests"
 msgstr ""
 
 #. translators: %1$s, %2$s: number of tests.
-#: components/admin-notification/views/admin-notification-unlock-more-tests.php:9
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:9
+#: components/admin-notification/views/admin-notification-unlock-more-tests.php:14
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:14
 #: editor/components/metabox-notifications/index.js:60
 msgid "Good work! You have added %1$s of %2$s available tests."
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
-#: components/admin-notification/views/admin-notification-unlock-more-tests.php:15
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:15
+#: components/admin-notification/views/admin-notification-unlock-more-tests.php:20
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-unlock-more-tests.php:20
 #: editor/components/metabox-notifications/index.js:69
 msgid "Upgrade %1$shere%2$s to add more tests to your website!"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:3
-msgid "Snapshot vs. Alert"
+#: components/alert-actions/index.php:17
+msgid "Flag as false positive"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:6
-msgid "Difference"
+#: components/alert-actions/index.php:18
+msgid "Unflag as false positive"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:9
-msgid "Split"
+#: components/alert-actions/index.php:26
+msgid "Mark as read"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:12
-msgid "Side by Side"
+#: components/alert-actions/index.php:27
+msgid "Mark as unread"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:18
-#: components/alerts-page/views/alert-content.php:24
-#: components/alerts-page/views/alert-content.php:25
-#: components/alerts-page/views/alert-content.php:40
-#: components/alerts-page/views/alert-content.php:41
-#: components/metabox-classic-editor/index.php:65
-#: includes/list-tables/class-tests-list-table.php:96
-#: includes/models/class-test.php:995
-#: editor/components/metabox/index.js:224
-msgid "Snapshot"
+#: components/alert-actions/index.php:31
+#: components/alert-actions/index.php:41
+msgid "Hide elements"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:28
-#: components/alerts-page/views/alert-content.php:45
-msgid "Screenshot"
+#: components/alert-actions/index.php:38
+#: components/settings-page/index.php:18
+#: components/tests-page/views/tests-page-list.php:84
+msgid "Close"
 msgstr ""
 
-#: components/alerts-page/views/alert-content.php:29
-#: components/alerts-page/views/alert-content.php:46
-msgid "Alert"
-msgstr ""
-
-#. translators: %s: the alert title.
-#: components/alerts-page/views/alerts-page-edit.php:6
-#: components/alerts-page/views/alerts-page-view.php:6
-msgid "View Alert %s"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:13
-#: components/alerts-page/views/alerts-page-view.php:13
-msgid "Permalink:"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:17
-#: components/alerts-page/views/alerts-page-view.php:17
-msgid "Current Page"
-msgstr ""
-
-#. translators: %d: pages.
-#: components/alerts-page/views/alerts-page-edit.php:22
-#: components/alerts-page/views/alerts-page-view.php:22
-msgctxt "e.g. 1 of 2"
-msgid "%1$d of %2$d"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:31
-#: components/alerts-page/views/alerts-page-view.php:31
-msgid "Previous alert"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:37
-#: components/alerts-page/views/alerts-page-view.php:37
-msgid "Next alert"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:56
-#: components/alerts-page/views/alerts-page-view.php:56
-msgid "Details"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:66
-#: components/alerts-page/views/alerts-page-view.php:66
-msgid "Detected:"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:74
-#: components/alerts-page/views/alerts-page-view.php:74
-msgid "Visual Difference:"
-msgstr ""
-
-#. translators: %s: the count of pixels with a visual difference.
-#: components/alerts-page/views/alerts-page-edit.php:77
-#: components/alerts-page/views/alerts-page-view.php:77
-#: includes/list-tables/class-alerts-list-table.php:76
-#: includes/list-tables/class-alerts-list-table.php:199
-#: includes/list-tables/class-alerts-list-table.php:209
-#: includes/list-tables/class-alerts-list-table.php:220
-msgid "%s pixel"
-msgid_plural "%s pixels"
-msgstr[0] ""
-msgstr[1] ""
-
-#: components/alerts-page/views/alerts-page-edit.php:83
-msgid "Info:"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:87
-msgid "Testing is disconnected until connection with the service is fixed."
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:102
-#: components/alerts-page/views/alerts-page-view.php:89
-msgid "Mark as false positive"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:104
-#: components/alerts-page/views/alerts-page-edit.php:115
-#: components/alerts-page/views/alerts-page-view.php:93
-msgid "Go Back"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:108
-#: includes/list-tables/class-alerts-list-table.php:165
-#: includes/list-tables/class-alerts-list-table.php:266
-msgid "Archive"
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:129
-#: includes/features/class-admin.php:43
-#: includes/features/class-settings-page.php:33
-#: includes/features/class-settings-page.php:34
-#: includes/features/class-settings-page.php:48
-msgid "Settings"
-msgstr ""
-
-#. translators: %1$s, %2$s: strong element wrapper.
-#: components/alerts-page/views/alerts-page-edit.php:142
-#: includes/list-tables/class-tests-list-table.php:376
-msgid "%1$sExclude elements on this page:%2$s "
-msgstr ""
-
-#. translators: %1$s, %2$s: link wrapper.
-#: components/alerts-page/views/alerts-page-edit.php:147
-#: includes/list-tables/class-tests-list-table.php:382
-msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
-msgstr ""
-
-#: components/alerts-page/views/alerts-page-edit.php:153
+#: components/alert-actions/index.php:47
 #: components/metabox-classic-editor/index.php:98
-#: includes/list-tables/class-tests-list-table.php:371
+#: includes/list-tables/class-tests-list-table.php:358
 #: editor/components/settings/index.js:54
 msgid "e.g.: .lottie, #ads"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-edit.php:161
-msgid "Save"
+#: components/alert-actions/index.php:48
+msgid "Hide elements on snapshots to exclude them from comparisons."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-list.php:3
-#: includes/features/class-alerts-page.php:30
-#: includes/features/class-alerts-page.php:31
-msgid "Alerts"
+#: components/alert-actions/index.php:50
+msgid "Save Changes"
 msgstr ""
 
-#. translators: %s: search query.
-#: components/alerts-page/views/alerts-page-list.php:11
-#: components/tests-page/views/tests-page-list.php:41
-msgid "Search results for: %s"
+#: components/alert-actions/index.php:52
+msgid "Saved successfully."
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-list.php:28
-#: components/tests-page/views/tests-page-list.php:57
-#: components/tests-page/views/tests-page-list.php:88
-msgid "Search"
+#. translators: %s: the count of pixels with a visual difference.
+#: components/comparisons/index.php:13
+msgid "%spx Difference"
 msgstr ""
 
-#: components/alerts-page/views/alerts-page-view.php:87
-msgid "Unmark as false positive"
+#: components/comparisons/index.php:15
+msgid "Expand"
+msgstr ""
+
+#: components/comparisons/index.php:26
+#: components/test-run-alerts/index.php:75
+#: components/test-run-receipt/index.php:35
+msgid "Difference"
+msgstr ""
+
+#: components/comparisons/index.php:32
+#: components/metabox-classic-editor/index.php:65
+#: includes/list-tables/class-tests-list-table.php:94
+#: includes/models/class-test.php:973
+#: editor/components/metabox/index.js:224
+msgid "Snapshot"
+msgstr ""
+
+#: components/comparisons/index.php:35
+msgid "Screenshot"
+msgstr ""
+
+#: components/emails/test-run/index.php:94
+msgid "Howdy 👋"
+msgstr ""
+
+#: components/emails/test-run/index.php:95
+msgid "We've detected visual changes on your website."
+msgstr ""
+
+#: components/emails/test-run/index.php:115
+#: components/test-run-receipt/index.php:18
+msgid "VRTs Plugin"
+msgstr ""
+
+#: components/emails/test-run/index.php:123
+#: components/test-run-pagination/index.php:16
+#: components/test-run-receipt/index.php:21
+msgid "Test Receipt"
+msgstr ""
+
+#. translators: %s: the run number.
+#: components/emails/test-run/index.php:136
+#: components/test-run-info/index.php:13
+#: components/test-run-receipt/index.php:28
+msgid "Run #%s"
+msgstr ""
+
+#. translators: %s. Test run receipt diff in pixels
+#: components/emails/test-run/index.php:172
+#: components/test-run-receipt/index.php:54
+msgctxt "test run receipt difference"
+msgid "%spx"
+msgstr ""
+
+#. translators: %s. Number of tests
+#. translators: %s: number of alerts, %s: number of tests.
+#. translators: %s Test. Test count
+#: components/emails/test-run/index.php:192
+#: components/test-run-receipt/index.php:69
+#: components/test-run-receipt/index.php:81
+#: components/test-run-receipt/index.php:93
+#: includes/list-tables/class-test-runs-list-table.php:339
+#: includes/list-tables/class-test-runs-queue-list-table.php:257
+msgid "%s Test"
+msgid_plural "%s Tests"
+msgstr[0] ""
+msgstr[1] ""
+
+#: components/emails/test-run/index.php:197
+#: components/test-run-receipt/index.php:75
+#: includes/models/class-test-run.php:482
+#: includes/models/class-test.php:920
+msgid "Passed"
+msgstr ""
+
+#: components/emails/test-run/index.php:201
+msgid "Changes Detected"
+msgstr ""
+
+#: components/emails/test-run/index.php:211
+#: components/test-run-receipt/index.php:100
+#: includes/list-tables/class-test-runs-list-table.php:70
+#: includes/list-tables/class-test-runs-queue-list-table.php:60
+msgid "Trigger"
+msgstr ""
+
+#: components/emails/test-run/index.php:234
+#: components/test-run-receipt/index.php:111
+msgid "Test Completed!"
+msgstr ""
+
+#: components/emails/test-run/index.php:243
+msgid "View Details"
+msgstr ""
+
+#: components/emails/test-run/index.php:259
+msgid "Your VRTs squad! 🚀"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:15
@@ -357,7 +344,8 @@ msgid "Add this page to your Visual Regression Tests for consistent checks to en
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:55
-#: includes/list-tables/class-tests-list-table.php:97
+#: includes/list-tables/class-test-runs-queue-list-table.php:61
+#: includes/list-tables/class-tests-list-table.php:95
 #: editor/components/metabox/index.js:200
 msgid "Test Status"
 msgstr ""
@@ -373,7 +361,7 @@ msgstr ""
 msgid "Exclude elements on this page: Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
 
-#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:4
+#: components/metabox-classic-editor/metabox-notifications/metabox-notification-connection-failed.php:9
 #: editor/components/metabox-notifications/index.js:138
 msgid "Go to plugin page"
 msgstr ""
@@ -390,10 +378,235 @@ msgstr ""
 msgid "The Visual Regression Test for the page %s has been added!"
 msgstr ""
 
+#: components/settings-page/index.php:20
+msgid "🚀 Go Pro for more testing power!"
+msgstr ""
+
+#: components/settings-page/index.php:23
+msgid "Upgrade your plan and unlock automatic testing after updates, plus more tools like manual testing to keep your sites running smoothly."
+msgstr ""
+
+#: components/settings-page/index.php:24
+msgid "Unlock Now"
+msgstr ""
+
+#: components/test-run-alerts/index.php:20
+msgid "All Runs"
+msgstr ""
+
+#: components/test-run-alerts/index.php:29
+msgid "Mark all as read"
+msgstr ""
+
+#: components/test-run-alerts/index.php:30
+msgid "Mark all as unread"
+msgstr ""
+
+#: components/test-run-page/index.php:24
+msgid "Navigate with arrow keys"
+msgstr ""
+
+#: components/test-run-pagination/index.php:12
+msgid "Current Page"
+msgstr ""
+
+#. translators: %d: pages.
+#: components/test-run-pagination/index.php:20
+msgctxt "e.g. Alert 1 of 2"
+msgid "Alert %1$d of %2$d"
+msgstr ""
+
+#: components/test-run-pagination/index.php:29
+msgid "Previous alert"
+msgstr ""
+
+#: components/test-run-pagination/index.php:34
+msgid "Next alert"
+msgstr ""
+
+#: components/test-run-receipt/index.php:34
+msgid "Page"
+msgstr ""
+
+#: components/test-run-receipt/index.php:64
+msgid "Total"
+msgstr ""
+
+#: components/test-run-receipt/index.php:87
+#: includes/list-tables/class-test-runs-list-table.php:106
+#: includes/list-tables/class-tests-list-table.php:244
+#: includes/models/class-test-run.php:445
+#: includes/models/class-test.php:863
+msgid "Changes detected"
+msgstr ""
+
+#: components/test-run-success/index.php:4
+msgid "Change is inevitable – except from a vending machine."
+msgstr ""
+
+#: components/test-run-success/index.php:8
+msgid "It’s not what happens to you, but how you react to it that matters."
+msgstr ""
+
+#: components/test-run-success/index.php:12
+msgid "Every success story is a tale of constant adaptation, revision, and change."
+msgstr ""
+
+#: components/test-run-success/index.php:16
+msgid "Change is hard at first, messy in the middle and gorgeous at the end."
+msgstr ""
+
+#: components/test-run-success/index.php:20
+msgid "Without deviation from the norm, progress is not possible."
+msgstr ""
+
+#: components/test-run-success/index.php:24
+msgid "Perfection is not attainable, but if we chase perfection we can catch excellence."
+msgstr ""
+
+#: components/test-run-success/index.php:28
+msgid "It’s the little details that are vital. Little things make big things happen."
+msgstr ""
+
+#: components/test-run-success/index.php:32
+msgid "It is not the strongest of the species that survive, nor the most intelligent. It is the one that is most adaptable to change."
+msgstr ""
+
+#: components/test-run-success/index.php:36
+msgid "Attention to detail is not about perfection. It’s about excellence, about constant improvement."
+msgstr ""
+
+#: components/test-run-success/index.php:40
+msgid "The difference between something good and something great is attention to detail."
+msgstr ""
+
+#: components/test-run-success/index.php:44
+msgid "Details make perfection, and perfection is not a detail."
+msgstr ""
+
+#: components/test-run-success/index.php:48
+msgid "Not everything that is faced can be changed, but nothing can be changed until it is faced."
+msgstr ""
+
+#: components/test-run-success/index.php:52
+msgid "Small deeds done are better than great deeds planned."
+msgstr ""
+
+#: components/test-run-success/index.php:56
+msgid "Great things are not done by impulse, but by a series of small things brought together."
+msgstr ""
+
+#: components/test-run-success/index.php:60
+msgid "Success is the sum of small efforts, repeated day in and day out."
+msgstr ""
+
+#: components/test-run-success/index.php:64
+msgid "To improve is to change; to be perfect is to change often."
+msgstr ""
+
+#: components/test-run-success/index.php:68
+msgid "The details are not the details. They make the design."
+msgstr ""
+
+#: components/test-run-success/index.php:72
+msgid "God is in the details."
+msgstr ""
+
+#: components/test-run-success/index.php:76
+msgid "Excellence is the gradual result of always striving to do better."
+msgstr ""
+
+#: components/test-run-success/index.php:80
+msgid "The world is changed by your example, not by your opinion."
+msgstr ""
+
+#: components/test-run-success/index.php:84
+msgid "Doing the little things can make a big difference."
+msgstr ""
+
+#: components/test-run-success/index.php:88
+msgid "Tiny tweaks can lead to big changes."
+msgstr ""
+
+#: components/test-run-success/index.php:92
+msgid "Life is a series of natural and spontaneous changes. Don’t resist them—that only creates sorrow. Let reality be reality."
+msgstr ""
+
+#: components/test-run-success/index.php:96
+msgid "A bend in the road is not the end of the road… unless you fail to make the turn."
+msgstr ""
+
+#: components/test-run-success/index.php:100
+msgid "The only way to make sense out of change is to plunge into it, move with it, and join the dance."
+msgstr ""
+
+#: components/test-run-success/index.php:104
+msgid "Change is the only constant in life."
+msgstr ""
+
+#: components/test-run-success/index.php:108
+msgid "The art of life lies in a constant readjustment to our surroundings."
+msgstr ""
+
+#: components/test-run-success/index.php:112
+msgid "Adaptability is about the powerful difference between adapting to cope and adapting to win."
+msgstr ""
+
+#: components/test-run-success/index.php:116
+msgid "The pessimist complains about the wind; the optimist expects it to change; the realist adjusts the sails."
+msgstr ""
+
+#: components/test-run-success/index.php:120
+msgid "The world hates change, yet it is the only thing that has brought progress."
+msgstr ""
+
+#: components/test-run-success/index.php:124
+msgid "Change is inevitable. Change is constant."
+msgstr ""
+
+#: components/test-run-success/index.php:128
+msgid "You must welcome change as the rule but not as your ruler."
+msgstr ""
+
+#: components/test-run-success/index.php:132
+msgid "Change is the process by which the future invades our lives."
+msgstr ""
+
+#: components/test-run-success/index.php:136
+msgid "Don’t fear failure. Fear being in the exact same place next year as you are today."
+msgstr ""
+
+#: components/test-run-success/index.php:140
+msgid "Sometimes good things fall apart so better things can fall together."
+msgstr ""
+
+#: components/test-run-success/index.php:144
+msgid "Change starts when someone sees the next step."
+msgstr ""
+
+#: components/test-run-success/index.php:159
+msgid "Nice work – no more Alerts left to review!"
+msgstr ""
+
+#: components/test-run-success/index.php:165
+msgid "Smooth sailing – no changes found!"
+msgstr ""
+
+#: components/test-run-success/index.php:166
+msgid "You're good to go."
+msgstr ""
+
+#: components/test-runs-page/index.php:9
+#: includes/features/class-test-runs-page.php:43
+#: includes/features/class-test-runs-page.php:44
+#: includes/list-tables/class-test-runs-list-table.php:40
+msgid "Runs"
+msgstr ""
+
 #: components/tests-page/views/tests-page-list.php:11
-#: includes/features/class-admin.php:42
-#: includes/features/class-tests-page.php:29
-#: includes/features/class-tests-page.php:30
+#: includes/features/class-admin.php:44
+#: includes/features/class-tests-page.php:31
+#: includes/features/class-tests-page.php:32
 msgid "Tests"
 msgstr ""
 
@@ -405,53 +618,65 @@ msgstr ""
 msgid "Run All Tests"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:78
-#: components/tests-page/views/tests-page-list.php:119
+#. translators: %s: search query.
+#: components/tests-page/views/tests-page-list.php:41
+msgid "Search results for: %s"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:57
+#: components/tests-page/views/tests-page-list.php:93
+msgid "Search"
+msgstr ""
+
+#: components/tests-page/views/tests-page-list.php:83
+#: components/tests-page/views/tests-page-list.php:124
 msgid "Add New Test"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:79
-msgid "Close"
-msgstr ""
-
-#: components/tests-page/views/tests-page-list.php:82
+#: components/tests-page/views/tests-page-list.php:87
 msgid "Destination URL"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:102
+#: components/tests-page/views/tests-page-list.php:107
 msgid "No search term specified. Showing recent items."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:103
+#: components/tests-page/views/tests-page-list.php:108
 msgid "Search or use up and down arrow keys to select an item."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:114
+#: components/tests-page/views/tests-page-list.php:119
 msgid "Cancel"
 msgstr ""
 
+#: includes/core/settings/field-checkbox/index.php:17
+#: includes/core/settings/field-info/index.php:6
+#: includes/core/settings/field-select/index.php:16
+#: includes/core/settings/field-text/index.php:13
+msgid "Pro"
+msgstr ""
+
 #. translators: 1: Date, 2: Time.
-#: includes/core/utilities/class-date-time-helpers.php:23
-#: includes/core/utilities/class-date-time-helpers.php:47
+#: includes/core/utilities/class-date-time-helpers.php:24
+#: includes/core/utilities/class-date-time-helpers.php:48
 msgctxt "date at time"
 msgid "%1$s at %2$s"
 msgstr ""
 
 #. translators: Date format. See https://www.php.net/manual/datetime.format.php
-#: includes/core/utilities/class-date-time-helpers.php:25
-#: includes/core/utilities/class-date-time-helpers.php:49
+#: includes/core/utilities/class-date-time-helpers.php:26
 msgctxt "date format"
 msgid "Y/m/d"
 msgstr ""
 
 #. translators: Time format. See https://www.php.net/manual/datetime.format.php
-#: includes/core/utilities/class-date-time-helpers.php:27
-#: includes/core/utilities/class-date-time-helpers.php:51
+#: includes/core/utilities/class-date-time-helpers.php:28
 msgctxt "time format"
 msgid "g:i a"
 msgstr ""
 
 #: includes/features/class-admin-columns.php:48
+#: includes/list-tables/class-test-runs-list-table.php:71
 msgid "Status"
 msgstr ""
 
@@ -468,61 +693,15 @@ msgstr ""
 msgid "Status: Testing not activated"
 msgstr ""
 
-#: includes/features/class-alerts-page.php:175
-#: includes/features/class-alerts-page.php:242
-#: includes/features/class-alerts-page.php:298
-#: includes/features/class-tests-page.php:101
-#: includes/features/class-tests-page.php:156
-#: includes/features/class-tests-page.php:181
-#: includes/features/class-tests-page.php:204
-msgid "Are you cheating?"
-msgstr ""
-
-#: includes/features/class-alerts-page.php:179
-#: includes/features/class-alerts-page.php:246
-#: includes/features/class-alerts-page.php:302
-#: includes/features/class-tests-page.php:105
-#: includes/features/class-tests-page.php:160
-#: includes/features/class-tests-page.php:185
-#: includes/features/class-tests-page.php:208
-msgid "Permission Denied!"
-msgstr ""
-
-#: includes/features/class-alerts-page.php:189
-#: includes/features/class-alerts-page.php:256
-#: includes/features/class-alerts-page.php:313
-msgid "Error: Alert ID is required."
-msgstr ""
-
-#. translators: %1$s: the id of the alert, %2$s: the test url
-#: includes/features/class-email-notifications.php:25
-msgctxt "notification email subject"
-msgid "VRTs: Alert %1$s (%2$s)"
-msgstr ""
-
-#: includes/features/class-email-notifications.php:30
-msgctxt "notification email"
-msgid "Howdy,"
-msgstr ""
-
-#: includes/features/class-email-notifications.php:31
-msgctxt "notification email"
-msgid "New visual differences have been detected on the following page:"
-msgstr ""
-
-#: includes/features/class-email-notifications.php:33
-msgctxt "notification email"
-msgid "View the alert:"
-msgstr ""
-
-#. translators: %1$s: the home url
-#: includes/features/class-email-notifications.php:37
-msgctxt "notification email"
-msgid "This alert was sent by the Visual Regression Tests plugin on %1$s"
+#: includes/features/class-admin.php:45
+#: includes/features/class-settings-page.php:39
+#: includes/features/class-settings-page.php:40
+#: includes/features/class-settings-page.php:54
+msgid "Settings"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/features/class-metaboxes.php:125
+#: includes/features/class-metaboxes.php:121
 msgid "%1$sView Alert%2$s"
 msgstr ""
 
@@ -535,11 +714,11 @@ msgid "With our VRTs plugin, you can effortlessly maintain your website's visual
 msgstr ""
 
 #: includes/features/class-onboarding.php:90
-msgid "⏰ Daily Checks, automatic Alerts"
+msgid "⏰ Daily Tests & Pro Automations"
 msgstr ""
 
 #: includes/features/class-onboarding.php:91
-msgid "Our <strong>daily Test Run</strong> takes screenshots of your <strong>Test pages</strong> and performs <strong>split-screen comparisons</strong>. <br><br>Rest assured, you'll be <strong>notified via email</strong>, as soon as a visual change is detected."
+msgid "The <strong>Daily Test Run</strong> captures screenshots of your <strong>Test pages</strong> and performs <strong>side-by-side comparisons</strong> to instantly spot changes.<br><br><strong>Upgrade to Pro</strong> to automate Tests for WordPress and plugin updates, integrate deployment pipelines via API, and run Manual Tests on demand."
 msgstr ""
 
 #: includes/features/class-onboarding.php:98
@@ -575,137 +754,167 @@ msgid "Want to see your Test in action? <br>Give it a go and run this Test now!"
 msgstr ""
 
 #: includes/features/class-onboarding.php:141
-msgid "🔍 Compare Changes"
+msgid "🚀 Meet the new Runs!"
 msgstr ""
 
 #: includes/features/class-onboarding.php:142
-msgid "Utilize the <strong>Difference, Split</strong>, and <strong>Side by Side views</strong> to accurately identify visual differences."
+msgid "Alerts are now bundled into Runs. Get a single report for each daily test, manual test, API trigger, or new: <strong>WordPress & plugin update (Pro)</strong>!"
 msgstr ""
 
-#: includes/features/class-onboarding.php:148
-msgid "🛠️ Fine-tune Tests"
-msgstr ""
-
-#: includes/features/class-onboarding.php:149
-msgid "If the Alert is not accurate, <strong>adjust the Test setup by excluding elements</strong> from the page when the snapshot is created."
-msgstr ""
-
-#: includes/features/class-onboarding.php:155
-msgid "🚫 Mark as false positive"
-msgstr ""
-
-#: includes/features/class-onboarding.php:156
-msgid "You may <strong>stop this Alert from happening again</strong>. Mark it as a false positive and the plugin will filter out matching Alerts in the future."
-msgstr ""
-
-#: includes/features/class-onboarding.php:162
-msgid "📦 Archive your Alerts"
-msgstr ""
-
-#: includes/features/class-onboarding.php:163
-msgid "Organize your Alerts by <strong>archiving</strong> them after review, for easy access and future reference."
-msgstr ""
-
-#: includes/features/class-settings-page.php:73
-#: includes/features/class-settings-page.php:79
-msgid "Add a single email address."
-msgstr ""
-
-#: includes/features/class-settings-page.php:74
-msgid "Want to add more email addresses?"
-msgstr ""
-
-#: includes/features/class-settings-page.php:76
-#: includes/features/class-settings-page.php:158
-msgid "Upgrade here."
-msgstr ""
-
-#: includes/features/class-settings-page.php:85
-msgid "Notification Email Address"
-msgstr ""
-
-#: includes/features/class-settings-page.php:92
-msgid "Email address"
-msgstr ""
-
-#: includes/features/class-settings-page.php:105
-msgid "Notification Email CC Address(es)"
-msgstr ""
-
-#: includes/features/class-settings-page.php:106
-msgid "Add a single email address, or separate multiple email addresses with commas, i.e. info@example.com, admin@example.com."
-msgstr ""
-
-#: includes/features/class-settings-page.php:112
-msgid "Email address(es)"
-msgstr ""
-
-#: includes/features/class-settings-page.php:125
+#: includes/features/class-settings-page.php:81
 msgid "Click Element"
 msgstr ""
 
 #. translators: %s: link wrapper.
-#: includes/features/class-settings-page.php:130
+#: includes/features/class-settings-page.php:86
 msgid "Add a %1$sCSS selector%2$s to click on the first element found before creating a new snapshot."
 msgstr ""
 
-#: includes/features/class-settings-page.php:134
+#: includes/features/class-settings-page.php:90
 msgid "Useful to accept cookie banners or anything else that should be clicked after page load."
 msgstr ""
 
-#: includes/features/class-settings-page.php:141
+#: includes/features/class-settings-page.php:92
 msgid "e.g.: #accept-cookies"
 msgstr ""
 
-#: includes/features/class-settings-page.php:153
+#: includes/features/class-settings-page.php:103
 msgid "License Key"
 msgstr ""
 
-#: includes/features/class-settings-page.php:156
+#: includes/features/class-settings-page.php:106
 msgid "No license key yet?"
 msgstr ""
 
-#: includes/features/class-settings-page.php:165
+#: includes/features/class-settings-page.php:108
+msgid "Upgrade here."
+msgstr ""
+
+#: includes/features/class-settings-page.php:110
 msgctxt "license key placeholder"
 msgid "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
 msgstr ""
 
-#: includes/features/class-tests-page.php:115
+#: includes/features/class-settings-page.php:121
+msgid "Triggers"
+msgstr ""
+
+#: includes/features/class-settings-page.php:121
+msgid "When your Tests are run."
+msgstr ""
+
+#: includes/features/class-settings-page.php:128
+#: includes/features/class-settings-page.php:201
+#: includes/models/class-test-run.php:310
+msgid "Schedule"
+msgstr ""
+
+#: includes/features/class-settings-page.php:129
+msgid "Run Tests every 24 hours."
+msgstr ""
+
+#: includes/features/class-settings-page.php:142
+#: includes/features/class-settings-page.php:215
+#: includes/models/class-test-run.php:312
+msgid "Update"
+msgstr ""
+
+#: includes/features/class-settings-page.php:143
+msgid "Run Tests after WordPress and plugin updates."
+msgstr ""
+
+#: includes/features/class-settings-page.php:158
+#: includes/features/class-settings-page.php:230
+#: includes/models/class-test-run.php:311
+msgid "API"
+msgstr ""
+
+#. translators: %1$s, %2$s: link wrapper.
+#: includes/features/class-settings-page.php:161
+msgid "Run Tests with your favorite apps. %1$sRead the docs%2$s."
+msgstr ""
+
+#: includes/features/class-settings-page.php:179
+#: includes/features/class-settings-page.php:245
+#: includes/models/class-test-run.php:309
+msgid "Manual"
+msgstr ""
+
+#: includes/features/class-settings-page.php:180
+msgid "Run Tests on demand."
+msgstr ""
+
+#: includes/features/class-settings-page.php:194
+msgid "Notifications"
+msgstr ""
+
+#: includes/features/class-settings-page.php:194
+msgid "Notify team members based on specific Trigger events."
+msgstr ""
+
+#: includes/features/class-settings-page.php:202
+msgid "Separate multiple email addresses with commas. Or leave blank to disable notifications."
+msgstr ""
+
+#: includes/features/class-settings-page.php:203
+#: includes/features/class-settings-page.php:216
+#: includes/features/class-settings-page.php:231
+msgid "Email address(es)"
+msgstr ""
+
+#: includes/features/class-settings-page.php:246
+msgid "Alerts are automatically sent to the user who triggers the Manual Test."
+msgstr ""
+
+#: includes/features/class-tests-page.php:103
+#: includes/features/class-tests-page.php:158
+#: includes/features/class-tests-page.php:182
+#: includes/features/class-tests-page.php:205
+msgid "Are you cheating?"
+msgstr ""
+
+#: includes/features/class-tests-page.php:107
+#: includes/features/class-tests-page.php:162
+#: includes/features/class-tests-page.php:186
+#: includes/features/class-tests-page.php:209
+msgid "Permission Denied!"
+msgstr ""
+
+#: includes/features/class-tests-page.php:117
 msgid "Error: Post ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:219
+#: includes/features/class-tests-page.php:220
 msgid "Error: Test ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:288
+#: includes/features/class-tests-page.php:290
 msgid "No changes made."
 msgstr ""
 
-#: includes/features/class-tests-page.php:299
+#: includes/features/class-tests-page.php:301
 msgid "Changes saved successfully."
 msgstr ""
 
-#: includes/features/class-tests-page.php:304
+#: includes/features/class-tests-page.php:306
 msgid "Error while saving the changes."
 msgstr ""
 
-#: includes/features/class-tests-page.php:308
-#: includes/list-tables/class-alerts-list-table.php:80
-#: includes/models/class-test.php:1003
+#: includes/features/class-tests-page.php:310
+#: includes/models/class-test.php:981
 msgid "In progress"
 msgstr ""
 
-#: includes/features/class-tests-page.php:337
+#: includes/features/class-tests-page.php:339
 msgid "(no title)"
 msgstr ""
 
-#: includes/features/class-tests-page.php:338
+#: includes/features/class-tests-page.php:340
 msgid "No results to enable visual regression testing found."
 msgstr ""
 
 #. translators: Minimum input length in characters to start searching posts in the "Insert/edit link" modal.
-#: includes/features/class-tests-page.php:340
+#: includes/features/class-tests-page.php:342
 msgctxt "minimum input length for searching post links"
 msgid "3"
 msgstr ""
@@ -716,243 +925,280 @@ msgstr ""
 msgid "Upgrade"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:43
-msgid "No alerts found."
+#: includes/list-tables/class-test-runs-list-table.php:39
+msgid "Run"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:67
-#: includes/list-tables/class-tests-list-table.php:71
-msgid "Open the page in a new tab"
+#: includes/list-tables/class-test-runs-list-table.php:58
+msgid "No Runs finished."
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:83
-msgid "Detected"
+#: includes/list-tables/class-test-runs-list-table.php:69
+msgid "Test Run"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:101
-#: includes/list-tables/class-tests-list-table.php:94
+#: includes/list-tables/class-test-runs-list-table.php:101
+#: includes/list-tables/class-tests-list-table.php:239
+msgid "All"
+msgstr ""
+
+#: includes/list-tables/class-test-runs-list-table.php:284
+msgid "Show Details"
+msgstr ""
+
+#: includes/list-tables/class-test-runs-list-table.php:331
+msgid "Changes detected "
+msgstr ""
+
+#: includes/list-tables/class-test-runs-list-table.php:335
+msgid "No changes"
+msgstr ""
+
+#. translators: %1$s, %2$s link wrapper.
+#: includes/list-tables/class-test-runs-queue-list-table.php:45
+msgid "No Runs in the queue. %1$sAdd Tests%2$s to get started."
+msgstr ""
+
+#: includes/list-tables/class-test-runs-queue-list-table.php:59
+#: includes/list-tables/class-tests-list-table.php:92
 msgid "Title"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:102
-#: includes/list-tables/class-tests-list-table.php:95
-msgid "Path"
+#: includes/list-tables/class-test-runs-queue-list-table.php:77
+msgid "Queue"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:103
-msgid "Visual Difference"
+#: includes/list-tables/class-test-runs-queue-list-table.php:189
+#: includes/models/class-test.php:896
+msgid "In Progress"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:104
-msgid "Date"
+#. translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
+#: includes/list-tables/class-test-runs-queue-list-table.php:243
+#: includes/models/class-test-run.php:464
+msgid "%1$sRefresh page%2$s to see results"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:130
-msgid "View this alert"
+#: includes/list-tables/class-test-runs-queue-list-table.php:250
+#: includes/models/class-test-run.php:472
+msgid "Pending"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:131
-msgid "View"
+#: includes/list-tables/class-test-runs-queue-list-table.php:261
+msgid "Edit configuration"
 msgstr ""
 
-#: includes/list-tables/class-alerts-list-table.php:138
-msgid "Delete this alert permanently"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:139
-#: includes/list-tables/class-alerts-list-table.php:261
-msgid "Delete permanently"
-msgstr ""
-
-#. translators: %s: the title of the alert.
-#: includes/list-tables/class-alerts-list-table.php:145
-#: includes/list-tables/class-alerts-list-table.php:174
-msgid "Alert %s"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:155
-msgid "Edit this alert"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:156
-#: includes/list-tables/class-alerts-list-table.php:172
-msgid "Edit"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:164
-msgid "Archive this alert"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:200
-msgid "False positive"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:213
-#: includes/models/class-test.php:892
-msgid "View Alert"
-msgstr ""
-
-#. translators: %s: link wrapper
-#: includes/list-tables/class-alerts-list-table.php:223
-msgid "Tests on %1$spage%2$s are %3$snot running until connection with the service is fixed.%4$s"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:330
-msgid "New"
-msgstr ""
-
-#: includes/list-tables/class-alerts-list-table.php:335
-msgid "Archived"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:46
+#: includes/list-tables/class-tests-list-table.php:44
 msgid "No tests found."
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:118
-#: includes/list-tables/class-tests-list-table.php:142
+#: includes/list-tables/class-tests-list-table.php:69
+msgid "Open the page in a new tab"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:93
+msgid "Path"
+msgstr ""
+
+#: includes/list-tables/class-tests-list-table.php:116
+#: includes/list-tables/class-tests-list-table.php:140
 msgid "Edit this page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:119
+#: includes/list-tables/class-tests-list-table.php:117
 msgid "Edit Page"
 msgstr ""
 
 #. translators: %s: Page Title.
-#: includes/list-tables/class-tests-list-table.php:125
+#: includes/list-tables/class-tests-list-table.php:123
 msgid "Quick edit &#8220;%s&#8221; inline"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:126
+#: includes/list-tables/class-tests-list-table.php:124
 msgid "Quick&nbsp;Edit"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:134
+#: includes/list-tables/class-tests-list-table.php:132
 msgid "Disable testing for this page"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:135
-#: includes/list-tables/class-tests-list-table.php:177
+#: includes/list-tables/class-tests-list-table.php:133
+#: includes/list-tables/class-tests-list-table.php:175
 msgid "Disable Testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:181
-#: includes/models/class-test.php:934
-#: includes/models/class-test.php:935
-#: includes/models/class-test.php:952
-#: includes/models/class-test.php:953
+#: includes/list-tables/class-tests-list-table.php:179
+#: includes/models/class-test.php:912
+#: includes/models/class-test.php:913
+#: includes/models/class-test.php:930
+#: includes/models/class-test.php:931
 msgid "Run Test"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:247
-msgid "All"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:252
-#: includes/models/class-test.php:886
-msgid "Changes detected"
-msgstr ""
-
-#: includes/list-tables/class-tests-list-table.php:368
+#: includes/list-tables/class-tests-list-table.php:355
 msgid "Quick Edit"
 msgstr ""
 
-#: includes/models/class-test.php:881
+#. translators: %1$s, %2$s: strong element wrapper.
+#: includes/list-tables/class-tests-list-table.php:363
+msgid "%1$sExclude elements on this page:%2$s "
+msgstr ""
+
+#. translators: %1$s, %2$s: link wrapper.
+#: includes/list-tables/class-tests-list-table.php:369
+msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
+msgstr ""
+
+#: includes/models/class-alert.php:105
+msgid "Alert #"
+msgstr ""
+
+#: includes/models/class-alert.php:110
+#: includes/models/class-test-run.php:75
+#: includes/models/class-test-run.php:122
+#: includes/models/class-test-run.php:146
+#: includes/models/class-test-run.php:173
+#: includes/models/class-test-run.php:200
+msgid "Run #"
+msgstr ""
+
+#: includes/models/class-test-run.php:313
+msgid "Legacy"
+msgstr ""
+
+#: includes/models/class-test-run.php:316
+msgid "Unknown"
+msgstr ""
+
+#. translators: %s: number of alerts.
+#: includes/models/class-test-run.php:452
+msgid "View Alert (%s)"
+msgid_plural "View Alerts (%s)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/models/class-test-run.php:476
+msgid "Edit Test Configuration"
+msgstr ""
+
+#: includes/models/class-test-run.php:486
+msgid "No changes detected"
+msgstr ""
+
+#: includes/models/class-test.php:858
 msgid "Disconnected"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/models/class-test.php:891
+#: includes/models/class-test.php:868
 msgid "%1$s%2$s View Alert%3$s"
 msgstr ""
 
-#: includes/models/class-test.php:899
-#: includes/models/class-test.php:910
+#: includes/models/class-test.php:869
+msgid "View Alert"
+msgstr ""
+
+#: includes/models/class-test.php:876
+#: includes/models/class-test.php:887
 msgid "Disabled"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/models/class-test.php:903
+#: includes/models/class-test.php:880
 msgid "%1$sUpgrade plugin%2$s to resume testing"
 msgstr ""
 
-#: includes/models/class-test.php:904
+#: includes/models/class-test.php:881
 msgid "Upgrade plugin"
 msgstr ""
 
-#: includes/models/class-test.php:911
+#: includes/models/class-test.php:888
 msgid "Publish post to resume testing"
 msgstr ""
 
-#: includes/models/class-test.php:915
+#: includes/models/class-test.php:892
 msgid "Waiting"
 msgstr ""
 
-#: includes/models/class-test.php:919
-msgid "In Progress"
-msgstr ""
-
-#: includes/models/class-test.php:920
+#: includes/models/class-test.php:897
 msgid "Refresh page to see result"
 msgstr ""
 
-#: includes/models/class-test.php:924
+#: includes/models/class-test.php:901
 msgid "Scheduled"
 msgstr ""
 
-#: includes/models/class-test.php:942
-msgid "Passed"
-msgstr ""
-
-#: includes/models/class-test.php:1000
+#: includes/models/class-test.php:978
 msgid "On hold"
 msgstr ""
 
-#: includes/models/class-test.php:1006
+#: includes/models/class-test.php:984
 msgid "Refresh page to see snapshot"
 msgstr ""
 
-#: includes/models/class-test.php:1015
-#: includes/models/class-test.php:1023
+#: includes/models/class-test.php:993
+#: includes/models/class-test.php:1001
 msgid "View this snapshot"
 msgstr ""
 
-#: includes/models/class-test.php:1016
-#: includes/models/class-test.php:1025
+#: includes/models/class-test.php:994
+#: includes/models/class-test.php:1003
 msgid "View Snapshot"
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:84
+#: includes/rest-api/class-rest-alerts-controller.php:74
+#: includes/rest-api/class-rest-alerts-controller.php:102
+msgid "Alert not found."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:86
 msgid "Action parameter is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:112
+#: includes/rest-api/class-rest-service-controller.php:122
+#: includes/rest-api/class-rest-service-controller.php:153
+#: includes/rest-api/class-rest-service-controller.php:184
 msgid "Project id is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:114
+#: includes/rest-api/class-rest-service-controller.php:124
+#: includes/rest-api/class-rest-service-controller.php:155
+#: includes/rest-api/class-rest-service-controller.php:186
 msgid "Project id does not match."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:116
+#: includes/rest-api/class-rest-service-controller.php:126
 msgid "Test id is missing."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:120
+#: includes/rest-api/class-rest-service-controller.php:130
+#: includes/rest-api/class-rest-service-controller.php:161
+#: includes/rest-api/class-rest-service-controller.php:192
 msgid "Signature is not valid."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:133
-#: includes/services/class-test-service.php:438
+#: includes/rest-api/class-rest-service-controller.php:143
+#: includes/rest-api/class-rest-service-controller.php:174
+#: includes/rest-api/class-rest-service-controller.php:203
+#: includes/services/class-test-service.php:434
 msgid "Test not found."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:162
+#: includes/rest-api/class-rest-service-controller.php:157
+#: includes/rest-api/class-rest-service-controller.php:188
+msgid "Run id is missing."
+msgstr ""
+
+#: includes/rest-api/class-rest-service-controller.php:232
 msgid "Subscription changed action was successful."
 msgstr ""
 
-#: includes/rest-api/class-rest-service-controller.php:172
+#: includes/rest-api/class-rest-service-controller.php:242
 msgid "Unknown action."
+msgstr ""
+
+#: includes/rest-api/class-rest-test-runs-controller.php:68
+msgid "Run not found."
 msgstr ""
 
 #: includes/rest-api/class-rest-tests-controller.php:89
@@ -971,40 +1217,46 @@ msgstr ""
 msgid "The test could not be updated."
 msgstr ""
 
-#: includes/services/class-test-service.php:146
+#. translators: %1$s: the id of the test run, %2$s: home url
+#: includes/services/class-email-service.php:21
+msgctxt "test run notification email subject"
+msgid "VRTs: Run #%1$s (%2$s)"
+msgstr ""
+
+#: includes/services/class-test-service.php:142
 msgid "Post not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:163
-#: includes/services/class-test-service.php:241
-#: includes/services/class-test-service.php:288
-#: includes/services/class-test-service.php:347
-#: includes/services/class-test-service.php:451
+#: includes/services/class-test-service.php:159
+#: includes/services/class-test-service.php:237
+#: includes/services/class-test-service.php:284
+#: includes/services/class-test-service.php:343
+#: includes/services/class-test-service.php:447
 msgid "Service is not connected."
 msgstr ""
 
-#: includes/services/class-test-service.php:165
-#: includes/services/class-test-service.php:243
+#: includes/services/class-test-service.php:161
+#: includes/services/class-test-service.php:239
 msgid "Error creating test."
 msgstr ""
 
-#: includes/services/class-test-service.php:189
+#: includes/services/class-test-service.php:185
 msgid "Posts not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:285
+#: includes/services/class-test-service.php:281
 msgid "Service could not create test."
 msgstr ""
 
-#: includes/services/class-test-service.php:341
+#: includes/services/class-test-service.php:337
 msgid "Plugin could not save tests."
 msgstr ""
 
-#: includes/services/class-test-service.php:344
+#: includes/services/class-test-service.php:340
 msgid "Service could not create tests."
 msgstr ""
 
-#: includes/services/class-test-service.php:448
+#: includes/services/class-test-service.php:444
 msgid "Service could not update test."
 msgstr ""
 

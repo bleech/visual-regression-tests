@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.6.2
-Stable tag: 1.9.1
+Stable tag: 2.0.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,7 +22,7 @@ How do you check your website after updates and code changes? Do you manually go
 
 1. **Activate Tests for any page or post:** Upon activation, a reference screenshot is taken. This will be renewed when a post is saved or updated.
 2. **VRTs monitors your pages:** Every day, VRTs captures and compares screenshots of your selected pages. Upgrade to Pro to automate Tests for WordPress updates, integrate deployment pipelines via API, and run Manual Tests on demand.
-2. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will notify you via email. 
+2. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will notify you via email.
 3. **Review changes:** The difference view makes it easy to spot changes, while the comparison slider lets you inspect the details.
 4. **Hide elements:** Prevent false positives by excluding dynamic elements, ads and animations from snapshots.
 
@@ -171,7 +171,7 @@ For Cloudflare, follow these steps:
 
 == Screenshots ==
 
-1. Review changes using the difference view and comparison slider. 
+1. Review changes using the difference view and comparison slider.
 2. Get an overview of all past Test Runs, their Triggers and detected changes.
 3. Manage all your registered Test pages.
 4. Activate Tests right within the editor.
