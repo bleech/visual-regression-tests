@@ -10,6 +10,8 @@
 }
 
 .vrts-test-runs-list-table {
+	position: relative;
+	overflow: hidden;
 
 	.check-column {
 		text-align: center;
@@ -56,8 +58,8 @@
 			content: "";
 			position: absolute;
 			top: 0;
-			left: 0;
-			width: 100%;
+			left: -38px;
+			width: 100vw;
 			height: 100%;
 		}
 	}
@@ -131,6 +133,7 @@
 
 	.subsubsub:has(+ &) {
 		float: none;
+		text-align: left;
 	}
 }
 
