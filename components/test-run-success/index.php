@@ -146,7 +146,7 @@
 		],
 	];
 
-	mt_srand( $data['run']->id );
+	mt_srand( $data['run']->id ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_seeding_mt_srand -- It's ok.
 	$random_quote = $quotes[ array_rand( $quotes ) ];
 
 	?>

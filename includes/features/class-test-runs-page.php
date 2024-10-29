@@ -20,13 +20,13 @@ class Test_Runs_Page {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
 
-
 	}
 
 	/**
 	 * Remove admin notices.
 	 */
 	public function remove_admin_notices() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
 		if ( isset( $_GET['page'] ) && 'vrts-runs' === $_GET['page'] && isset( $_GET['run_id'] ) ) {
 			remove_all_actions( 'admin_notices' );
 		}
