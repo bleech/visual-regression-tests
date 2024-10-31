@@ -5,6 +5,7 @@ namespace Vrts\Services;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 use Vrts\Services\Email_Service;
@@ -23,11 +24,13 @@ class Test_Run_Service {
 		$test_run = Test_Run::get_by_service_test_run_id( $run_id );
 
 		$test_run_just_finished = false;
-		$alert_ids = [];
+		$alert_ids = $test_run ? maybe_unserialize( $test_run->alerts ) : [];
 
 		if ( $test_run && empty( $test_run->finished_at ) && ! empty( $data['finished_at'] ) ) {
 			$test_run_just_finished = true;
 			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'], $test_run );
+		} elseif ( $test_run && ! empty( $test_run->finished_at ) ) {
+			$alert_ids = ! empty( $alert_ids ) ? $alert_ids : array_column(Alert::get_items_by_test_run( $test_run->id ), 'id');
 		}
 
 		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function( $test ) {
