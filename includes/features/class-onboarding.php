@@ -112,7 +112,7 @@ class Onboarding {
 						'description' => wp_kses_post( __( 'Starting from tomorrow, your Test will <strong>run daily</strong>, ensuring consistent monitoring of your page.', 'visual-regression-tests' ) ),
 					],
 					[
-						'element' => '.vrts_navigation_item a[href$="admin.php?page=vrts-settings"]',
+						'element' => '.vrts-admin-header__navigation-link[href$="admin.php?page=vrts-settings"]',
 						'title' => wp_kses_post( __( '🛠️ Fine-tune your setup', 'visual-regression-tests' ) ),
 						'description' => wp_kses_post( __( 'Further customize your Test configuration and plugin settings for an optimized experience.', 'visual-regression-tests' ) ),
 					],
@@ -137,7 +137,7 @@ class Onboarding {
 					[
 						'side' => 'bottom',
 						'align' => 'center',
-						'element' => '.vrts_navigation_item a[href$="admin.php?page=vrts-runs"]',
+						'element' => '.vrts-admin-header__navigation-link[href$="admin.php?page=vrts-runs"]',
 						'title' => wp_kses_post( __( '🚀 Meet the new Runs!', 'visual-regression-tests' ) ),
 						'description' => wp_kses_post( __( 'Alerts are now bundled into Runs. Get a single report for each daily test, manual test, API trigger, or new: <strong>WordPress & plugin update (Pro)</strong>!', 'visual-regression-tests' ) ),
 					],
