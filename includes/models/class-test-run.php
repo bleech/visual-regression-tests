@@ -42,7 +42,7 @@ class Test_Run {
 
 		if ( isset( $args['filter_status'] ) && null !== $args['filter_status'] ) {
 			if ( 'changes-detected' === $args['filter_status'] ) {
-				$where .= ' AND alerts IS NOT NULL';
+				$where .= ' AND alerts_count > 0';
 			}
 		}
 
@@ -82,7 +82,8 @@ class Test_Run {
 						runs.id,
 						$run_title,
 						runs.tests,
-						runs.alerts,
+						SUM( IF( alerts.id IS NOT NULL, 1, 0 ) ) as alerts_count,
+						SUM( IF( alerts.id IS NOT NULL and alerts.alert_state = 0, 1, 0 ) ) as unread_alerts_count,
 						runs.trigger,
 						runs.trigger_notes,
 						runs.trigger_meta,
@@ -90,6 +91,9 @@ class Test_Run {
 						runs.scheduled_at,
 						runs.finished_at
 					FROM $test_runs_table as runs
+					LEFT JOIN $alerts_table as alerts
+					ON runs.id = alerts.test_run_id
+					GROUP BY runs.id
 				) runs
 			$where
 			$orderby
@@ -372,7 +376,7 @@ class Test_Run {
 			$test_run = self::get_item( $test_run );
 		}
 
-		$has_alerts = ! empty( maybe_unserialize( $test_run->alerts ) );
+		$has_alerts = ( $test_run->alerts_count ?? 0 ) > 0;
 
 		if ( $has_alerts ) {
 			return 'has-alerts';
@@ -440,7 +444,7 @@ class Test_Run {
 
 		switch ( $test_run_status ) {
 			case 'has-alerts':
-				$alerts_count = count( maybe_unserialize( $test_run->alerts ) );
+				$alerts_count = $test_run->alerts_count;
 				$class = 'paused';
 				$text = esc_html__( 'Changes detected', 'visual-regression-tests' );
 				$instructions = Date_Time_Helpers::get_formatted_relative_date_time( $test_run->finished_at );

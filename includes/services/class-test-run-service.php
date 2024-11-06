@@ -24,13 +24,10 @@ class Test_Run_Service {
 		$test_run = Test_Run::get_by_service_test_run_id( $run_id );
 
 		$test_run_just_finished = false;
-		$alert_ids = $test_run ? maybe_unserialize( $test_run->alerts ) : [];
 
 		if ( $test_run && empty( $test_run->finished_at ) && ! empty( $data['finished_at'] ) ) {
 			$test_run_just_finished = true;
 			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'], $test_run );
-		} elseif ( $test_run && ! empty( $test_run->finished_at ) ) {
-			$alert_ids = ! empty( $alert_ids ) ? $alert_ids : array_column(Alert::get_items_by_test_run( $test_run->id ), 'id');
 		}
 
 		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function( $test ) {
@@ -44,7 +41,6 @@ class Test_Run_Service {
 
 		$test_run_id = $this->create_test_run( $data['run_id'], [
 			'tests' => maybe_serialize( $test_ids ),
-			'alerts' => ! empty( $alert_ids ) ? maybe_serialize( $alert_ids ) : null,
 			'started_at' => $data['started_at'],
 			'finished_at' => $data['finished_at'],
 			'scheduled_at' => $data['scheduled_at'],

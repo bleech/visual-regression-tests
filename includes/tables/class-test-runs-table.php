@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Test_Runs_Table {
 
-	const DB_VERSION = '1.0';
+	const DB_VERSION = '1.1';
 	const TABLE_NAME = 'vrts_test_runs';
 
 	/**
@@ -32,7 +32,6 @@ class Test_Runs_Table {
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				service_test_run_id varchar(40),
 				tests text,
-				alerts text default NULL,
 				`trigger` varchar(20),
 				trigger_notes text,
 				trigger_meta text default NULL,
@@ -117,6 +116,10 @@ class Test_Runs_Table {
 			return "('" . implode( "','", array_map( 'esc_sql', $run ) ) . "')";
 		}, $test_runs));
 
+		// add alerts column to test_runs table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( "ALTER TABLE {$runs_table} ADD COLUMN alerts text;" );
+
 		// insert all test runs with single query.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "INSERT INTO {$runs_table} (tests, alerts, `trigger`, started_at, finished_at) VALUES " . $test_runs_values . ';' );
@@ -124,6 +127,10 @@ class Test_Runs_Table {
 		// update test_run_id in alerts table from newly created test runs based on alerts column.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "UPDATE {$alerts_table} a JOIN {$runs_table} r ON r.alerts LIKE CONCAT('%\"', a.id, '\"%') SET a.test_run_id = r.id;" );
+
+		// remove alerts column from test_runs table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( "ALTER TABLE {$runs_table} DROP COLUMN alerts;" );
 
 		return true;
 	}
