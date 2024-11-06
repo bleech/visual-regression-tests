@@ -3,7 +3,7 @@
 use Vrts\Core\Utilities\Url_Helpers;
 
 ?>
-<vrts-alert-actions class="vrts-alert-actions">
+<vrts-alert-actions class="vrts-alert-actions" data-vrts-alert-url="<?php echo esc_url( Url_Helpers::get_alert_page( $data['alert']->id, $data['alert']->test_run_id ) ) ?>">
 	<button type="button" data-vrts-dropdown-open class="vrts-alert-actions__trigger" aria-expanded="false" aria-controls="vrts-alert-actions-dropdown">
 		<?php vrts()->icon( 'more-horizontal' ); ?>
 	</button>

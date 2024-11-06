@@ -1,4 +1,5 @@
 import Dropdown from '../../assets/scripts/dropdown';
+import { clearFetchCache, setFetchCache } from 'scripts/cachedFetch';
 
 class VrtsAlertActions extends window.HTMLElement {
 	constructor() {
@@ -74,6 +75,8 @@ class VrtsAlertActions extends window.HTMLElement {
 		const $form = e.currentTarget;
 		const formData = new window.FormData( $form );
 		const postId = formData.get( 'post_id' );
+		const $actions = $form.closest( 'vrts-alert-actions' );
+		const alertUrl = $actions.getAttribute( 'data-vrts-alert-url' );
 
 		this.$spinner.classList.add( 'is-active' );
 		this.$success.classList.remove( 'is-active' );
@@ -86,11 +89,15 @@ class VrtsAlertActions extends window.HTMLElement {
 			body: new URLSearchParams( formData ),
 		} )
 			.then( ( response ) => {
+				if ( alertUrl ) {
+					clearFetchCache( alertUrl );
+				}
 				return response.json();
 			} )
 			.then( () => {
 				this.$spinner.classList.remove( 'is-active' );
 				this.$success.classList.add( 'is-active' );
+				setFetchCache( alertUrl, document.body.innerHTML );
 			} );
 	}
 
@@ -117,6 +124,8 @@ class VrtsAlertActions extends window.HTMLElement {
 	handleAction( action, $el, id, shouldSetAction ) {
 		const restEndpoint = `${ window.vrts_admin_vars.rest_url }/alerts/${ id }/${ action }`;
 		const method = shouldSetAction ? 'POST' : 'DELETE';
+		const $actions = $el.closest( 'vrts-alert-actions' );
+		const alertUrl = $actions.getAttribute( 'data-vrts-alert-url' );
 
 		let loadingElapsedTime = 0;
 		let interval = null;
@@ -136,6 +145,9 @@ class VrtsAlertActions extends window.HTMLElement {
 			},
 		} )
 			.then( ( response ) => {
+				if ( alertUrl ) {
+					clearFetchCache( alertUrl );
+				}
 				return response.json();
 			} )
 			.then( () => {
@@ -171,6 +183,7 @@ class VrtsAlertActions extends window.HTMLElement {
 							);
 						}
 					}
+					setFetchCache( alertUrl, document.body.innerHTML );
 				}, loadingTimeoutTime );
 
 				clearTimeout( timeout );

@@ -1,8 +1,10 @@
+import { setFetchCache } from 'scripts/cachedFetch';
 class VrtsTestRunPage extends window.HTMLElement {
 	constructor() {
 		super();
 		this.bindFunctions();
 		this.bindEvents();
+		setFetchCache( window.location.href, document.body.innerHTML );
 		this.isScrolling = false;
 	}
 

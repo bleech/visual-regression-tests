@@ -1,9 +1,13 @@
+import { cachedFetch } from 'scripts/cachedFetch';
+import { requestIdleCallback } from 'scripts/ric';
+
 class VrtsTestRunPagination extends window.HTMLElement {
 	constructor() {
 		super();
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
+		requestIdleCallback( () => this.preloadCache() );
 	}
 
 	resolveElements() {
@@ -73,43 +77,39 @@ class VrtsTestRunPagination extends window.HTMLElement {
 			behavior: 'smooth',
 		} );
 
-		fetch( href )
-			.then( ( response ) => {
-				return response.text();
-			} )
-			.then( ( data ) => {
-				const parser = new window.DOMParser();
-				const $html = parser.parseFromString( data, 'text/html' );
+		cachedFetch( href ).then( ( data ) => {
+			const parser = new window.DOMParser();
+			const $html = parser.parseFromString( data, 'text/html' );
 
-				const $newContent =
-					$html.querySelector( 'vrts-comparisons' ) ||
-					$html.querySelector( 'vrts-test-run-success' );
-				const $newPagination = $html.querySelector(
-					'vrts-test-run-pagination'
-				);
+			const $newContent =
+				$html.querySelector( 'vrts-comparisons' ) ||
+				$html.querySelector( 'vrts-test-run-success' );
+			const $newPagination = $html.querySelector(
+				'vrts-test-run-pagination'
+			);
 
-				window.history.replaceState( {}, '', href );
+			window.history.replaceState( {}, '', href );
 
-				this.scrollTo( $content.offsetTop - 62 );
+			this.scrollTo( $content.offsetTop - 62 );
 
-				const loadingTimeoutTime =
-					loadingElapsedTime > 0
-						? Math.abs( loadingElapsedTime - 400 )
-						: 0;
+			const loadingTimeoutTime =
+				loadingElapsedTime > 0
+					? Math.abs( loadingElapsedTime - 400 )
+					: 0;
 
-				setTimeout( () => {
-					if ( $newContent ) {
-						$content.replaceWith( $newContent );
-					}
+			setTimeout( () => {
+				if ( $newContent ) {
+					$content.replaceWith( $newContent );
+				}
 
-					if ( $newPagination ) {
-						this.replaceWith( $newPagination );
-					}
-				}, loadingTimeoutTime );
+				if ( $newPagination ) {
+					this.replaceWith( $newPagination );
+				}
+			}, loadingTimeoutTime );
 
-				clearTimeout( timeout );
-				clearInterval( interval );
-			} );
+			clearTimeout( timeout );
+			clearInterval( interval );
+		} );
 	}
 
 	handleKeyDown( e ) {
@@ -134,6 +134,15 @@ class VrtsTestRunPagination extends window.HTMLElement {
 		$el.scrollTo( {
 			top: offset,
 			behavior: 'smooth',
+		} );
+	}
+
+	preloadCache() {
+		this.$buttons?.forEach( ( item ) => {
+			const href = item.getAttribute( 'href' );
+			if ( href ) {
+				cachedFetch( href );
+			}
 		} );
 	}
 
