@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Test_Runs_Table {
 
-	const DB_VERSION = '1.0';
+	const DB_VERSION = '1.1';
 	const TABLE_NAME = 'vrts_test_runs';
 
 	/**
@@ -32,7 +32,6 @@ class Test_Runs_Table {
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				service_test_run_id varchar(40),
 				tests text,
-				alerts text default NULL,
 				`trigger` varchar(20),
 				trigger_notes text,
 				trigger_meta text default NULL,
@@ -106,7 +105,7 @@ class Test_Runs_Table {
 						'permalink' => get_permalink( $alert->post_id ),
 					],
 				] ),
-				'alerts' => maybe_serialize( [ $alert->id ] ),
+				'alert_id' => $alert->id,
 				'trigger' => 'legacy',
 				'started_at' => $alert->finished_at,
 				'finished_at' => $alert->finished_at,
@@ -117,13 +116,21 @@ class Test_Runs_Table {
 			return "('" . implode( "','", array_map( 'esc_sql', $run ) ) . "')";
 		}, $test_runs));
 
+		// add alert_id column to test_runs table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( "ALTER TABLE {$runs_table} ADD COLUMN alert_id bigint(20) unsigned;" );
+
 		// insert all test runs with single query.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( "INSERT INTO {$runs_table} (tests, alerts, `trigger`, started_at, finished_at) VALUES " . $test_runs_values . ';' );
+		$wpdb->query( "INSERT INTO {$runs_table} (tests, alert_id, `trigger`, started_at, finished_at) VALUES " . $test_runs_values . ';' );
 
-		// update test_run_id in alerts table from newly created test runs based on alerts column.
+		// update test_run_id in alerts table from newly created test runs based on alert_id column.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$wpdb->query( "UPDATE {$alerts_table} a JOIN {$runs_table} r ON r.alerts LIKE CONCAT('%\"', a.id, '\"%') SET a.test_run_id = r.id;" );
+		$wpdb->query( "UPDATE {$alerts_table} a JOIN {$runs_table} r ON r.alert_id = a.id SET a.test_run_id = r.id;" );
+
+		// remove alert_id column from test_runs table.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.SchemaChange
+		$wpdb->query( "ALTER TABLE {$runs_table} DROP COLUMN alert_id;" );
 
 		return true;
 	}

@@ -45,7 +45,7 @@ class Image_Helpers {
 	 * @return string
 	 */
 	public static function get_screenshot_url( $object, $type, $size = 'full' ) {
-		$property = "${type}_screenshot_url";
+		$property = "{$type}_screenshot_url";
 
 		if ( ! property_exists( $object, $property ) ) {
 			return '';
