@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 6.6.2
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -180,6 +180,11 @@ For Cloudflare, follow these steps:
 
 
 == Changelog ==
+
+= 2.0.1 =
+* Fixed issue with wrong alerts count in Runs
+* Fixed few minor styling issues
+* Removed deprecated notice
 
 = 2.0.0 =
 * Introduced Runs
