@@ -410,6 +410,20 @@ class Test_Run {
 	}
 
 	/**
+	 * Delete all not finished test runs from database.
+	 *
+	 * @return int
+	 */
+	public static function delete_all_not_finished() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->query( "DELETE FROM $test_runs_table WHERE finished_at = NULL" );
+	}
+
+	/**
 	 * Convert values to correct type.
 	 *
 	 * @param object $test_run The test run object.
