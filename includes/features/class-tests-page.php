@@ -37,28 +37,12 @@ class Tests_Page {
 		);
 		remove_submenu_page( 'vrts', 'vrts' );
 
-		add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'add_assets' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_add_new_test' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_run_manual_tests' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'submit_retry_connection' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'process_column_actions' ] );
 		add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
-	}
-
-	/**
-	 * Add screen options.
-	 */
-	public function screen_option() {
-		// Set Screen Option.
-		$option = 'per_page';
-		$args   = [
-			'default' => 20,
-			'option' => 'vrts_tests_per_page',
-		];
-
-		// screen_option are user meta.
-		add_screen_option( $option, $args );
 	}
 
 	/**
