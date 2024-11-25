@@ -464,6 +464,14 @@ class Test_Service {
 	}
 
 	/**
+	 * Resume tests.
+	 */
+	public function resume_tests() {
+		Test::reset_base_screenshots();
+		Service::resume_tests();
+	}
+
+	/**
 	 * Update latest alert.
 	 *
 	 * @param int $post_id Post id.

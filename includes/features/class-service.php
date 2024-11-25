@@ -205,6 +205,15 @@ class Service {
 	}
 
 	/**
+	 * Send request to server to resume tests.
+	 */
+	public static function resume_tests() {
+		$service_project_id = get_option( 'vrts_project_id' );
+		$service_api_route = 'sites/' . $service_project_id;
+		self::rest_service_request( $service_api_route . '/resume', [], 'post' );
+	}
+
+	/**
 	 * Add homepage as a default test.
 	 */
 	public static function add_homepage_test() {

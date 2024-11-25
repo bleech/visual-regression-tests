@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\Core\Utilities\Sanitization;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 class Settings_Page {
 	/**
@@ -297,11 +298,14 @@ class Settings_Page {
 
 			$parameters = [
 				'screenshot_options' => [
-					'clickSelectors'   => $new,
+					'clickSelectors' => $new,
 				],
 			];
 
 			$response = Service::rest_service_request( $service_api_route, $parameters, 'put' );
+
+			$service = new Test_Service();
+			$service->resume_tests();
 		}
 	}
 

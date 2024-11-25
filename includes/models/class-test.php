@@ -807,6 +807,20 @@ class Test {
 	}
 
 	/**
+	 * Unset screenshots for tests.
+	 */
+	public static function reset_base_screenshots() {
+		global $wpdb;
+
+		$table_test = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->query(
+			"UPDATE $table_test SET base_screenshot_url = null, base_screenshot_date = null, last_comparison_date = null, next_run_date = null, is_running = null"
+		);
+	}
+
+	/**
 	 * Set tests running.
 	 *
 	 * @param array $test_ids The test ids.
