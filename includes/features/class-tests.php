@@ -142,7 +142,7 @@ class Tests {
 		$slug = $translation['slug'];
 		$language = $translation['language'];
 		if ( 'plugin' === $type ) {
-			$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $slug );
+			$plugin_data = static::get_plugin_data( $slug );
 			$name = $plugin_data['Name'];
 		} elseif ( 'theme' === $type ) {
 			$theme_data = wp_get_theme( $slug );
@@ -156,6 +156,29 @@ class Tests {
 			'slug' => $slug,
 			'language' => $language,
 		];
+	}
+
+	/**
+	 * Get plugin data.
+	 *
+	 * @param string $plugin_slug_or_file Plugin slug or file.
+	 *
+	 * @return array
+	 */
+	private static function get_plugin_data( $plugin_slug_or_file ) {
+		$plugin_file = WP_PLUGIN_DIR . '/' . $plugin_slug_or_file;
+		$plugin_data = get_plugin_data( $plugin_file );
+		if ( empty( $plugin_data['Name'] ) ) {
+			$plugins = get_plugins();
+			foreach ( $plugins as $file => $local_plugin_data ) {
+				$slug = dirname( $file );
+				if ( $slug === $plugin_slug_or_file ) {
+					$plugin_data = $local_plugin_data;
+					break;
+				}
+			}
+		}
+		return $plugin_data;
 	}
 
 	/**
