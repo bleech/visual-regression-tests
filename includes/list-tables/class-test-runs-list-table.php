@@ -36,8 +36,8 @@ class Test_Runs_List_Table extends \WP_List_Table {
 	 */
 	public function __construct() {
 		parent::__construct([
-			'singular' => __( 'Run', 'visual-regression-tests' ),
-			'plural'   => __( 'Runs', 'visual-regression-tests' ),
+			'singular' => 'vrts-run',
+			'plural'   => 'vrts-runs',
 			'ajax' => false,
 		]);
 	}
