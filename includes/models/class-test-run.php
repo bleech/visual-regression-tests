@@ -419,8 +419,8 @@ class Test_Run {
 
 		$test_runs_table = Test_Runs_Table::get_table_name();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->query( "DELETE FROM $test_runs_table WHERE finished_at = NULL" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+		return $wpdb->query( "DELETE FROM $test_runs_table WHERE finished_at IS NULL" );
 	}
 
 	/**

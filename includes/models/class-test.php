@@ -816,6 +816,7 @@ class Test {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->query(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 			"UPDATE $table_test SET base_screenshot_url = null, base_screenshot_date = null, last_comparison_date = null, next_run_date = null, is_running = null"
 		);
 	}
