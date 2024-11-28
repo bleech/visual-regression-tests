@@ -40,11 +40,18 @@ class Tests_Table {
 				);
 			}
 
+			if ( $installed_version && version_compare( $installed_version, '2.0.2', '<' ) ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
+				$wpdb->query(
+					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
+					"ALTER TABLE {$table_name} DROP COLUMN current_alert_id;"
+				);
+			}
+
 			$sql = "CREATE TABLE {$table_name} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				status boolean NOT NULL,
 				post_id bigint(20),
-				current_alert_id bigint(20),
 				service_test_id varchar(40),
 				base_screenshot_url varchar(2048),
 				base_screenshot_date datetime,
