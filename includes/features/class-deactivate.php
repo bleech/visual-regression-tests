@@ -18,5 +18,6 @@ class Deactivate {
 	 */
 	public function deactivate() {
 		Test_Run::delete_all_not_finished();
+		Service::disconnect_service();
 	}
 }
