@@ -100,7 +100,8 @@ class Enqueue_Scripts {
 			wp_enqueue_script( 'vrts-editor' );
 
 			// Localize scripts.
-			$test = (object) Test::get_item_by_post_id( $post->ID );
+			$test_id = Test::get_item_id( $post->ID );
+			$test = (object) Test::get_item( $test_id );
 
 			wp_localize_script(
 				'vrts-editor',
@@ -108,7 +109,7 @@ class Enqueue_Scripts {
 				[
 					'plugin_name' => vrts()->get_plugin_info( 'name' ),
 					'rest_url' => esc_url_raw( rest_url() ),
-					'has_post_alert' => Test::has_post_alert( $post->ID ),
+					'has_post_alert' => isset( $test->current_alert_id ) ? ! is_null( $test->current_alert_id ) : false,
 					'base_screenshot_url' => Image_Helpers::get_screenshot_url( $test, 'base' ),
 					'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( $test->base_screenshot_date ?? null ),
 					'remaining_tests' => Subscription::get_remaining_tests(),

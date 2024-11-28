@@ -109,11 +109,15 @@ class Metaboxes {
 	 */
 	public function render_metabox() {
 		global $post;
-		$post_id = $post->ID ? $post->ID : 0;
-		$run_tests_checked = ! empty( Test::get_item_id( $post_id ) );
 
-		$alert_id = Test::get_alert_id( $post_id );
+		$post_id = $post->ID ? $post->ID : 0;
+		$test_id = Test::get_item_id( $post_id );
+		$test = (object) Test::get_item( $test_id );
+
+		$run_tests_checked = ! is_null( $test_id );
+		$alert_id = $test->current_alert_id ?? null;
 		$testing_status_instructions = '';
+
 		if ( $alert_id ) {
 			$alert_link = Url_Helpers::get_alert_page( $alert_id );
 			$testing_status_instructions .= sprintf(
@@ -124,18 +128,15 @@ class Metaboxes {
 			);
 		}
 
-		$test_id = Test::get_item_id( $post_id );
-		$test = (object) Test::get_item( $test_id );
-
 		vrts()->component('metabox-classic-editor', [
 			'post_id' => $post_id,
 			'nonce' => $this->nonce,
 			'plugin_url' => Url_Helpers::get_page_url( 'tests' ),
 			'run_tests_checked' => $run_tests_checked,
 			'field_test_status_key' => self::$field_test_status_key,
-			'has_post_alert' => Test::has_post_alert( $post_id ),
+			'has_post_alert' => isset( $test->current_alert_id ) ? ! is_null( $test->current_alert_id ) : false,
 			'base_screenshot_url' => Image_Helpers::get_screenshot_url( $test, 'base' ),
-			'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( $test->base_screenshot_date ),
+			'base_screenshot_date' => Date_Time_Helpers::get_formatted_date_time( $test->base_screenshot_date ?? null ),
 			'testing_status_instructions' => $testing_status_instructions,
 			'is_new_test' => self::is_new_test( $post_id ),
 			'remaining_tests' => Subscription::get_remaining_tests(),

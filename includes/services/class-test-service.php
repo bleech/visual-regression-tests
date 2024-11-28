@@ -35,9 +35,6 @@ class Test_Service {
 				'base_screenshot_date' => $comparison['screenshot']['updated_at'],
 				'is_running' => false,
 			];
-			if ( $alert_id ) {
-				$update_data['current_alert_id'] = $alert_id;
-			}
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 			return $wpdb->update(
 				$table_test,
@@ -469,49 +466,5 @@ class Test_Service {
 	public function resume_tests() {
 		Test::reset_base_screenshots();
 		Service::resume_tests();
-	}
-
-	/**
-	 * Update latest alert.
-	 *
-	 * @param int $post_id Post id.
-	 *
-	 * @return int|false
-	 */
-	public function update_latest_alert( $post_id ) {
-		$latest_alert_id = Alert::get_latest_alert_id_by_post_id( $post_id );
-		return Test::set_alert( $post_id, $latest_alert_id );
-	}
-
-	/**
-	 * Update latest alerts.
-	 *
-	 * @param array $test_ids Test ids.
-	 *
-	 * @return int|false|void
-	 */
-	public function update_latest_alerts( $test_ids ) {
-		$test_ids = array_map( 'intval', $test_ids );
-		$test_ids = array_filter( $test_ids );
-		if ( ! empty( $test_ids ) ) {
-			global $wpdb;
-			$table_test = Tests_Table::get_table_name();
-			$table_alert = Alerts_Table::get_table_name();
-
-			$placeholders = implode( ',', array_fill( 0, count( $test_ids ), '%d' ) );
-
-			$query = "UPDATE $table_test t
-				LEFT JOIN (
-					SELECT a.post_id, MAX(a.id) as latest_id
-					FROM $table_alert a
-					WHERE a.alert_state = 0
-					GROUP BY a.post_id
-				) a ON t.post_id = a.post_id
-				SET t.current_alert_id = a.latest_id
-				WHERE t.id IN ( $placeholders )";
-
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-			return $wpdb->query( $wpdb->prepare( $query, $test_ids ) );
-		}//end if
 	}
 }

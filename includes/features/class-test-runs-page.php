@@ -93,9 +93,6 @@ class Test_Runs_Page {
 		$run = Test_Run::get_item( $run_id );
 
 		if ( $run ) {
-			$service = new Test_Run_Service();
-			$service->update_latest_alert_for_all_tests( $run );
-
 			$tests = $this->prepare_tests( maybe_unserialize( $run->tests ) );
 			$alerts = $this->prepare_alerts( $run_id, $tests );
 

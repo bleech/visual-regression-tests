@@ -2,10 +2,8 @@
 
 namespace Vrts\Services;
 
-use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
-use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 use Vrts\Services\Email_Service;
@@ -132,22 +130,6 @@ class Test_Run_Service {
 			) {
 				Subscription::update_available_tests( $response['remaining_credits'], $response['total_credits'], $response['has_subscription'], $response['tier_id'] );
 			}
-		}
-	}
-
-	/**
-	 * Update latest alert for all tests.
-	 *
-	 * @param object $test_run Test run.
-	 *
-	 * @return void
-	 */
-	public function update_latest_alert_for_all_tests( $test_run ) {
-		$tests = maybe_unserialize( $test_run->tests );
-
-		if ( ! empty( $tests ) ) {
-			$service = new Test_Service();
-			$service->update_latest_alerts( $tests );
 		}
 	}
 }

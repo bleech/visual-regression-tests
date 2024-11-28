@@ -99,7 +99,7 @@ class Test {
 						tests.id,
 						tests.status,
 						tests.post_id,
-						tests.current_alert_id,
+						alerts.latest_id as current_alert_id,
 						tests.service_test_id,
 						tests.base_screenshot_url,
 						tests.base_screenshot_date,
@@ -109,7 +109,7 @@ class Test {
 						tests.hide_css_selectors,
 						posts.post_title,
 						CASE
-							WHEN tests.current_alert_id is not null THEN '6-has-alert'
+							WHEN alerts.latest_id is not null THEN '6-has-alert'
 							WHEN tests.service_test_id is null THEN '1-post-not-published'
 							WHEN tests.base_screenshot_date is null THEN '2-waiting'
 							WHEN tests.is_running > 0 THEN '3-running'
@@ -117,7 +117,7 @@ class Test {
 							else '5-passed'
 						END as calculated_status,
 						CASE
-							WHEN tests.current_alert_id is not null THEN alerts.target_screenshot_finish_date
+							WHEN alerts.latest_id is not null THEN alerts.target_screenshot_finish_date
 							WHEN tests.service_test_id is null THEN tests.base_screenshot_date
 							WHEN tests.base_screenshot_date is null THEN tests.base_screenshot_date
 							WHEN tests.is_running > 0 THEN tests.base_screenshot_date
@@ -126,7 +126,12 @@ class Test {
 						END as calculated_date
 					FROM $tests_table as tests
 					INNER JOIN $wpdb->posts as posts ON posts.id = tests.post_id
-					LEFT JOIN $alerts_table as alerts ON alerts.id = tests.current_alert_id
+					LEFT JOIN (
+						SELECT MAX(id) as latest_id, post_id, target_screenshot_finish_date
+						FROM $alerts_table
+						WHERE alert_state = 0
+						GROUP BY post_id
+					) as alerts ON tests.post_id = alerts.post_id
 					GROUP BY tests.id
 				) tests
 			$where
@@ -200,13 +205,34 @@ class Test {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
+		$alerts_table = Alerts_Table::get_table_name();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return $wpdb->get_row(
 			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT * FROM $tests_table WHERE id = %d",
+				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT
+					test.id,
+					test.status,
+					test.post_id,
+					alert.latest_id as current_alert_id,
+					test.service_test_id,
+					test.base_screenshot_url,
+					test.base_screenshot_date,
+					test.last_comparison_date,
+					test.next_run_date,
+					test.is_running,
+					test.hide_css_selectors
+				FROM $tests_table as test
+				LEFT JOIN (
+					SELECT MAX(id) as latest_id, post_id
+					FROM $alerts_table
+					WHERE alert_state = 0
+					GROUP BY post_id
+				) alert ON test.post_id = alert.post_id
+				WHERE id = %d",
 				$id
+				// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			)
 		);
 	}
@@ -343,28 +369,6 @@ class Test {
 	}
 
 	/**
-	 * Get the id of the alert
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return int
-	 */
-	public static function get_alert_id( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT current_alert_id FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
-	}
-
-	/**
 	 * Get post id by test id
 	 *
 	 * @param int $id the id of the post.
@@ -430,30 +434,6 @@ class Test {
 		);
 
 		return $service_test_id;
-	}
-
-	/**
-	 * Does an alert exits?
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return boolean
-	 */
-	public static function has_post_alert( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		$current_alert_id = $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT current_alert_id FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
-
-		return null === $current_alert_id ? false : true;
 	}
 
 	/**
@@ -586,24 +566,6 @@ class Test {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- It's ok.
 		return $wpdb->get_col( $query );
-	}
-
-	/**
-	 * Set alert for a test.
-	 *
-	 * @param int $post_id The id of the post.
-	 * @param int $alert_id The id of the alert.
-	 */
-	public static function set_alert( $post_id = 0, $alert_id = 0 ) {
-		global $wpdb;
-
-		$alert_id = 0 === $alert_id ? null : $alert_id;
-		$tests_table = Tests_Table::get_table_name();
-		$data = [ 'current_alert_id' => $alert_id ];
-		$where = [ 'post_id' => $post_id ];
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->update( $tests_table, $data, $where );
 	}
 
 	/**
