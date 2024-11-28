@@ -615,24 +615,6 @@ class Test {
 	}
 
 	/**
-	 * Set alert for a test.
-	 *
-	 * @param int $post_id The id of the post.
-	 * @param int $alert_id The id of the alert.
-	 */
-	public static function set_alert( $post_id = 0, $alert_id = 0 ) {
-		global $wpdb;
-
-		$alert_id = 0 === $alert_id ? null : $alert_id;
-		$tests_table = Tests_Table::get_table_name();
-		$data = [ 'current_alert_id' => $alert_id ];
-		$where = [ 'post_id' => $post_id ];
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->update( $tests_table, $data, $where );
-	}
-
-	/**
 	 * Get post status
 	 *
 	 * @param int $post_id the id of the post.

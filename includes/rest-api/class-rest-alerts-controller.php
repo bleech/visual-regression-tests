@@ -2,7 +2,6 @@
 
 namespace Vrts\Rest_Api;
 
-use Vrts\Services\Test_Service;
 use WP_Error;
 use WP_REST_Server;
 use WP_REST_Request;
@@ -105,9 +104,6 @@ class Rest_Alerts_Controller extends WP_REST_Controller {
 		$should_mark_as_read = $request->get_method() === WP_REST_Server::CREATABLE ? 1 : 0;
 
 		Alert::set_alert_state( $id, $should_mark_as_read );
-
-		$test_service = new Test_Service();
-		$test_service->update_latest_alert( $alert->post_id );
 
 		return new WP_REST_Response( true, 200 );
 	}
