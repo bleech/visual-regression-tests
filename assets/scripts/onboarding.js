@@ -68,6 +68,9 @@ if ( window.vrts_admin_vars.onboarding ) {
 		onCloseClick: () => {
 			onboarding.destroy();
 		},
+		onDestroyed: () => {
+			window.removeEventListener( 'keyup', onKeyup );
+		},
 		steps: window.vrts_admin_vars.onboarding.steps.map( ( step ) => {
 			return {
 				element: step.element,
@@ -80,6 +83,14 @@ if ( window.vrts_admin_vars.onboarding ) {
 			};
 		} ),
 	} );
+
+	const onKeyup = ( event ) => {
+		if ( event.key === 'Escape' ) {
+			onboarding.destroy();
+		}
+	};
+
+	window.addEventListener( 'keyup', onKeyup );
 
 	onboarding.drive();
 	saveOnboarding();
