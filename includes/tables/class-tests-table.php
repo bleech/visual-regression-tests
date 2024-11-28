@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Tests_Table {
 
-	const DB_VERSION = '1.4';
+	const DB_VERSION = '1.5';
 	const TABLE_NAME = 'vrts_tests';
 
 	/**
@@ -40,7 +40,7 @@ class Tests_Table {
 				);
 			}
 
-			if ( $installed_version && version_compare( $installed_version, '2.0.2', '<' ) ) {
+			if ( $installed_version && version_compare( $installed_version, '1.5', '<' ) ) {
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching  -- It's OK.
 				$wpdb->query(
 					// phpcs:ignore WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's OK.
