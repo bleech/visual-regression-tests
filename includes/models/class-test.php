@@ -459,30 +459,6 @@ class Test {
 	}
 
 	/**
-	 * Does an alert exits?
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return boolean
-	 */
-	public static function has_post_alert( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		$current_alert_id = $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT current_alert_id FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
-
-		return null === $current_alert_id ? false : true;
-	}
-
-	/**
 	 * Get total test items from database
 	 *
 	 * @param int $filter_status_query the id of status.
