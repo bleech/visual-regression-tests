@@ -48,7 +48,7 @@ class Service {
 	 * @return bool
 	 */
 	private static function create_site() {
-		if ( ! empty( get_option( 'vrts_project_id' ) ) || ! empty( get_option( 'vrts_project_token' ) ) ) {
+		if ( static::is_connected() ) {
 			return;
 		}
 		$time = current_time( 'mysql' );
@@ -63,9 +63,17 @@ class Service {
 			'requested_at' => $time,
 		];
 
+		if ( ! empty( get_option( 'vrts_project_id' ) ) && ! empty( get_option( 'vrts_project_token' ) ) ) {
+			$parameters['project_id'] = get_option( 'vrts_project_id' );
+			$parameters['project_token'] = get_option( 'vrts_project_token' );
+			$parameters['project_secret'] = get_option( 'vrts_project_secret' );
+			$parameters['tests'] = Test::get_all_service_test_ids();
+		}
+
 		$service_request = self::rest_service_request( $service_api_route, $parameters, 'post' );
 
-		if ( 201 === $service_request['status_code'] ) {
+		delete_option( 'vrts_disconnected' );
+		if ( 201 === $service_request['status_code'] || 200 === $service_request['status_code'] ) {
 			$data = $service_request['response'];
 
 			update_option( 'vrts_project_id', $data['id'] );
@@ -77,6 +85,8 @@ class Service {
 			self::add_homepage_test();
 
 			return true;
+		} else {
+			update_option( 'vrts_disconnected', 1 );
 		}
 		return false;
 	}
@@ -311,7 +321,10 @@ class Service {
 	public static function disconnect_service() {
 		$service_project_id = get_option( 'vrts_project_id' );
 		$service_api_route = 'sites/' . $service_project_id;
-		self::rest_service_request( $service_api_route, [], 'delete' );
+		$response = self::rest_service_request( $service_api_route, [], 'delete' );
+		if ( 200 === $response['status_code'] ) {
+			update_option( 'vrts_disconnected', 1 );
+		}
 	}
 
 	/**
@@ -333,7 +346,7 @@ class Service {
 	 * Check if external service was able to connect
 	 */
 	public static function is_connected() {
-		return (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
+		return ! (bool) get_option( 'vrts_disconnected' ) && (bool) get_option( 'vrts_project_id' ) && (bool) get_option( 'vrts_project_token' );
 	}
 
 	/**
