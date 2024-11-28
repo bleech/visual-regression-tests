@@ -257,6 +257,23 @@ class Test_Run {
 	}
 
 	/**
+	 * Delete duplicate test runs by service_test_run_id from database.
+	 *
+	 * @return void
+	 */
+	public static function delete_duplicates() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$wpdb->query(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"DELETE t1 FROM $test_runs_table t1 INNER JOIN $test_runs_table t2 WHERE t1.id > t2.id AND t1.service_test_run_id = t2.service_test_run_id"
+		);
+	}
+
+	/**
 	 * Insert multiple test data
 	 *
 	 * @param array $data Data to update (in multi array column => value pairs).

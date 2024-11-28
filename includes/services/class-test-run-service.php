@@ -100,9 +100,11 @@ class Test_Run_Service {
 		if ( $test_run && ! $update ) {
 			return false;
 		}
-		return Test_Run::save(array_merge( $data, [
+		$test_run_id = Test_Run::save(array_merge( $data, [
 			'service_test_run_id' => $service_test_run_id,
 		]), $test_run->id ?? null);
+		Test_Run::delete_duplicates();
+		return $test_run_id;
 	}
 
 	/**
