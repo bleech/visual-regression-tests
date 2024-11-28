@@ -369,28 +369,6 @@ class Test {
 	}
 
 	/**
-	 * Get the id of the alert
-	 *
-	 * @param int $post_id the id of the post.
-	 *
-	 * @return int
-	 */
-	public static function get_alert_id( $post_id = 0 ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT current_alert_id FROM $tests_table WHERE post_id = %d",
-				$post_id
-			)
-		);
-	}
-
-	/**
 	 * Get post id by test id
 	 *
 	 * @param int $id the id of the post.
