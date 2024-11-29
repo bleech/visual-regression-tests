@@ -316,6 +316,18 @@ class Service {
 	}
 
 	/**
+	 * Get test runs from the service.
+	 *
+	 * @param string[] $test_run_ids the test run ids.
+	 */
+	public static function fetch_test_runs( $test_run_ids ) {
+		$service_project_id = get_option( 'vrts_project_id' );
+		$service_api_route = 'sites/' . $service_project_id . '/runs';
+		$service_api_route = add_query_arg( 'ids', implode( ',', $test_run_ids ), $service_api_route );
+		return self::rest_service_request( $service_api_route, [], 'get' );
+	}
+
+	/**
 	 * Delete project from the service.
 	 */
 	public static function disconnect_service() {

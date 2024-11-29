@@ -14,11 +14,17 @@ class Test_Run_Service {
 	 * Create test from API data.
 	 *
 	 * @param array $data Data.
+	 * @param bool  $with_cleanup With cleanup.
 	 *
 	 * @return boolean
 	 */
-	public function update_run_from_api_data( $data ) {
+	public function update_run_from_api_data( $data, $with_cleanup = true ) {
 		$run_id = $data['run_id'];
+
+		if ( empty( $run_id ) ) {
+			return false;
+		}
+
 		$test_run = Test_Run::get_by_service_test_run_id( $run_id );
 
 		$test_run_just_finished = false;
@@ -45,7 +51,7 @@ class Test_Run_Service {
 			'trigger' => $data['trigger'],
 			'trigger_notes' => $data['trigger_notes'],
 			'trigger_meta' => maybe_serialize( $data['trigger_meta'] ),
-		], true);
+		], true, $with_cleanup );
 
 		if ( $test_run_just_finished && ! empty( $alert_ids ) ) {
 			$email_service = new Email_Service();
@@ -91,10 +97,11 @@ class Test_Run_Service {
 	 * @param string $service_test_run_id Service test run id.
 	 * @param array  $data Data.
 	 * @param bool   $update Update.
+	 * @param bool   $with_cleanup With cleanup.
 	 *
 	 * @return boolean
 	 */
-	public function create_test_run( $service_test_run_id, $data, $update = false ) {
+	public function create_test_run( $service_test_run_id, $data, $update = false, $with_cleanup = true ) {
 		$test_run = Test_Run::get_by_service_test_run_id( $service_test_run_id );
 
 		if ( $test_run && ! $update ) {
@@ -103,8 +110,35 @@ class Test_Run_Service {
 		$test_run_id = Test_Run::save(array_merge( $data, [
 			'service_test_run_id' => $service_test_run_id,
 		]), $test_run->id ?? null);
-		Test_Run::delete_duplicates();
+		if ( $with_cleanup ) {
+			Test_Run::delete_duplicates();
+			Test_Run::delete_empty();
+			$this->check_stalled_test_runs();
+		}
 		return $test_run_id;
+	}
+
+	/**
+	 * Check stalled test runs.
+	 *
+	 * @return void
+	 */
+	public function check_stalled_test_runs() {
+		$test_run_ids = array_column( Test_Run::get_stalled_test_run_ids(), 'service_test_run_id' );
+		if ( empty( $test_run_ids ) ) {
+			return;
+		}
+		$response = Service::fetch_test_runs( $test_run_ids );
+		if ( 200 === $response['status_code'] ) {
+			$test_runs = $response['response']['data'] ?? [];
+			foreach ( $test_runs as $test_run ) {
+				$this->update_run_from_api_data( $test_run, false );
+			}
+			$missing_test_run_ids = array_diff( $test_run_ids, array_column( $test_runs, 'run_id' ) );
+			foreach ( $missing_test_run_ids as $missing_test_run_id ) {
+				Test_Run::delete_by_service_test_run_id( $missing_test_run_id );
+			}
+		}
 	}
 
 	/**
@@ -119,7 +153,7 @@ class Test_Run_Service {
 			if ( array_key_exists( 'run_updates', $response ) ) {
 				$updates = $response['run_updates'];
 				foreach ( $updates as $update ) {
-					$this->update_run_from_api_data( $update );
+					$this->update_run_from_api_data( $update, false );
 				}
 			}
 			if (
