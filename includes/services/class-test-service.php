@@ -382,6 +382,7 @@ class Test_Service {
 				$args['status'] = 0;
 				$args['service_test_id'] = null;
 				unset( $args['id'] );
+				unset( $args['current_alert_id'] );
 				Test::save( $args, $test->id );
 				return $test;
 			} else {
