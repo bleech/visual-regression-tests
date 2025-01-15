@@ -124,18 +124,7 @@ The VRTs plugin primarily supports WordPress pages and posts. Automated visual t
 
 = How do I prevent screenshots from getting blocked? =
 
-If your firewall is blocking our screenshot service, whitelist our IP address to resolve this: 49.13.14.240.
-
-For Cloudflare, follow these steps:
-
-1. Log in to your Cloudflare account.
-2. Navigate to **Security → WAF**.
-3. Click on **Tools**.
-4. In the **IP Access Rules box**, enter 49.13.14.240.
-5. Select **Allow** from the action dropdown.
-6. Add “VRTs” as the note.
-7. Click **Add**.
-
+If your firewall is blocking our screenshot service, whitelist our IP addresses. For detailed steps and a list of IPs, visit our documentation: [Whitelisting IPs](https://vrts.app/docs/#whitelisting-ips).
 
 == Installation ==
 
