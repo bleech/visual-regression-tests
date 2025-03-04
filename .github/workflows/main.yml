@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js v20
@@ -28,7 +28,7 @@ jobs:
         npm i
     - name: Install composer
       run: |
-        php7.4 $(which composer) install
+        php8.3 $(which composer) install
     - name: Run lint
       run: |
         npm run lint
