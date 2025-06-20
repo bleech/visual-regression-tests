@@ -2,8 +2,8 @@
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
-Tested up to: 6.6.2
-Stable tag: 2.0.0
+Tested up to: 6.7
+Stable tag: 2.0.3
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -124,18 +124,7 @@ The VRTs plugin primarily supports WordPress pages and posts. Automated visual t
 
 = How do I prevent screenshots from getting blocked? =
 
-If your firewall is blocking our screenshot service, whitelist our IP address to resolve this: 49.13.14.240.
-
-For Cloudflare, follow these steps:
-
-1. Log in to your Cloudflare account.
-2. Navigate to **Security → WAF**.
-3. Click on **Tools**.
-4. In the **IP Access Rules box**, enter 49.13.14.240.
-5. Select **Allow** from the action dropdown.
-6. Add “VRTs” as the note.
-7. Click **Add**.
-
+If your firewall is blocking our screenshot service, whitelist our IP addresses. For detailed steps and a list of IPs, visit our documentation: [Whitelisting IPs](https://vrts.app/docs/#whitelisting-ips).
 
 == Installation ==
 
@@ -180,6 +169,20 @@ For Cloudflare, follow these steps:
 
 
 == Changelog ==
+
+= 2.0.3 =
+* Added cleanup on multisite uninstallation.
+
+= 2.0.2 =
+* Fixed empty and stalled Runs
+* Fixed runs queue pagination
+* Fixed wrong test status and the associated current alert
+* Fixed wrong translations info for update trigger
+
+= 2.0.1 =
+* Fixed issue with wrong alerts count in Runs
+* Fixed few minor styling issues
+* Removed deprecated notice
 
 = 2.0.0 =
 * Introduced Runs

@@ -21,8 +21,8 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 	 */
 	public function __construct() {
 		parent::__construct([
-			'singular' => 'test',
-			'plural' => 'tests',
+			'singular' => 'vrts-run-queue',
+			'plural' => 'vrts-run-queues',
 			'ajax' => false,
 		]);
 	}
@@ -108,22 +108,7 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		$hidden = [];
 		$sortable = $this->get_sortable_columns();
 		$this->_column_headers = [ $columns, $hidden, $sortable ];
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- It's the list search query parameter.
-		$filter_status_query = isset( $_REQUEST['status'] ) && '' !== $_REQUEST['status'] ? sanitize_text_field( wp_unslash( $_REQUEST['status'] ) ) : null;
-
-		$args = [
-			'number' => -1,
-			'filter_status' => $filter_status_query,
-		];
-
-		$this->items = Test_Run::get_queued_items( $args );
-		$total_items = count( $this->items );
-
-		$this->set_pagination_args([
-			'total_items' => $total_items,
-			'per_page' => 100000,
-		]);
+		$this->items = Test_Run::get_queued_items();
 	}
 
 	/**

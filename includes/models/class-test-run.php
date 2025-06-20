@@ -257,6 +257,40 @@ class Test_Run {
 	}
 
 	/**
+	 * Delete duplicate test runs by service_test_run_id from database.
+	 *
+	 * @return void
+	 */
+	public static function delete_duplicates() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$wpdb->query(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"DELETE t1 FROM $test_runs_table t1 INNER JOIN $test_runs_table t2 WHERE t1.id > t2.id AND t1.service_test_run_id = t2.service_test_run_id"
+		);
+	}
+
+	/**
+	 * Delete empty test runs from database.
+	 *
+	 * @return void
+	 */
+	public static function delete_empty() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$wpdb->query(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"DELETE FROM $test_runs_table WHERE service_test_run_id IS NULL"
+		);
+	}
+
+	/**
 	 * Insert multiple test data
 	 *
 	 * @param array $data Data to update (in multi array column => value pairs).
@@ -410,6 +444,20 @@ class Test_Run {
 	}
 
 	/**
+	 * Delete all not finished test runs from database.
+	 *
+	 * @return int
+	 */
+	public static function delete_all_not_finished() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+		return $wpdb->query( "DELETE FROM $test_runs_table WHERE finished_at IS NULL" );
+	}
+
+	/**
 	 * Convert values to correct type.
 	 *
 	 * @param object $test_run The test run object.
@@ -559,5 +607,27 @@ class Test_Run {
 			"SELECT * FROM $test_runs_table WHERE finished_at IS NULL AND scheduled_at IS NOT NULL ORDER BY scheduled_at ASC LIMIT 1"
 		);
 		return $test_run;
+	}
+
+	/**
+	 * Get test run by service test run id
+	 *
+	 * @return mixed
+	 */
+	public static function get_stalled_test_run_ids() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$test_runs = $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT service_test_run_id FROM $test_runs_table
+			WHERE ( finished_at IS NULL AND started_at IS NULL AND scheduled_at < DATE_SUB( now(), INTERVAL 1 HOUR ) )
+			OR ( finished_at IS NULL AND started_at IS NOT NULL AND started_at < DATE_SUB( NOW(), INTERVAL 1 HOUR ) )
+			OR ( finished_at IS NULL AND started_at IS NULL AND scheduled_at IS NULL )
+			"
+		);
+		return $test_runs;
 	}
 }

@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\Core\Utilities\Sanitization;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Subscription;
+use Vrts\Services\Test_Service;
 
 class Settings_Page {
 	/**
@@ -18,6 +19,7 @@ class Settings_Page {
 	 * Constructor.
 	 */
 	public function __construct() {
+		add_action( 'init', [ $this, 'add_settings' ] );
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_init', [ $this, 'settings_migration' ] );
 		add_action( 'add_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
@@ -26,8 +28,6 @@ class Settings_Page {
 		add_action( 'pre_update_option_vrts_email_update_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
 		add_action( 'pre_update_option_vrts_email_api_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
 		add_action( 'update_option_vrts_automatic_comparison', [ $this, 'do_after_update_vrts_automatic_comparison' ], 10, 2 );
-
-		$this->add_settings();
 	}
 
 	/**
@@ -297,11 +297,14 @@ class Settings_Page {
 
 			$parameters = [
 				'screenshot_options' => [
-					'clickSelectors'   => $new,
+					'clickSelectors' => $new,
 				],
 			];
 
 			$response = Service::rest_service_request( $service_api_route, $parameters, 'put' );
+
+			$service = new Test_Service();
+			$service->resume_tests();
 		}
 	}
 
