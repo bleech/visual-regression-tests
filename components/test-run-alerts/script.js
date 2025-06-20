@@ -1,3 +1,10 @@
+import {
+	cachedFetch,
+	clearFetchCache,
+	setFetchCache,
+} from 'scripts/cachedFetch';
+import { requestIdleCallback } from 'scripts/ric';
+
 class VrtsTestRunAlerts extends window.HTMLElement {
 	constructor() {
 		super();
@@ -36,11 +43,13 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		this.handleAlertClick = this.handleAlertClick.bind( this );
 		this.handleActionClick = this.handleActionClick.bind( this );
 		this.updateRunsCount = this.updateRunsCount.bind( this );
+		this.handleAlertHover = this.handleAlertHover.bind( this );
 	}
 
 	bindEvents() {
 		this.$alerts?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleAlertClick );
+			item.addEventListener( 'pointerenter', this.handleAlertHover );
 		} );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleActionClick );
@@ -144,6 +153,19 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 		} );
 	}
 
+	handleAlertHover( e ) {
+		const $el = e.currentTarget;
+		const isCurrent = $el.getAttribute( 'data-vrts-current' ) === 'true';
+
+		if ( isCurrent ) {
+			return;
+		}
+
+		const href = $el.getAttribute( 'href' );
+
+		requestIdleCallback( () => cachedFetch( href ) );
+	}
+
 	handleAlertClick( e ) {
 		e.preventDefault();
 		const $el = e.currentTarget;
@@ -171,35 +193,31 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			$content.setAttribute( 'data-vrts-loading', 'true' );
 		}, 200 );
 
-		fetch( href )
-			.then( ( response ) => {
-				return response.text();
-			} )
-			.then( ( data ) => {
-				const parser = new window.DOMParser();
-				const $html = parser.parseFromString( data, 'text/html' );
+		cachedFetch( href ).then( ( data ) => {
+			const parser = new window.DOMParser();
+			const $html = parser.parseFromString( data, 'text/html' );
 
-				const $newContent =
-					$html.querySelector( 'vrts-comparisons' ) ||
-					$html.querySelector( 'vrts-test-run-success' );
-				const $newPagination = $html.querySelector(
-					'vrts-test-run-pagination'
-				);
+			const $newContent =
+				$html.querySelector( 'vrts-comparisons' ) ||
+				$html.querySelector( 'vrts-test-run-success' );
+			const $newPagination = $html.querySelector(
+				'vrts-test-run-pagination'
+			);
 
-				window.history.replaceState( {}, '', href );
+			window.history.replaceState( {}, '', href );
 
-				this.scrollTo( $content.offsetTop - 62 );
+			this.scrollTo( $content.offsetTop - 62 );
 
-				if ( $newContent ) {
-					$content.replaceWith( $newContent );
-				}
+			if ( $newContent ) {
+				$content.replaceWith( $newContent );
+			}
 
-				if ( $newPagination ) {
-					$pagination.replaceWith( $newPagination );
-				}
+			if ( $newPagination ) {
+				$pagination.replaceWith( $newPagination );
+			}
 
-				clearTimeout( timeout );
-			} );
+			clearTimeout( timeout );
+		} );
 	}
 
 	handleActionClick( e ) {
@@ -240,6 +258,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			},
 		} )
 			.then( ( response ) => {
+				clearFetchCache();
 				return response.json();
 			} )
 			.then( () => {
@@ -264,6 +283,10 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 							shouldSetAction ? 'read' : 'unread'
 						);
 					} );
+					setFetchCache(
+						window.location.href,
+						document.body.innerHTML
+					);
 				}, loadingTimeoutTime );
 
 				clearTimeout( timeout );
@@ -287,6 +310,7 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	disconnectedCallback() {
 		this.$alerts?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleAlertClick );
+			item.removeEventListener( 'pointerenter', this.handleAlertHover );
 		} );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleActionClick );
