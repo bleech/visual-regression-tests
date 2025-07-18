@@ -97,7 +97,7 @@ class Settings_Page {
 		]);
 
 		vrts()->settings()->add_setting([
-			'type' => 'text',
+			'type' => 'password',
 			'id' => 'vrts_license_key',
 			'section' => 'vrts-settings-section-general',
 			'title' => esc_html__( 'License Key', 'visual-regression-tests' ),
@@ -111,6 +111,7 @@ class Settings_Page {
 			'sanitize_callback' => 'sanitize_text_field',
 			'show_in_rest' => true,
 			'value_type' => 'string',
+			'value' => ! empty( vrts()->settings()->get_option( 'vrts_license_key', false ) ) ? 'XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX' : '',
 			'default' => '',
 		]);
 
@@ -319,7 +320,11 @@ class Settings_Page {
 		if ( ! $new && $old ) {
 			self::remove_license_key();
 			update_option( 'vrts_license_failed', true );
-			return $new;
+			return '';
+		}
+
+		if ( 'XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX' === $new ) {
+			return $old;
 		}
 
 		if ( $old !== $new ) {
@@ -339,7 +344,7 @@ class Settings_Page {
 				// If new key is not valid, remove the old one.
 				self::remove_license_key();
 				update_option( 'vrts_license_failed', true );
-				return $new;
+				return '';
 			}
 
 			update_option( 'vrts_license_success', true );
