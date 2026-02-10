@@ -60,13 +60,13 @@
 	</rule>
 
 	<!-- Allow short Ternary -->
-	<rule ref="WordPress.PHP.DisallowShortTernary.Found">
-		<exclude name="WordPress.PHP.DisallowShortTernary.Found" />
+	<rule ref="Universal.Operators.DisallowShortTernary.Found">
+		<exclude name="Universal.Operators.DisallowShortTernary.Found" />
 	</rule>
 
 	<!-- Allow short array syntax -->
-	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
-		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+	<rule ref="Universal.Arrays.DisallowShortArraySyntax.Found">
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax.Found" />
 	</rule>
 
 	<!-- Disallow long array syntax -->
