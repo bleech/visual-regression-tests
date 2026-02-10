@@ -7,7 +7,7 @@ class Admin_Header {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action('current_screen', function() {
+		add_action('current_screen', function () {
 			$current_screen = get_current_screen();
 			if ( isset( $current_screen->id ) && strpos( $current_screen->id, 'vrts' ) !== false ) {
 				add_action( 'in_admin_header', [ $this, 'add_navigation' ] );

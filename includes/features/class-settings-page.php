@@ -118,7 +118,6 @@ class Settings_Page {
 		vrts()->settings()->add_section([
 			'id' => 'vrts-settings-section-triggers',
 			'page' => $this->page_slug,
-			'title' => 'Triggers',
 			'title' => esc_html__( 'Triggers', 'visual-regression-tests' ) . '<span>' . esc_html__( 'When your Tests are run.', 'visual-regression-tests' ) . '</span>',
 		]);
 
@@ -289,16 +288,16 @@ class Settings_Page {
 	 * Update global click selector settings for project in service
 	 *
 	 * @param string $old Old value.
-	 * @param string $new New value.
+	 * @param string $new_value New value.
 	 */
-	public function do_after_update_click_selectors( $old, $new ) {
-		if ( $old !== $new ) {
+	public function do_after_update_click_selectors( $old, $new_value ) {
+		if ( $old !== $new_value ) {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_api_route = 'sites/' . $service_project_id;
 
 			$parameters = [
 				'screenshot_options' => [
-					'clickSelectors' => $new,
+					'clickSelectors' => $new_value,
 				],
 			];
 
@@ -312,28 +311,28 @@ class Settings_Page {
 	/**
 	 * Register the Gumroad API key with the service.
 	 *
-	 *  @param mixed $new new value.
+	 *  @param mixed $new_value new value.
 	 *  @param mixed $old old value.
 	 */
-	public function do_before_add_license_key( $new, $old ) {
+	public function do_before_add_license_key( $new_value, $old ) {
 		// If license key is empty but was previously added.
-		if ( ! $new && $old ) {
+		if ( ! $new_value && $old ) {
 			self::remove_license_key();
 			update_option( 'vrts_license_failed', true );
 			return '';
 		}
 
-		if ( 'XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX' === $new ) {
+		if ( 'XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX' === $new_value ) {
 			return $old;
 		}
 
-		if ( $old !== $new ) {
+		if ( $old !== $new_value ) {
 
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_api_route = 'sites/' . $service_project_id . '/register';
 
 			$parameters = [
-				'license_key'   => $new,
+				'license_key'   => $new_value,
 			];
 
 			$response = Service::rest_service_request( $service_api_route, $parameters, 'post' );
@@ -348,7 +347,7 @@ class Settings_Page {
 			}
 
 			update_option( 'vrts_license_success', true );
-			return $new;
+			return $new_value;
 		}//end if
 
 		return $old;
@@ -368,15 +367,15 @@ class Settings_Page {
 	 * Update automatic comparison settings for project in service
 	 *
 	 * @param string $old Old value.
-	 * @param string $new New value.
+	 * @param string $new_value New value.
 	 */
-	public function do_after_update_vrts_automatic_comparison( $old, $new ) {
-		if ( $old !== $new ) {
+	public function do_after_update_vrts_automatic_comparison( $old, $new_value ) {
+		if ( $old !== $new_value ) {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$service_api_route = 'sites/' . $service_project_id;
 
 			$parameters = [
-				'automatic_comparison' => empty( $new ) ? false : true,
+				'automatic_comparison' => empty( $new_value ) ? false : true,
 			];
 
 			$response = Service::rest_service_request( $service_api_route, $parameters, 'put' );

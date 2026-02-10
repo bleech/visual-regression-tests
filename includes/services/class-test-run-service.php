@@ -34,7 +34,7 @@ class Test_Run_Service {
 			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'], $test_run );
 		}
 
-		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function( $test ) {
+		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function ( $test ) {
 			return [
 				'id' => $test->id,
 				'post_id' => $test->post_id,

@@ -51,45 +51,45 @@ class String_Helpers {
 	/**
 	 * Converts a string from kebap case to camel case.
 	 *
-	 * @param string  $string The string to convert.
+	 * @param string  $str The string to convert.
 	 * @param boolean $capitalize_first_character Sets if the first character should be capitalized.
 	 *
 	 * @return string
 	 */
-	public static function kebap_case_to_camel_case( $string, $capitalize_first_character = false ) {
-		$string = str_replace( ' ', '', ucwords( str_replace( '-', ' ', $string ) ) );
+	public static function kebap_case_to_camel_case( $str, $capitalize_first_character = false ) {
+		$str = str_replace( ' ', '', ucwords( str_replace( '-', ' ', $str ) ) );
 		if ( false === $capitalize_first_character ) {
-			$string[0] = strtolower( $string[0] );
+			$str[0] = strtolower( $str[0] );
 		}
-		return $string;
+		return $str;
 	}
 
 	/**
 	 * Removes a prefix from a string.
 	 *
 	 * @param string $prefix The prefix to be removed.
-	 * @param string $string The string to manipulate.
+	 * @param string $str The string to manipulate.
 	 *
 	 * @return string
 	 */
-	public static function remove_prefix( $prefix, $string ) {
-		if ( self::starts_with( $prefix, $string ) ) {
-			return substr( $string, strlen( $prefix ) );
+	public static function remove_prefix( $prefix, $str ) {
+		if ( self::starts_with( $prefix, $str ) ) {
+			return substr( $str, strlen( $prefix ) );
 		}
 
-		return $string;
+		return $str;
 	}
 
 	/**
 	 * Checks if a string starts with a certain string.
 	 *
 	 * @param string $search The string to search for.
-	 * @param string $string The string to look into.
+	 * @param string $str The string to look into.
 	 *
 	 * @return boolean Returns true if the subject string starts with the search string.
 	 */
-	public static function starts_with( $search, $string ) {
-		$starts_with = substr( $string, 0, strlen( $search ) );
+	public static function starts_with( $search, $str ) {
+		$starts_with = substr( $str, 0, strlen( $search ) );
 		return $search === $starts_with;
 	}
 
@@ -97,36 +97,36 @@ class String_Helpers {
 	 * Checks if a string ends with a certain string.
 	 *
 	 * @param string $search The string to search for.
-	 * @param string $string The string to look into.
+	 * @param string $str The string to look into.
 	 *
 	 * @return boolean Returns true if the subject string ends with the search string.
 	 */
-	public static function ends_with( $search, $string ) {
+	public static function ends_with( $search, $str ) {
 		$search_length = strlen( $search );
-		$string_length = strlen( $string );
-		if ( $search_length > $string_length ) {
+		$str_length = strlen( $str );
+		if ( $search_length > $str_length ) {
 			return false;
 		}
-		return 0 === substr_compare( $string, $search, $string_length - $search_length, $search_length );
+		return 0 === substr_compare( $str, $search, $str_length - $search_length, $search_length );
 	}
 
 	/**
 	 * Remove white space in string.
 	 *
-	 * @param string $string The string to look into.
+	 * @param string $str The string to look into.
 	 *
 	 * @return string String without whitespace.
 	 */
-	public function remove_white_space( $string ) {
-		$string = str_replace( "\t", ' ', $string );
-		$string = str_replace( "\n", '', $string );
-		$string = str_replace( "\r", '', $string );
+	public function remove_white_space( $str ) {
+		$str = str_replace( "\t", ' ', $str );
+		$str = str_replace( "\n", '', $str );
+		$str = str_replace( "\r", '', $str );
 
-		while ( stristr( $string, ' ' ) ) {
-			$string = str_replace( ' ', '', $string );
+		while ( stristr( $str, ' ' ) ) {
+			$str = str_replace( ' ', '', $str );
 		}
 
-		return $string;
+		return $str;
 	}
 
 	/**
@@ -141,7 +141,7 @@ class String_Helpers {
 		$line_tabs = str_repeat( "\t", $tabs );
 		$end_tabs = str_repeat( "\t", $tabs - 1 );
 
-		$lines = array_map( function( $line ) use ( $line_tabs ) {
+		$lines = array_map( function ( $line ) use ( $line_tabs ) {
 			return "\n{$line_tabs}{$line}";
 		}, $lines);
 
@@ -151,14 +151,14 @@ class String_Helpers {
 	/**
 	 * Truncate a string.
 	 *
-	 * @param string $string The string to truncate.
+	 * @param string $str The string to truncate.
 	 * @param int    $length The length to truncate to.
 	 * @param string $append The string to append.
 	 *
 	 * @return string
 	 */
-	public static function truncate( $string, $length = 100, $append = '...' ) {
-		$string = trim( $string );
-		return ( strlen( $string ) > $length ) ? substr( $string, 0, $length - strlen( $append ) ) . $append : $string;
+	public static function truncate( $str, $length = 100, $append = '...' ) {
+		$str = trim( $str );
+		return ( strlen( $str ) > $length ) ? substr( $str, 0, $length - strlen( $append ) ) . $append : $str;
 	}
 }

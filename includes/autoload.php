@@ -1,7 +1,4 @@
 <?php
-
-namespace Vrts;
-
 /**
  * Autoload Core Classes.
  *
@@ -11,6 +8,7 @@ namespace Vrts;
  *     Vrts\Core\Plugin - includes/core/class-plugin-php
  *     Vrts\Core\Utilities\Assets - includes/core/utilities/class-assets-php
  */
+
 spl_autoload_register( function ( $class_name ) {
 	$namespace = 'Vrts\\';
 

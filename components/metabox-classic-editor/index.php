@@ -1,6 +1,6 @@
 <?php
 if ( ! $data['is_connected'] ) {
-	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-connection-failed.php';
+	include_once __DIR__ . '/metabox-notifications/metabox-notification-connection-failed.php';
 	return;
 }
 ?>
@@ -34,13 +34,13 @@ if ( ! $data['is_connected'] ) {
 
 // Notification: New Test added.
 if ( true === $data['is_new_test'] ) {
-	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-new-test-added.php';
+	include_once __DIR__ . '/metabox-notifications/metabox-notification-new-test-added.php';
 } elseif ( 1 === intval( $data['remaining_tests'] ) ) {
 	// Notification: Unlock more tests.
-	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-unlock-more-tests.php';
+	include_once __DIR__ . '/metabox-notifications/metabox-notification-unlock-more-tests.php';
 } elseif ( 0 === intval( $data['remaining_tests'] ) ) {
 	// Notification: Unlock more tests.
-	include_once dirname( __FILE__ ) . '/metabox-notifications/metabox-notification-upgrade-required.php';
+	include_once __DIR__ . '/metabox-notifications/metabox-notification-upgrade-required.php';
 }
 ?>
 

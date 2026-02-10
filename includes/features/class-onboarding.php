@@ -20,10 +20,10 @@ class Onboarding {
 	 */
 	public function register_rest_field() {
 		register_rest_field( 'user', 'vrts_onboarding', [
-			'get_callback' => function( $user ) {
+			'get_callback' => function ( $user ) {
 				return get_user_meta( $user['id'], 'vrts_onboarding', true ) ?: [];
 			},
-			'update_callback' => function( $value, $user ) {
+			'update_callback' => function ( $value, $user ) {
 				return update_user_meta( $user->ID, 'vrts_onboarding', $value );
 			},
 			'schema' => [

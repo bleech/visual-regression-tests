@@ -193,7 +193,6 @@ class Metaboxes {
 			$test_service = new Test_Service();
 			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
 		}
-
 	}
 
 	/**

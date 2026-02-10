@@ -36,7 +36,7 @@ $trigger_note = Test_Run::get_trigger_note( $data['run'] );
 		</div>
 		<?php
 		foreach ( $data['tests'] as $test ) :
-			$alert = array_values( array_filter( $data['alerts'], static function( $alert ) use ( $test ) {
+			$alert = array_values( array_filter( $data['alerts'], static function ( $alert ) use ( $test ) {
 				return $alert->post_id === $test['post_id'];
 			} ) );
 			$difference = $alert ? ceil( $alert[0]->differences ) : 0;

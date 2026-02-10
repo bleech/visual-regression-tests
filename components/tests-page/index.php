@@ -2,7 +2,7 @@
 
 switch ( $data['action'] ) {
 	default:
-		$template = dirname( __FILE__ ) . '/views/tests-page-list.php';
+		$template = __DIR__ . '/views/tests-page-list.php';
 		break;
 }
 

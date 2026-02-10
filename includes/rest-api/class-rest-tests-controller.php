@@ -165,7 +165,7 @@ class Rest_Tests_Controller {
 				if ( ! empty( $test ) ) {
 					return rest_ensure_response( Test::cast_values( $test ), 200 );
 				}
-			};
+			}
 		}
 		$error = new WP_Error(
 			'rest_update_test_failed',

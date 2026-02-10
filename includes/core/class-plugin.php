@@ -146,13 +146,13 @@ class Plugin {
 	 * Create objects.
 	 *
 	 * @param string $key Array key that the object will be accessible.
-	 * @param object $object object that needs to created.
+	 * @param object $instance object that needs to created.
 	 *
 	 * @return object Created object.
 	 */
-	protected function factory( $key, $object ) {
+	protected function factory( $key, $instance ) {
 		if ( ! isset( $this->factory[ $key ] ) ) {
-			$this->factory[ $key ] = $object;
+			$this->factory[ $key ] = $instance;
 		}
 
 		return $this->factory[ $key ];
@@ -208,13 +208,13 @@ class Plugin {
 	 *
 	 * @throws Exception If there is no file found.
 	 */
-	public function get_component( $name, $data = [] ) {
+	public function get_component( $name, $data = [] ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- $data is used by included template files.
 		ob_start();
 
 		if ( file_exists( $this->get_plugin_path( "components/{$name}/index.php" ) ) ) {
 			include $this->get_plugin_path( "components/{$name}/index.php" );
 		} else {
-			throw new Exception( "Components file 'components/{$name}/index.php' cannot be located" );
+			throw new Exception( esc_html( "Components file 'components/{$name}/index.php' cannot be located" ) );
 		}
 
 		return ob_get_clean();

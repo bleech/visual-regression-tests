@@ -210,7 +210,7 @@ class Tests {
 	 * @return string
 	 */
 	public static function get_wp_version() {
-		return ( function() {
+		return ( function () {
 			require ABSPATH . WPINC . '/version.php';
 			return $wp_version;
 		} )();

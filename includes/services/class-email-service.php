@@ -84,7 +84,7 @@ class Email_Service {
 		$alerts = Alert::get_items_by_test_run( $run_id );
 
 		if ( is_array( $tests ) && count( $tests ) > 0 && ! is_array( $tests[0] ) ) {
-			$tests = array_map( function( $test ) {
+			$tests = array_map( function ( $test ) {
 				$test = (int) $test;
 				$post_id = Test::get_post_id( $test );
 				return [
@@ -95,7 +95,7 @@ class Email_Service {
 				];
 			}, $tests );
 		}
-		usort( $tests, function( $a, $b ) {
+		usort( $tests, function ( $a, $b ) {
 			return $a['post_id'] > $b['post_id'] ? -1 : 1;
 		} );
 

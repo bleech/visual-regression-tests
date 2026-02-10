@@ -38,20 +38,20 @@ class Image_Helpers {
 	/**
 	 * Get screenshot URL.
 	 *
-	 * @param object $object The alert or test object.
+	 * @param object $item The alert or test object.
 	 * @param string $type Image type - base, target, comparison.
 	 * @param string $size The size of the image.
 	 *
 	 * @return string
 	 */
-	public static function get_screenshot_url( $object, $type, $size = 'full' ) {
+	public static function get_screenshot_url( $item, $type, $size = 'full' ) {
 		$property = "{$type}_screenshot_url";
 
-		if ( ! property_exists( $object, $property ) ) {
+		if ( ! property_exists( $item, $property ) ) {
 			return '';
 		}
 
-		$url = 'preview' === $size ? maybe_unserialize( $object->meta )['preview_url'] ?? $object->$property : $object->$property;
+		$url = 'preview' === $size ? maybe_unserialize( $item->meta )['preview_url'] ?? $item->$property : $item->$property;
 		return self::get_cloudfront_url( $url );
 	}
 

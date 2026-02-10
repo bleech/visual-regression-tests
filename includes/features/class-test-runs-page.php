@@ -19,7 +19,6 @@ class Test_Runs_Page {
 		add_action( 'admin_init', [ $this, 'remove_admin_notices' ], 99 );
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
-
 	}
 
 	/**
@@ -137,7 +136,7 @@ class Test_Runs_Page {
 	 */
 	private function prepare_tests( $tests ) {
 		if ( is_array( $tests ) && count( $tests ) > 0 && ! is_array( $tests[0] ) ) {
-			$tests = array_map( function( $test ) {
+			$tests = array_map( function ( $test ) {
 				$test = (int) $test;
 				$post_id = Test::get_post_id( $test );
 				return [
@@ -148,7 +147,7 @@ class Test_Runs_Page {
 				];
 			}, $tests );
 		}
-		usort( $tests, function( $a, $b ) {
+		usort( $tests, function ( $a, $b ) {
 			return $a['id'] > $b['id'] ? -1 : 1;
 		} );
 		return $tests;
@@ -174,7 +173,7 @@ class Test_Runs_Page {
 			}
 		}
 		$remaining_alerts = array_values( $alerts_by_post_id );
-		usort( $remaining_alerts, function( $a, $b ) {
+		usort( $remaining_alerts, function ( $a, $b ) {
 			return $a[0]->post_id > $b[0]->post_id ? -1 : 1;
 		} );
 		foreach ( $remaining_alerts as $remaining_alert ) {

@@ -337,7 +337,7 @@ class Tests_Page {
 	 *
 	 * @return array the modified results.
 	 */
-	public function wp_link_query( $results, $query ) {
+	public function wp_link_query( $results, $query ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by wp_link_query filter signature.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing -- It should be ok here.
 		$is_vrts_filter_query = isset( $_POST['vrts_filter_query'] ) ? filter_var( wp_unslash( $_POST['vrts_filter_query'] ), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE ) : false;
 
@@ -361,10 +361,8 @@ class Tests_Page {
 
 		if ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
-		} else {
-			if ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
+		} elseif ( 0 === $total_test_items || ( 1 === $total_test_items && true === $is_front_page_added ) ) {
 				add_action( 'admin_notices', [ $this, 'render_notification_get_started' ] );
-			}
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It should be ok here.
@@ -430,7 +428,7 @@ class Tests_Page {
 		$post_ids = isset( $_GET['post_ids'] ) ? array_map( 'intval', $_GET['post_ids'] ) : false;
 		if ( $post_ids ) {
 			Admin_Notices::render_notification( 'new_tests_added', false, [
-				'page_titles' => implode( ', ', array_reverse( array_map( function( $post_id ) {
+				'page_titles' => implode( ', ', array_reverse( array_map( function ( $post_id ) {
 					return get_the_title( $post_id );
 				}, $post_ids ) ) ),
 			]);

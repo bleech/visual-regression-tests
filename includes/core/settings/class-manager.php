@@ -105,7 +105,7 @@ class Manager {
 			add_settings_field(
 				$id,
 				$args['title'] ?? '',
-				function() use ( $args ) {
+				function () use ( $args ) {
 					$this->get_field( $args );
 				},
 				$this->get_section_page( $args['section'] ),

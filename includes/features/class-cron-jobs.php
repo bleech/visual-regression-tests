@@ -90,7 +90,6 @@ class Cron_Jobs {
 				wp_schedule_single_event( $next_execution, 'vrts_fetch_test_run_updates', [ $test_run_id, $try_number + 1 ] );
 			}
 		}
-
 	}
 
 	/**

@@ -65,7 +65,7 @@ trait Macroable {
 	 */
 	public static function __callStatic( $method, $parameters ) {
 		if ( ! static::has_macro( $method ) ) {
-			throw new BadMethodCallException( "Method {$method} does not exist." );
+			throw new BadMethodCallException( esc_html( "Method {$method} does not exist." ) );
 		}
 
 		$macro = static::$macros[ $method ];
@@ -89,7 +89,7 @@ trait Macroable {
 	 */
 	public function __call( $method, $parameters ) {
 		if ( ! static::has_macro( $method ) ) {
-			throw new BadMethodCallException( "Method {$method} does not exist." );
+			throw new BadMethodCallException( esc_html( "Method {$method} does not exist." ) );
 		}
 
 		$macro = static::$macros[ $method ];

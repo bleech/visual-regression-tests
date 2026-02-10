@@ -188,7 +188,7 @@ class Test_Service {
 			$existing_tests_posts_ids = array_map( 'intval', wp_list_pluck( $existing_tests, 'post_id' ) );
 
 			// Remove posts that already have tests.
-			$posts = array_filter( $posts, function( $post ) use ( $existing_tests_posts_ids ) {
+			$posts = array_filter( $posts, function ( $post ) use ( $existing_tests_posts_ids ) {
 				return ! in_array( $post->ID, $existing_tests_posts_ids, true );
 			} );
 
@@ -197,11 +197,11 @@ class Test_Service {
 			}
 
 			// Only try to create as many remote tests as we have remaining.
-			$published_posts = array_slice( array_filter( $posts, function( $post ) {
+			$published_posts = array_slice( array_filter( $posts, function ( $post ) {
 				return 'publish' === $post->post_status;
 			} ), 0, $remaining_tests );
 
-			$not_published_posts = array_filter( $posts, function( $post ) {
+			$not_published_posts = array_filter( $posts, function ( $post ) {
 				return 'publish' !== $post->post_status && 'revision' !== $post->post_type && 'auto-draft' !== $post->post_status;
 			} );
 
@@ -214,7 +214,7 @@ class Test_Service {
 			}
 
 			if ( $not_published_posts ) {
-				$args = array_values( array_map(function( $post ) {
+				$args = array_values( array_map(function ( $post ) {
 					return [
 						'post_id' => $post->ID,
 						'status' => 0,
@@ -294,7 +294,7 @@ class Test_Service {
 			$service_project_id = get_option( 'vrts_project_id' );
 			$request_url = 'tests';
 
-			$urls = array_combine( $post_ids, array_map( function( $post_id ) {
+			$urls = array_combine( $post_ids, array_map( function ( $post_id ) {
 				return get_permalink( $post_id );
 			}, $post_ids ) );
 
@@ -354,7 +354,7 @@ class Test_Service {
 				? Test::get_item( (int) $test_id )
 				: $test_id;
 		if ( ! empty( $test->service_test_id ) ) {
-			$delete_locally = ! ! $this->delete_remote_test( $test_id );
+			$delete_locally = (bool) $this->delete_remote_test( $test_id );
 		}
 		if ( ! $delete_locally ) {
 			Subscription::get_latest_status();

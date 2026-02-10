@@ -6,17 +6,17 @@ class Array_Helpers {
 	/**
 	 * Parses the string into variables without the max_input_vars limitation.
 	 *
-	 * @param string $string String.
+	 * @param string $str String.
 	 *
 	 * @return array Parsed array.
 	 */
-	public static function parse_str( $string ) {
-		if ( '' === $string ) {
+	public static function parse_str( $str ) {
+		if ( '' === $str ) {
 			return false;
 		}
 
 		$result = [];
-		$pairs = explode( '&', $string );
+		$pairs = explode( '&', $str );
 
 		foreach ( $pairs as $key => $pair ) {
 
@@ -91,7 +91,7 @@ class Array_Helpers {
 	/**
 	 * Implode array keys with desired value.
 	 *
-	 * @param array        $array Array to implode.
+	 * @param array        $arr Array to implode.
 	 * @param string       $value Checked for this value.
 	 * @param string|array $remove Array key or keys to remove before implode.
 	 * @param string       $before Value to prepend to array keys.
@@ -99,19 +99,19 @@ class Array_Helpers {
 	 *
 	 * @return string Imploded array keys with value.
 	 */
-	public static function implode_array_keys( $array, $value, $remove = false, $before = '', $after = '' ) {
+	public static function implode_array_keys( $arr, $value, $remove = false, $before = '', $after = '' ) {
 		if ( is_array( $remove ) ) {
 			foreach ( $remove as $key ) {
-				unset( $array[ $key ] );
+				unset( $arr[ $key ] );
 			}
 		} elseif ( $remove ) {
-			unset( $array[ $remove ] );
+			unset( $arr[ $remove ] );
 		}
 
 		$new_array = [];
 
-		foreach ( $array as $key => $item ) {
-			if ( $array[ $key ] === $value ) {
+		foreach ( $arr as $key => $item ) {
+			if ( $arr[ $key ] === $value ) {
 				$new_array[ $before . $key . $after ] = $item;
 			}
 		}

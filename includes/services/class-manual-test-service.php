@@ -50,7 +50,7 @@ class Manual_Test_Service {
 		} else {
 			$tests = Test::get_items_by_ids( $test_ids );
 		}
-		$service_test_ids = array_map( function( $test ) {
+		$service_test_ids = array_map( function ( $test ) {
 			return $test->service_test_id;
 		}, $tests );
 		self::set_option();
@@ -58,7 +58,7 @@ class Manual_Test_Service {
 			'trigger_meta' => [ 'user_id' => get_current_user_id() ],
 		] );
 
-		$test_ids = array_map( function( $test ) {
+		$test_ids = array_map( function ( $test ) {
 			return $test->id;
 		}, $tests );
 

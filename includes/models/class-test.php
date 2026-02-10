@@ -359,7 +359,7 @@ class Test {
 		$tests_table = Tests_Table::get_table_name();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		return ! ! $wpdb->get_var(
+		return (bool) $wpdb->get_var(
 			$wpdb->prepare(
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT id FROM $tests_table WHERE post_id = %d",
@@ -469,12 +469,9 @@ class Test {
 			if ( $wpdb->insert( $tests_table, $args ) ) {
 				return $wpdb->insert_id;
 			}
-		} else {
-			// Update existing row.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-			if ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
-				return $row_id;
-			}
+		} elseif ( $wpdb->update( $tests_table, $args, [ 'id' => $row_id ] ) ) {
+			return $row_id;
 		}
 	}
 
@@ -496,7 +493,7 @@ class Test {
 		}
 
 		$fields  = '`' . implode( '`, `', array_keys( $data[0] ) ) . '`';
-		$formats = implode( ', ', array_map(function( $row ) {
+		$formats = implode( ', ', array_map(function ( $row ) {
 			return '(' . implode( ', ', array_fill( 0, count( $row ), '%s' ) ) . ')';
 		}, $data ) );
 		$values  = [];
@@ -705,7 +702,7 @@ class Test {
 		$test->id = ! is_null( $test->id ) ? (int) $test->id : null;
 		$test->post_id = ! is_null( $test->post_id ) ? (int) $test->post_id : null;
 		$test->status = ! is_null( $test->status ) ? (int) $test->status : null;
-		$test->current_alert_id = ! is_null( $test->current_alert_id ) ? (int) $test->current_alert_id : null;
+		$test->current_alert_id = isset( $test->current_alert_id ) && ! is_null( $test->current_alert_id ) ? (int) $test->current_alert_id : null;
 		$test->base_screenshot_date = ! is_null( $test->base_screenshot_date ) ? mysql2date( 'c', $test->base_screenshot_date ) : null;
 		$test->next_run_date = ! is_null( $test->next_run_date ) ? mysql2date( 'c', $test->next_run_date ) : null;
 		$test->last_comparison_date = ! is_null( $test->last_comparison_date ) ? mysql2date( 'c', $test->last_comparison_date ) : null;

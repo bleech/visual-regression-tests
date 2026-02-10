@@ -11,7 +11,7 @@ class Bulk_Actions {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'admin_init', function() {
+		add_action( 'admin_init', function () {
 			$post_types = vrts()->get_public_post_types();
 
 			foreach ( $post_types as $post_type ) {

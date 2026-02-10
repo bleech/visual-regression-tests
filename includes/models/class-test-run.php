@@ -247,12 +247,9 @@ class Test_Run {
 			if ( $wpdb->insert( $test_runs_table, $args ) ) {
 				return $wpdb->insert_id;
 			}
-		} else {
-			// Update existing row.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-			if ( $wpdb->update( $test_runs_table, $args, [ 'id' => $row_id ] ) ) {
-				return $row_id;
-			}
+		} elseif ( $wpdb->update( $test_runs_table, $args, [ 'id' => $row_id ] ) ) {
+			return $row_id;
 		}
 	}
 
@@ -308,7 +305,7 @@ class Test_Run {
 		}
 
 		$fields  = '`' . implode( '`, `', array_keys( $data[0] ) ) . '`';
-		$formats = implode( ', ', array_map(function( $row ) {
+		$formats = implode( ', ', array_map(function ( $row ) {
 			return '(' . implode( ', ', array_fill( 0, count( $row ), '%s' ) ) . ')';
 		}, $data ) );
 		$values  = [];

@@ -134,14 +134,12 @@ class Subscription {
 				if ( ! in_array( $test_id, $active_test_ids ) && in_array( $test_id, $paused_test_ids ) ) {
 					Test::pause( $test_id );
 				}
-			} else {
 				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- This is a loose comparison by design.
-				if ( in_array( $test_id, $paused_test_ids ) ) {
-					$service_api_route = 'tests/' . $test_id . '/resume';
-					$response = Service::rest_service_request( $service_api_route, [], 'post' );
+			} elseif ( in_array( $test_id, $paused_test_ids ) ) {
+				$service_api_route = 'tests/' . $test_id . '/resume';
+				$response = Service::rest_service_request( $service_api_route, [], 'post' );
 
-					Test::unpause( $test_id );
-				}
+				Test::unpause( $test_id );
 			}
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict -- This is a loose comparison by design.
 			if ( $test_id && ! in_array( $test_id, $active_test_ids ) && ! in_array( $test_id, $paused_test_ids ) ) {

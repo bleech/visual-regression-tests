@@ -101,11 +101,11 @@ class Rest_Service_Controller {
 				break;
 
 			case 'subscription_changed':
-				$response = $this->subscription_changed_request( $data );
+				$response = $this->subscription_changed_request();
 				break;
 
 			default:
-				$response = $this->unknown_action_request( $data );
+				$response = $this->unknown_action_request();
 				break;
 		}//end switch
 
@@ -128,7 +128,7 @@ class Rest_Service_Controller {
 
 		if ( ! self::verify_signature( $data ) ) {
 			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		};
+		}
 
 		$test_service = new Test_Service();
 		if ( $test_service->update_test_from_api_data( $data ) ) {
@@ -159,7 +159,7 @@ class Rest_Service_Controller {
 
 		if ( ! self::verify_signature( $data ) ) {
 			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		};
+		}
 
 		$test_run_service = new Test_Run_Service();
 		if ( $test_run_service->update_run_from_api_data( $data ) ) {
@@ -190,7 +190,7 @@ class Rest_Service_Controller {
 
 		if ( ! self::verify_signature( $data ) ) {
 			return new WP_Error( 'error', esc_html__( 'Signature is not valid.', 'visual-regression-tests' ), [ 'status' => 403 ] );
-		};
+		}
 
 		$test_run_service = new Test_Run_Service();
 		if ( Test_Run::delete_by_service_test_run_id( $data['run_id'] ) ) {
@@ -221,10 +221,8 @@ class Rest_Service_Controller {
 
 	/**
 	 * Subscription changed request
-	 *
-	 * @param array $data Rest api response body.
 	 */
-	private function subscription_changed_request( $data ) {
+	private function subscription_changed_request() {
 		// When notified about subscription change from service, update the tests with the new status.
 		Subscription::get_latest_status();
 
@@ -235,19 +233,15 @@ class Rest_Service_Controller {
 
 	/**
 	 * Unknown action request
-	 *
-	 * @param string $data Rest api response body.
 	 */
-	private function unknown_action_request( $data ) {
+	private function unknown_action_request() {
 		return new WP_Error( 'error', esc_html__( 'Unknown action.', 'visual-regression-tests' ), [ 'status' => 403 ] );
 	}
 
 	/**
 	 * Check permissions for the requets.
-	 *
-	 * @param WP_REST_Request $request Current request.
 	 */
-	public function get_items_permissions_check( WP_REST_Request $request ) {
+	public function get_items_permissions_check() {
 		return true;
 	}
 

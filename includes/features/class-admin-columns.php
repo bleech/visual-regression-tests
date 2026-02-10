@@ -68,7 +68,7 @@ class Admin_Columns {
 						? vrts()->get_plugin_info( 'name' ) . '&#13;' . esc_html__( 'Status: Running', 'visual-regression-tests' )
 						: vrts()->get_plugin_info( 'name' ) . '&#13;' . esc_html__( 'Status: Paused', 'visual-regression-tests' );
 
-					echo sprintf(
+					printf(
 						'<div aria-hidden="true" title="%s" class="vrts-icon-status %s"></div>
 						<span class="screen-reader-text">%s</span>',
 						esc_html( $text ),
@@ -76,7 +76,7 @@ class Admin_Columns {
 						esc_html( $text )
 					);
 				} else {
-					echo sprintf(
+					printf(
 						'<div aria-hidden="true" title="%s" class="vrts-icon-status"></div>
 						<span class="screen-reader-text">%s</span>',
 						esc_html( vrts()->get_plugin_info( 'name' ) . '&#13;' . esc_html__( 'Status: Testing not activated', 'visual-regression-tests' ) ),
