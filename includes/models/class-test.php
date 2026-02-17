@@ -107,6 +107,7 @@ class Test {
 						tests.next_run_date,
 						tests.is_running,
 						tests.hide_css_selectors,
+						tests.meta,
 						posts.post_title,
 						CASE
 							WHEN alerts.latest_id is not null THEN '6-has-alert'
@@ -222,7 +223,8 @@ class Test {
 					test.last_comparison_date,
 					test.next_run_date,
 					test.is_running,
-					test.hide_css_selectors
+					test.hide_css_selectors,
+					test.meta
 				FROM $tests_table as test
 				LEFT JOIN (
 					SELECT MAX(id) as latest_id, post_id
@@ -707,6 +709,7 @@ class Test {
 		$test->next_run_date = ! is_null( $test->next_run_date ) ? mysql2date( 'c', $test->next_run_date ) : null;
 		$test->last_comparison_date = ! is_null( $test->last_comparison_date ) ? mysql2date( 'c', $test->last_comparison_date ) : null;
 		$test->is_running = ! is_null( $test->is_running ) ? (bool) $test->is_running : null;
+		$test->meta = ! empty( $test->meta ) ? maybe_unserialize( $test->meta ) : [];
 
 		return $test;
 	}
@@ -871,7 +874,7 @@ class Test {
 				$instructions = esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
 				break;
 			case 'scheduled':
-				$class = 'waiting';
+				$class = 'running';
 				$text = esc_html__( 'Scheduled', 'visual-regression-tests' );
 				$next_run = Test_Run::get_next_scheduled_run();
 				if ( $next_run ) {
@@ -985,6 +988,94 @@ class Test {
 			'instructions' => $instructions,
 			'screenshot' => $screenshot,
 		];
+	}
+
+	/**
+	 * Get the raw meta array for a test.
+	 *
+	 * @param int $id Test ID.
+	 *
+	 * @return array
+	 */
+	private static function get_raw_meta( $id ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$raw = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT meta FROM $tests_table WHERE id = %d",
+				$id
+			)
+		);
+
+		return ! empty( $raw ) ? maybe_unserialize( $raw ) : [];
+	}
+
+	/**
+	 * Save the meta array for a test.
+	 *
+	 * @param int   $id Test ID.
+	 * @param array $meta Meta array.
+	 *
+	 * @return bool
+	 */
+	private static function save_meta( $id, $meta ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$result = $wpdb->update(
+			$tests_table,
+			[ 'meta' => ! empty( $meta ) ? maybe_serialize( $meta ) : null ],
+			[ 'id' => $id ]
+		);
+
+		return false !== $result;
+	}
+
+	/**
+	 * Get a specific meta key from a test.
+	 *
+	 * @param int    $id Test ID.
+	 * @param string $key Meta key.
+	 *
+	 * @return mixed|null
+	 */
+	public static function get_meta( $id, $key ) {
+		$meta = self::get_raw_meta( $id );
+		return isset( $meta[ $key ] ) ? $meta[ $key ] : null;
+	}
+
+	/**
+	 * Set a specific meta key on a test.
+	 *
+	 * @param int   $id Test ID.
+	 * @param array $values Associative array of key => value pairs.
+	 *
+	 * @return bool
+	 */
+	public static function set_meta( $id, $values ) {
+		$meta = self::get_raw_meta( $id );
+		$meta = array_merge( $meta, $values );
+		return self::save_meta( $id, $meta );
+	}
+
+	/**
+	 * Delete a specific meta key from a test.
+	 *
+	 * @param int    $id Test ID.
+	 * @param string $key Meta key.
+	 *
+	 * @return bool
+	 */
+	public static function delete_meta( $id, $key ) {
+		$meta = self::get_raw_meta( $id );
+		unset( $meta[ $key ] );
+		return self::save_meta( $id, $meta );
 	}
 
 	/**

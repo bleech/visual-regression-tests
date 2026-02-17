@@ -73,6 +73,8 @@ use Vrts\Services\Manual_Test_Service;
 		}
 		?>
 	</form>
+
+	<?php vrts()->component( 'test-settings' ); ?>
 </div>
 
 <div id="wp-link-backdrop" style="display: none"></div>

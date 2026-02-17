@@ -41,7 +41,7 @@ class Test_Service {
 				$update_data,
 				[ 'service_test_id' => $test_id ]
 			);
-		}
+		}//end if
 	}
 
 	/**
@@ -68,7 +68,21 @@ class Test_Service {
 				],
 				[ 'service_test_id' => $test_id ]
 			);
-		}
+
+			// Generate AI selectors if none exist after initial screenshot.
+			$post_id = Test::get_post_id_by_service_test_id( $test_id );
+			if ( $post_id ) {
+				$test = Test::get_item_by_post_id( $post_id );
+				if ( $test && empty( $test->hide_css_selectors ) ) {
+					$result = self::generate_ai_selectors();
+					Test::save_hide_css_selectors( $test->id, $result['selectors'] );
+					Test::set_meta( $test->id, [
+						'ai_selectors' => $result['ai_selectors'],
+						'ai_selectors_seen' => false,
+					] );
+				}
+			}
+		}//end if
 	}
 
 	/**
@@ -444,6 +458,83 @@ class Test_Service {
 		} else {
 			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}
+	}
+
+	/**
+	 * Generate random AI selectors from a predefined pool.
+	 *
+	 * @return array{selectors: string, ai_selectors: array} Selector string and structured data.
+	 */
+	private static function generate_ai_selectors() {
+		$pool = [
+			[
+				'selector' => '.cookie-banner',
+				'reason' => 'Consent overlay, appears conditionally',
+			],
+			[
+				'selector' => '.ads-container',
+				'reason' => 'Ad content changes between page loads',
+			],
+			[
+				'selector' => '#popup-overlay',
+				'reason' => 'Modal popup, not always visible',
+			],
+			[
+				'selector' => '.chat-widget',
+				'reason' => 'Live chat state varies per visit',
+			],
+			[
+				'selector' => '.notification-bar',
+				'reason' => 'Dismissible banner, shown conditionally',
+			],
+			[
+				'selector' => '.carousel-slide',
+				'reason' => 'Rotating content changes on each load',
+			],
+			[
+				'selector' => '.dynamic-counter',
+				'reason' => 'Counter value updates in real time',
+			],
+			[
+				'selector' => '#live-chat',
+				'reason' => 'Chat window state is unpredictable',
+			],
+			[
+				'selector' => '.video-autoplay',
+				'reason' => 'Video frame differs on each capture',
+			],
+			[
+				'selector' => '.social-feed',
+				'reason' => 'Feed content refreshes dynamically',
+			],
+			[
+				'selector' => '.rotating-banner',
+				'reason' => 'Banner rotates between creatives',
+			],
+			[
+				'selector' => '.countdown-timer',
+				'reason' => 'Timer value changes every second',
+			],
+		];
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand -- Non-security random.
+		$count = mt_rand( 1, 3 );
+		$keys = array_rand( $pool, $count );
+
+		if ( ! is_array( $keys ) ) {
+			$keys = [ $keys ];
+		}
+
+		$selected = array_map( function ( $key ) use ( $pool ) {
+			return $pool[ $key ];
+		}, $keys );
+
+		$selectors_string = implode( ', ', array_column( $selected, 'selector' ) );
+
+		return [
+			'selectors' => $selectors_string,
+			'ai_selectors' => array_values( $selected ),
+		];
 	}
 
 	/**

@@ -66,6 +66,12 @@ class Rest_Tests_Controller {
 			'callback' => [ $this, 'update_test_callback' ],
 			'permission_callback' => [ $this, 'user_can_create' ],
 		]);
+
+		register_rest_route($this->namespace, $this->resource_name . '/(?P<test_id>\d+)/ai-seen', [
+			'methods' => WP_REST_Server::CREATABLE,
+			'callback' => [ $this, 'ai_seen_callback' ],
+			'permission_callback' => [ $this, 'user_can_create' ],
+		]);
 	}
 
 	/**
@@ -170,6 +176,27 @@ class Rest_Tests_Controller {
 		$error = new WP_Error(
 			'rest_update_test_failed',
 			esc_html__( 'The test could not be updated.', 'visual-regression-tests' ),
+		[ 'status' => 400 ] );
+		return rest_ensure_response( $error );
+	}
+
+	/**
+	 * Marks AI selectors as seen for a test.
+	 *
+	 * @param WP_REST_Request $request Current request.
+	 */
+	public function ai_seen_callback( WP_REST_Request $request ) {
+		$data = $request->get_params();
+		$test_id = $data['test_id'] ?? 0;
+
+		if ( 0 !== $test_id ) {
+			Test::set_meta( (int) $test_id, [ 'ai_selectors_seen' => true ] );
+			return rest_ensure_response( [ 'success' => true ], 200 );
+		}
+
+		$error = new WP_Error(
+			'rest_ai_seen_failed',
+			esc_html__( 'Could not mark AI selectors as seen.', 'visual-regression-tests' ),
 		[ 'status' => 400 ] );
 		return rest_ensure_response( $error );
 	}

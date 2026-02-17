@@ -142,9 +142,14 @@ class Tests_List_Table extends \WP_List_Table {
 			$this->row_actions( $actions )
 		);
 
+		$ai_selectors_seen = isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? '0' : '1';
+		$ai_selectors_json = isset( $item->parsed_meta['ai_selectors'] ) ? esc_html( wp_json_encode( $item->parsed_meta['ai_selectors'] ) ) : '';
+
 		$quickedit_hidden_fields = "
 		<div class='hidden' id='inline_{$item->id}'>
 			<div class='hide_css_selectors'>$item->hide_css_selectors</div>
+			<div class='ai_selectors_seen'>$ai_selectors_seen</div>
+			<div class='ai_selectors'>$ai_selectors_json</div>
 		</div>";
 
 		return $row_actions . $quickedit_hidden_fields;
@@ -323,6 +328,7 @@ class Tests_List_Table extends \WP_List_Table {
 	 * @param object|array $item The current item.
 	 */
 	public function single_row( $item ) {
+		$item->parsed_meta = ! empty( $item->meta ) ? maybe_unserialize( $item->meta ) : [];
 		$classes = 'iedit';
 		?>
 		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>">
@@ -403,11 +409,27 @@ class Tests_List_Table extends \WP_List_Table {
 	private function render_column_status( $item ) {
 		$status_data = Test::get_status_data( $item );
 
+		$ai_seen = isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? 'false' : 'true';
+		$tooltip = 'false' === $ai_seen
+			? esc_attr__( 'AI-optimized configuration available', 'visual-regression-tests' )
+			: esc_attr__( 'Test settings', 'visual-regression-tests' );
+
+		$settings_button = sprintf(
+			'<button type="button" class="vrts-test-settings-button" data-post-id="%s" data-test-id="%s" data-status="%s" data-ai-seen="%s" data-a11y-dialog-show="vrts-modal-hide-elements" aria-label="%s" title="%s"><span class="vrts-gradient-border"></span></button>',
+			esc_attr( $item->post_id ),
+			esc_attr( $item->id ),
+			esc_attr( $status_data['class'] ),
+			esc_attr( $ai_seen ),
+			esc_attr__( 'Test settings', 'visual-regression-tests' ),
+			$tooltip
+		);
+
 		return sprintf(
-			'<div class="vrts-testing-status-wrapper"><p class="vrts-testing-status"><span class="%s">%s</span></p><p class="vrts-testing-status">%s</p></div>',
+			'<div class="vrts-testing-status-wrapper"><div><p class="vrts-testing-status"><span class="%s">%s</span></p><p class="vrts-testing-status">%s</p></div>%s</div>',
 			'vrts-testing-status--' . $status_data['class'],
 			$status_data['text'],
-			$status_data['instructions']
+			$status_data['instructions'],
+			$settings_button
 		);
 	}
 
