@@ -244,6 +244,35 @@
 	}
 }
 
+.vrts-tooltip-popup {
+	position: fixed;
+	z-index: 99999999999;
+	pointer-events: none;
+	animation: vrts-fade-in 0.15s ease-in-out;
+
+	.vrts-tooltip-content-inner {
+		display: block;
+		max-width: 200px;
+		background-color: #1e1e1e;
+		color: #f0f0f0;
+		font-size: 0.75rem;
+		line-height: 1.4;
+		padding: 8px 10px;
+		border-radius: 6px;
+		box-shadow: 2px 2px 8px 4px rgba(30, 30, 30, 0.12);
+		-webkit-font-smoothing: antialiased;
+	}
+
+	&__arrow {
+		position: absolute;
+		left: 50%;
+		top: 100%;
+		transform: translateX(-50%);
+		border: 6px solid transparent;
+		border-top-color: #1e1e1e;
+	}
+}
+
 .vrts-testing-toogle {
 	display: flex;
 	align-items: center;
@@ -338,7 +367,9 @@
 .vrts-gradient-border {
 	border-radius: inherit;
 	inset: 0;
-	mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+	mask:
+		linear-gradient(#fff 0 0) content-box,
+		linear-gradient(#fff 0 0);
 	mask-composite: exclude;
 	opacity: 0;
 	overflow: hidden;
@@ -354,6 +385,7 @@
 		animation: vrts-rotate 2s linear infinite;
 		animation-play-state: paused;
 		aspect-ratio: 1 / 1;
+		background: conic-gradient(from 0deg at 50% 50%, #0894ff 0%, #c959dd 22%, #ff2e54 45%, #ff9004 76%, #0894ff 100%);
 		block-size: auto;
 		content: "";
 		inline-size: 200%;

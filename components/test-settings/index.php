@@ -13,22 +13,27 @@
 					<input type="hidden" name="test_id" value="">
 					<textarea class="widefat" name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"></textarea>
 					<p class="description"><?php esc_html_e( 'Hide elements on snapshots to exclude them from comparisons.', 'visual-regression-tests' ); ?></p>
-					<div class="vrts-test-settings-modal__ai-panel" hidden>
-						<div class="vrts-test-settings-modal__ai-summary">
-							<span><strong data-ai-count></strong> <?php esc_html_e( 'selectors added by AI', 'visual-regression-tests' ); ?></span>
-							<button type="button" class="vrts-test-settings-modal__ai-toggle" data-ai-toggle><?php esc_html_e( 'Details', 'visual-regression-tests' ); ?><?php vrts()->icon( 'arrow-down' ); ?></button>
-						</div>
-						<div class="vrts-test-settings-modal__ai-details"></div>
+					<div class="vrts-test-settings-modal__ai-panel" hidden
+						data-text-loading="<?php esc_attr_e( 'AI is analyzing your site…', 'visual-regression-tests' ); ?>"
+						data-text-empty="<?php esc_attr_e( 'No selectors were suggested by AI', 'visual-regression-tests' ); ?>"
+						<?php /* translators: %d: number of selectors */ ?>
+						data-text-added-singular="<?php echo esc_attr( __( '%d selector was added by AI', 'visual-regression-tests' ) ); ?>"
+						data-text-added-plural="<?php echo esc_attr( __( '%d selectors were added by AI', 'visual-regression-tests' ) ); ?>"
+						data-text-suggested-singular="<?php echo esc_attr( __( '%d selector was suggested by AI', 'visual-regression-tests' ) ); ?>"
+						data-text-suggested-plural="<?php echo esc_attr( __( '%d selectors were suggested by AI', 'visual-regression-tests' ) ); ?>"
+					>
+						<div class="vrts-gradient-border"></div>
+						<button type="button" class="vrts-test-settings-modal__ai-summary" data-ai-toggle aria-expanded="false" aria-controls="vrts-ai-details">
+							<span data-ai-label></span>
+							<span class="vrts-test-settings-modal__ai-toggle"><?php esc_html_e( 'Details', 'visual-regression-tests' ); ?><?php vrts()->icon( 'chevron-down' ); ?></span>
+						</button>
+						<div class="vrts-test-settings-modal__ai-details" id="vrts-ai-details" role="region" aria-label="<?php esc_attr_e( 'AI selectors', 'visual-regression-tests' ); ?>"></div>
 					</div>
 					<div class="vrts-test-settings-modal__action">
-						<div class="vrts-test-settings-modal__ai-suggest">
-							<button type="button" class="button vrts-test-settings-modal__ai-button"><span class="vrts-gradient-border"></span><span><?php esc_html_e( 'AI Suggest', 'visual-regression-tests' ); ?></span></button>
-							<span class="spinner"></span>
-						</div>
 						<div class="vrts-test-settings-modal__save">
-							<span class="vrts-test-settings-modal__action-success"><?php esc_html_e( 'Saved successfully.', 'visual-regression-tests' ); ?></span>
-							<span class="spinner"></span>
 							<button type="submit" class="button button-primary"><?php esc_html_e( 'Save Changes', 'visual-regression-tests' ); ?></button>
+							<span class="spinner"></span>
+							<span class="vrts-test-settings-modal__action-success"><?php esc_html_e( 'Saved successfully.', 'visual-regression-tests' ); ?></span>
 						</div>
 					</div>
 				</form>

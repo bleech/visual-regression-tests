@@ -1,54 +1,3 @@
-const AI_SELECTOR_POOL = [
-	{
-		selector: '.cookie-banner',
-		reason: 'Consent overlay, appears conditionally',
-	},
-	{
-		selector: '.ads-container',
-		reason: 'Ad content changes between page loads',
-	},
-	{
-		selector: '#popup-overlay',
-		reason: 'Modal popup, not always visible',
-	},
-	{
-		selector: '.chat-widget',
-		reason: 'Live chat state varies per visit',
-	},
-	{
-		selector: '.notification-bar',
-		reason: 'Dismissible banner, shown conditionally',
-	},
-	{
-		selector: '.carousel-slide',
-		reason: 'Rotating content changes on each load',
-	},
-	{
-		selector: '.dynamic-counter',
-		reason: 'Counter value updates in real time',
-	},
-	{
-		selector: '#live-chat',
-		reason: 'Chat window state is unpredictable',
-	},
-	{
-		selector: '.video-autoplay',
-		reason: 'Video frame differs on each capture',
-	},
-	{
-		selector: '.social-feed',
-		reason: 'Feed content refreshes dynamically',
-	},
-	{
-		selector: '.rotating-banner',
-		reason: 'Banner rotates between creatives',
-	},
-	{
-		selector: '.countdown-timer',
-		reason: 'Timer value changes every second',
-	},
-];
-
 class VrtsTestSettings extends window.HTMLElement {
 	constructor() {
 		super();
@@ -66,9 +15,7 @@ class VrtsTestSettings extends window.HTMLElement {
 		);
 		this.$postIdInput = this.$form.querySelector( '[name="post_id"]' );
 		this.$testIdInput = this.$form.querySelector( '[name="test_id"]' );
-		this.$save = this.querySelector(
-			'.vrts-test-settings-modal__save'
-		);
+		this.$save = this.querySelector( '.vrts-test-settings-modal__save' );
 		this.$spinner = this.$save.querySelector( '.spinner' );
 		this.$success = this.querySelector(
 			'.vrts-test-settings-modal__action-success'
@@ -76,17 +23,10 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.$aiPanel = this.querySelector(
 			'.vrts-test-settings-modal__ai-panel'
 		);
-		this.$aiCount = this.querySelector( '[data-ai-count]' );
+		this.$aiLabel = this.querySelector( '[data-ai-label]' );
 		this.$aiToggle = this.querySelector( '[data-ai-toggle]' );
 		this.$aiDetails = this.querySelector(
 			'.vrts-test-settings-modal__ai-details'
-		);
-		this.$aiSuggest = this.querySelector(
-			'.vrts-test-settings-modal__ai-suggest'
-		);
-		this.$aiSpinner = this.$aiSuggest.querySelector( '.spinner' );
-		this.$aiButton = this.querySelector(
-			'.vrts-test-settings-modal__ai-button'
 		);
 	}
 
@@ -95,7 +35,6 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.onFormSubmit = this.onFormSubmit.bind( this );
 		this.onModalClose = this.onModalClose.bind( this );
 		this.onToggleClick = this.onToggleClick.bind( this );
-		this.onAiSuggestClick = this.onAiSuggestClick.bind( this );
 	}
 
 	bindEvents() {
@@ -103,7 +42,6 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.$form.addEventListener( 'submit', this.onFormSubmit );
 		this.$modal.addEventListener( 'hide', this.onModalClose );
 		this.$aiToggle.addEventListener( 'click', this.onToggleClick );
-		this.$aiButton.addEventListener( 'click', this.onAiSuggestClick );
 	}
 
 	onButtonClick( e ) {
@@ -114,6 +52,7 @@ class VrtsTestSettings extends window.HTMLElement {
 
 		const postId = button.getAttribute( 'data-post-id' );
 		const testId = button.getAttribute( 'data-test-id' );
+		const testStatus = button.getAttribute( 'data-status' );
 		const hiddenData = document.getElementById( 'inline_' + testId );
 		const selectors =
 			hiddenData?.querySelector( '.hide_css_selectors' )?.textContent ||
@@ -133,7 +72,8 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.aiSelectors = [];
 		this.$aiDetails.classList.remove( 'is-open' );
 		this.$aiToggle.classList.remove( 'is-open' );
-		this.showAiPanel( aiSelectorsRaw );
+		this.$aiToggle.setAttribute( 'aria-expanded', 'false' );
+		this.showAiPanel( aiSelectorsRaw, testStatus );
 
 		// Handle AI seen state.
 		if ( aiSeen === '0' ) {
@@ -160,7 +100,8 @@ class VrtsTestSettings extends window.HTMLElement {
 		}
 	}
 
-	showAiPanel( aiSelectorsRaw ) {
+	showAiPanel( aiSelectorsRaw, testStatus ) {
+		const hasAiMeta = aiSelectorsRaw !== '';
 		let newSelectors = [];
 		try {
 			newSelectors =
@@ -183,17 +124,59 @@ class VrtsTestSettings extends window.HTMLElement {
 
 		if ( this.aiSelectors.length > 0 ) {
 			this.$aiPanel.hidden = false;
-			this.$aiCount.textContent = this.aiSelectors.length;
-			const rows = this.aiSelectors
-				.map(
-					( item ) =>
-						`<div class="vrts-test-settings-modal__ai-row"><code>${ item.selector }</code><span class="vrts-test-settings-modal__ai-reason">${ item.reason }</span></div>`
-				)
-				.join( '' );
-			this.$aiDetails.innerHTML = `<div class="vrts-test-settings-modal__ai-details-inner">${ rows }</div>`;
+			this.$aiPanel.setAttribute( 'data-ai-state', 'results' );
+			this.renderAiSelectors();
+			this.updateAiLabel();
+		} else if ( testStatus === 'waiting' && ! hasAiMeta ) {
+			this.$aiPanel.hidden = false;
+			this.$aiPanel.setAttribute( 'data-ai-state', 'loading' );
+			this.$aiLabel.textContent = this.$aiPanel.dataset.textLoading;
+		} else if ( hasAiMeta ) {
+			this.$aiPanel.hidden = false;
+			this.$aiPanel.setAttribute( 'data-ai-state', 'empty' );
+			this.$aiLabel.textContent = this.$aiPanel.dataset.textEmpty;
 		} else {
 			this.$aiPanel.hidden = true;
 		}
+	}
+
+	renderAiSelectors() {
+		const items = this.aiSelectors
+			.map(
+				( item ) =>
+					`<div class="vrts-test-settings-modal__ai-item"><code>${ item.selector }</code><p class="description">${ item.reason }</p></div>`
+			)
+			.join( '' );
+		this.$aiDetails.innerHTML = `<div class="vrts-test-settings-modal__ai-details-inner">${ items }</div>`;
+		const inner = this.$aiDetails.querySelector(
+			'.vrts-test-settings-modal__ai-details-inner'
+		);
+		const updateFade = () => {
+			const hasOverflow = inner.scrollHeight > inner.clientHeight;
+			const atBottom =
+				inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 2;
+			inner.classList.toggle( 'has-overflow', hasOverflow && ! atBottom );
+		};
+		inner.addEventListener( 'scroll', updateFade );
+		window.requestAnimationFrame( updateFade );
+	}
+
+	updateAiLabel() {
+		const total = this.aiSelectors.length;
+		const aiSet = new Set(
+			this.aiSelectors.map( ( item ) => item.selector )
+		);
+		const textareaSelectors = this.$textarea.value
+			.split( ',' )
+			.map( ( s ) => s.trim() )
+			.filter( Boolean );
+		const isExactMatch =
+			textareaSelectors.length === aiSet.size &&
+			textareaSelectors.every( ( s ) => aiSet.has( s ) );
+		const key = isExactMatch ? 'Added' : 'Suggested';
+		const plural = total === 1 ? 'Singular' : 'Plural';
+		const template = this.$aiPanel.dataset[ `text${ key }${ plural }` ];
+		this.$aiLabel.textContent = template.replace( '%d', total );
 	}
 
 	onFormSubmit( e ) {
@@ -235,62 +218,30 @@ class VrtsTestSettings extends window.HTMLElement {
 			} );
 	}
 
-	onAiSuggestClick() {
-		if ( this.$aiButton.classList.contains( 'is-loading' ) ) {
-			return;
-		}
-
-		this.$aiButton.classList.add( 'is-loading' );
-		this.$aiSpinner.classList.add( 'is-active' );
-
-		setTimeout( () => {
-			// Get existing selectors to avoid duplicates.
-			const current = this.$textarea.value.trim();
-			const existing = current
-				? current.split( ',' ).map( ( s ) => s.trim() )
-				: [];
-
-			const available = AI_SELECTOR_POOL.filter(
-				( item ) => ! existing.includes( item.selector )
-			);
-
-			if ( available.length === 0 ) {
-				this.$aiButton.classList.remove( 'is-loading' );
-				this.$aiSpinner.classList.remove( 'is-active' );
-				return;
-			}
-
-			const count = Math.min(
-				Math.floor( Math.random() * 3 ) + 1,
-				available.length
-			);
-			const shuffled = [ ...available ].sort( () => Math.random() - 0.5 );
-			const selected = shuffled.slice( 0, count );
-			const newSelectors = selected
-				.map( ( item ) => item.selector )
-				.join( ', ' );
-
-			if ( current ) {
-				this.$textarea.value = current + ', ' + newSelectors;
-			} else {
-				this.$textarea.value = newSelectors;
-			}
-
-			this.showAiPanel( selected );
-			this.$aiButton.classList.remove( 'is-loading' );
-			this.$aiSpinner.classList.remove( 'is-active' );
-		}, 3000 );
-	}
-
 	onToggleClick() {
-		this.$aiDetails.classList.toggle( 'is-open' );
+		const isOpen = this.$aiDetails.classList.toggle( 'is-open' );
 		this.$aiToggle.classList.toggle( 'is-open' );
+		this.$aiToggle.setAttribute( 'aria-expanded', String( isOpen ) );
+
+		clearTimeout( this.animatingTimeout );
+		if ( isOpen ) {
+			this.$aiPanel.classList.add( 'is-animating' );
+			this.animatingTimeout = setTimeout( () => {
+				this.$aiPanel.classList.remove( 'is-animating' );
+			}, 300 );
+		} else {
+			this.$aiPanel.classList.add( 'is-closing' );
+			this.animatingTimeout = setTimeout( () => {
+				this.$aiPanel.classList.remove( 'is-closing' );
+			}, 300 );
+		}
 	}
 
 	onModalClose() {
 		this.$success.classList.remove( 'is-active' );
 		this.$aiDetails.classList.remove( 'is-open' );
 		this.$aiToggle.classList.remove( 'is-open' );
+		this.$aiToggle.setAttribute( 'aria-expanded', 'false' );
 		this.aiSelectors = [];
 	}
 
@@ -299,7 +250,6 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.$form?.removeEventListener( 'submit', this.onFormSubmit );
 		this.$modal?.removeEventListener( 'hide', this.onModalClose );
 		this.$aiToggle?.removeEventListener( 'click', this.onToggleClick );
-		this.$aiButton?.removeEventListener( 'click', this.onAiSuggestClick );
 	}
 }
 

@@ -410,15 +410,19 @@ class Tests_List_Table extends \WP_List_Table {
 		$status_data = Test::get_status_data( $item );
 
 		$ai_seen = isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? 'false' : 'true';
+		$has_ai_meta = ! empty( $item->parsed_meta['ai_selectors'] );
 		$tooltip = 'false' === $ai_seen
 			? esc_attr__( 'AI-optimized configuration available', 'visual-regression-tests' )
 			: esc_attr__( 'Test settings', 'visual-regression-tests' );
+
+		// Only show "waiting" status on button during initial creation (no AI meta yet).
+		$button_status = ( 'waiting' === $status_data['class'] && $has_ai_meta ) ? 'scheduled' : $status_data['class'];
 
 		$settings_button = sprintf(
 			'<button type="button" class="vrts-test-settings-button" data-post-id="%s" data-test-id="%s" data-status="%s" data-ai-seen="%s" data-a11y-dialog-show="vrts-modal-hide-elements" aria-label="%s" title="%s"><span class="vrts-gradient-border"></span></button>',
 			esc_attr( $item->post_id ),
 			esc_attr( $item->id ),
-			esc_attr( $status_data['class'] ),
+			esc_attr( $button_status ),
 			esc_attr( $ai_seen ),
 			esc_attr__( 'Test settings', 'visual-regression-tests' ),
 			$tooltip

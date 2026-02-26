@@ -31,54 +31,42 @@ $vrts-wand-icon-mask: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 		padding: 1px;
 
 		&::before {
-			background-color: #787c82;
+			background: #787c82;
 			transition: filter 0.2s;
 		}
 	}
 
 	&:hover,
 	&:focus-visible {
+
 		.vrts-gradient-border::before {
 			filter: brightness(0.8);
 		}
 	}
 
-	&[data-status="waiting"],
-	&[data-ai-seen="false"] {
+	&[data-status="waiting"] {
+
 		.vrts-gradient-border {
-			padding: 1.5px;
+			padding: 1px;
 
 			&::before {
 				animation-play-state: running;
+				background: conic-gradient(from 0deg at 50% 50%, transparent 0%, #0894ff 25%, #c959dd 45%, #ff2e54 65%, #ff9004 85%, #0894ff 100%);
 			}
 		}
 	}
 
-	&[data-status="waiting"] {
-		.vrts-gradient-border::before {
-			background: conic-gradient(
-				from 0deg at 50% 50%,
-				transparent 0%,
-				#8c8f94 100%
-			);
-		}
-	}
-
 	&[data-ai-seen="false"]:not([data-status="waiting"]) {
+
 		.vrts-gradient-border::before {
-			background: conic-gradient(
-				from 0deg at 50% 50%,
-				#0894ff 0%,
-				#c959dd 22%,
-				#ff2e54 45%,
-				#ff9004 76%,
-				#0894ff 100%
-			);
+			background: conic-gradient(from 0deg at 50% 50%, #0894ff 0%, #c959dd 22%, #ff2e54 45%, #ff9004 76%, #0894ff 100%);
 		}
 	}
 }
 
+/* stylelint-disable no-descending-specificity */
 .vrts-test-settings-modal {
+
 	.vrts-modal__content {
 		max-width: 450px;
 	}
@@ -87,17 +75,14 @@ $vrts-wand-icon-mask: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 		padding-top: 15px;
 	}
 
-	h3 {
-		margin: 0 0 8px;
-		font-size: 0.875rem;
+	textarea {
+		line-height: 1.7;
 	}
 
 	&__action {
 		margin-top: 20px;
-		gap: 1rem;
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 	}
 
 	&__save {
@@ -125,24 +110,98 @@ $vrts-wand-icon-mask: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 		}
 	}
 
-	.description {
-		color: #757575;
-	}
-
 	&__ai-panel {
-		margin-top: 0.5rem;
+		margin-top: 1rem;
 		margin-bottom: 1rem;
-		border: 1px solid #f0f0f1;
 		border-radius: 6px;
-		padding: 10px 12px;
+		border: 1px solid #e2e4e7;
+		position: relative;
+
+		.vrts-gradient-border {
+			padding: 1px;
+			inset: -1px;
+			transition-duration: 0.3s;
+		}
+
+		&[data-ai-state="results"]:hover:not(:has(.is-open)):not(.is-closing)
+		.vrts-gradient-border,
+		&[data-ai-state="results"].is-animating .vrts-gradient-border {
+			opacity: 1;
+
+			&::before {
+				animation-play-state: running;
+			}
+		}
+
+		// Hide toggle in loading and empty states.
+		&[data-ai-state="loading"],
+		&[data-ai-state="empty"] {
+
+			.vrts-test-settings-modal__ai-toggle {
+				display: none;
+			}
+		}
+
+		// Loading state: gradient text, dashed border.
+		&[data-ai-state="loading"] {
+			border-color: transparent;
+
+			.vrts-gradient-border {
+				opacity: 0.5;
+			}
+
+			.vrts-test-settings-modal__ai-summary {
+				cursor: default;
+				pointer-events: none;
+				background: linear-gradient(90deg, #0894ff 0%, #c959dd 25%, #ff2e54 50%, #ff9004 75%, #0894ff 100%);
+				background-size: 200% 100%;
+				background-clip: text;
+				-webkit-background-clip: text; // stylelint-disable-line property-no-unknown
+				-webkit-text-fill-color: transparent; // stylelint-disable-line property-no-unknown
+				animation: vrts-gradient-text 3s linear infinite;
+				font-weight: 600;
+
+				&::before {
+					background: conic-gradient(from 0deg at 50% 50%, #0894ff 0%, #c959dd 22%, #ff2e54 45%, #ff9004 76%, #0894ff 100%);
+				}
+			}
+		}
+
+		// Empty state: muted.
+		&[data-ai-state="empty"] {
+			border-color: #e2e4e7;
+			border-style: dashed;
+
+			.vrts-gradient-border {
+				display: none;
+			}
+
+			.vrts-test-settings-modal__ai-summary {
+				cursor: default;
+				pointer-events: none;
+				color: #787878;
+
+				&::before {
+					background: #787878;
+				}
+			}
+		}
 	}
 
 	&__ai-summary {
+		all: unset;
+		box-sizing: border-box;
+		cursor: pointer;
 		display: flex;
 		align-items: center;
 		gap: 6px;
 		font-size: 0.75rem;
 		color: #50575e;
+		padding: 0.75rem;
+		border-bottom: 1px solid transparent;
+		transition: border-color 0.2s;
+		font-weight: 500;
+		width: 100%;
 
 		&::before {
 			content: "";
@@ -150,21 +209,20 @@ $vrts-wand-icon-mask: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 			width: 14px;
 			height: 14px;
 			flex-shrink: 0;
-			background: conic-gradient(
-				from 0deg at 50% 50%,
-				#0894ff 0%,
-				#c959dd 22%,
-				#ff2e54 45%,
-				#ff9004 76%,
-				#0894ff 100%
-			);
+			background: conic-gradient(from 0deg at 50% 50%, #0894ff 0%, #c959dd 22%, #ff2e54 45%, #ff9004 76%, #0894ff 100%);
 			mask: url("#{$vrts-wand-icon-mask}") no-repeat center / contain;
+		}
+
+		&.is-open {
+			border-color: #e2e4e7;
+		}
+
+		&.is-open .vrts-test-settings-modal__ai-toggle svg {
+			transform: rotate(180deg);
 		}
 	}
 
 	&__ai-toggle {
-		all: unset;
-		cursor: pointer;
 		color: #2271b1;
 		font-size: 0.75rem;
 		margin-left: auto;
@@ -173,140 +231,65 @@ $vrts-wand-icon-mask: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/s
 		gap: 0.375rem;
 
 		svg {
-			width: 6px;
+			width: 12px;
 			height: auto;
 			transition: transform 0.25s ease;
-		}
-
-		&.is-open svg {
-			transform: rotate(180deg);
-		}
-
-		&:hover,
-		&:focus-visible {
-			text-decoration: underline;
 		}
 	}
 
 	&__ai-details {
 		max-height: 0;
-		opacity: 0;
 		overflow: hidden;
-		transition:
-			max-height 0.25s ease,
-			opacity 0.25s ease,
-			margin 0.25s ease;
+		transition: max-height 0.25s ease;
 
 		&.is-open {
 			max-height: 300px;
-			opacity: 1;
-			margin-top: 8px;
 		}
 	}
 
 	&__ai-details-inner {
+		box-sizing: border-box;
+		padding: 1rem 0.75rem;
 		max-height: 300px;
 		overflow-y: auto;
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+
+		&::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: #dcdcde;
+			border-radius: 6px;
+			border: 2px solid #fff;
+		}
+		mask-image: linear-gradient(to bottom, #000 0%, #000 100%);
+
+		&.has-overflow {
+			mask-image: linear-gradient(to bottom, #000 0%, #000 calc(100% - 32px), transparent 100%);
+		}
 	}
 
-	&__ai-row {
-		display: flex;
-		align-items: baseline;
-		gap: 8px;
-		padding: 6px 0;
-		font-size: 0.6875rem;
-
-		& + & {
-			border-top: 1px solid #f0f0f1;
-		}
+	&__ai-item {
 
 		code {
-			font-size: 0.6875rem;
-			font-family: Menlo, Consolas, Monaco, "Liberation Mono", "Lucida Console",
-				monospace;
-			color: #1e1e1e;
-			background: #f0f0f1;
-			padding: 2px 6px;
-			border-radius: 3px;
-			white-space: nowrap;
-			flex-shrink: 0;
-		}
-	}
-
-	&__ai-reason {
-		color: #757575;
-	}
-
-	&__ai-button {
-		background: none !important;
-		border-color: transparent !important;
-		box-shadow: none !important;
-		color: #50575e !important;
-		position: relative;
-
-		> .vrts-gradient-border {
-			// stylelint-disable-line no-descending-specificity
-			opacity: 1;
-			padding: 2px;
-			inset: -2px;
-
-			&::before {
-				// stylelint-disable-line no-descending-specificity
-				animation-play-state: running;
-			}
+			font-size: 0.675rem;
+			background: rgba(0, 0, 0, 0.05);
+			padding: 3px 7px;
+			border-radius: 32px;
+			display: inline-block;
 		}
 
-		> span:not(.vrts-gradient-border) {
-			position: relative;
-			z-index: 1;
-			display: inline-flex;
-			align-items: center;
-			gap: 4px;
-			background: linear-gradient(
-				90deg,
-				#0894ff 0%,
-				#c959dd 24%,
-				#ff2e54 48%,
-				#ff9004 72%,
-				#0894ff 100%
-			);
-			background-size: 200% 100%;
-			background-clip: text;
-			-webkit-background-clip: text; // stylelint-disable-line property-no-vendor-prefix
-			transition: color 0.3s;
+		.description {
+			margin: 6px 0 0 5px;
+			font-size: 0.725rem;
 		}
-
-		.vrts-gradient-border::before {
-			// stylelint-disable-line no-descending-specificity
-			background: conic-gradient(
-				from 0deg at 50% 50%,
-				#0894ff 0%,
-				#c959dd 22%,
-				#ff2e54 45%,
-				#ff9004 76%,
-				#0894ff 100%
-			);
-		}
-
-		&:hover,
-		&:focus-visible {
-			> span:not(.vrts-gradient-border) {
-				color: transparent;
-				animation: vrts-gradient-text 3s linear infinite;
-			}
-		}
-
-		&.is-loading {
-			> span:not(.vrts-gradient-border) {
-				color: transparent;
-				animation: vrts-gradient-text 3s linear infinite;
-			}
-		}
-	}
-
-	&__ai-suggest {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
 	}
 }
+/* stylelint-enable no-descending-specificity */

@@ -468,57 +468,49 @@ class Test_Service {
 	private static function generate_ai_selectors() {
 		$pool = [
 			[
-				'selector' => '.cookie-banner',
-				'reason' => 'Consent overlay, appears conditionally',
+				'selector' => '.elementor-background-video-hosted',
+				'reason' => 'Background video frame changes on every capture',
 			],
 			[
-				'selector' => '.ads-container',
-				'reason' => 'Ad content changes between page loads',
+				'selector' => '.cmplz-cookiebanner',
+				'reason' => 'Cookie consent banner appears conditionally based on visitor state',
 			],
 			[
-				'selector' => '#popup-overlay',
-				'reason' => 'Modal popup, not always visible',
+				'selector' => '.wp-block-embed__wrapper iframe',
+				'reason' => 'Embedded iframe content may load differently between visits',
 			],
 			[
-				'selector' => '.chat-widget',
-				'reason' => 'Live chat state varies per visit',
+				'selector' => '#tidio-chat',
+				'reason' => 'Live chat widget position and visibility varies per session',
 			],
 			[
-				'selector' => '.notification-bar',
-				'reason' => 'Dismissible banner, shown conditionally',
+				'selector' => '.swiper-slide-active',
+				'reason' => 'Active slide in carousel rotates automatically between captures',
 			],
 			[
-				'selector' => '.carousel-slide',
-				'reason' => 'Rotating content changes on each load',
+				'selector' => '.woocommerce-store-notice',
+				'reason' => 'Store notice banner can be dismissed and may not always display',
 			],
 			[
-				'selector' => '.dynamic-counter',
-				'reason' => 'Counter value updates in real time',
+				'selector' => '.elementor-widget-countdown',
+				'reason' => 'Countdown timer value changes continuously between screenshots',
 			],
 			[
-				'selector' => '#live-chat',
-				'reason' => 'Chat window state is unpredictable',
+				'selector' => '.google-auto-placed',
+				'reason' => 'Auto-placed ad content differs on every page load',
 			],
 			[
-				'selector' => '.video-autoplay',
-				'reason' => 'Video frame differs on each capture',
+				'selector' => '.jetpack-lazy-image',
+				'reason' => 'Lazy-loaded image placeholder may appear before full image renders',
 			],
 			[
-				'selector' => '.social-feed',
-				'reason' => 'Feed content refreshes dynamically',
-			],
-			[
-				'selector' => '.rotating-banner',
-				'reason' => 'Banner rotates between creatives',
-			],
-			[
-				'selector' => '.countdown-timer',
-				'reason' => 'Timer value changes every second',
+				'selector' => '.wpforms-confirmation-container',
+				'reason' => 'Form confirmation message only appears after submission',
 			],
 		];
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand -- Non-security random.
-		$count = mt_rand( 1, 3 );
+		$count = mt_rand( 3, 5 );
 		$keys = array_rand( $pool, $count );
 
 		if ( ! is_array( $keys ) ) {
