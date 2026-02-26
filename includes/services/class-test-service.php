@@ -69,17 +69,41 @@ class Test_Service {
 				[ 'service_test_id' => $test_id ]
 			);
 
-			// Generate AI selectors if none exist after initial screenshot.
+			// Save AI selectors from service callback payload.
 			$post_id = Test::get_post_id_by_service_test_id( $test_id );
 			if ( $post_id ) {
 				$test = Test::get_item_by_post_id( $post_id );
-				if ( $test && empty( $test->hide_css_selectors ) ) {
-					$result = self::generate_ai_selectors();
-					Test::save_hide_css_selectors( $test->id, $result['selectors'] );
+				if ( $test && array_key_exists( 'ai_selectors', $data ) && is_array( $data['ai_selectors'] ) ) {
+					$ai_selectors = array_values( array_filter( array_map(
+						function ( $entry ) {
+							if ( ! is_array( $entry ) || empty( $entry['selector'] ) ) {
+								return null;
+							}
+
+							return [
+								'selector' => sanitize_text_field( $entry['selector'] ),
+								'reason' => isset( $entry['reason'] ) ? sanitize_text_field( $entry['reason'] ) : '',
+							];
+						},
+						$data['ai_selectors']
+					) ) );
+
+					$has_ai_suggestions = ! empty( $ai_selectors );
+
 					Test::set_meta( $test->id, [
-						'ai_selectors' => $result['ai_selectors'],
-						'ai_selectors_seen' => false,
+						'ai_selectors' => $ai_selectors,
+						'ai_selectors_seen' => ! $has_ai_suggestions,
 					] );
+
+					if ( $has_ai_suggestions ) {
+						// Apply only when user has not configured manual hide selectors yet.
+						if ( empty( $test->hide_css_selectors ) ) {
+							$selectors = implode( ', ', array_values( array_unique( array_column( $ai_selectors, 'selector' ) ) ) );
+							if ( ! empty( $selectors ) ) {
+								Test::save_hide_css_selectors( $test->id, $selectors );
+							}
+						}
+					}
 				}
 			}
 		}//end if
@@ -458,75 +482,6 @@ class Test_Service {
 		} else {
 			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}
-	}
-
-	/**
-	 * Generate random AI selectors from a predefined pool.
-	 *
-	 * @return array{selectors: string, ai_selectors: array} Selector string and structured data.
-	 */
-	private static function generate_ai_selectors() {
-		$pool = [
-			[
-				'selector' => '.elementor-background-video-hosted',
-				'reason' => 'Background video frame changes on every capture',
-			],
-			[
-				'selector' => '.cmplz-cookiebanner',
-				'reason' => 'Cookie consent banner appears conditionally based on visitor state',
-			],
-			[
-				'selector' => '.wp-block-embed__wrapper iframe',
-				'reason' => 'Embedded iframe content may load differently between visits',
-			],
-			[
-				'selector' => '#tidio-chat',
-				'reason' => 'Live chat widget position and visibility varies per session',
-			],
-			[
-				'selector' => '.swiper-slide-active',
-				'reason' => 'Active slide in carousel rotates automatically between captures',
-			],
-			[
-				'selector' => '.woocommerce-store-notice',
-				'reason' => 'Store notice banner can be dismissed and may not always display',
-			],
-			[
-				'selector' => '.elementor-widget-countdown',
-				'reason' => 'Countdown timer value changes continuously between screenshots',
-			],
-			[
-				'selector' => '.google-auto-placed',
-				'reason' => 'Auto-placed ad content differs on every page load',
-			],
-			[
-				'selector' => '.jetpack-lazy-image',
-				'reason' => 'Lazy-loaded image placeholder may appear before full image renders',
-			],
-			[
-				'selector' => '.wpforms-confirmation-container',
-				'reason' => 'Form confirmation message only appears after submission',
-			],
-		];
-
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand -- Non-security random.
-		$count = mt_rand( 3, 5 );
-		$keys = array_rand( $pool, $count );
-
-		if ( ! is_array( $keys ) ) {
-			$keys = [ $keys ];
-		}
-
-		$selected = array_map( function ( $key ) use ( $pool ) {
-			return $pool[ $key ];
-		}, $keys );
-
-		$selectors_string = implode( ', ', array_column( $selected, 'selector' ) );
-
-		return [
-			'selectors' => $selectors_string,
-			'ai_selectors' => array_values( $selected ),
-		];
 	}
 
 	/**

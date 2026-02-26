@@ -142,8 +142,9 @@ class Tests_List_Table extends \WP_List_Table {
 			$this->row_actions( $actions )
 		);
 
-		$ai_selectors_seen = isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? '0' : '1';
-		$ai_selectors_json = isset( $item->parsed_meta['ai_selectors'] ) ? esc_html( wp_json_encode( $item->parsed_meta['ai_selectors'] ) ) : '';
+		$has_ai_suggestions = ! empty( $item->parsed_meta['ai_selectors'] );
+		$ai_selectors_seen = $has_ai_suggestions && isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? '0' : '1';
+		$ai_selectors_json = array_key_exists( 'ai_selectors', $item->parsed_meta ) ? esc_html( wp_json_encode( $item->parsed_meta['ai_selectors'] ) ) : '';
 
 		$quickedit_hidden_fields = "
 		<div class='hidden' id='inline_{$item->id}'>
@@ -409,8 +410,9 @@ class Tests_List_Table extends \WP_List_Table {
 	private function render_column_status( $item ) {
 		$status_data = Test::get_status_data( $item );
 
-		$ai_seen = isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? 'false' : 'true';
-		$has_ai_meta = ! empty( $item->parsed_meta['ai_selectors'] );
+		$has_ai_suggestions = ! empty( $item->parsed_meta['ai_selectors'] );
+		$ai_seen = $has_ai_suggestions && isset( $item->parsed_meta['ai_selectors_seen'] ) && false === $item->parsed_meta['ai_selectors_seen'] ? 'false' : 'true';
+		$has_ai_meta = array_key_exists( 'ai_selectors', $item->parsed_meta );
 		$tooltip = 'false' === $ai_seen
 			? esc_attr__( 'AI-optimized configuration available', 'visual-regression-tests' )
 			: esc_attr__( 'Test settings', 'visual-regression-tests' );

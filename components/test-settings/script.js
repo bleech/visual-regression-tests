@@ -67,17 +67,13 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.$testIdInput.value = testId;
 		this.$textarea.value = selectors;
 		this.$success.classList.remove( 'is-active' );
-
-		// Populate AI panel.
 		this.aiSelectors = [];
 		this.$aiDetails.classList.remove( 'is-open' );
 		this.$aiToggle.classList.remove( 'is-open' );
 		this.$aiToggle.setAttribute( 'aria-expanded', 'false' );
 		this.showAiPanel( aiSelectorsRaw, testStatus );
 
-		// Handle AI seen state.
 		if ( aiSeen === '0' ) {
-			// Mark as seen via REST.
 			fetch(
 				`${ window.vrts_admin_vars.rest_url }/tests/${ testId }/ai-seen`,
 				{
@@ -88,11 +84,9 @@ class VrtsTestSettings extends window.HTMLElement {
 				}
 			);
 
-			// Clear gradient on button and update tooltip.
 			button.setAttribute( 'data-ai-seen', 'true' );
 			button.title = button.getAttribute( 'aria-label' );
 
-			// Update inline data.
 			const aiSeenEl = hiddenData?.querySelector( '.ai_selectors_seen' );
 			if ( aiSeenEl ) {
 				aiSeenEl.textContent = '1';
@@ -112,7 +106,6 @@ class VrtsTestSettings extends window.HTMLElement {
 			newSelectors = [];
 		}
 
-		// Append new selectors, avoiding duplicates.
 		const existingSet = new Set(
 			this.aiSelectors.map( ( item ) => item.selector )
 		);
@@ -203,7 +196,6 @@ class VrtsTestSettings extends window.HTMLElement {
 					this.$success.classList.remove( 'is-active' );
 				}, 5000 );
 
-				// Update hidden inline data so next open shows fresh value.
 				const hiddenData = document.getElementById(
 					'inline_' + testId
 				);
