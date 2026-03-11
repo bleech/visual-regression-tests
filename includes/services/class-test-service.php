@@ -104,8 +104,8 @@ class Test_Service {
 							}
 						}
 					}
-				}
-			}
+				}//end if
+			}//end if
 		}//end if
 	}
 

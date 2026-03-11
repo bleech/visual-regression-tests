@@ -18,8 +18,11 @@
 						data-text-empty="<?php esc_attr_e( 'No selectors were suggested by AI', 'visual-regression-tests' ); ?>"
 						<?php /* translators: %d: number of selectors */ ?>
 						data-text-added-singular="<?php echo esc_attr( __( '%d selector was added by AI', 'visual-regression-tests' ) ); ?>"
+						<?php /* translators: %d: number of selectors */ ?>
 						data-text-added-plural="<?php echo esc_attr( __( '%d selectors were added by AI', 'visual-regression-tests' ) ); ?>"
+						<?php /* translators: %d: number of selectors */ ?>
 						data-text-suggested-singular="<?php echo esc_attr( __( '%d selector was suggested by AI', 'visual-regression-tests' ) ); ?>"
+						<?php /* translators: %d: number of selectors */ ?>
 						data-text-suggested-plural="<?php echo esc_attr( __( '%d selectors were suggested by AI', 'visual-regression-tests' ) ); ?>"
 					>
 						<div class="vrts-gradient-border"></div>
