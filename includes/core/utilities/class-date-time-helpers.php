@@ -76,8 +76,8 @@ class Date_Time_Helpers {
 	 * @return string Formatted date.
 	 */
 	private static function extract_date( $input_date ) {
-		// Get today's date at midnight.
-		$today = new DateTime( 'today' );
+		// Get today's date at midnight in the site's timezone.
+		$today = new DateTime( 'today', wp_timezone() );
 
 		// Clone input date and set time to midnight.
 		$comparison_date = clone $input_date;
