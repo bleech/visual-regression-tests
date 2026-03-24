@@ -16,6 +16,8 @@ package.json
 package-lock.json
 webpack.config.js
 README.md
+CLAUDE.md
+AGENTS.md
 node_modules/
 vendor/
 svn/
