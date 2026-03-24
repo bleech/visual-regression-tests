@@ -1,6 +1,6 @@
 {
 	"name": "@bleech/visual-regression-tests",
-	"version": "2.0.5",
+	"version": "2.0.6",
 	"description": "Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.",
 	"author": "Bleech <hello@bleech.de>",
 	"license": "GPL-2.0-or-later",
@@ -73,6 +73,6 @@
 		"test:e2e": "wp-scripts test-e2e",
 		"test:unit": "wp-scripts test-unit-js",
 		"makepot": "./vendor/bin/wp i18n make-pot . --skip-audit --exclude=\".github,.wordpress-org,build,node_modules,vendor,svn\" --headers='{\"Last-Translator\":\"hello@bleech.de\",\"Report-Msgid-Bugs-To\":\"https://github.com/visual-regression-tests/issues\"}' languages/visual-regression-tests.pot",
-		"zip": "run-s build && zip -r visual-regression-tests.zip ./ -x '.*' '__MACOSX' 'node_modules/*' 'vendor/*' 'composer.json' 'composer.lock' 'package.json' 'package-lock.json' 'phpcs.xml' 'webpack.config.js' 'README.md'"
+		"zip": "run-s build && zip -r visual-regression-tests.zip ./ -x '.*' '__MACOSX' 'node_modules/*' 'vendor/*' 'composer.json' 'composer.lock' 'package.json' 'package-lock.json' 'phpcs.xml' 'webpack.config.js' 'README.md' 'CLAUDE.md' 'AGENTS.md'"
 	}
 }
