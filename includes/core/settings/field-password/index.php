@@ -5,6 +5,7 @@
 		name="<?php echo esc_attr( $args['id'] ); ?>"
 		value="<?php echo esc_attr( $value ); ?>"
 		placeholder="<?php echo esc_attr( $args['placeholder'] ); ?>"
+		autocomplete="<?php echo esc_attr( $args['autocomplete'] ?? 'off' ); ?>"
 		<?php wp_readonly( isset( $args['readonly'] ) && $args['readonly'] ); ?>
 		<?php disabled( isset( $args['disabled'] ) && $args['disabled'] ); ?>>
 	<?php
