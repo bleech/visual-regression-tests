@@ -5,7 +5,7 @@ use Vrts\Core\Utilities\Url_Helpers;
 ?>
 <vrts-settings class="wrap vrts-settings">
 	<h1><?php echo esc_html( $data['title'] ); ?></h1>
-	<form method="post" action="options.php">
+	<form method="post" action="options.php" autocomplete="off">
 	<?php
 		settings_fields( $data['settings_fields'] );
 		do_settings_sections( $data['settings_sections'] );
