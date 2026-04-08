@@ -97,7 +97,7 @@ class Settings_Page {
 		]);
 
 		vrts()->settings()->add_setting([
-			'type' => 'password',
+			'type' => 'text',
 			'id' => 'vrts_license_key',
 			'section' => 'vrts-settings-section-general',
 			'title' => esc_html__( 'License Key', 'visual-regression-tests' ),
