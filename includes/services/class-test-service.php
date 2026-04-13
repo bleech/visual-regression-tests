@@ -41,7 +41,7 @@ class Test_Service {
 				$update_data,
 				[ 'service_test_id' => $test_id ]
 			);
-		}
+		}//end if
 	}
 
 	/**
@@ -68,7 +68,45 @@ class Test_Service {
 				],
 				[ 'service_test_id' => $test_id ]
 			);
-		}
+
+			// Save AI selectors from service callback payload.
+			$post_id = Test::get_post_id_by_service_test_id( $test_id );
+			if ( $post_id ) {
+				$test = Test::get_item_by_post_id( $post_id );
+				if ( $test && array_key_exists( 'ai_selectors', $data ) && is_array( $data['ai_selectors'] ) ) {
+					$ai_selectors = array_values( array_filter( array_map(
+						function ( $entry ) {
+							if ( ! is_array( $entry ) || empty( $entry['selector'] ) ) {
+								return null;
+							}
+
+							return [
+								'selector' => sanitize_text_field( $entry['selector'] ),
+								'reason' => isset( $entry['reason'] ) ? sanitize_text_field( $entry['reason'] ) : '',
+							];
+						},
+						$data['ai_selectors']
+					) ) );
+
+					$has_ai_suggestions = ! empty( $ai_selectors );
+
+					Test::set_meta( $test->id, [
+						'ai_selectors' => $ai_selectors,
+						'ai_selectors_seen' => ! $has_ai_suggestions,
+					] );
+
+					if ( $has_ai_suggestions ) {
+						// Apply only when user has not configured manual hide selectors yet.
+						if ( empty( $test->hide_css_selectors ) ) {
+							$selectors = implode( ', ', array_values( array_unique( array_column( $ai_selectors, 'selector' ) ) ) );
+							if ( ! empty( $selectors ) ) {
+								Test::save_hide_css_selectors( $test->id, $selectors );
+							}
+						}
+					}
+				}//end if
+			}//end if
+		}//end if
 	}
 
 	/**
