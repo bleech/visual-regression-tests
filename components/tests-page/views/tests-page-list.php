@@ -13,7 +13,7 @@ use Vrts\Services\Manual_Test_Service;
 
 	<menu class="page-title-actions">
 		<li>
-			<button type="button" class="page-title-action vrts-page-title-action button-primary"
+			<button type="button" class="vrts-page-title-action button-primary"
 				id="<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? 'modal-add-new-disabled' : 'show-modal-add-new'; ?>"
 				<?php echo ( ! $data['is_connected'] || intval( $data['remaining_tests'] ) === 0 ) ? ' disabled' : ''; ?>>
 				<?php esc_html_e( 'Add New', 'visual-regression-tests' ); ?>
@@ -24,7 +24,7 @@ use Vrts\Services\Manual_Test_Service;
 				<form method="post" id="form-run-manual-tests">
 					<?php wp_nonce_field( 'submit_run_manual_tests', '_wpnonce' ); ?>
 					<input type="submit" name="submit_run_manual_tests" value="<?php esc_attr_e( 'Run All Tests', 'visual-regression-tests' ); ?>"
-						class="page-title-action button-secondary"
+						class="vrts-page-title-action button-secondary"
 						id="<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? 'run-manual-tests-disabled' : 'run-manual-tests'; ?>"
 						<?php echo ( ! $data['is_connected'] || ! $data['running_tests_count'] ) ? ' disabled' : ''; ?>
 					>
