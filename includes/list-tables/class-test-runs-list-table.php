@@ -302,8 +302,10 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			'<span class="vrts-test-run-trigger vrts-test-run-trigger--%s">%s</span>%s',
 			esc_attr( $item->trigger ),
 			esc_html( $trigger_title ),
-			empty( $trigger_note ) ? '' : sprintf('<p class="vrts-test-run-trigger-notes" title="%1$s">%1$s</p>',
-				$trigger_note
+			empty( $trigger_note ) ? '' : sprintf(
+				'<p class="vrts-test-run-trigger-notes" title="%1$s">%2$s</p>',
+				esc_attr( $trigger_note ),
+				esc_html( $trigger_note )
 			)
 		);
 	}
