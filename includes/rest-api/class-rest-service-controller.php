@@ -224,6 +224,11 @@ class Rest_Service_Controller {
 	/**
 	 * Verify signature.
 	 *
+	 * The service dual-signs callbacks during the transition away from the
+	 * broken pre-2.0.9 scheme: `signature` carries the legacy HMAC for old
+	 * plugins, `signature_v2` the HMAC keyed with the real project secret,
+	 * computed over the payload without either signature field.
+	 *
 	 * @param array  $data Rest api response body.
 	 * @param string $secret Project signing secret.
 	 *
@@ -231,15 +236,15 @@ class Rest_Service_Controller {
 	 */
 	private function verify_signature( $data, $secret ) {
 		if (
-			! array_key_exists( 'signature', $data )
-			|| ! is_string( $data['signature'] )
-			|| 1 !== preg_match( '/^[a-f0-9]{64}$/', $data['signature'] )
+			! array_key_exists( 'signature_v2', $data )
+			|| ! is_string( $data['signature_v2'] )
+			|| 1 !== preg_match( '/^[a-f0-9]{64}$/', $data['signature_v2'] )
 		) {
 			return false;
 		}
 
-		$signature = $data['signature'];
-		unset( $data['signature'] );
+		$signature = $data['signature_v2'];
+		unset( $data['signature'], $data['signature_v2'] );
 
 		$expected_signature = hash_hmac( 'sha256', wp_json_encode( $data ), $secret );
 
