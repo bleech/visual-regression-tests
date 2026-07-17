@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +169,9 @@ If your firewall is blocking our screenshot service, whitelist our IP addresses.
 
 
 == Changelog ==
+
+= 2.0.9 =
+* Fixed a security issue with how service updates are verified.
 
 = 2.0.8 =
 * Fixed visual compatibility issues with WordPress 7.
