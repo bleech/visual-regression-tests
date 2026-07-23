@@ -2,6 +2,7 @@
 
 namespace Vrts\Services;
 
+use Vrts\Models\Alert;
 use Vrts\Tables\Alerts_Table;
 
 class Alert_Service {
@@ -17,6 +18,23 @@ class Alert_Service {
 	public function create_alert_from_comparison( $post_id, $test_id, $comparison, $test_run = null ) {
 		global $wpdb;
 		$table_alert = Alerts_Table::get_table_name();
+
+		// The same comparison can arrive both via webhook (with a test run) and via the
+		// hourly poll fallback (without one) — reuse the existing alert instead of
+		// creating an orphaned duplicate.
+		$existing_alert = empty( $comparison['id'] ) ? null : Alert::get_item_by_comparison_id( $comparison['id'] );
+
+		if ( $existing_alert ) {
+			if ( empty( $existing_alert->test_run_id ) && $test_run ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+				$wpdb->update(
+					$table_alert,
+					[ 'test_run_id' => $test_run->id ],
+					[ 'id' => $existing_alert->id ]
+				);
+			}
+			return $existing_alert->id;
+		}
 
 		$prepare_alert = [];
 		$prepare_alert['post_id'] = $post_id;

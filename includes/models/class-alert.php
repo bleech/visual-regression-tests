@@ -164,6 +164,25 @@ class Alert {
 	}
 
 	/**
+	 * Get a single alert from database by comparison id
+	 *
+	 * @param string $comparison_id the comparison id of the item.
+	 *
+	 * @return object
+	 */
+	public static function get_item_by_comparison_id( $comparison_id = '' ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_row(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok
+			$wpdb->prepare( "SELECT * FROM $alerts_table WHERE comparison_id = %s ORDER BY id DESC LIMIT 1", $comparison_id )
+		);
+	}
+
+	/**
 	 * Get multiple alerts from database by id
 	 *
 	 * @param array $ids the ids of the items.

@@ -27,12 +27,9 @@ class Test_Run_Service {
 
 		$test_run = Test_Run::get_by_service_test_run_id( $run_id );
 
-		$test_run_just_finished = false;
-
-		if ( $test_run && empty( $test_run->finished_at ) && ! empty( $data['finished_at'] ) ) {
-			$test_run_just_finished = true;
-			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'], $test_run );
-		}
+		// A run can be first seen already finished, e.g. when the hourly poll catches up
+		// on a missed webhook — save the run first so its alerts can link to it.
+		$test_run_just_finished = ! empty( $data['finished_at'] ) && ( ! $test_run || empty( $test_run->finished_at ) );
 
 		$test_ids = empty( $data['comparison_schedule_ids'] ) ? [] : array_map(function ( $test ) {
 			return [
@@ -53,9 +50,13 @@ class Test_Run_Service {
 			'trigger_meta' => maybe_serialize( $data['trigger_meta'] ),
 		], true, $with_cleanup );
 
-		if ( $test_run_just_finished && ! empty( $alert_ids ) ) {
-			$email_service = new Email_Service();
-			$email_service->send_test_run_email( $test_run_id );
+		if ( $test_run_just_finished ) {
+			$alert_ids = $this->update_tests_and_create_alerts( $data['comparisons'] ?? [], Test_Run::get_item( $test_run_id ) );
+
+			if ( ! empty( $alert_ids ) ) {
+				$email_service = new Email_Service();
+				$email_service->send_test_run_email( $test_run_id );
+			}
 		}
 
 		return true;

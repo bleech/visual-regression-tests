@@ -108,6 +108,14 @@ class Test_Service {
 		$service_request = Service::fetch_updates();
 		if ( 200 === $service_request['status_code'] ) {
 			$response = $service_request['response'];
+			// Process runs before tests so alerts created here are linked to their run
+			// and the `updates` path below reuses them instead of inserting orphans.
+			if ( ! empty( $response['run_updates'] ) ) {
+				$test_run_service = new Test_Run_Service();
+				foreach ( $response['run_updates'] as $run_update ) {
+					$test_run_service->update_run_from_api_data( $run_update, false );
+				}
+			}
 			if ( array_key_exists( 'updates', $response ) ) {
 				$updates = $response['updates'];
 				foreach ( $updates as $update ) {
@@ -122,7 +130,7 @@ class Test_Service {
 			) {
 				Subscription::update_available_tests( $response['remaining_credits'], $response['total_credits'], $response['has_subscription'], $response['tier_id'] );
 			}
-		}
+		}//end if
 	}
 
 	/**
