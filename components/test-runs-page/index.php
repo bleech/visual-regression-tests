@@ -11,34 +11,42 @@ use Vrts\Services\Manual_Test_Service;
 
 	<hr class="wp-header-end">
 
-	<?php
-	$list_table = $data['list_queue_table'];
-	$list_table->prepare_items();
-	$list_table->views();
-	$list_table->display();
-	?>
-
-	<form method="post">
+	<div data-vrts-refresh>
 		<?php
-		$list_table = $data['list_table'];
+		$list_table = $data['list_queue_table'];
 		$list_table->prepare_items();
 		$list_table->views();
 		$list_table->display();
-
-		if ( $list_table->has_items() ) {
-			$list_table->inline_edit();
-		}
 		?>
-	</form>
+
+		<form method="post">
+			<?php
+			$list_table = $data['list_table'];
+			$list_table->prepare_items();
+			$list_table->views();
+			$list_table->display();
+
+			if ( $list_table->has_items() ) {
+				$list_table->inline_edit();
+			}
+			?>
+		</form>
+	</div>
+
 	<?php
-	$vrts_manual_test_service = new Manual_Test_Service();
-	$test_status = $vrts_manual_test_service->get_option();
-	if ( $test_status ) {
-		$vrts_manual_test_service->delete_option();
-		if ( '1' === $test_status ) {
-			Admin_Notices::render_notification( 'test_started', false, [] );
-		} elseif ( '2' === $test_status ) {
-			Admin_Notices::render_notification( 'test_failed', false, [] );
+	// Skip the one-shot notice on background refresh requests so it is only
+	// consumed and rendered by a real page load.
+	$vrts_is_refresh_request = '1' === sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_VRTS_REFRESH'] ?? '' ) );
+	if ( ! $vrts_is_refresh_request ) {
+		$vrts_manual_test_service = new Manual_Test_Service();
+		$test_status = $vrts_manual_test_service->get_option();
+		if ( $test_status ) {
+			$vrts_manual_test_service->delete_option();
+			if ( '1' === $test_status ) {
+				Admin_Notices::render_notification( 'test_started', false, [] );
+			} elseif ( '2' === $test_status ) {
+				Admin_Notices::render_notification( 'test_failed', false, [] );
+			}
 		}
 	}
 	?>

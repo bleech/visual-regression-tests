@@ -1,6 +1,7 @@
 import './admin.scss';
 
 import './scripts/onboarding';
+import './scripts/refreshable';
 
 function importAll( r ) {
 	r.keys().forEach( r );

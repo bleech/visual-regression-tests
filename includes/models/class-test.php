@@ -868,7 +868,6 @@ class Test {
 			case 'running':
 				$class = 'waiting';
 				$text = esc_html__( 'In Progress', 'visual-regression-tests' );
-				$instructions = esc_html__( 'Refresh page to see result', 'visual-regression-tests' );
 				break;
 			case 'scheduled':
 				$class = 'waiting';
@@ -953,10 +952,6 @@ class Test {
 				break;
 			case 'waiting':
 				$text = esc_html__( 'In progress', 'visual-regression-tests' );
-				$instructions = sprintf(
-					'<span class="vrts-testing-status--waiting">%s</span>',
-					esc_html__( 'Refresh page to see snapshot', 'visual-regression-tests' )
-				);
 				break;
 			case 'taken':
 			default:

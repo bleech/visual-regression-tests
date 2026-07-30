@@ -6,7 +6,7 @@ use Vrts\Services\Manual_Test_Service;
 
 ?>
 
-<div class="wrap vrts-list-table-page">
+<div class="wrap vrts-list-table-page vrts-tests-page">
 	<h1 class="wp-heading-inline">
 		<?php esc_html_e( 'Tests', 'visual-regression-tests' ); ?>
 	</h1>
@@ -47,20 +47,29 @@ use Vrts\Services\Manual_Test_Service;
 
 	<hr class="wp-header-end">
 
-	<form method="post">
-		<input type="hidden" name="page" value="vrts-tests_list_table">
+	<div data-vrts-refresh>
+		<form method="post">
+			<input type="hidden" name="page" value="vrts-tests_list_table">
 
-		<?php
-		$list_table = $data['list_table'];
-		$list_table->prepare_items();
-		$list_table->views();
-		$list_table->search_box( esc_attr__( 'Search', 'visual-regression-tests' ), 'search_id' );
-		$list_table->display();
+			<?php
+			$list_table = $data['list_table'];
+			$list_table->prepare_items();
+			$list_table->views();
+			$list_table->search_box( esc_attr__( 'Search', 'visual-regression-tests' ), 'search_id' );
+			$list_table->display();
 
-		if ( $list_table->has_items() ) {
-			$list_table->inline_edit();
-		}
+			if ( $list_table->has_items() ) {
+				$list_table->inline_edit();
+			}
+			?>
+		</form>
+	</div>
 
+	<?php
+	// Skip the one-shot notice on background refresh requests so it is only
+	// consumed and rendered by a real page load.
+	$vrts_is_refresh_request = '1' === sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_VRTS_REFRESH'] ?? '' ) );
+	if ( ! $vrts_is_refresh_request ) {
 		$vrts_manual_test_service = new Manual_Test_Service();
 		$test_status = $vrts_manual_test_service->get_option();
 		if ( $test_status ) {
@@ -71,8 +80,8 @@ use Vrts\Services\Manual_Test_Service;
 				Admin_Notices::render_notification( 'test_failed', false, [] );
 			}
 		}
-		?>
-	</form>
+	}
+	?>
 </div>
 
 <div id="wp-link-backdrop" style="display: none"></div>

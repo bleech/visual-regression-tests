@@ -2,6 +2,7 @@ class VrtsTestRunsPage extends window.HTMLElement {
 	constructor() {
 		super();
 		this.resolveElements();
+		this.onRefreshed = this.onRefreshed.bind( this );
 	}
 
 	resolveElements() {
@@ -11,6 +12,16 @@ class VrtsTestRunsPage extends window.HTMLElement {
 	}
 
 	connectedCallback() {
+		this.highlightNewTestRuns();
+		this.addEventListener( 'vrts-refreshed', this.onRefreshed );
+	}
+
+	disconnectedCallback() {
+		this.removeEventListener( 'vrts-refreshed', this.onRefreshed );
+	}
+
+	onRefreshed() {
+		this.resolveElements();
 		this.highlightNewTestRuns();
 	}
 

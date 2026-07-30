@@ -170,8 +170,8 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 		$actions = [];
 		$status = Test_Run::get_calculated_status( $item );
 
-		if ( 'running' === $status ) {
-			$scheduled_at = __( 'In Progress', 'visual-regression-tests' );
+		if ( 'running' === $status && $item->started_at ) {
+			$scheduled_at = Date_Time_Helpers::get_formatted_relative_date_time( $item->started_at );
 		} else {
 			$scheduled_at = Date_Time_Helpers::get_formatted_relative_date_time( $item->scheduled_at );
 		}
@@ -221,16 +221,8 @@ class Test_Runs_Queue_List_Table extends \WP_List_Table {
 
 		if ( 'running' === $test_run_status ) {
 			$class = 'waiting';
-			$text = '';
-			$instructions = sprintf(
-				'<span>%s</span>',
-				sprintf(
-					// translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
-					wp_kses( __( '%1$sRefresh page%2$s to see results', 'visual-regression-tests' ), [ 'a' => [ 'href' => [] ] ] ),
-					'<a href="' . esc_url( Url_Helpers::get_page_url( 'runs' ) ) . '">',
-					'</a>'
-				)
-			);
+			$text = esc_html__( 'In Progress', 'visual-regression-tests' );
+			$instructions = '';
 		} else {
 			$class = 'waiting';
 			$text = esc_html__( 'Pending', 'visual-regression-tests' );

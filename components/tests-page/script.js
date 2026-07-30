@@ -6,6 +6,17 @@ document
 		window.wpLink.open( 'input_hidden_internal_url' );
 	} );
 
+( () => {
+	if ( ! document.querySelector( '.vrts-tests-page' ) ) {
+		return;
+	}
+
+	document.addEventListener( 'vrts-refreshed', () => {
+		// The quick and bulk edit handlers were bound to replaced elements.
+		window.inlineEditTest?.init();
+	} );
+} )();
+
 window.wp = window.wp || {};
 ( function ( $, wp ) {
 	window.inlineEditTest = {
