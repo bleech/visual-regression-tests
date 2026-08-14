@@ -151,35 +151,15 @@ class VrtsTestRunPagination extends window.HTMLElement {
 	}
 
 	handleKeyDown( e ) {
-		if ( e.key !== 'ArrowUp' && e.key !== 'ArrowDown' ) {
-			return;
+		if ( e.key === 'ArrowUp' ) {
+			e.preventDefault();
+			this.querySelector( '[data-vrts-pagination="prev"]' ).click();
 		}
 
-		// Leave arrow keys alone while a form field has focus, e.g. the
-		// comparison slider.
-		if (
-			e.target.matches?.( 'input, textarea, select' ) ||
-			e.target.isContentEditable
-		) {
-			return;
+		if ( e.key === 'ArrowDown' ) {
+			e.preventDefault();
+			this.querySelector( '[data-vrts-pagination="next"]' ).click();
 		}
-
-		e.preventDefault();
-
-		const direction = e.key === 'ArrowUp' ? 'prev' : 'next';
-
-		// Scroll to the next change of the current comparison first; switch
-		// the alert only when there are no more changes in that direction.
-		const $jump = document.querySelector(
-			`[data-vrts-comparisons-jump="${ direction }"]`
-		);
-
-		if ( $jump && ! $jump.disabled ) {
-			$jump.click();
-			return;
-		}
-
-		this.querySelector( `[data-vrts-pagination="${ direction }"]` ).click();
 	}
 
 	scrollTo( offset ) {

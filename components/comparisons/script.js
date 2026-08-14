@@ -2,6 +2,7 @@ class VrtsComparisons extends window.HTMLElement {
 	constructor() {
 		super();
 		this.changeRegions = [];
+		this.jumpDismissed = false;
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
@@ -24,12 +25,7 @@ class VrtsComparisons extends window.HTMLElement {
 			'[data-vrts-comparisons-slot="base"] img'
 		);
 		this.$header = this.querySelector( '.vrts-comparisons__header' );
-		this.$jumpPrev = this.querySelector(
-			'[data-vrts-comparisons-jump="prev"]'
-		);
-		this.$jumpNext = this.querySelector(
-			'[data-vrts-comparisons-jump="next"]'
-		);
+		this.$jump = this.querySelector( '[data-vrts-comparisons-jump]' );
 	}
 
 	bindFunctions() {
@@ -37,16 +33,14 @@ class VrtsComparisons extends window.HTMLElement {
 		this.onControlChange = this.onControlChange.bind( this );
 		this.onFullScreenChange = this.onFullScreenChange.bind( this );
 		this.onLoadComparison = this.onLoadComparison.bind( this );
-		this.onJumpPrev = this.onJumpPrev.bind( this );
-		this.onJumpNext = this.onJumpNext.bind( this );
+		this.onJumpClick = this.onJumpClick.bind( this );
 		this.onScroll = this.onScroll.bind( this );
 	}
 
 	bindEvents() {
 		this.$fullscreen.addEventListener( 'click', this.onFullscreenToggle );
 		this.$control.addEventListener( 'input', this.onControlChange );
-		this.$jumpPrev?.addEventListener( 'click', this.onJumpPrev );
-		this.$jumpNext?.addEventListener( 'click', this.onJumpNext );
+		this.$jump?.addEventListener( 'click', this.onJumpClick );
 		// Capture phase also catches scrolls of the fullscreen container.
 		document.addEventListener( 'scroll', this.onScroll, {
 			capture: true,
@@ -189,17 +183,6 @@ class VrtsComparisons extends window.HTMLElement {
 		};
 	}
 
-	getPrevRegion( metrics ) {
-		// The closest region fully above the visible area.
-		return [ ...this.changeRegions ]
-			.reverse()
-			.find(
-				( region ) =>
-					metrics.imageTop + region.end * metrics.scale <
-					metrics.topOffset
-			);
-	}
-
 	getNextRegion( metrics ) {
 		// The first region fully below the visible area.
 		return this.changeRegions.find(
@@ -209,8 +192,16 @@ class VrtsComparisons extends window.HTMLElement {
 		);
 	}
 
+	isAnyRegionVisible( metrics ) {
+		return this.changeRegions.some( ( region ) => {
+			const top = metrics.imageTop + region.start * metrics.scale;
+			const bottom = metrics.imageTop + region.end * metrics.scale;
+			return bottom > metrics.topOffset && top < metrics.viewportBottom;
+		} );
+	}
+
 	updateJumpState() {
-		if ( ! this.$jumpPrev || ! this.$jumpNext ) {
+		if ( ! this.$jump ) {
 			return;
 		}
 
@@ -218,8 +209,20 @@ class VrtsComparisons extends window.HTMLElement {
 			? this.getJumpMetrics()
 			: null;
 
-		this.$jumpPrev.disabled = ! metrics || ! this.getPrevRegion( metrics );
-		this.$jumpNext.disabled = ! metrics || ! this.getNextRegion( metrics );
+		if (
+			metrics &&
+			! this.jumpDismissed &&
+			this.isAnyRegionVisible( metrics )
+		) {
+			this.jumpDismissed = true;
+		}
+
+		this.$jump.setAttribute(
+			'data-vrts-visible',
+			Boolean(
+				! this.jumpDismissed && metrics && this.getNextRegion( metrics )
+			)
+		);
 	}
 
 	onScroll() {
@@ -233,16 +236,7 @@ class VrtsComparisons extends window.HTMLElement {
 		} );
 	}
 
-	onJumpPrev() {
-		const metrics = this.getJumpMetrics();
-		const region = metrics && this.getPrevRegion( metrics );
-
-		if ( region ) {
-			this.scrollToRegion( region, metrics );
-		}
-	}
-
-	onJumpNext() {
+	onJumpClick() {
 		const metrics = this.getJumpMetrics();
 		const region = metrics && this.getNextRegion( metrics );
 
@@ -294,8 +288,7 @@ class VrtsComparisons extends window.HTMLElement {
 			this.onFullscreenToggle
 		);
 		this.$control?.removeEventListener( 'input', this.onControlChange );
-		this.$jumpPrev?.removeEventListener( 'click', this.onJumpPrev );
-		this.$jumpNext?.removeEventListener( 'click', this.onJumpNext );
+		this.$jump?.removeEventListener( 'click', this.onJumpClick );
 		document.removeEventListener( 'scroll', this.onScroll, {
 			capture: true,
 		} );
