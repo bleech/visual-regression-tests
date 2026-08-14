@@ -40,9 +40,13 @@ class Test_Run_Service {
 			];
 		}, Test::get_by_service_test_ids( $data['comparison_schedule_ids'] ));
 
+		// A manual trigger sets started_at locally before the service picks the
+		// run up; a sync of the still-queued run must not null it out again.
+		$started_at = ! empty( $data['started_at'] ) ? $data['started_at'] : ( $test_run->started_at ?? null );
+
 		$test_run_id = $this->create_test_run( $data['run_id'], [
 			'tests' => maybe_serialize( $test_ids ),
-			'started_at' => $data['started_at'],
+			'started_at' => $started_at,
 			'finished_at' => $data['finished_at'],
 			'scheduled_at' => $data['scheduled_at'],
 			'trigger' => $data['trigger'],

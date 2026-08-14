@@ -413,12 +413,8 @@ class Test_Run {
 			return 'has-alerts';
 		}
 
-		if ( ! empty( $test_run->started_at ) && empty( $test_run->finished_at ) ) {
-			return 'running';
-		}
-
-		if ( ! empty( $test_run->scheduled_at ) && empty( $test_run->finished_at ) ) {
-			return 'scheduled';
+		if ( empty( $test_run->finished_at ) ) {
+			return empty( $test_run->started_at ) ? 'scheduled' : 'running';
 		}
 
 		return 'passed';
