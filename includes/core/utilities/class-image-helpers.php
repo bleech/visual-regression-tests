@@ -4,6 +4,8 @@ namespace Vrts\Core\Utilities;
 
 class Image_Helpers {
 
+	const CDN_ORIGIN = 'https://images.vrts.app';
+
 	/**
 	 * Get the image height and width string.
 	 *
@@ -63,6 +65,6 @@ class Image_Helpers {
 	 * @return string
 	 */
 	public static function get_cloudfront_url( $url ) {
-		return str_replace( 'https://screenshotter-dev.s3.eu-central-1.amazonaws.com/', 'https://images.vrts.app/', $url );
+		return str_replace( 'https://screenshotter-dev.s3.eu-central-1.amazonaws.com/', self::CDN_ORIGIN . '/', $url );
 	}
 }

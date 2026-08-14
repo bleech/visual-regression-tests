@@ -1,4 +1,5 @@
 import Dropdown from '../../assets/scripts/dropdown';
+import { invalidateAlert } from '../../assets/scripts/page-cache';
 
 class VrtsAlertActions extends window.HTMLElement {
 	constructor() {
@@ -50,7 +51,42 @@ class VrtsAlertActions extends window.HTMLElement {
 
 	connectedCallback() {
 		this.dropdown = Dropdown( this );
+		this.syncStateFromSidebar();
 		this.setAsReadOnView();
+	}
+
+	// Cached markup may carry stale button states; the sidebar card is the
+	// live source of truth, so sync from it before setAsReadOnView() runs.
+	syncStateFromSidebar() {
+		this.$actionButtons.forEach( ( action ) => {
+			const id = action.getAttribute( 'data-vrts-alert-id' );
+			const $alert = document.getElementById( `vrts-alert-${ id }` );
+
+			if ( ! $alert ) {
+				return;
+			}
+
+			const type = action.getAttribute( 'data-vrts-alert-action' );
+
+			if ( 'read-status' === type ) {
+				const isRead =
+					$alert.getAttribute( 'data-vrts-state' ) === 'read';
+				action.setAttribute(
+					'data-vrts-action-state',
+					isRead ? 'secondary' : 'primary'
+				);
+			}
+
+			if ( 'false-positive' === type ) {
+				const isFalsePositive =
+					$alert.getAttribute( 'data-vrts-false-positive' ) ===
+					'true';
+				action.setAttribute(
+					'data-vrts-action-state',
+					isFalsePositive ? 'secondary' : 'primary'
+				);
+			}
+		} );
 	}
 
 	setAsReadOnView() {
@@ -86,11 +122,24 @@ class VrtsAlertActions extends window.HTMLElement {
 			body: new URLSearchParams( formData ),
 		} )
 			.then( ( response ) => {
+				if ( ! response.ok ) {
+					throw new Error( `HTTP ${ response.status }` );
+				}
+
 				return response.json();
 			} )
 			.then( () => {
+				// The alert's cached markup embeds the selectors in the modal.
+				const alertId = this.querySelector(
+					'[data-vrts-alert-id]'
+				)?.getAttribute( 'data-vrts-alert-id' );
+
+				invalidateAlert( alertId );
 				this.$spinner.classList.remove( 'is-active' );
 				this.$success.classList.add( 'is-active' );
+			} )
+			.catch( () => {
+				this.$spinner.classList.remove( 'is-active' );
 			} );
 	}
 
@@ -136,12 +185,34 @@ class VrtsAlertActions extends window.HTMLElement {
 			},
 		} )
 			.then( ( response ) => {
+				if ( ! response.ok ) {
+					throw new Error( `HTTP ${ response.status }` );
+				}
+
 				return response.json();
 			} )
 			.then( () => {
+				const $alert = document.getElementById( `vrts-alert-${ id }` );
+
+				if ( $alert ) {
+					if ( 'false-positive' === action ) {
+						$alert.setAttribute(
+							'data-vrts-false-positive',
+							shouldSetAction ? 'true' : 'false'
+						);
+					}
+
+					if ( 'read-status' === action ) {
+						$alert.setAttribute(
+							'data-vrts-state',
+							shouldSetAction ? 'read' : 'unread'
+						);
+					}
+				}
+
 				const loadingTimeoutTime =
 					loadingElapsedTime > 0
-						? Math.abs( loadingElapsedTime - 400 )
+						? Math.max( 400 - loadingElapsedTime, 0 )
 						: 0;
 
 				setTimeout( () => {
@@ -151,30 +222,15 @@ class VrtsAlertActions extends window.HTMLElement {
 						'data-vrts-action-state',
 						shouldSetAction ? 'secondary' : 'primary'
 					);
-
-					const $alert = document.getElementById(
-						`vrts-alert-${ id }`
-					);
-
-					if ( $alert ) {
-						if ( 'false-positive' === action ) {
-							$alert.setAttribute(
-								'data-vrts-false-positive',
-								shouldSetAction ? 'true' : 'false'
-							);
-						}
-
-						if ( 'read-status' === action ) {
-							$alert.setAttribute(
-								'data-vrts-state',
-								shouldSetAction ? 'read' : 'unread'
-							);
-						}
-					}
 				}, loadingTimeoutTime );
 
 				clearTimeout( timeout );
 				clearInterval( interval );
+			} )
+			.catch( () => {
+				clearTimeout( timeout );
+				clearInterval( interval );
+				$el.setAttribute( 'data-vrts-loading', 'false' );
 			} );
 	}
 

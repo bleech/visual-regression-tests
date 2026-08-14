@@ -1,3 +1,10 @@
+import {
+	fetchPage,
+	warmAlert,
+	startNavigation,
+	isCurrentNavigation,
+} from '../../assets/scripts/page-cache';
+
 class VrtsTestRunAlerts extends window.HTMLElement {
 	constructor() {
 		super();
@@ -35,12 +42,18 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	bindFunctions() {
 		this.handleAlertClick = this.handleAlertClick.bind( this );
 		this.handleActionClick = this.handleActionClick.bind( this );
+		this.handleAlertWarm = this.handleAlertWarm.bind( this );
+		this.handleAlertWarmCancel = this.handleAlertWarmCancel.bind( this );
 		this.updateRunsCount = this.updateRunsCount.bind( this );
 	}
 
 	bindEvents() {
 		this.$alerts?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleAlertClick );
+			item.addEventListener( 'pointerenter', this.handleAlertWarm );
+			item.addEventListener( 'pointerleave', this.handleAlertWarmCancel );
+			item.addEventListener( 'focus', this.handleAlertWarm );
+			item.addEventListener( 'blur', this.handleAlertWarmCancel );
 		} );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleActionClick );
@@ -167,15 +180,20 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 
 		$el.setAttribute( 'data-vrts-current', 'true' );
 
+		const token = startNavigation();
+
 		const timeout = setTimeout( () => {
 			$content.setAttribute( 'data-vrts-loading', 'true' );
 		}, 200 );
 
-		fetch( href )
-			.then( ( response ) => {
-				return response.text();
-			} )
+		fetchPage( href )
 			.then( ( data ) => {
+				clearTimeout( timeout );
+
+				if ( ! isCurrentNavigation( token ) ) {
+					return;
+				}
+
 				const parser = new window.DOMParser();
 				const $html = parser.parseFromString( data, 'text/html' );
 
@@ -186,20 +204,48 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 					'vrts-test-run-pagination'
 				);
 
+				if ( ! $newContent ) {
+					throw new Error( 'vrts: unexpected page response' );
+				}
+
 				window.history.replaceState( {}, '', href );
 
 				this.scrollTo( $content.offsetTop - 62 );
 
-				if ( $newContent ) {
-					$content.replaceWith( $newContent );
-				}
+				$content.replaceWith( $newContent );
 
 				if ( $newPagination ) {
 					$pagination.replaceWith( $newPagination );
 				}
-
+			} )
+			.catch( () => {
 				clearTimeout( timeout );
+
+				if ( isCurrentNavigation( token ) ) {
+					window.location.assign( href );
+				}
 			} );
+	}
+
+	handleAlertWarm( e ) {
+		const $el = e.currentTarget;
+
+		if ( $el.getAttribute( 'data-vrts-current' ) === 'true' ) {
+			return;
+		}
+
+		const href = $el.getAttribute( 'href' );
+
+		this.warmTimeouts = this.warmTimeouts || new Map();
+		this.warmTimeouts.set(
+			$el,
+			setTimeout( () => warmAlert( href ), 100 )
+		);
+	}
+
+	handleAlertWarmCancel( e ) {
+		clearTimeout( this.warmTimeouts?.get( e.currentTarget ) );
+		this.warmTimeouts?.delete( e.currentTarget );
 	}
 
 	handleActionClick( e ) {
@@ -240,12 +286,25 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 			},
 		} )
 			.then( ( response ) => {
+				if ( ! response.ok ) {
+					throw new Error( `HTTP ${ response.status }` );
+				}
+
 				return response.json();
 			} )
 			.then( () => {
+				document
+					.querySelectorAll( '[data-vrts-alert]' )
+					.forEach( ( item ) => {
+						item.setAttribute(
+							'data-vrts-state',
+							shouldSetAction ? 'read' : 'unread'
+						);
+					} );
+
 				const loadingTimeoutTime =
 					loadingElapsedTime > 0
-						? Math.abs( loadingElapsedTime - 400 )
+						? Math.max( 400 - loadingElapsedTime, 0 )
 						: 0;
 
 				setTimeout( () => {
@@ -254,20 +313,15 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 						'data-vrts-action-state',
 						shouldSetAction ? 'secondary' : 'primary'
 					);
-
-					const $alerts =
-						document.querySelectorAll( '[data-vrts-alert]' );
-
-					$alerts.forEach( ( item ) => {
-						item.setAttribute(
-							'data-vrts-state',
-							shouldSetAction ? 'read' : 'unread'
-						);
-					} );
 				}, loadingTimeoutTime );
 
 				clearTimeout( timeout );
 				clearInterval( interval );
+			} )
+			.catch( () => {
+				clearTimeout( timeout );
+				clearInterval( interval );
+				$el.setAttribute( 'data-vrts-loading', 'false' );
 			} );
 	}
 
@@ -287,10 +341,19 @@ class VrtsTestRunAlerts extends window.HTMLElement {
 	disconnectedCallback() {
 		this.$alerts?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleAlertClick );
+			item.removeEventListener( 'pointerenter', this.handleAlertWarm );
+			item.removeEventListener(
+				'pointerleave',
+				this.handleAlertWarmCancel
+			);
+			item.removeEventListener( 'focus', this.handleAlertWarm );
+			item.removeEventListener( 'blur', this.handleAlertWarmCancel );
 		} );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleActionClick );
 		} );
+
+		this.warmTimeouts?.forEach( ( timeout ) => clearTimeout( timeout ) );
 	}
 }
 

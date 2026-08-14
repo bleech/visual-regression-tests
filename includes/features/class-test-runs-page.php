@@ -2,6 +2,7 @@
 
 namespace Vrts\Features;
 
+use Vrts\Core\Utilities\Image_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\List_Tables\Test_Runs_List_Table;
 use Vrts\List_Tables\Test_Runs_Queue_List_Table;
@@ -19,6 +20,27 @@ class Test_Runs_Page {
 		add_action( 'admin_init', [ $this, 'remove_admin_notices' ], 99 );
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_action( 'admin_body_class', [ $this, 'add_body_class' ] );
+		add_action( 'admin_head', [ $this, 'add_resource_hints' ] );
+	}
+
+	/**
+	 * Preconnect to the screenshot CDN so the first image request skips
+	 * DNS/TCP/TLS setup. Comparison images load with crossorigin="anonymous"
+	 * while sidebar thumbnails load without it; browsers use separate
+	 * connections for the two, so both need warming.
+	 */
+	public function add_resource_hints() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verification is not required here.
+		if ( ! isset( $_GET['page'] ) || 'vrts-runs' !== $_GET['page'] ) {
+			return;
+		}
+
+		printf(
+			'<link rel="preconnect" href="%1$s" />' . "\n" .
+			'<link rel="preconnect" href="%1$s" crossorigin />' . "\n" .
+			'<link rel="dns-prefetch" href="%1$s" />' . "\n",
+			esc_url( Image_Helpers::CDN_ORIGIN )
+		);
 	}
 
 	/**

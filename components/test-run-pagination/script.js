@@ -1,3 +1,10 @@
+import {
+	fetchPage,
+	warmAlert,
+	startNavigation,
+	isCurrentNavigation,
+} from '../../assets/scripts/page-cache';
+
 class VrtsTestRunPagination extends window.HTMLElement {
 	constructor() {
 		super();
@@ -14,14 +21,32 @@ class VrtsTestRunPagination extends window.HTMLElement {
 	bindFunctions() {
 		this.handleClick = this.handleClick.bind( this );
 		this.handleKeyDown = this.handleKeyDown.bind( this );
+		this.handleWarm = this.handleWarm.bind( this );
+		this.handleWarmCancel = this.handleWarmCancel.bind( this );
 	}
 
 	bindEvents() {
 		this.$buttons?.forEach( ( item ) => {
 			item.addEventListener( 'click', this.handleClick );
+			item.addEventListener( 'pointerenter', this.handleWarm );
+			item.addEventListener( 'pointerleave', this.handleWarmCancel );
+			item.addEventListener( 'focus', this.handleWarm );
+			item.addEventListener( 'blur', this.handleWarmCancel );
 		} );
 
 		document.addEventListener( 'keydown', this.handleKeyDown );
+	}
+
+	connectedCallback() {
+		const href = this.querySelector(
+			'[data-vrts-pagination="next"]'
+		)?.getAttribute( 'href' );
+
+		if ( href ) {
+			this.warmIdleId = window.requestIdleCallback
+				? window.requestIdleCallback( () => warmAlert( href ) )
+				: setTimeout( () => warmAlert( href ), 1000 );
+		}
 	}
 
 	handleClick( e ) {
@@ -50,15 +75,10 @@ class VrtsTestRunPagination extends window.HTMLElement {
 
 		$nextAlert.setAttribute( 'data-vrts-current', 'true' );
 
-		let loadingElapsedTime = 0;
-		let interval = null;
+		const token = startNavigation();
 
 		const timeout = setTimeout( () => {
 			$content.setAttribute( 'data-vrts-loading', 'true' );
-			const loadingStartTime = window.Date.now();
-			interval = setInterval( () => {
-				loadingElapsedTime = window.Date.now() - loadingStartTime;
-			}, 50 );
 		}, 200 );
 
 		let offsetTop = 0;
@@ -73,11 +93,14 @@ class VrtsTestRunPagination extends window.HTMLElement {
 			behavior: 'smooth',
 		} );
 
-		fetch( href )
-			.then( ( response ) => {
-				return response.text();
-			} )
+		fetchPage( href )
 			.then( ( data ) => {
+				clearTimeout( timeout );
+
+				if ( ! isCurrentNavigation( token ) ) {
+					return;
+				}
+
 				const parser = new window.DOMParser();
 				const $html = parser.parseFromString( data, 'text/html' );
 
@@ -88,28 +111,43 @@ class VrtsTestRunPagination extends window.HTMLElement {
 					'vrts-test-run-pagination'
 				);
 
+				if ( ! $newContent ) {
+					throw new Error( 'vrts: unexpected page response' );
+				}
+
 				window.history.replaceState( {}, '', href );
 
 				this.scrollTo( $content.offsetTop - 62 );
 
-				const loadingTimeoutTime =
-					loadingElapsedTime > 0
-						? Math.abs( loadingElapsedTime - 400 )
-						: 0;
+				$content.replaceWith( $newContent );
 
-				setTimeout( () => {
-					if ( $newContent ) {
-						$content.replaceWith( $newContent );
-					}
-
-					if ( $newPagination ) {
-						this.replaceWith( $newPagination );
-					}
-				}, loadingTimeoutTime );
-
+				if ( $newPagination ) {
+					this.replaceWith( $newPagination );
+				}
+			} )
+			.catch( () => {
 				clearTimeout( timeout );
-				clearInterval( interval );
+
+				if ( isCurrentNavigation( token ) ) {
+					window.location.assign( href );
+				}
 			} );
+	}
+
+	handleWarm( e ) {
+		const $el = e.currentTarget;
+		const href = $el.getAttribute( 'href' );
+
+		this.warmTimeouts = this.warmTimeouts || new Map();
+		this.warmTimeouts.set(
+			$el,
+			setTimeout( () => warmAlert( href ), 100 )
+		);
+	}
+
+	handleWarmCancel( e ) {
+		clearTimeout( this.warmTimeouts?.get( e.currentTarget ) );
+		this.warmTimeouts?.delete( e.currentTarget );
 	}
 
 	handleKeyDown( e ) {
@@ -160,9 +198,23 @@ class VrtsTestRunPagination extends window.HTMLElement {
 	disconnectedCallback() {
 		this.$buttons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.handleClick );
+			item.removeEventListener( 'pointerenter', this.handleWarm );
+			item.removeEventListener( 'pointerleave', this.handleWarmCancel );
+			item.removeEventListener( 'focus', this.handleWarm );
+			item.removeEventListener( 'blur', this.handleWarmCancel );
 		} );
 
 		document.removeEventListener( 'keydown', this.handleKeyDown );
+
+		this.warmTimeouts?.forEach( ( timeout ) => clearTimeout( timeout ) );
+
+		if ( this.warmIdleId ) {
+			if ( window.cancelIdleCallback ) {
+				window.cancelIdleCallback( this.warmIdleId );
+			} else {
+				clearTimeout( this.warmIdleId );
+			}
+		}
 	}
 }
 
