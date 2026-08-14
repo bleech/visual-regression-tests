@@ -1,4 +1,5 @@
 const POLL_INTERVAL = 5000;
+const IDLE_POLL_INTERVAL = 30000;
 const SELECTOR = '[data-vrts-refresh]';
 
 ( () => {
@@ -99,8 +100,18 @@ const SELECTOR = '[data-vrts-refresh]';
 	};
 
 	const schedulePoll = () => {
+		// The server marks the region "active" while runs or tests are in
+		// progress; anything else polls at the slow idle cadence.
+		const isActive =
+			document
+				.querySelector( SELECTOR )
+				?.getAttribute( 'data-vrts-refresh' ) === 'active';
+
 		window.clearTimeout( pollTimeout );
-		pollTimeout = window.setTimeout( refresh, POLL_INTERVAL );
+		pollTimeout = window.setTimeout(
+			refresh,
+			isActive ? POLL_INTERVAL : IDLE_POLL_INTERVAL
+		);
 	};
 
 	async function refresh() {

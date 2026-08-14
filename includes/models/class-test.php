@@ -151,6 +151,23 @@ class Test {
 	}
 
 	/**
+	 * Check if any test has a comparison in progress.
+	 *
+	 * @return bool
+	 */
+	public static function has_tests_in_progress() {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return (bool) $wpdb->get_var(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT EXISTS( SELECT 1 FROM $tests_table WHERE is_running = 1 )"
+		);
+	}
+
+	/**
 	 * Get all running test items from database
 	 *
 	 * @param bool $return_count Optional.

@@ -134,6 +134,23 @@ class Test_Run {
 	}
 
 	/**
+	 * Check if any test run is currently in progress.
+	 *
+	 * @return bool
+	 */
+	public static function has_runs_in_progress() {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return (bool) $wpdb->get_var(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+			"SELECT EXISTS( SELECT 1 FROM $test_runs_table WHERE started_at IS NOT NULL AND finished_at IS NULL )"
+		);
+	}
+
+	/**
 	 * Get a single test from database
 	 *
 	 * @param int $id the id of the item.

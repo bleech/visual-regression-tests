@@ -2,6 +2,8 @@
 
 use Vrts\Features\Admin_Notices;
 use Vrts\Features\Subscription;
+use Vrts\Models\Test;
+use Vrts\Models\Test_Run;
 use Vrts\Services\Manual_Test_Service;
 
 ?>
@@ -47,7 +49,7 @@ use Vrts\Services\Manual_Test_Service;
 
 	<hr class="wp-header-end">
 
-	<div data-vrts-refresh>
+	<div data-vrts-refresh="<?php echo esc_attr( Test_Run::has_runs_in_progress() || Test::has_tests_in_progress() ? 'active' : 'idle' ); ?>">
 		<form method="post">
 			<input type="hidden" name="page" value="vrts-tests_list_table">
 
