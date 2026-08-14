@@ -64,6 +64,7 @@ class Manual_Test_Service {
 
 		if ( 201 === $request['status_code'] ) {
 			self::set_option( 1 );
+			Test::set_tests_running( $service_test_ids );
 			$response = $request['response'];
 			$service = new Test_Run_Service();
 			$id = $service->create_test_run( $response['id'], [
