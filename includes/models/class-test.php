@@ -163,7 +163,11 @@ class Test {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		return (bool) $wpdb->get_var(
 			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-			"SELECT EXISTS( SELECT 1 FROM $tests_table WHERE is_running = 1 )"
+			"SELECT EXISTS(
+				SELECT 1 FROM $tests_table
+				WHERE is_running = 1
+					OR ( status != 0 AND service_test_id IS NOT NULL AND service_test_id != '' AND base_screenshot_date IS NULL )
+			)"
 		);
 	}
 
@@ -800,9 +804,10 @@ class Test {
 	/**
 	 * Set tests running.
 	 *
-	 * @param array $test_ids The test ids.
+	 * @param array $test_ids The service test ids.
+	 * @param bool  $running Whether the tests are running.
 	 */
-	public static function set_tests_running( $test_ids ) {
+	public static function set_tests_running( $test_ids, $running = true ) {
 		global $wpdb;
 
 		if ( empty( $test_ids ) ) {
@@ -819,9 +824,40 @@ class Test {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"UPDATE $table_test
 					SET
-						is_running = 1 "
+						is_running = " . ( $running ? '1' : '0' ) . ' '
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
 				. "WHERE service_test_id IN ( $placeholders )",
+				$test_ids
+			)
+		);
+	}
+
+	/**
+	 * Set tests running by local test ids.
+	 *
+	 * @param array $test_ids The local test ids.
+	 * @param bool  $running Whether the tests are running.
+	 */
+	public static function set_tests_running_by_ids( $test_ids, $running = true ) {
+		global $wpdb;
+
+		if ( empty( $test_ids ) ) {
+			return;
+		}
+
+		$table_test = Tests_Table::get_table_name();
+
+		$placeholders = implode( ', ', array_fill( 0, count( $test_ids ), '%d' ) );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$wpdb->query(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"UPDATE $table_test
+					SET
+						is_running = " . ( $running ? '1' : '0' ) . ' '
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
+				. "WHERE id IN ( $placeholders )",
 				$test_ids
 			)
 		);
