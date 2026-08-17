@@ -70,7 +70,7 @@ class Manual_Test_Service {
 			$id = $service->create_test_run( $response['id'], [
 				'tests' => maybe_serialize( $test_ids ),
 				'trigger' => 'manual',
-				'started_at' => current_time( 'mysql' ),
+				'started_at' => current_time( 'mysql', true ),
 			] );
 			Cron_Jobs::schedule_initial_fetch_test_run_updates( $id );
 		} else {
