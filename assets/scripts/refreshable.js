@@ -99,6 +99,59 @@ const SELECTOR = '[data-vrts-refresh]';
 		};
 	};
 
+	// Carry expanded responsive rows over to the fetched region so a swap
+	// does not collapse them.
+	const preserveExpandedRows = ( $live, $next ) => {
+		const rowKey = ( $row ) =>
+			$row.querySelector( '.check-column input' )?.value ||
+			$row.querySelector( 'a[href]' )?.getAttribute( 'href' ) ||
+			$row.rowIndex;
+
+		const $nextTables = [ ...$next.querySelectorAll( 'table' ) ];
+
+		[ ...$live.querySelectorAll( 'table' ) ].forEach( ( $table, index ) => {
+			const $nextTable = $nextTables[ index ];
+
+			if ( ! $nextTable ) {
+				return;
+			}
+
+			$table.querySelectorAll( 'tr.is-expanded' ).forEach( ( $row ) => {
+				const key = rowKey( $row );
+				const $twin = [ ...$nextTable.querySelectorAll( 'tr' ) ].find(
+					( $candidate ) => rowKey( $candidate ) === key
+				);
+
+				$twin?.classList.add( 'is-expanded' );
+			} );
+		} );
+	};
+
+	// WP core binds its list-table behaviors to elements inside the region at
+	// DOMContentLoaded; a swap discards them, so re-create the equivalents on
+	// the new region.
+	const bindCoreListTableBehaviors = ( $region ) => {
+		$region.addEventListener( 'click', ( e ) => {
+			const $toggle = e.target.closest( '.toggle-row' );
+
+			if ( $toggle && $region.contains( $toggle ) ) {
+				$toggle.closest( 'tr' )?.classList.toggle( 'is-expanded' );
+			}
+		} );
+
+		const $top = $region.querySelector( '#bulk-action-selector-top' );
+		const $bottom = $region.querySelector( '#bulk-action-selector-bottom' );
+
+		if ( $top && $bottom ) {
+			$top.addEventListener( 'change', () => {
+				$bottom.value = $top.value;
+			} );
+			$bottom.addEventListener( 'change', () => {
+				$top.value = $bottom.value;
+			} );
+		}
+	};
+
 	const schedulePoll = () => {
 		// The server marks the region "active" while runs or tests are in
 		// progress; anything else polls at the slow idle cadence.
@@ -150,11 +203,13 @@ const SELECTOR = '[data-vrts-refresh]';
 				) {
 					// Snapshot before user state gets copied into $next.
 					const nextHtml = $next.outerHTML;
+					preserveExpandedRows( $live, $next );
 					const restoreFocus = preserveState( $live, $next );
 
 					if ( false !== restoreFocus ) {
 						lastHtml = nextHtml;
 						$live.replaceWith( $next );
+						bindCoreListTableBehaviors( $next );
 						restoreFocus();
 						$next.dispatchEvent(
 							new window.CustomEvent( 'vrts-refreshed', {
