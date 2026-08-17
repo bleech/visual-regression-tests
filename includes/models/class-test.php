@@ -160,15 +160,15 @@ class Test {
 
 		$tests_table = Tests_Table::get_table_name();
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 		return (bool) $wpdb->get_var(
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 			"SELECT EXISTS(
 				SELECT 1 FROM $tests_table
 				WHERE is_running = 1
 					OR ( status != 0 AND service_test_id IS NOT NULL AND service_test_id != '' AND base_screenshot_date IS NULL )
 			)"
 		);
+		// phpcs:enable
 	}
 
 	/**
@@ -824,10 +824,10 @@ class Test {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"UPDATE $table_test
 					SET
-						is_running = " . ( $running ? '1' : '0' ) . ' '
+						is_running = %d "
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
 				. "WHERE service_test_id IN ( $placeholders )",
-				$test_ids
+				array_merge( [ $running ? 1 : 0 ], $test_ids )
 			)
 		);
 	}
@@ -855,10 +855,10 @@ class Test {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"UPDATE $table_test
 					SET
-						is_running = " . ( $running ? '1' : '0' ) . ' '
+						is_running = %d "
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- It's ok.
 				. "WHERE id IN ( $placeholders )",
-				$test_ids
+				array_merge( [ $running ? 1 : 0 ], $test_ids )
 			)
 		);
 	}

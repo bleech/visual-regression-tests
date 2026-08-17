@@ -81,14 +81,17 @@ class Cron_Jobs {
 	 */
 	public function fetch_test_run_updates( $test_run_id, $try_number = 1 ) {
 		$test_run = Test_Run::get_item( $test_run_id );
-		if ( empty( $test_run ) || empty( $test_run->finished_at ) ) {
-			$service = new Test_Run_Service();
-			$service->fetch_and_update_test_runs();
+		if ( empty( $test_run ) || ! empty( $test_run->finished_at ) ) {
+			return;
+		}
 
-			if ( $try_number < $this->max_tries ) {
-				$next_execution = time() + $this->initial_wait * $this->wait_multiplicator * $try_number;
-				wp_schedule_single_event( $next_execution, 'vrts_fetch_test_run_updates', [ $test_run_id, $try_number + 1 ] );
-			}
+		$service = new Test_Run_Service();
+		$service->fetch_and_update_test_run( $test_run->service_test_run_id );
+		$test_run = Test_Run::get_item( $test_run_id );
+
+		if ( $test_run && empty( $test_run->finished_at ) && $try_number < $this->max_tries ) {
+			$next_execution = time() + $this->initial_wait * $this->wait_multiplicator * $try_number;
+			wp_schedule_single_event( $next_execution, 'vrts_fetch_test_run_updates', [ $test_run_id, $try_number + 1 ] );
 		}
 	}
 
@@ -107,6 +110,9 @@ class Cron_Jobs {
 	 * @param int $test_run_id Test run id.
 	 */
 	public static function schedule_initial_fetch_test_run_updates( $test_run_id ) {
-		wp_schedule_single_event( time(), 'vrts_fetch_test_run_updates', [ $test_run_id, 1 ] );
+		$args = [ $test_run_id, 1 ];
+		if ( $test_run_id && ! wp_next_scheduled( 'vrts_fetch_test_run_updates', $args ) ) {
+			wp_schedule_single_event( time(), 'vrts_fetch_test_run_updates', $args );
+		}
 	}
 }

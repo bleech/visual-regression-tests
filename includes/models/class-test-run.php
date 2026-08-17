@@ -264,10 +264,37 @@ class Test_Run {
 			if ( $wpdb->insert( $test_runs_table, $args ) ) {
 				return $wpdb->insert_id;
 			}
+			// An update affecting 0 rows is not an error: a concurrent request
+			// may have written the same values already.
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		} elseif ( $wpdb->update( $test_runs_table, $args, [ 'id' => $row_id ] ) ) {
+		} elseif ( false !== $wpdb->update( $test_runs_table, $args, [ 'id' => $row_id ] ) ) {
 			return $row_id;
 		}
+	}
+
+	/**
+	 * Mark a test run as finished. Only one concurrent caller wins the
+	 * transition, so side effects like notification emails run once.
+	 *
+	 * @param int    $row_id The row id.
+	 * @param string $finished_at The finish datetime.
+	 *
+	 * @return bool Whether this call performed the transition.
+	 */
+	public static function mark_finished( $row_id, $finished_at ) {
+		global $wpdb;
+
+		$test_runs_table = Test_Runs_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return (bool) $wpdb->update(
+			$test_runs_table,
+			[ 'finished_at' => $finished_at ],
+			[
+				'id' => $row_id,
+				'finished_at' => null,
+			]
+		);
 	}
 
 	/**

@@ -181,7 +181,7 @@ class Rest_Service_Controller {
 		}
 
 		$test_run_service = new Test_Run_Service();
-		if ( Test_Run::delete_by_service_test_run_id( $data['run_id'] ) ) {
+		if ( $test_run_service->delete_test_run( $data['run_id'] ) ) {
 
 			return rest_ensure_response([
 				'message' => 'Action run_deleted successful.',
