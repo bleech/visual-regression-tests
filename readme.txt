@@ -3,7 +3,7 @@ Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
 Requires at least: 5.0
 Tested up to: 7.0
-Stable tag: 2.0.9
+Stable tag: 2.1.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +169,15 @@ If your firewall is blocking our screenshot service, whitelist our IP addresses.
 
 
 == Changelog ==
+
+= 2.1.0 =
+* Added a scroll to changes button that takes you straight to the detected changes in the alert view.
+* Improved the speed of navigating between the alerts of a test run.
+* Improved the tests and runs pages to update without page reloads.
+* Improved the reliability of alert delivery when service notifications are missed or interrupted.
+* Fixed unfinished test runs being reported as passed.
+* Fixed duplicate and orphaned alerts created by the hourly update check.
+* Fixed the tests page not showing a test as in progress after starting a manual run.
 
 = 2.0.9 =
 * Fixed a security issue with how service updates are verified.
