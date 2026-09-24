@@ -583,22 +583,36 @@ class Test {
 	 * @return array
 	 */
 	public static function get_alert_threshold_options( $include_default = true ) {
+		$options = [];
+		if ( $include_default ) {
+			$options[''] = esc_html__( 'Use project default', 'visual-regression-tests' ) . ' · ' . self::get_alert_threshold_label( self::get_global_alert_threshold() );
+		}
+		$options['0'] = self::get_alert_threshold_label( 0 );
+		foreach ( self::ALERT_THRESHOLDS as $threshold ) {
+			$options[ (string) $threshold ] = self::get_alert_threshold_label( $threshold );
+		}
+		return $options;
+	}
+
+	/**
+	 * Get the label of an alert threshold value.
+	 *
+	 * @param int $threshold Threshold percentage, 0 for any change.
+	 *
+	 * @return string
+	 */
+	public static function get_alert_threshold_label( $threshold ) {
 		$labels = [
 			1 => esc_html__( 'Small', 'visual-regression-tests' ),
 			10 => esc_html__( 'Medium', 'visual-regression-tests' ),
 			25 => esc_html__( 'Large', 'visual-regression-tests' ),
 			50 => esc_html__( 'Huge', 'visual-regression-tests' ),
 		];
-		$options = [];
-		if ( $include_default ) {
-			$options[''] = esc_html__( 'Global threshold', 'visual-regression-tests' );
+		if ( ! $threshold ) {
+			return esc_html__( 'Any change', 'visual-regression-tests' );
 		}
-		$options['0'] = esc_html__( 'Any change', 'visual-regression-tests' );
-		foreach ( self::ALERT_THRESHOLDS as $threshold ) {
-			/* translators: %1$s: percentage of the page, %2$s: size of the change. */
-			$options[ (string) $threshold ] = sprintf( esc_html__( '%1$s%% (%2$s)', 'visual-regression-tests' ), number_format_i18n( $threshold ), $labels[ $threshold ] );
-		}
-		return $options;
+		/* translators: %1$s: size of the change, %2$s: percentage of the page. */
+		return sprintf( esc_html__( '%1$s (%2$s%%)', 'visual-regression-tests' ), $labels[ $threshold ], number_format_i18n( $threshold ) );
 	}
 
 	/**

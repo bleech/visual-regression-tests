@@ -103,11 +103,11 @@ class Settings_Page {
 			'type' => 'select',
 			'id' => 'vrts_alert_threshold',
 			'section' => 'vrts-settings-section-general',
-			'title' => esc_html__( 'Global alert threshold', 'visual-regression-tests' ),
+			'title' => esc_html__( 'Default alert threshold', 'visual-regression-tests' ),
 			'description' => sprintf(
 				'%s<br>%s',
 				esc_html__( 'Only alert when the most-changed screen of the page differs by more than this.', 'visual-regression-tests' ),
-				esc_html__( 'Tests set to "Global threshold" always use the value selected here.', 'visual-regression-tests' )
+				esc_html__( 'Tests set to "Use project default" always use the value selected here.', 'visual-regression-tests' )
 			),
 			'choices' => Test::get_alert_threshold_options( false ),
 			'sanitize_callback' => [ $this, 'sanitize_alert_threshold' ],

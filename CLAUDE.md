@@ -108,7 +108,7 @@ Vrts\
 | `next_run_date`        | datetime      | Next scheduled run                      |
 | `is_running`           | boolean       | Whether comparison is in progress       |
 | `hide_css_selectors`   | longtext      | CSS selectors to hide during screenshot |
-| `meta`                 | longtext      | Serialized settings array, e.g. `alert_threshold` (0 = any change, 1/10/25/50 percent, absent = Default, follows the `vrts_alert_threshold` setting) |
+| `meta`                 | longtext      | Serialized settings array, e.g. `alert_threshold` (0 = any change, 1/10/25/50 percent = Small/Medium/Large/Huge, absent = "Use project default", follows the `vrts_alert_threshold` setting shown as "Default alert threshold" on the Settings page) |
 
 **Calculated statuses** (in `Test` model): `disconnected`, `no-credit-left`, `post-not-published`, `waiting`, `running`, `scheduled`, `has-alert`, `passed`
 
