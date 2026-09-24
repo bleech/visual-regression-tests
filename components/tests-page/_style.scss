@@ -60,10 +60,19 @@
 		padding-top: 8px;
 	}
 
+	#wp-link #link-selector {
+		bottom: 57px;
+	}
+
 	#wp-link .query-results {
-		top: 80px;
-		max-height: calc(100% - 90px);
+		top: 94px;
+		max-height: calc(100% - 196px);
 		height: 100%;
+	}
+
+	.vrts-alert-threshold-field {
+		margin-top: auto;
+		padding-bottom: 16px;
 	}
 
 	.item {
@@ -84,6 +93,10 @@
 
 		textarea {
 			width: 100%;
+		}
+
+		.vrts-alert-threshold-field__label {
+			display: flex;
 		}
 
 		.inline-edit-col {

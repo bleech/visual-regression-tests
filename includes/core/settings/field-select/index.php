@@ -1,5 +1,6 @@
 <fieldset <?php echo isset( $args['is_pro'] ) && false === $args['is_pro'] ? 'data-a11y-dialog-show="vrts-modal-pro-settings"' : ''; ?>>
 	<select
+		class="regular-text"
 		name="<?php echo esc_attr( $args['id'] ); ?>"
 		id="<?php echo esc_attr( $args['id'] ); ?>"
 		<?php wp_readonly( isset( $args['readonly'] ) && $args['readonly'] ); ?>

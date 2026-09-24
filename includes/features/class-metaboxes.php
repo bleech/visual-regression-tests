@@ -147,6 +147,7 @@ class Metaboxes {
 			'test_settings' => [
 				'test_id' => isset( $test->id ) ? $test->id : null,
 				'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
+				'alert_threshold' => $test_id ? Test::get_meta( $test_id, 'alert_threshold' ) : null,
 			],
 		]);
 	}
@@ -192,6 +193,9 @@ class Metaboxes {
 			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
 			$test_service = new Test_Service();
 			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
+			if ( isset( $_POST['alert_threshold'] ) ) {
+				$test_service->update_alert_threshold( $test_id, sanitize_text_field( wp_unslash( $_POST['alert_threshold'] ) ) );
+			}
 		}
 	}
 
@@ -233,6 +237,11 @@ class Metaboxes {
 			$test_id = Test::get_item_id( $post->ID );
 			$test_service = new Test_Service();
 			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
+		}
+		if ( array_key_exists( 'alert_threshold', $vrts_params ?? [] ) ) {
+			$test_id = Test::get_item_id( $post->ID );
+			$test_service = new Test_Service();
+			$test_service->update_alert_threshold( $test_id, $vrts_params['alert_threshold'] );
 		}
 	}
 }

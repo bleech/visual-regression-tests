@@ -124,6 +124,7 @@ use Vrts\Services\Manual_Test_Service;
 					</div>
 				</div>
 			</div>
+			<?php vrts()->component( 'alert-threshold-field', [ 'id' => 'vrts-add-test-alert-threshold' ] ); ?>
 		</div>
 		<div class="submitbox">
 			<div id="wp-link-cancel">

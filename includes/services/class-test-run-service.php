@@ -148,7 +148,7 @@ class Test_Run_Service {
 			$test_id = $comparison['comparison_schedule_id'];
 			$alert_id = null;
 
-			if ( $comparison['pixels_diff'] > 1 && ! $comparison['matches_false_positive'] ) {
+			if ( Alert_Service::should_alert( $test_id, $comparison ) ) {
 				$post_id = Test::get_post_id_by_service_test_id( $test_id );
 				$alert_service = new Alert_Service();
 				$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison, $test_run );

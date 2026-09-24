@@ -142,9 +142,12 @@ class Tests_List_Table extends \WP_List_Table {
 			$this->row_actions( $actions )
 		);
 
+		$meta = ! empty( $item->meta ) ? maybe_unserialize( $item->meta ) : [];
+		$alert_threshold = Test::sanitize_alert_threshold( is_array( $meta ) ? ( $meta['alert_threshold'] ?? null ) : null );
 		$quickedit_hidden_fields = "
 		<div class='hidden' id='inline_{$item->id}'>
 			<div class='hide_css_selectors'>$item->hide_css_selectors</div>
+			<div class='alert_threshold'>$alert_threshold</div>
 		</div>";
 
 		return $row_actions . $quickedit_hidden_fields;
@@ -372,6 +375,7 @@ class Tests_List_Table extends \WP_List_Table {
 							);
 							?>
 							</p>
+							<?php vrts()->component( 'alert-threshold-field', [ 'id' => 'vrts-quick-edit-alert-threshold' ] ); ?>
 						</div>
 					</fieldset>
 					<div class="submit inline-edit-save">

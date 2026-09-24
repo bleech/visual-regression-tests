@@ -74,7 +74,7 @@ Vrts\
 ├── Services\                     # Business logic layer
 │   ├── Test_Service              # Create/delete/resume tests (local + remote)
 │   ├── Test_Run_Service          # Process run webhooks, create alerts from comparisons
-│   ├── Alert_Service             # Create alert records from comparison data
+│   ├── Alert_Service             # Create alert records; exceeds_alert_threshold() compares the comparison's meta.viewport_diff_percentage with the test's threshold (no threshold = pixels_diff > 1)
 │   ├── Email_Service             # Send HTML test run notification emails
 │   └── Manual_Test_Service       # Trigger manual test runs (subscription required)
 ├── Tables\                       # DB schema definitions (dbDelta)
@@ -94,7 +94,7 @@ Vrts\
 
 ## Custom Database Tables
 
-### `{prefix}vrts_tests` (DB_VERSION 1.5)
+### `{prefix}vrts_tests` (DB_VERSION 1.6)
 
 | Column                 | Type          | Purpose                                 |
 |------------------------|---------------|-----------------------------------------|
@@ -108,6 +108,7 @@ Vrts\
 | `next_run_date`        | datetime      | Next scheduled run                      |
 | `is_running`           | boolean       | Whether comparison is in progress       |
 | `hide_css_selectors`   | longtext      | CSS selectors to hide during screenshot |
+| `meta`                 | longtext      | Serialized settings array, e.g. `alert_threshold` (0 = any change, 1/10/25/50 percent, absent = Default, follows the `vrts_alert_threshold` setting) |
 
 **Calculated statuses** (in `Test` model): `disconnected`, `no-credit-left`, `post-not-published`, `waiting`, `running`, `scheduled`, `has-alert`, `passed`
 
@@ -166,7 +167,7 @@ All API calls go through `Vrts\Features\Service` using `wp_remote_post()` / `wp_
 | `sites/{id}/register`              | POST   | Register license key               |
 | `sites/{id}/unregister`            | POST   | Remove license key                 |
 | `tests`                            | POST   | Create test(s)                     |
-| `tests/{id}`                       | PUT    | Update test (URL, hide selectors)  |
+| `tests/{id}`                       | PUT    | Update test (URL, hide selectors, meta) |
 | `tests/{id}`                       | DELETE | Delete test                        |
 | `tests/{id}/resume`                | POST   | Resume individual test             |
 | `tests/{id}/false-positives`       | POST   | Mark comparison as false positive  |
@@ -181,7 +182,7 @@ Signature verification: HMAC-SHA256 of JSON payload using `vrts_project_secret`.
 | Action                 | Purpose                                            |
 |------------------------|----------------------------------------------------|
 | `test_updated`         | Test screenshot/comparison ready                   |
-| `run_updated`          | Test run completed, creates alerts for diffs > 1px |
+| `run_updated`          | Test run completed, creates alerts per `Alert_Service::exceeds_alert_threshold()` |
 | `run_deleted`          | Run deleted remotely                               |
 | `subscription_changed` | Subscription tier changed                          |
 
@@ -239,6 +240,7 @@ All registered under `wp-json/vrts/v1/`:
 | `vrts_total_tests`      | Total test quota            |
 | `vrts_has_subscription` | Premium subscription flag   |
 | `vrts_tier_id`          | Subscription tier           |
+| `vrts_alert_threshold`  | Global alert threshold (0 = any change); used by tests without their own value, pushed to the service as project `meta` |
 
 ## Frontend / JavaScript
 

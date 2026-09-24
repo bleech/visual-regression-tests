@@ -176,6 +176,9 @@ window.wp = window.wp || {};
 			$( ':input[name="hide_css_selectors"]', editRow ).val(
 				hideInputSelectorsText
 			);
+			$( ':input[name="alert_threshold"]', editRow ).val(
+				$( '.alert_threshold', rowData ).text()
+			);
 
 			$( editRow )
 				.attr( 'id', 'edit-' + id )
@@ -211,6 +214,9 @@ window.wp = window.wp || {};
 				hide_css_selectors: $(
 					'#edit-' + id + ' [name="hide_css_selectors"]'
 				).val(),
+				alert_threshold: $(
+					'#edit-' + id + ' [name="alert_threshold"]'
+				).val(),
 				nonce: $( '#_vrts_test_quick_edit_nonce' ).val(),
 			};
 
@@ -236,6 +242,11 @@ window.wp = window.wp || {};
 
 					$( '#inline_' + id + ' .hide_css_selectors' ).text(
 						response.hide_css_selectors
+					);
+					$( '#inline_' + id + ' .alert_threshold' ).text(
+						null === response.alert_threshold
+							? ''
+							: response.alert_threshold
 					);
 
 					// Hide the quick edit window.

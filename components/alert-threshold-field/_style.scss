@@ -1,0 +1,16 @@
+.vrts-alert-threshold-field {
+	margin-top: 1.5rem;
+
+	&__label {
+		display: flex;
+		gap: 0.5rem;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 0.5rem;
+	}
+
+	select {
+		width: 100%;
+		max-width: 100%;
+	}
+}

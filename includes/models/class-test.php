@@ -15,6 +15,8 @@ use Vrts\Tables\Tests_Table;
  */
 class Test {
 
+	const ALERT_THRESHOLDS = [ 1, 10, 25, 50 ];
+
 	/**
 	 * Get all test items from database
 	 *
@@ -107,6 +109,7 @@ class Test {
 						tests.next_run_date,
 						tests.is_running,
 						tests.hide_css_selectors,
+						tests.meta,
 						posts.post_title,
 						CASE
 							WHEN alerts.latest_id is not null THEN '6-has-alert'
@@ -243,7 +246,8 @@ class Test {
 					test.last_comparison_date,
 					test.next_run_date,
 					test.is_running,
-					test.hide_css_selectors
+					test.hide_css_selectors,
+					test.meta
 				FROM $tests_table as test
 				LEFT JOIN (
 					SELECT MAX(id) as latest_id, post_id
@@ -572,6 +576,172 @@ class Test {
 	}
 
 	/**
+	 * Get the alert threshold options as value => label.
+	 *
+	 * @param bool $include_default Whether to include the option that follows the global setting.
+	 *
+	 * @return array
+	 */
+	public static function get_alert_threshold_options( $include_default = true ) {
+		$labels = [
+			1 => esc_html__( 'Small', 'visual-regression-tests' ),
+			10 => esc_html__( 'Medium', 'visual-regression-tests' ),
+			25 => esc_html__( 'Large', 'visual-regression-tests' ),
+			50 => esc_html__( 'Huge', 'visual-regression-tests' ),
+		];
+		$options = [];
+		if ( $include_default ) {
+			$options[''] = esc_html__( 'Global threshold', 'visual-regression-tests' );
+		}
+		$options['0'] = esc_html__( 'Any change', 'visual-regression-tests' );
+		foreach ( self::ALERT_THRESHOLDS as $threshold ) {
+			/* translators: %1$s: percentage of the page, %2$s: size of the change. */
+			$options[ (string) $threshold ] = sprintf( esc_html__( '%1$s%% (%2$s)', 'visual-regression-tests' ), number_format_i18n( $threshold ), $labels[ $threshold ] );
+		}
+		return $options;
+	}
+
+	/**
+	 * Sanitize an alert threshold value to one of the allowed presets.
+	 *
+	 * @param mixed $value Raw value.
+	 *
+	 * @return int|null Threshold percentage, 0 for any change, null to follow the global setting.
+	 */
+	public static function sanitize_alert_threshold( $value ) {
+		if ( ! is_numeric( $value ) ) {
+			return null;
+		}
+		$value = (int) $value;
+		return 0 === $value || in_array( $value, self::ALERT_THRESHOLDS, true ) ? $value : null;
+	}
+
+	/**
+	 * Get the global alert threshold from the settings page.
+	 *
+	 * @return int Threshold percentage, 0 for any change.
+	 */
+	public static function get_global_alert_threshold() {
+		return (int) self::sanitize_alert_threshold( vrts()->settings()->get_option( 'vrts_alert_threshold' ) );
+	}
+
+	/**
+	 * Get the alert threshold that applies to the test with the given service test id:
+	 * its own value, or the global setting when it has none.
+	 *
+	 * @param string $service_test_id Service test id.
+	 *
+	 * @return int Threshold percentage, 0 for any change.
+	 */
+	public static function get_alert_threshold_by_service_test_id( $service_test_id ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$raw = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT meta FROM $tests_table WHERE service_test_id = %s",
+				$service_test_id
+			)
+		);
+		$meta = ! empty( $raw ) ? maybe_unserialize( $raw ) : [];
+
+		$alert_threshold = self::sanitize_alert_threshold( is_array( $meta ) ? ( $meta['alert_threshold'] ?? null ) : null );
+
+		return is_null( $alert_threshold ) ? self::get_global_alert_threshold() : $alert_threshold;
+	}
+
+	/**
+	 * Get the meta array for a test.
+	 *
+	 * @param int $id Test ID.
+	 *
+	 * @return array
+	 */
+	public static function get_all_meta( $id ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$raw = $wpdb->get_var(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT meta FROM $tests_table WHERE id = %d",
+				$id
+			)
+		);
+
+		$meta = ! empty( $raw ) ? maybe_unserialize( $raw ) : [];
+
+		return is_array( $meta ) ? $meta : [];
+	}
+
+	/**
+	 * Save the meta array for a test.
+	 *
+	 * @param int   $id Test ID.
+	 * @param array $meta Meta array.
+	 *
+	 * @return bool
+	 */
+	public static function save_all_meta( $id, $meta ) {
+		global $wpdb;
+
+		$tests_table = Tests_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		$result = $wpdb->update(
+			$tests_table,
+			[ 'meta' => ! empty( $meta ) ? maybe_serialize( $meta ) : null ],
+			[ 'id' => $id ]
+		);
+
+		return false !== $result;
+	}
+
+	/**
+	 * Get a specific meta key from a test.
+	 *
+	 * @param int    $id Test ID.
+	 * @param string $key Meta key.
+	 *
+	 * @return mixed|null
+	 */
+	public static function get_meta( $id, $key ) {
+		$meta = self::get_all_meta( $id );
+		return isset( $meta[ $key ] ) ? $meta[ $key ] : null;
+	}
+
+	/**
+	 * Set meta keys on a test.
+	 *
+	 * @param int   $id Test ID.
+	 * @param array $values Associative array of key => value pairs.
+	 *
+	 * @return bool
+	 */
+	public static function set_meta( $id, $values ) {
+		return self::save_all_meta( $id, array_merge( self::get_all_meta( $id ), $values ) );
+	}
+
+	/**
+	 * Delete a specific meta key from a test.
+	 *
+	 * @param int    $id Test ID.
+	 * @param string $key Meta key.
+	 *
+	 * @return bool
+	 */
+	public static function delete_meta( $id, $key ) {
+		$meta = self::get_all_meta( $id );
+		unset( $meta[ $key ] );
+		return self::save_all_meta( $id, $meta );
+	}
+
+	/**
 	 * Get all service test ids
 	 *
 	 * @return array
@@ -728,6 +898,8 @@ class Test {
 		$test->next_run_date = ! is_null( $test->next_run_date ) ? mysql2date( 'c', $test->next_run_date ) : null;
 		$test->last_comparison_date = ! is_null( $test->last_comparison_date ) ? mysql2date( 'c', $test->last_comparison_date ) : null;
 		$test->is_running = ! is_null( $test->is_running ) ? (bool) $test->is_running : null;
+		$meta = ! empty( $test->meta ) ? maybe_unserialize( $test->meta ) : [];
+		$test->meta = is_array( $meta ) ? $meta : [];
 
 		return $test;
 	}

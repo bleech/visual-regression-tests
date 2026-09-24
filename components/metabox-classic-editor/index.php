@@ -96,6 +96,12 @@ if ( $data['run_tests_checked'] ) {
 			</span>
 		</label>
 		<textarea id="vrts-hide-css-selectors" name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>
+		<?php
+		vrts()->component( 'alert-threshold-field', [
+			'id' => 'vrts-metabox-alert-threshold',
+			'value' => $data['test_settings']['alert_threshold'] ?? null,
+		] );
+		?>
 	</div>
 <?php }//end if
 ?>

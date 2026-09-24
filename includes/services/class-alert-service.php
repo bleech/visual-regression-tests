@@ -3,9 +3,58 @@
 namespace Vrts\Services;
 
 use Vrts\Models\Alert;
+use Vrts\Models\Test;
 use Vrts\Tables\Alerts_Table;
 
 class Alert_Service {
+
+	/**
+	 * Whether a comparison differs enough to become an alert.
+	 *
+	 * Without a threshold any comparison with more than one changed pixel alerts.
+	 * With a threshold the changed share of the most-changed screen of the page,
+	 * as measured by the screenshotter, has to exceed it.
+	 *
+	 * @param int   $alert_threshold Threshold in percent, 0 for any change.
+	 * @param array $comparison Comparison data from the service.
+	 *
+	 * @return bool
+	 */
+	public static function exceeds_alert_threshold( $alert_threshold, $comparison ) {
+		$pixels_diff = (int) ( $comparison['pixels_diff'] ?? 0 );
+		$viewport_diff_percentage = $comparison['meta']['viewport_diff_percentage'] ?? null;
+
+		if ( ! $alert_threshold ) {
+			return $pixels_diff > 1;
+		}
+
+		if ( ! is_numeric( $viewport_diff_percentage ) ) {
+			return $pixels_diff > 1;
+		}
+
+		return (float) $viewport_diff_percentage > $alert_threshold;
+	}
+
+	/**
+	 * Whether a comparison should become an alert for the given test.
+	 *
+	 * A comparison that already has an alert (created by the other delivery
+	 * path, webhook or poll) always does, whatever the current threshold is.
+	 *
+	 * @param string $test_id Service test id.
+	 * @param array  $comparison Comparison data from the service.
+	 *
+	 * @return bool
+	 */
+	public static function should_alert( $test_id, $comparison ) {
+		if ( ! empty( $comparison['matches_false_positive'] ) ) {
+			return false;
+		}
+		if ( ! empty( $comparison['id'] ) && Alert::get_item_by_comparison_id( $comparison['id'] ) ) {
+			return true;
+		}
+		return self::exceeds_alert_threshold( Test::get_alert_threshold_by_service_test_id( $test_id ), $comparison );
+	}
 
 	/**
 	 * Create alert from comparison.

@@ -122,7 +122,14 @@ class Enqueue_Scripts {
 					'test_settings' => [
 						'test_id' => isset( $test->id ) ? $test->id : null,
 						'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
+						'alert_threshold' => $test_id ? Test::get_meta( $test_id, 'alert_threshold' ) : null,
 					],
+					'alert_threshold_options' => array_values( array_map( function ( $value, $label ) {
+						return [
+							'value' => (string) $value,
+							'label' => $label,
+						];
+					}, array_keys( Test::get_alert_threshold_options() ), Test::get_alert_threshold_options() ) ),
 				]
 			);
 		}//end if

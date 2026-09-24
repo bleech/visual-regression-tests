@@ -107,10 +107,13 @@ class Tests_Page {
 			exit;
 		}
 
+		$alert_threshold = isset( $_POST['alert_threshold'] ) ? Test::sanitize_alert_threshold( sanitize_text_field( wp_unslash( $_POST['alert_threshold'] ) ) ) : null;
+		$meta = is_null( $alert_threshold ) ? [] : [ 'alert_threshold' => $alert_threshold ];
+
 		// New or edit?
 		if ( $post_id ) {
 			$test_service = new Test_Service();
-			$insert_test = $test_service->create_test( $post_id );
+			$insert_test = $test_service->create_test( $post_id, $meta );
 		}
 
 		if ( is_wp_error( $insert_test ) ) {
@@ -266,29 +269,44 @@ class Tests_Page {
 		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
 		$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
 
-		$current_hide_css_selectors = TEST::get_item( $test_id )->hide_css_selectors ?? '';
+		$current_hide_css_selectors = Test::get_item( $test_id )->hide_css_selectors ?? '';
+		$current_alert_threshold = Test::sanitize_alert_threshold( Test::get_meta( $test_id, 'alert_threshold' ) );
+		$alert_threshold = isset( $_POST['alert_threshold'] ) ? Test::sanitize_alert_threshold( sanitize_text_field( wp_unslash( $_POST['alert_threshold'] ) ) ) : $current_alert_threshold;
 
-		if ( $current_hide_css_selectors === $hide_css_selectors ) {
+		$hide_css_selectors_changed = $current_hide_css_selectors !== $hide_css_selectors;
+		$alert_threshold_changed = $current_alert_threshold !== $alert_threshold;
+
+		if ( ! $hide_css_selectors_changed && ! $alert_threshold_changed ) {
 			$response = [
 				'success' => true,
 				'message' => __( 'No changes made.', 'visual-regression-tests' ),
 				'hide_css_selectors' => $hide_css_selectors,
+				'alert_threshold' => $alert_threshold,
 			];
 
 			return wp_die( wp_json_encode( $response ) );
 		}
 
 		$test_service = new Test_Service();
-		$is_saved = $test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
-		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
-			$success = true;
-			$message = __( 'Changes saved successfully.', 'visual-regression-tests' );
-			$post_id = Test::get_item( $test_id )->post_id;
-			$test_service->resume_test( $post_id );
-		} else {
-			$success = false;
-			$message = __( 'Error while saving the changes.', 'visual-regression-tests' );
+		$success = true;
+
+		if ( $alert_threshold_changed ) {
+			$is_saved = $test_service->update_alert_threshold( $test_id, $alert_threshold );
+			$success = $is_saved && ! is_wp_error( $is_saved );
 		}
+
+		if ( $success && $hide_css_selectors_changed ) {
+			$is_saved = $test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
+			$success = $is_saved && ! is_wp_error( $is_saved );
+			if ( $success ) {
+				$post_id = Test::get_item( $test_id )->post_id;
+				$test_service->resume_test( $post_id );
+			}
+		}
+
+		$message = $success
+			? __( 'Changes saved successfully.', 'visual-regression-tests' )
+			: __( 'Error while saving the changes.', 'visual-regression-tests' );
 
 		$test = Test::get_item( $test_id );
 		$snapshot_status = ! $test->target_screenshot_finish_date ? esc_html__( 'In progress', 'visual-regression-tests' ) : null;
@@ -296,6 +314,7 @@ class Tests_Page {
 			'success' => $success,
 			'message' => $message,
 			'hide_css_selectors' => $hide_css_selectors,
+			'alert_threshold' => Test::sanitize_alert_threshold( Test::get_meta( $test_id, 'alert_threshold' ) ),
 			'snapshot_status' => $snapshot_status,
 		];
 

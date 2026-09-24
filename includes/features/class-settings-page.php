@@ -5,6 +5,7 @@ namespace Vrts\Features;
 use Vrts\Core\Utilities\Sanitization;
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Features\Subscription;
+use Vrts\Models\Test;
 use Vrts\Services\Test_Service;
 
 class Settings_Page {
@@ -24,6 +25,8 @@ class Settings_Page {
 		add_action( 'admin_init', [ $this, 'settings_migration' ] );
 		add_action( 'add_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
 		add_action( 'update_option_vrts_click_selectors', [ $this, 'do_after_update_click_selectors' ], 10, 2 );
+		add_action( 'add_option_vrts_alert_threshold', [ $this, 'do_after_update_alert_threshold' ], 10, 2 );
+		add_action( 'update_option_vrts_alert_threshold', [ $this, 'do_after_update_alert_threshold' ], 10, 2 );
 		add_action( 'pre_update_option_vrts_license_key', [ $this, 'do_before_add_license_key' ], 10, 2 );
 		add_action( 'pre_update_option_vrts_email_update_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
 		add_action( 'pre_update_option_vrts_email_api_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
@@ -94,6 +97,23 @@ class Settings_Page {
 			'show_in_rest' => true,
 			'value_type' => 'string',
 			'default' => '',
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'select',
+			'id' => 'vrts_alert_threshold',
+			'section' => 'vrts-settings-section-general',
+			'title' => esc_html__( 'Global alert threshold', 'visual-regression-tests' ),
+			'description' => sprintf(
+				'%s<br>%s',
+				esc_html__( 'Only alert when the most-changed screen of the page differs by more than this.', 'visual-regression-tests' ),
+				esc_html__( 'Tests set to "Global threshold" always use the value selected here.', 'visual-regression-tests' )
+			),
+			'choices' => Test::get_alert_threshold_options( false ),
+			'sanitize_callback' => [ $this, 'sanitize_alert_threshold' ],
+			'show_in_rest' => true,
+			'value_type' => 'string',
+			'default' => '0',
 		]);
 
 		vrts()->settings()->add_setting([
@@ -281,6 +301,34 @@ class Settings_Page {
 				update_option( 'vrts_email_update_notification_address', $schedule_email );
 				update_option( 'vrts_email_api_notification_address', $schedule_email );
 			}
+		}
+	}
+
+	/**
+	 * Sanitize the global alert threshold to one of the presets, 0 for any change.
+	 *
+	 * @param mixed $value Raw value.
+	 *
+	 * @return string
+	 */
+	public function sanitize_alert_threshold( $value ) {
+		return (string) (int) Test::sanitize_alert_threshold( $value );
+	}
+
+	/**
+	 * Send the global alert threshold to the service. Tests set to Default follow it,
+	 * tests with their own value are not affected.
+	 *
+	 * @param mixed $old Old value, or the option name when the option is added.
+	 * @param mixed $new_value New value.
+	 */
+	public function do_after_update_alert_threshold( $old, $new_value ) {
+		if ( $old !== $new_value ) {
+			Service::rest_service_request(
+				'sites/' . get_option( 'vrts_project_id' ),
+				[ 'meta' => [ 'alert_threshold' => (int) Test::sanitize_alert_threshold( $new_value ) ] ],
+				'put'
+			);
 		}
 	}
 
