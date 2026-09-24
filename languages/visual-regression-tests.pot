@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: VRTs – Visual Regression Tests 2.1.0\n"
+"Project-Id-Version: VRTs – Visual Regression Tests 2.2.0\n"
 "Report-Msgid-Bugs-To: https://github.com/visual-regression-tests/issues\n"
 "Last-Translator: hello@bleech.de\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-14T18:39:14+00:00\n"
+"POT-Creation-Date: 2026-09-24T14:19:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: visual-regression-tests\n"
@@ -216,14 +216,14 @@ msgstr ""
 
 #: components/alert-actions/index.php:38
 #: components/settings-page/index.php:18
-#: components/tests-page/views/tests-page-list.php:93
+#: components/tests-page/views/tests-page-list.php:95
 msgid "Close"
 msgstr ""
 
 #: components/alert-actions/index.php:47
 #: components/metabox-classic-editor/index.php:98
-#: includes/list-tables/class-tests-list-table.php:358
-#: editor/components/settings/index.js:54
+#: includes/list-tables/class-tests-list-table.php:361
+#: editor/components/settings/index.js:68
 msgid "e.g.: .lottie, #ads"
 msgstr ""
 
@@ -237,6 +237,18 @@ msgstr ""
 
 #: components/alert-actions/index.php:52
 msgid "Saved successfully."
+msgstr ""
+
+#: components/alert-threshold-field/index.php:12
+#: editor/components/settings/index.js:81
+#: editor/components/settings/index.js:98
+msgid "Alert threshold"
+msgstr ""
+
+#: components/alert-threshold-field/index.php:16
+#: includes/features/class-settings-page.php:109
+#: editor/components/settings/index.js:88
+msgid "Only alert when the most-changed screen of the page differs by more than this."
 msgstr ""
 
 #. translators: %s: the count of pixels with a visual difference.
@@ -258,7 +270,7 @@ msgstr ""
 #: components/comparisons/index.php:32
 #: components/metabox-classic-editor/index.php:65
 #: includes/list-tables/class-tests-list-table.php:94
-#: includes/models/class-test.php:946
+#: includes/models/class-test.php:1185
 #: editor/components/metabox/index.js:224
 msgid "Snapshot"
 msgstr ""
@@ -323,8 +335,8 @@ msgstr[1] ""
 
 #: components/emails/test-run/index.php:197
 #: components/test-run-receipt/index.php:75
-#: includes/models/class-test-run.php:527
-#: includes/models/class-test.php:893
+#: includes/models/class-test-run.php:571
+#: includes/models/class-test.php:1132
 msgid "Passed"
 msgstr ""
 
@@ -372,13 +384,13 @@ msgid "Test Status"
 msgstr ""
 
 #: components/metabox-classic-editor/index.php:81
-#: editor/components/settings/index.js:26
+#: editor/components/settings/index.js:40
 msgid "Hide elements from VRTs"
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
 #: components/metabox-classic-editor/index.php:89
-#: editor/components/settings/index.js:40
+#: editor/components/settings/index.js:54
 #, php-format,js-format
 msgid "Exclude elements on this page: Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
@@ -458,9 +470,9 @@ msgstr ""
 
 #: components/test-run-receipt/index.php:87
 #: includes/list-tables/class-test-runs-list-table.php:106
-#: includes/list-tables/class-tests-list-table.php:244
-#: includes/models/class-test-run.php:490
-#: includes/models/class-test.php:837
+#: includes/list-tables/class-tests-list-table.php:247
+#: includes/models/class-test-run.php:534
+#: includes/models/class-test.php:1076
 msgid "Changes detected"
 msgstr ""
 
@@ -620,63 +632,63 @@ msgstr ""
 msgid "You're good to go."
 msgstr ""
 
-#: components/test-runs-page/index.php:9
+#: components/test-runs-page/index.php:11
 #: includes/features/class-test-runs-page.php:64
 #: includes/features/class-test-runs-page.php:65
 msgid "Runs"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:11
+#: components/tests-page/views/tests-page-list.php:13
 #: includes/features/class-admin.php:44
 #: includes/features/class-tests-page.php:31
 #: includes/features/class-tests-page.php:32
 msgid "Tests"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:19
+#: components/tests-page/views/tests-page-list.php:21
 msgid "Add New"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:26
+#: components/tests-page/views/tests-page-list.php:28
 msgid "Run All Tests"
 msgstr ""
 
 #. translators: %s: search query.
-#: components/tests-page/views/tests-page-list.php:41
+#: components/tests-page/views/tests-page-list.php:43
 #, php-format
 msgid "Search results for: %s"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:58
-#: components/tests-page/views/tests-page-list.php:102
+#: components/tests-page/views/tests-page-list.php:60
+#: components/tests-page/views/tests-page-list.php:104
 msgid "Search"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:92
-#: components/tests-page/views/tests-page-list.php:133
+#: components/tests-page/views/tests-page-list.php:94
+#: components/tests-page/views/tests-page-list.php:136
 msgid "Add New Test"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:96
+#: components/tests-page/views/tests-page-list.php:98
 msgid "Destination URL"
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:116
+#: components/tests-page/views/tests-page-list.php:118
 msgid "No search term specified. Showing recent items."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:117
+#: components/tests-page/views/tests-page-list.php:119
 msgid "Search or use up and down arrow keys to select an item."
 msgstr ""
 
-#: components/tests-page/views/tests-page-list.php:128
+#: components/tests-page/views/tests-page-list.php:131
 msgid "Cancel"
 msgstr ""
 
 #: includes/core/settings/field-checkbox/index.php:17
 #: includes/core/settings/field-info/index.php:6
 #: includes/core/settings/field-password/index.php:13
-#: includes/core/settings/field-select/index.php:16
+#: includes/core/settings/field-select/index.php:17
 #: includes/core/settings/field-text/index.php:13
 msgid "Pro"
 msgstr ""
@@ -720,9 +732,9 @@ msgid "Status: Testing not activated"
 msgstr ""
 
 #: includes/features/class-admin.php:45
-#: includes/features/class-settings-page.php:39
-#: includes/features/class-settings-page.php:40
-#: includes/features/class-settings-page.php:54
+#: includes/features/class-settings-page.php:42
+#: includes/features/class-settings-page.php:43
+#: includes/features/class-settings-page.php:57
 msgid "Settings"
 msgstr ""
 
@@ -788,124 +800,132 @@ msgstr ""
 msgid "Alerts are now bundled into Runs. Get a single report for each daily test, manual test, API trigger, or new: <strong>WordPress & plugin update (Pro)</strong>!"
 msgstr ""
 
-#: includes/features/class-settings-page.php:81
+#: includes/features/class-settings-page.php:84
 msgid "Click Element"
 msgstr ""
 
 #. translators: %s: link wrapper.
-#: includes/features/class-settings-page.php:86
+#: includes/features/class-settings-page.php:89
 #, php-format
 msgid "Add a %1$sCSS selector%2$s to click on the first element found before creating a new snapshot."
 msgstr ""
 
-#: includes/features/class-settings-page.php:90
+#: includes/features/class-settings-page.php:93
 msgid "Useful to accept cookie banners or anything else that should be clicked after page load."
 msgstr ""
 
-#: includes/features/class-settings-page.php:92
+#: includes/features/class-settings-page.php:95
 msgid "e.g.: #accept-cookies"
 msgstr ""
 
-#: includes/features/class-settings-page.php:103
-msgid "License Key"
-msgstr ""
-
 #: includes/features/class-settings-page.php:106
-msgid "No license key yet?"
-msgstr ""
-
-#: includes/features/class-settings-page.php:108
-msgid "Upgrade here."
+msgid "Default alert threshold"
 msgstr ""
 
 #: includes/features/class-settings-page.php:110
+msgid "Tests set to \"Use project default\" always use the value selected here."
+msgstr ""
+
+#: includes/features/class-settings-page.php:123
+msgid "License Key"
+msgstr ""
+
+#: includes/features/class-settings-page.php:126
+msgid "No license key yet?"
+msgstr ""
+
+#: includes/features/class-settings-page.php:128
+msgid "Upgrade here."
+msgstr ""
+
+#: includes/features/class-settings-page.php:130
 msgctxt "license key placeholder"
 msgid "XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX"
 msgstr ""
 
-#: includes/features/class-settings-page.php:121
+#: includes/features/class-settings-page.php:141
 msgid "Triggers"
 msgstr ""
 
-#: includes/features/class-settings-page.php:121
+#: includes/features/class-settings-page.php:141
 msgid "When your Tests are run."
 msgstr ""
 
-#: includes/features/class-settings-page.php:128
-#: includes/features/class-settings-page.php:201
-#: includes/models/class-test-run.php:345
+#: includes/features/class-settings-page.php:148
+#: includes/features/class-settings-page.php:221
+#: includes/models/class-test-run.php:389
 msgid "Schedule"
 msgstr ""
 
-#: includes/features/class-settings-page.php:129
+#: includes/features/class-settings-page.php:149
 msgid "Run Tests every 24 hours."
 msgstr ""
 
-#: includes/features/class-settings-page.php:142
-#: includes/features/class-settings-page.php:215
-#: includes/models/class-test-run.php:347
+#: includes/features/class-settings-page.php:162
+#: includes/features/class-settings-page.php:235
+#: includes/models/class-test-run.php:391
 msgid "Update"
 msgstr ""
 
-#: includes/features/class-settings-page.php:143
+#: includes/features/class-settings-page.php:163
 msgid "Run Tests after WordPress and plugin updates."
 msgstr ""
 
-#: includes/features/class-settings-page.php:158
-#: includes/features/class-settings-page.php:230
-#: includes/models/class-test-run.php:346
+#: includes/features/class-settings-page.php:178
+#: includes/features/class-settings-page.php:250
+#: includes/models/class-test-run.php:390
 msgid "API"
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
-#: includes/features/class-settings-page.php:161
+#: includes/features/class-settings-page.php:181
 #, php-format
 msgid "Run Tests with your favorite apps. %1$sRead the docs%2$s."
 msgstr ""
 
-#: includes/features/class-settings-page.php:179
-#: includes/features/class-settings-page.php:245
-#: includes/models/class-test-run.php:344
+#: includes/features/class-settings-page.php:199
+#: includes/features/class-settings-page.php:265
+#: includes/models/class-test-run.php:388
 msgid "Manual"
 msgstr ""
 
-#: includes/features/class-settings-page.php:180
+#: includes/features/class-settings-page.php:200
 msgid "Run Tests on demand."
 msgstr ""
 
-#: includes/features/class-settings-page.php:194
+#: includes/features/class-settings-page.php:214
 msgid "Notifications"
 msgstr ""
 
-#: includes/features/class-settings-page.php:194
+#: includes/features/class-settings-page.php:214
 msgid "Notify team members based on specific Trigger events."
 msgstr ""
 
-#: includes/features/class-settings-page.php:202
+#: includes/features/class-settings-page.php:222
 msgid "Separate multiple email addresses with commas. Or leave blank to disable notifications."
 msgstr ""
 
-#: includes/features/class-settings-page.php:203
-#: includes/features/class-settings-page.php:216
-#: includes/features/class-settings-page.php:231
+#: includes/features/class-settings-page.php:223
+#: includes/features/class-settings-page.php:236
+#: includes/features/class-settings-page.php:251
 msgid "Email address(es)"
 msgstr ""
 
-#: includes/features/class-settings-page.php:246
+#: includes/features/class-settings-page.php:266
 msgid "Alerts are automatically sent to the user who triggers the Manual Test."
 msgstr ""
 
 #: includes/features/class-tests-page.php:87
-#: includes/features/class-tests-page.php:142
-#: includes/features/class-tests-page.php:166
-#: includes/features/class-tests-page.php:189
+#: includes/features/class-tests-page.php:145
+#: includes/features/class-tests-page.php:169
+#: includes/features/class-tests-page.php:192
 msgid "Are you cheating?"
 msgstr ""
 
 #: includes/features/class-tests-page.php:91
-#: includes/features/class-tests-page.php:146
-#: includes/features/class-tests-page.php:170
-#: includes/features/class-tests-page.php:193
+#: includes/features/class-tests-page.php:149
+#: includes/features/class-tests-page.php:173
+#: includes/features/class-tests-page.php:196
 msgid "Permission Denied!"
 msgstr ""
 
@@ -913,37 +933,37 @@ msgstr ""
 msgid "Error: Post ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:204
+#: includes/features/class-tests-page.php:207
 msgid "Error: Test ID is required."
 msgstr ""
 
-#: includes/features/class-tests-page.php:274
+#: includes/features/class-tests-page.php:282
 msgid "No changes made."
 msgstr ""
 
-#: includes/features/class-tests-page.php:285
+#: includes/features/class-tests-page.php:308
 msgid "Changes saved successfully."
 msgstr ""
 
-#: includes/features/class-tests-page.php:290
+#: includes/features/class-tests-page.php:309
 msgid "Error while saving the changes."
 msgstr ""
 
-#: includes/features/class-tests-page.php:294
-#: includes/models/class-test.php:954
+#: includes/features/class-tests-page.php:312
+#: includes/models/class-test.php:1193
 msgid "In progress"
 msgstr ""
 
-#: includes/features/class-tests-page.php:323
+#: includes/features/class-tests-page.php:342
 msgid "(no title)"
 msgstr ""
 
-#: includes/features/class-tests-page.php:324
+#: includes/features/class-tests-page.php:343
 msgid "No results to enable visual regression testing found."
 msgstr ""
 
 #. translators: Minimum input length in characters to start searching posts in the "Insert/edit link" modal.
-#: includes/features/class-tests-page.php:326
+#: includes/features/class-tests-page.php:345
 msgctxt "minimum input length for searching post links"
 msgid "3"
 msgstr ""
@@ -963,7 +983,7 @@ msgid "Test Run"
 msgstr ""
 
 #: includes/list-tables/class-test-runs-list-table.php:101
-#: includes/list-tables/class-tests-list-table.php:239
+#: includes/list-tables/class-tests-list-table.php:242
 msgid "All"
 msgstr ""
 
@@ -995,12 +1015,12 @@ msgid "Queue"
 msgstr ""
 
 #: includes/list-tables/class-test-runs-queue-list-table.php:224
-#: includes/models/class-test.php:870
+#: includes/models/class-test.php:1109
 msgid "In Progress"
 msgstr ""
 
 #: includes/list-tables/class-test-runs-queue-list-table.php:228
-#: includes/models/class-test-run.php:517
+#: includes/models/class-test-run.php:561
 msgid "Pending"
 msgstr ""
 
@@ -1044,30 +1064,30 @@ msgid "Disable testing for this page"
 msgstr ""
 
 #: includes/list-tables/class-tests-list-table.php:133
-#: includes/list-tables/class-tests-list-table.php:175
+#: includes/list-tables/class-tests-list-table.php:178
 msgid "Disable Testing"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:179
-#: includes/models/class-test.php:885
-#: includes/models/class-test.php:886
-#: includes/models/class-test.php:903
-#: includes/models/class-test.php:904
+#: includes/list-tables/class-tests-list-table.php:182
+#: includes/models/class-test.php:1124
+#: includes/models/class-test.php:1125
+#: includes/models/class-test.php:1142
+#: includes/models/class-test.php:1143
 msgid "Run Test"
 msgstr ""
 
-#: includes/list-tables/class-tests-list-table.php:355
+#: includes/list-tables/class-tests-list-table.php:358
 msgid "Quick Edit"
 msgstr ""
 
 #. translators: %1$s, %2$s: strong element wrapper.
-#: includes/list-tables/class-tests-list-table.php:363
+#: includes/list-tables/class-tests-list-table.php:366
 #, php-format
 msgid "%1$sExclude elements on this page:%2$s "
 msgstr ""
 
 #. translators: %1$s, %2$s: link wrapper.
-#: includes/list-tables/class-tests-list-table.php:369
+#: includes/list-tables/class-tests-list-table.php:372
 #, php-format
 msgid "Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created."
 msgstr ""
@@ -1079,22 +1099,22 @@ msgstr ""
 #: includes/models/class-alert.php:110
 #: includes/models/class-test-run.php:75
 #: includes/models/class-test-run.php:126
-#: includes/models/class-test-run.php:150
-#: includes/models/class-test-run.php:177
-#: includes/models/class-test-run.php:204
+#: includes/models/class-test-run.php:167
+#: includes/models/class-test-run.php:194
+#: includes/models/class-test-run.php:221
 msgid "Run #"
 msgstr ""
 
-#: includes/models/class-test-run.php:348
+#: includes/models/class-test-run.php:392
 msgid "Legacy"
 msgstr ""
 
-#: includes/models/class-test-run.php:351
+#: includes/models/class-test-run.php:395
 msgid "Unknown"
 msgstr ""
 
 #. translators: %s: number of alerts.
-#: includes/models/class-test-run.php:497
+#: includes/models/class-test-run.php:541
 #, php-format
 msgid "View Alert (%s)"
 msgid_plural "View Alerts (%s)"
@@ -1102,71 +1122,101 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: link start to test runs page. %2$s: link end to test runs page.
-#: includes/models/class-test-run.php:509
+#: includes/models/class-test-run.php:553
 #, php-format
 msgid "%1$sRefresh page%2$s to see results"
 msgstr ""
 
-#: includes/models/class-test-run.php:521
+#: includes/models/class-test-run.php:565
 msgid "Edit Test Configuration"
 msgstr ""
 
-#: includes/models/class-test-run.php:531
+#: includes/models/class-test-run.php:575
 msgid "No changes detected"
 msgstr ""
 
-#: includes/models/class-test.php:832
+#: includes/models/class-test.php:588
+msgid "Use project default"
+msgstr ""
+
+#: includes/models/class-test.php:606
+msgid "Small"
+msgstr ""
+
+#: includes/models/class-test.php:607
+msgid "Medium"
+msgstr ""
+
+#: includes/models/class-test.php:608
+msgid "Large"
+msgstr ""
+
+#: includes/models/class-test.php:609
+msgid "Huge"
+msgstr ""
+
+#: includes/models/class-test.php:612
+msgid "Any change"
+msgstr ""
+
+#. translators: %1$s: size of the change, %2$s: percentage of the page.
+#: includes/models/class-test.php:615
+#, php-format
+msgid "%1$s (%2$s%%)"
+msgstr ""
+
+#: includes/models/class-test.php:1071
 msgid "Disconnected"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/models/class-test.php:842
+#: includes/models/class-test.php:1081
 #, php-format
 msgid "%1$s%2$s View Alert%3$s"
 msgstr ""
 
-#: includes/models/class-test.php:843
+#: includes/models/class-test.php:1082
 msgid "View Alert"
 msgstr ""
 
-#: includes/models/class-test.php:850
-#: includes/models/class-test.php:861
+#: includes/models/class-test.php:1089
+#: includes/models/class-test.php:1100
 msgid "Disabled"
 msgstr ""
 
 #. translators: %1$s and %2$s: link wrapper.
-#: includes/models/class-test.php:854
+#: includes/models/class-test.php:1093
 #, php-format
 msgid "%1$sUpgrade plugin%2$s to resume testing"
 msgstr ""
 
-#: includes/models/class-test.php:855
+#: includes/models/class-test.php:1094
 msgid "Upgrade plugin"
 msgstr ""
 
-#: includes/models/class-test.php:862
+#: includes/models/class-test.php:1101
 msgid "Publish post to resume testing"
 msgstr ""
 
-#: includes/models/class-test.php:866
+#: includes/models/class-test.php:1105
 msgid "Waiting"
 msgstr ""
 
-#: includes/models/class-test.php:874
+#: includes/models/class-test.php:1113
 msgid "Scheduled"
 msgstr ""
 
-#: includes/models/class-test.php:951
+#: includes/models/class-test.php:1190
 msgid "On hold"
 msgstr ""
 
-#: includes/models/class-test.php:962
-#: includes/models/class-test.php:970
+#: includes/models/class-test.php:1201
+#: includes/models/class-test.php:1209
 msgid "View this snapshot"
 msgstr ""
 
-#: includes/models/class-test.php:963
-#: includes/models/class-test.php:972
+#: includes/models/class-test.php:1202
+#: includes/models/class-test.php:1211
 msgid "View Snapshot"
 msgstr ""
 
@@ -1186,7 +1236,8 @@ msgstr ""
 #: includes/rest-api/class-rest-service-controller.php:147
 #: includes/rest-api/class-rest-service-controller.php:170
 #: includes/rest-api/class-rest-service-controller.php:191
-#: includes/services/class-test-service.php:440
+#: includes/services/class-test-service.php:455
+#: includes/services/class-test-service.php:486
 msgid "Test not found."
 msgstr ""
 
@@ -1246,40 +1297,42 @@ msgctxt "test run notification email subject"
 msgid "VRTs: Run #%1$s (%2$s)"
 msgstr ""
 
-#: includes/services/class-test-service.php:147
+#: includes/services/class-test-service.php:155
 msgid "Post not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:164
-#: includes/services/class-test-service.php:242
-#: includes/services/class-test-service.php:289
-#: includes/services/class-test-service.php:348
-#: includes/services/class-test-service.php:453
+#: includes/services/class-test-service.php:173
+#: includes/services/class-test-service.php:251
+#: includes/services/class-test-service.php:304
+#: includes/services/class-test-service.php:363
+#: includes/services/class-test-service.php:468
+#: includes/services/class-test-service.php:502
 msgid "Service is not connected."
 msgstr ""
 
-#: includes/services/class-test-service.php:166
-#: includes/services/class-test-service.php:244
+#: includes/services/class-test-service.php:175
+#: includes/services/class-test-service.php:253
 msgid "Error creating test."
 msgstr ""
 
-#: includes/services/class-test-service.php:190
+#: includes/services/class-test-service.php:199
 msgid "Posts not found."
 msgstr ""
 
-#: includes/services/class-test-service.php:286
+#: includes/services/class-test-service.php:301
 msgid "Service could not create test."
 msgstr ""
 
-#: includes/services/class-test-service.php:342
+#: includes/services/class-test-service.php:357
 msgid "Plugin could not save tests."
 msgstr ""
 
-#: includes/services/class-test-service.php:345
+#: includes/services/class-test-service.php:360
 msgid "Service could not create tests."
 msgstr ""
 
-#: includes/services/class-test-service.php:450
+#: includes/services/class-test-service.php:465
+#: includes/services/class-test-service.php:505
 msgid "Service could not update test."
 msgstr ""
 

@@ -1,6 +1,6 @@
 {
 	"name": "@bleech/visual-regression-tests",
-	"version": "2.1.0",
+	"version": "2.2.0",
 	"description": "Find issues before others do – every time. With automatic screenshots, daily comparisons, and instant tests after WordPress and plugin updates.",
 	"author": "Bleech <hello@bleech.de>",
 	"license": "GPL-2.0-or-later",
@@ -72,7 +72,7 @@
 		"plugin-zip": "wp-scripts plugin-zip",
 		"test:e2e": "wp-scripts test-e2e",
 		"test:unit": "wp-scripts test-unit-js",
-		"makepot": "./vendor/bin/wp i18n make-pot . --skip-audit --exclude=\".github,.wordpress-org,build,node_modules,vendor,svn\" --headers='{\"Last-Translator\":\"hello@bleech.de\",\"Report-Msgid-Bugs-To\":\"https://github.com/visual-regression-tests/issues\"}' languages/visual-regression-tests.pot",
+		"makepot": "./vendor/bin/wp i18n make-pot . --allow-root --skip-audit --exclude=\".github,.wordpress-org,build,node_modules,vendor,svn\" --headers='{\"Last-Translator\":\"hello@bleech.de\",\"Report-Msgid-Bugs-To\":\"https://github.com/visual-regression-tests/issues\"}' languages/visual-regression-tests.pot",
 		"zip": "run-s build && rm -f visual-regression-tests.zip && ZIPDIR=$(mktemp -d) && ln -s \"$PWD\" \"$ZIPDIR/visual-regression-tests\" && (cd \"$ZIPDIR\" && zip -r visual-regression-tests.zip visual-regression-tests -x 'visual-regression-tests/.*' '*/.*' 'visual-regression-tests/node_modules/*' 'visual-regression-tests/vendor/*' 'visual-regression-tests/*.zip' 'visual-regression-tests/composer.json' 'visual-regression-tests/composer.lock' 'visual-regression-tests/package.json' 'visual-regression-tests/package-lock.json' 'visual-regression-tests/phpcs.xml' 'visual-regression-tests/webpack.config.js' 'visual-regression-tests/README.md' 'visual-regression-tests/CLAUDE.md' 'visual-regression-tests/AGENTS.md') && mv \"$ZIPDIR/visual-regression-tests.zip\" . && rm -rf \"$ZIPDIR\""
 	}
 }
