@@ -2,7 +2,6 @@ class VrtsComparisons extends window.HTMLElement {
 	constructor() {
 		super();
 		this.changeRegions = [];
-		this.jumpDismissed = false;
 		this.resolveElements();
 		this.bindFunctions();
 		this.bindEvents();
@@ -192,14 +191,6 @@ class VrtsComparisons extends window.HTMLElement {
 		);
 	}
 
-	isAnyRegionVisible( metrics ) {
-		return this.changeRegions.some( ( region ) => {
-			const top = metrics.imageTop + region.start * metrics.scale;
-			const bottom = metrics.imageTop + region.end * metrics.scale;
-			return bottom > metrics.topOffset && top < metrics.viewportBottom;
-		} );
-	}
-
 	updateJumpState() {
 		if ( ! this.$jump ) {
 			return;
@@ -209,19 +200,9 @@ class VrtsComparisons extends window.HTMLElement {
 			? this.getJumpMetrics()
 			: null;
 
-		if (
-			metrics &&
-			! this.jumpDismissed &&
-			this.isAnyRegionVisible( metrics )
-		) {
-			this.jumpDismissed = true;
-		}
-
 		this.$jump.setAttribute(
 			'data-vrts-visible',
-			Boolean(
-				! this.jumpDismissed && metrics && this.getNextRegion( metrics )
-			)
+			Boolean( metrics && this.getNextRegion( metrics ) )
 		);
 	}
 
