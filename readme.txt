@@ -25,6 +25,7 @@ How do you check your website after updates and code changes? Do you manually go
 3. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will notify you via email.
 4. **Review changes:** The difference view makes it easy to spot changes, while the comparison slider lets you inspect the details.
 5. **Hide elements:** Prevent false positives by excluding dynamic elements, ads, and animations from snapshots.
+6. **Set alert thresholds:** Only get alerted when a change is big enough to matter.
 
 
 = Use cases =
@@ -45,6 +46,7 @@ In which cases can visual regression testing help you spot issues?
 * **Daily Tests:** The plugin monitors selected posts and pages and compares screenshots daily.
 * **Hide Elements:** Hide dynamic or irrelevant elements to prevent false positives in your tests.
 * **Click Element:** Define an element that should be clicked before taking a screenshot. This is useful for closing cookie banners or modals.
+* **Alert Threshold:** Only get alerts for changes above a threshold you choose, for all tests or per test.
 * **Email Notifications:** As soon as a change is detected between the snapshot and the comparison screenshot, you will be notified via email.
 * **Fullscreen Review:** Inspect changes up close using the difference view and comparison slider in fullscreen mode.
 * **Read / Unread:** Keep track of test results that require further attention by marking alerts as unread.
@@ -113,6 +115,12 @@ If our external screenshot service cannot access your WordPress installation dir
 = Does the plugin work with cookie consent banners? =
 
 Yes, cookie banners are not an issue. Before taking a snapshot, the tool can automatically trigger the Accept button to hide the banner. This option can be configured with CSS selectors in the plugin settings.
+
+= Can I ignore small changes? =
+
+Yes. Set an alert threshold, and VRTs only alerts you when the most-changed screen of a page differs by more than it: Small (1%), Medium (10%), Large (25%) or Huge (50%). By default, every change triggers an alert.
+
+Set the default for all tests under **VRTs > Settings**, or choose a different threshold for a single test in its test settings.
 
 = Can I test custom post type archives with VRTs? =
 
