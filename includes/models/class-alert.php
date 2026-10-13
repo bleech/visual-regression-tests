@@ -518,6 +518,22 @@ class Alert {
 	}
 
 	/**
+	 * Delete all alerts of a test run from database.
+	 *
+	 * @param int $test_run_id the id of the test run.
+	 *
+	 * @return int|false Number of deleted alerts, false on error.
+	 */
+	public static function delete_by_test_run_id( $test_run_id = 0 ) {
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->delete( $alerts_table, [ 'test_run_id' => $test_run_id ] );
+	}
+
+	/**
 	 * Get the alert state.
 	 *
 	 * @param object $alert the alert object.

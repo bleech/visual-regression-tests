@@ -276,6 +276,15 @@ class Test_Runs_List_Table extends \WP_List_Table {
 			esc_html__( 'Show Details', 'visual-regression-tests' )
 		);
 
+		if ( ! empty( $item->finished_at ) ) {
+			$actions['delete'] = sprintf(
+				'<a class="vrts-delete-test-run" href="%s" data-vrts-confirm="%s">%s</a>',
+				esc_url( Url_Helpers::get_delete_test_run_url( $item->id ) ),
+				esc_attr__( 'Delete this run and its detected changes? This cannot be undone.', 'visual-regression-tests' ),
+				esc_html__( 'Delete', 'visual-regression-tests' )
+			);
+		}
+
 		$row_actions = sprintf(
 			'<strong><a class="row-title vrts-show-test-run-details" href="%1$s">%2$s</a></strong><div class="vrts-test-runs-title-subline">%3$s</div> %4$s',
 			esc_url( Url_Helpers::get_test_run_page( $item->id ) ),

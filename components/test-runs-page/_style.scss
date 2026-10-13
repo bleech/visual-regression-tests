@@ -81,6 +81,11 @@
 		> *:not(:first-child)::before {
 			content: " | ";
 		}
+
+		// Keep the links clickable above the row-wide title link overlay.
+		a {
+			position: relative;
+		}
 	}
 
 	tr {

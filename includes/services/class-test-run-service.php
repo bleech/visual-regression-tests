@@ -5,6 +5,7 @@ namespace Vrts\Services;
 use Vrts\Features\Cron_Jobs;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
+use Vrts\Models\Alert;
 use Vrts\Models\Test;
 use Vrts\Models\Test_Run;
 use Vrts\Services\Email_Service;
@@ -218,6 +219,32 @@ class Test_Run_Service {
 		}
 
 		return $deleted;
+	}
+
+	/**
+	 * Delete a finished test run and its alerts from the database.
+	 *
+	 * Runs that are still queued or in progress are left alone: the service
+	 * sync owns them until they finish.
+	 *
+	 * @param int $test_run_id Test run id.
+	 *
+	 * @return boolean
+	 */
+	public function delete_finished_test_run( $test_run_id ) {
+		$test_run = Test_Run::get_item( $test_run_id );
+
+		if ( ! $test_run || empty( $test_run->finished_at ) ) {
+			return false;
+		}
+
+		// Remove the alerts first, so a failure never leaves alerts behind
+		// that point to a run which no longer exists.
+		if ( false === Alert::delete_by_test_run_id( $test_run->id ) ) {
+			return false;
+		}
+
+		return (bool) Test_Run::delete( $test_run->id );
 	}
 
 	/**
