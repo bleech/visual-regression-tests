@@ -73,7 +73,6 @@ $current_alert_id = isset( $data['alert']->id ) ? $data['alert']->id : 0;
 						data-vrts-false-positive="<?php echo esc_attr( $alert->is_false_positive ? 'true' : 'false' ); ?>">
 						<figure class="vrts-test-run-alerts__card-figure">
 							<img class="vrts-test-run-alerts__card-image" src="<?php echo esc_url( Image_Helpers::get_screenshot_url( $alert, 'comparison', 'preview' ) ); ?>" alt="<?php esc_attr_e( 'Difference', 'visual-regression-tests' ); ?>">
-							<span class="vrts-test-run-alerts__card-flag"><?php vrts()->icon( 'flag' ); ?></span>
 						</figure>
 						<span class="vrts-test-run-alerts__card-title">
 							<span class="vrts-test-run-alerts__card-title-inner"><?php echo esc_html( $alert_post_title ); ?></span>

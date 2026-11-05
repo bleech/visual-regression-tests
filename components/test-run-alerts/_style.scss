@@ -138,17 +138,6 @@
 			width: 100%;
 		}
 
-		&-flag {
-			position: absolute;
-			top: 10px;
-			left: 10px;
-			visibility: hidden;
-
-			[data-vrts-false-positive="true"] & {
-				visibility: visible;
-			}
-		}
-
 		&-image {
 			position: absolute;
 			max-width: 100%;

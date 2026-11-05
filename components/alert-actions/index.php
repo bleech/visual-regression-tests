@@ -8,15 +8,6 @@ use Vrts\Core\Utilities\Url_Helpers;
 		<?php vrts()->icon( 'more-horizontal' ); ?>
 	</button>
 	<div id="vrts-alert-actions-dropdown" class="vrts-alert-actions__dropdown" aria-hidden="true">
-		<button data-vrts-loading="false" data-vrts-action-state="<?php echo esc_attr( $data['alert']->is_false_positive ? 'secondary' : 'primary' ); ?>" data-vrts-alert-id="<?php echo esc_attr( $data['alert']->id ); ?>" data-vrts-alert-action="false-positive" class="vrts-alert-actions__dropdown-action vrts-action-button">
-			<span class="vrts-action-button__icons">
-				<span class="vrts-action-button__icon" data-vrts-action-state-primary><?php vrts()->icon( 'flag-outline' ); ?></span>
-				<span class="vrts-action-button__icon" data-vrts-action-state-secondary><?php vrts()->icon( 'flag' ); ?></span>
-				<span class="vrts-action-button__spinner"><?php vrts()->icon( 'spinner' ); ?></span>
-			</span>
-			<span class="vrts-action-button__info" data-vrts-action-state-primary><?php esc_html_e( 'Flag as false positive', 'visual-regression-tests' ); ?></span>
-			<span class="vrts-action-button__info" data-vrts-action-state-secondary><?php esc_html_e( 'Unflag as false positive', 'visual-regression-tests' ); ?></span>
-		</button>
 		<button data-vrts-loading="false" data-vrts-action-state="<?php echo esc_attr( $data['alert']->alert_state ? 'secondary' : 'primary' ); ?>" data-vrts-alert-id="<?php echo esc_attr( $data['alert']->id ); ?>" data-vrts-alert-action="read-status" class="vrts-alert-actions__dropdown-action vrts-action-button">
 			<span class="vrts-action-button__icons">
 				<span class="vrts-action-button__icon" data-vrts-action-state-secondary><?php vrts()->icon( 'email-unread' ); ?></span>
