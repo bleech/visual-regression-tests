@@ -4,6 +4,7 @@ namespace Vrts\Services;
 
 use Vrts\Models\Alert;
 use Vrts\Models\Test;
+use Vrts\Core\Utilities\Image_Helpers;
 use Vrts\Core\Utilities\Url_Helpers;
 
 /**
@@ -39,18 +40,20 @@ class Test_Settings {
 		$alerts = array_map( function ( $alert ) {
 			$meta = maybe_unserialize( $alert->meta );
 			$percentage = is_array( $meta ) ? ( $meta['viewport_diff_percentage'] ?? null ) : null;
+			$snapshot = Image_Helpers::get_screenshot_url( $alert, 'base' );
+			$screenshot = Image_Helpers::get_screenshot_url( $alert, 'target' );
 
 			return [
 				'date' => $alert->target_screenshot_finish_date,
 				'pixels' => (int) $alert->differences,
 				'percentage' => is_numeric( $percentage ) ? round( (float) $percentage, 2 ) : null,
 				'false_positive' => (bool) $alert->is_false_positive,
-				'snapshot' => $alert->base_screenshot_url,
-				'screenshot' => $alert->target_screenshot_url,
-				'diff' => $alert->comparison_screenshot_url,
+				'snapshot' => $snapshot,
+				'screenshot' => $screenshot,
+				'diff' => Image_Helpers::get_screenshot_url( $alert, 'comparison' ),
 				// The screenshotter stores the captured DOM next to each screenshot.
-				'snapshot_html' => self::get_html_url( $alert->base_screenshot_url ),
-				'screenshot_html' => self::get_html_url( $alert->target_screenshot_url ),
+				'snapshot_html' => self::get_html_url( $snapshot ),
+				'screenshot_html' => self::get_html_url( $screenshot ),
 			];
 		}, Alert::get_latest_items_by_post_id( $test->post_id ) );
 
