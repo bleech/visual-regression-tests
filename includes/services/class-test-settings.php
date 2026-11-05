@@ -51,9 +51,8 @@ class Test_Settings {
 				'snapshot' => $snapshot,
 				'screenshot' => $screenshot,
 				'diff' => Image_Helpers::get_screenshot_url( $alert, 'comparison' ),
-				// The screenshotter stores the captured DOM next to each screenshot.
-				'snapshot_html' => self::get_html_url( $snapshot ),
-				'screenshot_html' => self::get_html_url( $screenshot ),
+				'snapshot_html' => Image_Helpers::get_html_url( $snapshot ),
+				'screenshot_html' => Image_Helpers::get_html_url( $screenshot ),
 			];
 		}, Alert::get_latest_items_by_post_id( $test->post_id ) );
 
@@ -63,16 +62,5 @@ class Test_Settings {
 			'click_selectors' => (string) vrts()->settings()->get_option( 'vrts_click_selectors' ),
 			'alerts' => $alerts,
 		];
-	}
-
-	/**
-	 * URL of the HTML captured with a screenshot.
-	 *
-	 * @param string $screenshot_url Screenshot URL.
-	 *
-	 * @return string
-	 */
-	private static function get_html_url( $screenshot_url ) {
-		return preg_replace( '/\.png$/i', '.html', (string) $screenshot_url );
 	}
 }

@@ -67,4 +67,17 @@ class Image_Helpers {
 	public static function get_cloudfront_url( $url ) {
 		return str_replace( 'https://screenshotter-dev.s3.eu-central-1.amazonaws.com/', self::CDN_ORIGIN . '/', $url );
 	}
+
+	/**
+	 * URL of the HTML captured with a screenshot.
+	 *
+	 * The screenshotter stores the captured DOM next to each screenshot.
+	 *
+	 * @param string $screenshot_url Screenshot URL.
+	 *
+	 * @return string
+	 */
+	public static function get_html_url( $screenshot_url ) {
+		return preg_replace( '/\.png$/i', '.html', (string) $screenshot_url );
+	}
 }
