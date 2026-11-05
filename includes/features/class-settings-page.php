@@ -103,13 +103,9 @@ class Settings_Page {
 			'type' => 'select',
 			'id' => 'vrts_alert_threshold',
 			'section' => 'vrts-settings-section-general',
-			'title' => esc_html__( 'Default alert threshold', 'visual-regression-tests' ),
-			'description' => sprintf(
-				'%s<br>%s',
-				esc_html__( 'Only alert when the most-changed screen of the page differs by more than this.', 'visual-regression-tests' ),
-				esc_html__( 'Tests set to "Use project default" always use the value selected here.', 'visual-regression-tests' )
-			),
-			'choices' => Test::get_alert_threshold_options( false ),
+			'title' => esc_html__( 'Alert threshold', 'visual-regression-tests' ),
+			'description' => esc_html__( 'Only alert when the most-changed screen of the page differs by more than this. Applies to all tests.', 'visual-regression-tests' ),
+			'choices' => Test::get_alert_threshold_options(),
 			'sanitize_callback' => [ $this, 'sanitize_alert_threshold' ],
 			'show_in_rest' => true,
 			'value_type' => 'string',
@@ -316,8 +312,7 @@ class Settings_Page {
 	}
 
 	/**
-	 * Send the global alert threshold to the service. Tests set to Default follow it,
-	 * tests with their own value are not affected.
+	 * Send the alert threshold to the service.
 	 *
 	 * @param mixed $old Old value, or the option name when the option is added.
 	 * @param mixed $new_value New value.

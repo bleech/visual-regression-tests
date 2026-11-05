@@ -578,15 +578,10 @@ class Test {
 	/**
 	 * Get the alert threshold options as value => label.
 	 *
-	 * @param bool $include_default Whether to include the option that follows the global setting.
-	 *
 	 * @return array
 	 */
-	public static function get_alert_threshold_options( $include_default = true ) {
+	public static function get_alert_threshold_options() {
 		$options = [];
-		if ( $include_default ) {
-			$options[''] = esc_html__( 'Use project default', 'visual-regression-tests' ) . ' · ' . self::get_alert_threshold_label( self::get_global_alert_threshold() );
-		}
 		$options['0'] = self::get_alert_threshold_label( 0 );
 		foreach ( self::ALERT_THRESHOLDS as $threshold ) {
 			$options[ (string) $threshold ] = self::get_alert_threshold_label( $threshold );
@@ -620,7 +615,7 @@ class Test {
 	 *
 	 * @param mixed $value Raw value.
 	 *
-	 * @return int|null Threshold percentage, 0 for any change, null to follow the global setting.
+	 * @return int|null Threshold percentage, 0 for any change, null when it is not a preset.
 	 */
 	public static function sanitize_alert_threshold( $value ) {
 		if ( ! is_numeric( $value ) ) {
@@ -637,34 +632,6 @@ class Test {
 	 */
 	public static function get_global_alert_threshold() {
 		return (int) self::sanitize_alert_threshold( vrts()->settings()->get_option( 'vrts_alert_threshold' ) );
-	}
-
-	/**
-	 * Get the alert threshold that applies to the test with the given service test id:
-	 * its own value, or the global setting when it has none.
-	 *
-	 * @param string $service_test_id Service test id.
-	 *
-	 * @return int Threshold percentage, 0 for any change.
-	 */
-	public static function get_alert_threshold_by_service_test_id( $service_test_id ) {
-		global $wpdb;
-
-		$tests_table = Tests_Table::get_table_name();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
-		$raw = $wpdb->get_var(
-			$wpdb->prepare(
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
-				"SELECT meta FROM $tests_table WHERE service_test_id = %s",
-				$service_test_id
-			)
-		);
-		$meta = ! empty( $raw ) ? maybe_unserialize( $raw ) : [];
-
-		$alert_threshold = self::sanitize_alert_threshold( is_array( $meta ) ? ( $meta['alert_threshold'] ?? null ) : null );
-
-		return is_null( $alert_threshold ) ? self::get_global_alert_threshold() : $alert_threshold;
 	}
 
 	/**

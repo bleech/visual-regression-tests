@@ -46,7 +46,7 @@ In which cases can visual regression testing help you spot issues?
 * **Daily Tests:** The plugin monitors selected posts and pages and compares screenshots daily.
 * **Hide Elements:** Hide dynamic or irrelevant elements to prevent false positives in your tests.
 * **Click Element:** Define an element that should be clicked before taking a screenshot. This is useful for closing cookie banners or modals.
-* **Alert Threshold:** Only get alerts for changes above a threshold you choose, for all tests or per test.
+* **Alert Threshold:** Only get alerts for changes above a threshold you choose.
 * **Email Notifications:** As soon as a change is detected between the snapshot and the comparison screenshot, you will be notified via email.
 * **Fullscreen Review:** Inspect changes up close using the difference view and comparison slider in fullscreen mode.
 * **Read / Unread:** Keep track of test results that require further attention by marking alerts as unread.
@@ -120,7 +120,7 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 
 Yes. Set an alert threshold, and VRTs only alerts you when the most-changed screen of a page differs by more than it: Small (1%), Medium (10%), Large (25%) or Huge (50%). By default, every change triggers an alert.
 
-Set the default for all tests under **VRTs > Settings**, or choose a different threshold for a single test in its test settings.
+Set it for all tests under **VRTs > Settings**.
 
 = Can I test custom post type archives with VRTs? =
 

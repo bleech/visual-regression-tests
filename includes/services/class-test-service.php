@@ -87,7 +87,7 @@ class Test_Service {
 				$this->update_test_from_schedule( $test_id, $data );
 			} elseif ( $data['comparison'] ?? null ) {
 				$comparison = $data['comparison'];
-				// A schedule update (e.g. a changed threshold) resends its latest comparison;
+				// The webhook and the hourly poll can both deliver the same comparison;
 				// only judge comparisons newer than the last one this test processed.
 				$last_comparison_date = Test::get_item_by_post_id( $post_id )->last_comparison_date ?? null;
 				if ( $last_comparison_date && strtotime( $comparison['updated_at'] ) <= strtotime( $last_comparison_date ) ) {
@@ -95,7 +95,7 @@ class Test_Service {
 				}
 				$comparison['matches_false_positive'] = $data['matches_false_positive'] ?? false;
 				$alert_id = null;
-				if ( Alert_Service::should_alert( $test_id, $comparison ) ) {
+				if ( Alert_Service::should_alert( $comparison ) ) {
 					$alert_service = new Alert_Service();
 					$alert_id = $alert_service->create_alert_from_comparison( $post_id, $test_id, $comparison );
 				}//end if
@@ -143,12 +143,11 @@ class Test_Service {
 	/**
 	 * Create test.
 	 *
-	 * @param int   $post_id Post id.
-	 * @param array $meta Test meta, e.g. alert_threshold.
+	 * @param int $post_id Post id.
 	 *
 	 * @return int|WP_Error
 	 */
-	public function create_test( $post_id, $meta = [] ) {
+	public function create_test( $post_id ) {
 		if ( Service::is_connected() ) {
 			$post = get_post( $post_id );
 			if ( ! $post ) {
@@ -159,12 +158,11 @@ class Test_Service {
 				return $test;
 			}
 			if ( 'publish' === $post->post_status ) {
-				return $this->create_remote_test( $post, [ 'meta' => $meta ] );
+				return $this->create_remote_test( $post );
 			} elseif ( 'revision' !== $post->post_type && 'auto-draft' !== $post->post_status ) {
 				$args = [
 					'post_id' => $post_id,
 					'status' => 0,
-					'meta' => ! empty( $meta ) ? maybe_serialize( $meta ) : null,
 				];
 				$new_row_id = Test::save( $args );
 				return Test::get_item( $new_row_id );
@@ -271,6 +269,7 @@ class Test_Service {
 			$request_url = 'tests';
 			$meta = ! empty( $test['meta'] ) ? maybe_unserialize( $test['meta'] ) : [];
 			$meta = is_array( $meta ) ? $meta : [];
+			unset( $meta['alert_threshold'] );
 			$parameters = [
 				'project_id' => $service_project_id,
 				'url' => get_permalink( $post ),
@@ -467,46 +466,6 @@ class Test_Service {
 		} else {
 			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}
-	}
-
-	/**
-	 * Update the alert threshold of a test.
-	 *
-	 * Unlike hide selectors this does not change the screenshot, so the caller
-	 * must not resume the test afterwards.
-	 *
-	 * @param int   $test_id Test id.
-	 * @param mixed $alert_threshold Threshold in percent, 0 for any change, empty to follow the global setting.
-	 *
-	 * @return bool|WP_Error
-	 */
-	public function update_alert_threshold( $test_id, $alert_threshold ) {
-		$test = Test::get_item( $test_id );
-		if ( ! $test ) {
-			return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-tests' ) );
-		}
-
-		$alert_threshold = Test::sanitize_alert_threshold( $alert_threshold );
-		$meta = Test::get_all_meta( $test_id );
-		if ( Test::sanitize_alert_threshold( $meta['alert_threshold'] ?? null ) === $alert_threshold ) {
-			return true;
-		}
-		if ( is_null( $alert_threshold ) ) {
-			unset( $meta['alert_threshold'] );
-		} else {
-			$meta['alert_threshold'] = $alert_threshold;
-		}
-
-		if ( $test->service_test_id ) {
-			if ( ! Service::is_connected() ) {
-				return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
-			}
-			if ( ! Service::update_test( $test->service_test_id, [ 'meta' => $meta ] ) ) {
-				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-tests' ) );
-			}
-		}
-
-		return Test::save_all_meta( $test_id, $meta );
 	}
 
 	/**

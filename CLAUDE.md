@@ -74,7 +74,7 @@ Vrts\
 ├── Services\                     # Business logic layer
 │   ├── Test_Service              # Create/delete/resume tests (local + remote)
 │   ├── Test_Run_Service          # Process run webhooks, create alerts from comparisons
-│   ├── Alert_Service             # Create alert records; exceeds_alert_threshold() compares the comparison's meta.viewport_diff_percentage with the test's threshold (no threshold = pixels_diff > 1)
+│   ├── Alert_Service             # Create alert records; exceeds_alert_threshold() compares the comparison's meta.viewport_diff_percentage with the global `vrts_alert_threshold` (0 = pixels_diff > 1)
 │   ├── Email_Service             # Send HTML test run notification emails
 │   └── Manual_Test_Service       # Trigger manual test runs (subscription required)
 ├── Tables\                       # DB schema definitions (dbDelta)
@@ -108,7 +108,7 @@ Vrts\
 | `next_run_date`        | datetime      | Next scheduled run                      |
 | `is_running`           | boolean       | Whether comparison is in progress       |
 | `hide_css_selectors`   | longtext      | CSS selectors to hide during screenshot |
-| `meta`                 | longtext      | Serialized settings array, e.g. `alert_threshold` (0 = any change, 1/10/25/50 percent = Small/Medium/Large/Huge, absent = "Use project default", follows the `vrts_alert_threshold` setting shown as "Default alert threshold" on the Settings page) |
+| `meta`                 | longtext      | Serialized settings array. Per-test `alert_threshold` values written by 2.2.x are ignored: the threshold is global (`vrts_alert_threshold`) |
 
 **Calculated statuses** (in `Test` model): `disconnected`, `no-credit-left`, `post-not-published`, `waiting`, `running`, `scheduled`, `has-alert`, `passed`
 
@@ -240,7 +240,7 @@ All registered under `wp-json/vrts/v1/`:
 | `vrts_total_tests`      | Total test quota            |
 | `vrts_has_subscription` | Premium subscription flag   |
 | `vrts_tier_id`          | Subscription tier           |
-| `vrts_alert_threshold`  | Global alert threshold (0 = any change); used by tests without their own value, pushed to the service as project `meta` |
+| `vrts_alert_threshold`  | Alert threshold for all tests (0 = any change; 1/10/25/50 percent = Small/Medium/Large/Huge), shown as "Alert threshold" on the Settings page, pushed to the service as project `meta` |
 
 ## Frontend / JavaScript
 

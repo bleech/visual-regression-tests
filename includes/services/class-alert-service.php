@@ -36,24 +36,23 @@ class Alert_Service {
 	}
 
 	/**
-	 * Whether a comparison should become an alert for the given test.
+	 * Whether a comparison should become an alert.
 	 *
 	 * A comparison that already has an alert (created by the other delivery
 	 * path, webhook or poll) always does, whatever the current threshold is.
 	 *
-	 * @param string $test_id Service test id.
-	 * @param array  $comparison Comparison data from the service.
+	 * @param array $comparison Comparison data from the service.
 	 *
 	 * @return bool
 	 */
-	public static function should_alert( $test_id, $comparison ) {
+	public static function should_alert( $comparison ) {
 		if ( ! empty( $comparison['matches_false_positive'] ) ) {
 			return false;
 		}
 		if ( ! empty( $comparison['id'] ) && Alert::get_item_by_comparison_id( $comparison['id'] ) ) {
 			return true;
 		}
-		return self::exceeds_alert_threshold( Test::get_alert_threshold_by_service_test_id( $test_id ), $comparison );
+		return self::exceeds_alert_threshold( Test::get_global_alert_threshold(), $comparison );
 	}
 
 	/**
