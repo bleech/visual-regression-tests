@@ -94,7 +94,7 @@ Vrts\
 
 ## Custom Database Tables
 
-### `{prefix}vrts_tests` (DB_VERSION 1.6)
+### `{prefix}vrts_tests` (DB_VERSION 1.7)
 
 | Column                 | Type          | Purpose                                 |
 |------------------------|---------------|-----------------------------------------|
@@ -107,7 +107,9 @@ Vrts\
 | `last_comparison_date` | datetime      | Last comparison timestamp               |
 | `next_run_date`        | datetime      | Next scheduled run                      |
 | `is_running`           | boolean       | Whether comparison is in progress       |
-| `hide_css_selectors`   | longtext      | CSS selectors to hide during screenshot |
+| `hide_css_selectors`   | longtext      | Legacy CSS selectors to hide; shown as the equivalent custom CSS in the Test settings modal and cleared when it is saved |
+| `custom_css`           | longtext      | Custom CSS injected before the screenshot (service option `customCss`) |
+| `custom_js`            | longtext      | Custom JS run after load, before the screenshot (service option `customJs`) |
 | `meta`                 | longtext      | Serialized settings array. Per-test `alert_threshold` values written by 2.2.x are ignored: the threshold is global (`vrts_alert_threshold`) |
 
 **Calculated statuses** (in `Test` model): `disconnected`, `no-credit-left`, `post-not-published`, `waiting`, `running`, `scheduled`, `has-alert`, `passed`
@@ -167,7 +169,7 @@ All API calls go through `Vrts\Features\Service` using `wp_remote_post()` / `wp_
 | `sites/{id}/register`              | POST   | Register license key               |
 | `sites/{id}/unregister`            | POST   | Remove license key                 |
 | `tests`                            | POST   | Create test(s)                     |
-| `tests/{id}`                       | PUT    | Update test (URL, hide selectors, meta) |
+| `tests/{id}`                       | PUT    | Update test (URL, options `customCss`/`customJs`, meta) |
 | `tests/{id}`                       | DELETE | Delete test                        |
 | `tests/{id}/resume`                | POST   | Resume individual test             |
 | `tests/{id}/false-positives`       | POST   | Mark comparison as false positive  |
@@ -204,7 +206,7 @@ All registered under `wp-json/vrts/v1/`:
 | `/tests/post/{post_id}`       | GET         | Public           | Get test data for a post      |
 | `/tests/post/{post_id}`       | POST        | `manage_options` | Create test for a post        |
 | `/tests/post/{post_id}`       | DELETE      | `manage_options` | Delete test for a post        |
-| `/tests/post/{post_id}`       | PUT/PATCH   | `manage_options` | Update test (CSS selectors)   |
+| `/tests/{test_id}/settings`   | PUT         | `manage_options` | Save test settings modal: custom CSS/JS |
 | `/alerts/{id}/false-positive` | POST/DELETE | `manage_options` | Toggle false positive         |
 | `/alerts/{id}/read-status`    | POST/DELETE | `manage_options` | Toggle read status            |
 | `/test-runs/{id}/read-status` | POST/DELETE | `manage_options` | Toggle run read status        |
@@ -218,7 +220,6 @@ All registered under `wp-json/vrts/v1/`:
 
 ### Post Integration
 - `save_post` -> Saves test toggle state from classic editor
-- `rest_after_insert_{post_type}` -> Updates hide CSS selectors from block editor
 - `wp_after_insert_post` -> Resumes test (retakes screenshot) after post update
 - `trashed_post` -> Deletes test, archives alerts when post is trashed
 - `transition_post_status` -> Creates/deletes remote test on publish/unpublish
@@ -268,7 +269,10 @@ Webpack via `@wordpress/scripts` with two entry points:
 
 ### Localized Data
 - `vrts_admin_vars`: `rest_url`, `rest_nonce`, `pluginUrl`, `currentUserId`, `onboarding`
-- `vrts_editor_vars`: `plugin_name`, `rest_url`, `has_post_alert`, `base_screenshot_url`, `remaining_tests`, `total_tests`, `test_status`, `test_settings`, etc.
+- `vrts_editor_vars`: `plugin_name`, `rest_url`, `has_post_alert`, `base_screenshot_url`, `remaining_tests`, `total_tests`, `test_status`, etc.
+
+### Test Settings Modal
+`components/test-settings` renders one modal per page (tests list, run view, post edit screens via `admin_footer-post*.php`). Any element with `data-a11y-dialog-show="vrts-modal-test-settings"` and `data-vrts-test-id` opens it; the modal uses settings preloaded into the page and saves via `/tests/{test_id}/settings`, using the WP code editor (CodeMirror). `Services\Test_Settings` provides the shared payload, including AI context; recent alerts are batched for the tests list. Saves update the client data, and table refreshes replace row payloads. Post editor test responses include the same settings. There is no load request: an opener without settings shows a load error, so new openers must preload (`data-vrts-test-settings` or `rememberSettings()`). Both editors share one panel switched by file tabs. Saving unchanged code is a no-op; a changed save resumes the test (new baseline). There is no per-test alert threshold; the global setting applies to every test.
 
 ## Admin Pages
 

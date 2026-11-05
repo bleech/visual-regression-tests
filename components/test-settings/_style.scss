@@ -1,0 +1,522 @@
+$vrts-settings-icon-mask: "data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 18C10 19.6568 8.65686 21 7 21C5.34314 21 4 19.6568 4 18C4 16.3432 5.34314 15 7 15C8.65686 15 10 16.3432 10 18Z' stroke='%23000' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M20 6C20 4.34314 18.6568 3 17 3C15.3432 3 14 4.34314 14 6C14 7.65686 15.3432 9 17 9C18.6568 9 20 7.65686 20 6Z' stroke='%23000' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M7 15V3' stroke='%23000' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M17 9V21' stroke='%23000' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E";
+
+
+$vrts-code-font: ui-monospace, sfmono-regular, menlo, consolas, monospace;
+$vrts-select-arrow: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpath d='M5 6l5 5 5-5 2 1-7 7-7-7z' fill='%23abb2bf'/%3E%3C/svg%3E";
+
+.vrts-test-settings-button {
+	all: unset;
+	cursor: pointer;
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: 20px;
+	corner-shape: squircle; // stylelint-disable-line property-no-unknown
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		padding: 1px;
+		border-radius: inherit;
+		corner-shape: squircle; // stylelint-disable-line property-no-unknown
+		background: #50575e;
+		mask:
+			url(#{$vrts-settings-icon-mask}) no-repeat center / 14px 14px,
+			linear-gradient(#fff 0 0) content-box,
+			linear-gradient(#fff 0 0);
+		mask-composite: add, exclude;
+		transition: filter 0.2s;
+	}
+
+	&:hover::before,
+	&:focus-visible::before {
+		filter: brightness(0.8);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--vrts-admin-theme-color);
+		outline-offset: 2px;
+	}
+}
+
+.vrts-test-settings-modal {
+
+	.vrts-modal__content {
+		max-width: 640px;
+		border-radius: 10px;
+		overflow: auto;
+		max-height: min(100%, 800px);
+	}
+
+	.vrts-modal__title {
+		padding: 16px 56px 14px 24px;
+		border-bottom: 1px solid #f0f0f1;
+		gap: 12px;
+	}
+
+	.vrts-modal__close {
+		top: 8px;
+		right: 14px;
+	}
+
+	&__heading {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+
+	&__subtitle {
+		overflow: hidden;
+		color: #646970;
+		font-size: 12px;
+		font-weight: 400;
+		line-height: 1.5;
+		text-overflow: ellipsis;
+		// Filled after the settings load; keep its line so the content height
+		// does not change and add a scrollbar mid-open.
+		min-height: 1.5em;
+		white-space: nowrap;
+	}
+
+	.vrts-modal__content-inner {
+		padding: 16px 24px 24px;
+		// Scroll the whole modal so upward tooltips can overlap its header.
+		overflow: visible;
+		flex: 0 0 auto;
+	}
+
+	fieldset {
+		min-width: 0;
+	}
+
+	&__field-heading {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 12px;
+	}
+
+	&__label {
+		color: #1d2327;
+		font-size: 14px;
+		font-weight: 600;
+		line-height: 20px;
+	}
+
+	&__agent {
+		min-width: 0;
+		margin-bottom: 20px;
+	}
+
+	&__prompt {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		width: 100%;
+		min-width: 0;
+		min-height: 40px;
+		padding: 8px 12px;
+		// A theme tint, so it reads as an action rather than an input.
+		border: 1px solid color-mix(in srgb, var(--vrts-admin-theme-color) 25%, #fff);
+		border-radius: 2px; // Same as WP admin inputs and buttons.
+		background: color-mix(in srgb, var(--vrts-admin-theme-color) 6%, #fff);
+		color: #3c434a;
+		font-family: inherit;
+		font-size: 14px;
+		line-height: 1.5;
+		text-align: left;
+		cursor: pointer;
+		transition: border-color 0.15s, background-color 0.15s;
+
+		&:hover {
+			background: color-mix(in srgb, var(--vrts-admin-theme-color) 10%, #fff);
+			border-color: var(--vrts-admin-theme-color);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--vrts-admin-theme-color);
+			outline-offset: -1px;
+		}
+
+		&:disabled {
+			cursor: default;
+			opacity: 0.6;
+		}
+	}
+
+	&__prompt-sign {
+		display: flex;
+		flex-shrink: 0;
+		color: var(--vrts-admin-theme-color);
+		font-weight: 600;
+
+		svg {
+			width: 18px;
+			height: 18px;
+		}
+	}
+
+	&__prompt-text {
+		flex: 1;
+		color: #50575e;
+		font: 13px/1.5 $vrts-code-font;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&__prompt-action {
+		display: grid;
+		flex-shrink: 0;
+	}
+
+	&__prompt-icon {
+		grid-area: 1 / 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		color: var(--vrts-admin-theme-color);
+		font-size: 12px;
+		font-weight: 600;
+		white-space: nowrap;
+		transition: color 0.15s;
+
+		svg {
+			width: 18px;
+			height: 18px;
+		}
+
+		.vrts-test-settings-modal__prompt:hover & {
+			color: var(--vrts-admin-theme-color);
+		}
+
+		&[data-vrts-prompt-icon="copied"],
+		.is-copied &[data-vrts-prompt-icon="copy"] {
+			visibility: hidden;
+		}
+
+		.is-copied &[data-vrts-prompt-icon="copied"] {
+			visibility: visible;
+			color: #00a32a;
+		}
+	}
+
+	&__code {
+		position: relative;
+	}
+
+	// The tabs sit over the left of the active panel's bar, like editor file tabs.
+	&__code-tabs {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		display: flex;
+		height: 44px;
+		margin: 1px;
+	}
+
+	&__code-tab {
+		display: flex;
+		gap: 7px;
+		align-items: center;
+		padding: 0 16px 0 14px;
+		border: 0;
+		border-right: 1px solid #181a1f;
+		background: transparent;
+		color: #8f96a3;
+		font-size: 12px;
+		font-weight: 500;
+		cursor: pointer;
+
+		&:hover {
+			color: #d7dae0;
+		}
+
+		&[aria-selected="true"] {
+			background: #282c34;
+			color: #d7dae0;
+		}
+
+		&:focus-visible {
+			outline: 2px solid #528bff;
+			outline-offset: -2px;
+		}
+	}
+
+	// Only the open file shows; its label lives in the tab.
+	&__field {
+		display: none;
+
+		&.is-active {
+			display: block;
+		}
+	}
+
+	&__action {
+		position: sticky;
+		// Offset from the scrolling modal's edge, not from the inner padding.
+		bottom: 0;
+		// Above CodeMirror's scrollbars (z-index 6), which otherwise paint over it.
+		z-index: 7;
+		margin: 16px -24px -24px;
+		// 8px looked cramped next to the 24px sides and the rounded corner.
+		padding: 12px 24px;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem;
+		border-top: 1px solid #dcdcde;
+		background: #fff;
+	}
+
+	.vrts-tooltip-content {
+		top: auto;
+		right: auto;
+		bottom: 100%;
+		left: -0.5rem;
+	}
+
+
+	.vrts-tooltip {
+
+		&:focus-visible {
+			outline: 2px solid var(--vrts-admin-theme-color);
+			outline-offset: 2px;
+		}
+
+		&:focus .vrts-tooltip-content {
+			visibility: visible;
+		}
+	}
+
+	&__cancel {
+		margin-left: auto !important;
+	}
+
+	&__message {
+		order: -1;
+		flex: 1 1 240px;
+		color: #007017;
+		font-size: 0.75rem;
+
+		&:empty {
+			display: none;
+		}
+
+		&.is-error {
+			color: #d63638;
+		}
+	}
+
+	.spinner {
+		margin: 0;
+		display: none;
+
+		&.is-active {
+			display: block;
+		}
+	}
+}
+
+
+.vrts-code-field {
+	$font: $vrts-code-font;
+	$bg: #282c34;
+	$fg: #abb2bf;
+
+	position: relative;
+	border: 1px solid #181a1f;
+	border-radius: 3px;
+	overflow: hidden;
+	background: $bg;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+
+	&__bar {
+		display: flex;
+		justify-content: flex-end;
+		align-items: stretch;
+		height: 44px;
+		padding-right: 8px;
+		box-shadow: inset 0 -1px #181a1f;
+		background: #21252b;
+	}
+
+	&__icon {
+		color: #61afef;
+		font: 700 11px/1 $font;
+
+		&[data-language="JS"] {
+			color: #e5c07b;
+		}
+	}
+
+	select.vrts-code-field__snippets {
+		align-self: center;
+		flex: 0 1 auto;
+		width: auto;
+		min-width: 0;
+		field-sizing: content; // stylelint-disable-line property-no-unknown
+		min-height: 32px;
+		padding: 0 26px 0 10px;
+		border: 1px solid #353b45;
+		border-radius: 3px;
+		background: transparent url(#{$vrts-select-arrow}) no-repeat right 6px top 55% / 14px 14px;
+		color: #a4adbb;
+		font-size: 12px;
+		line-height: 30px;
+		cursor: pointer;
+		transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+
+		&:hover,
+		&:focus {
+			background-color: #2c313a;
+			border-color: #596273;
+			color: #d7dae0;
+		}
+
+		&:focus {
+			box-shadow: none;
+			outline: 2px solid #528bff;
+			outline-offset: 0;
+		}
+
+		option {
+			background: #fff;
+			color: #1d2327;
+		}
+	}
+
+	textarea {
+		border: 0;
+		background: $bg;
+		color: $fg;
+		font: 13px/1.6 $font;
+	}
+
+	.CodeMirror {
+		height: 260px;
+		background: $bg;
+		color: $fg;
+		font: 13px/1.6 $font;
+	}
+
+	.CodeMirror-vscrollbar,
+	.CodeMirror-hscrollbar {
+		scrollbar-color: #4b5263 $bg;
+	}
+
+	.CodeMirror-scrollbar-filler,
+	.CodeMirror-gutter-filler {
+		background: $bg;
+	}
+
+	.CodeMirror-lines {
+		padding: 10px 0;
+	}
+
+	.CodeMirror pre.CodeMirror-line,
+	.CodeMirror pre.CodeMirror-line-like {
+		padding: 0 12px;
+	}
+
+	.CodeMirror-gutters {
+		border-right: 0;
+		background: $bg;
+	}
+
+	.CodeMirror-linenumber {
+		min-width: 2ch;
+		padding: 0 4px 0 12px;
+		color: #636d83;
+	}
+
+	.CodeMirror-activeline-background {
+		background: transparent;
+	}
+
+	.CodeMirror-focused .CodeMirror-activeline-background {
+		background: #2c313a;
+	}
+
+	.CodeMirror-focused .CodeMirror-activeline-gutter .CodeMirror-linenumber {
+		color: $fg;
+	}
+
+
+	.CodeMirror-selected,
+	.CodeMirror-focused .CodeMirror-selected {
+		background: #3e4451;
+	}
+
+	.CodeMirror-cursor {
+		border-left: 2px solid #528bff;
+	}
+
+	.CodeMirror-matchingbracket {
+		color: inherit !important;
+		background: #3a3f4b;
+		outline: 1px solid #5c6370;
+	}
+
+	.cm-s-default {
+
+		.cm-comment {
+			color: #8f96a3;
+			font-style: italic;
+		}
+
+		.cm-keyword {
+			color: #c678dd;
+		}
+
+		.cm-def,
+		.cm-variable-2 {
+			color: #61afef;
+		}
+
+		.cm-variable {
+			color: $fg;
+		}
+
+		.cm-property,
+		.cm-tag {
+			color: #e06c75;
+		}
+
+		.cm-string,
+		.cm-string-2 {
+			color: #98c379;
+		}
+
+		.cm-number,
+		.cm-atom,
+		.cm-qualifier {
+			color: #d19a66;
+		}
+
+		.cm-builtin {
+			color: #e5c07b;
+		}
+
+		.cm-operator,
+		.cm-meta {
+			color: #56b6c2;
+		}
+
+		.cm-bracket {
+			color: $fg;
+		}
+	}
+
+	fieldset:disabled & .CodeMirror {
+		opacity: 0.6;
+	}
+}

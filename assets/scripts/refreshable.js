@@ -11,12 +11,11 @@ const SELECTOR = '[data-vrts-refresh]';
 	// as differences.
 	let lastHtml = document.querySelector( SELECTOR ).outerHTML;
 	let pollTimeout = null;
+	// Polls and on-demand refreshes can overlap; only the newest may swap.
+	let latestRequest = 0;
 
 	const isSafeToReplace = ( $refreshable ) =>
 		! window.document.hidden &&
-		// Quick edit is an unsaved editing session that cannot be restored
-		// after a swap.
-		! $refreshable.querySelector( 'tr.inline-editor' ) &&
 		// A server-rendered search value means the visible results come from
 		// a POST request, so a refetched GET would drop them.
 		! $refreshable
@@ -176,6 +175,8 @@ const SELECTOR = '[data-vrts-refresh]';
 			return;
 		}
 
+		const request = ++latestRequest;
+
 		try {
 			const response = await window.fetch( window.location.href, {
 				credentials: 'same-origin',
@@ -192,10 +193,12 @@ const SELECTOR = '[data-vrts-refresh]';
 
 				// The user may have started interacting while the request
 				// was in flight, so re-resolve the region and re-run the
-				// guards before swapping.
+				// guards before swapping. A newer request means this
+				// response may predate a save, e.g. from the test settings.
 				const $live = document.querySelector( SELECTOR );
 
 				if (
+					request === latestRequest &&
 					$next &&
 					$live &&
 					isSafeToReplace( $live ) &&
@@ -225,6 +228,9 @@ const SELECTOR = '[data-vrts-refresh]';
 
 		schedulePoll();
 	}
+
+	// Lets other components request an immediate refresh, e.g. after saving.
+	document.addEventListener( 'vrts-refresh', refresh );
 
 	schedulePoll();
 } )();

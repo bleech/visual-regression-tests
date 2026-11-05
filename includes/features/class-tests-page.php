@@ -18,7 +18,6 @@ class Tests_Page {
 		add_action( 'admin_menu', [ $this, 'add_submenu_page' ] );
 		add_filter( 'set-screen-option', [ $this, 'set_screen' ], 10, 3 );
 		add_action( 'wp_link_query', [ $this, 'wp_link_query' ], 10, 2 );
-		add_action( 'wp_ajax_vrts_test_quick_edit_save', [ $this, 'quick_edit_save' ] );
 		add_action( 'admin_init', [ $this, 'handle_bulk_actions' ] );
 	}
 
@@ -246,60 +245,6 @@ class Tests_Page {
 
 		wp_safe_redirect( $redirect_to );
 		exit;
-	}
-
-	/**
-	 * This function is used to save hide css selectors in quick edit.
-	 * It will be called from quick_edit_save function.
-	 *
-	 * @return json_decode
-	 */
-	public function quick_edit_save() {
-		if ( isset( $_POST['nonce'] ) && ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'vrts_test_quick_edit' ) ) {
-			exit( 'No naughty business please' );
-		}
-
-		if ( ! isset( $_POST['test_id'] ) || ! (int) $_POST['test_id'] ) {
-			exit( 'No naughty business please' );
-		}
-
-		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
-		$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
-
-		$current_hide_css_selectors = Test::get_item( $test_id )->hide_css_selectors ?? '';
-
-		if ( $current_hide_css_selectors === $hide_css_selectors ) {
-			$response = [
-				'success' => true,
-				'message' => __( 'No changes made.', 'visual-regression-tests' ),
-				'hide_css_selectors' => $hide_css_selectors,
-			];
-
-			return wp_die( wp_json_encode( $response ) );
-		}
-
-		$test_service = new Test_Service();
-		$is_saved = $test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
-		if ( $is_saved && ! is_wp_error( $is_saved ) ) {
-			$success = true;
-			$message = __( 'Changes saved successfully.', 'visual-regression-tests' );
-			$post_id = Test::get_item( $test_id )->post_id;
-			$test_service->resume_test( $post_id );
-		} else {
-			$success = false;
-			$message = __( 'Error while saving the changes.', 'visual-regression-tests' );
-		}
-
-		$test = Test::get_item( $test_id );
-		$snapshot_status = ! $test->target_screenshot_finish_date ? esc_html__( 'In progress', 'visual-regression-tests' ) : null;
-		$response = [
-			'success' => $success,
-			'message' => $message,
-			'hide_css_selectors' => $hide_css_selectors,
-			'snapshot_status' => $snapshot_status,
-		];
-
-		return wp_die( wp_json_encode( $response ) );
 	}
 
 	/**

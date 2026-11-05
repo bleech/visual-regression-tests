@@ -12,6 +12,37 @@ use Vrts\Tables\Tests_Table;
 class Alert {
 
 	/**
+	 * Recent alerts preloaded for this request, grouped by post.
+	 *
+	 * @var array
+	 */
+	private static $preloaded_recent_alerts = [];
+
+	/**
+	 * Load up to three recent alerts per post in batched queries.
+	 *
+	 * @param array $post_ids Post IDs visible on the page.
+	 */
+	public static function preload_recent_alerts( $post_ids ) {
+		global $wpdb;
+		$table = Alerts_Table::get_table_name();
+		$post_ids = array_unique( array_map( 'absint', $post_ids ) );
+		foreach ( array_chunk( $post_ids, 100 ) as $chunk ) {
+			$queries = [];
+			foreach ( $chunk as $post_id ) {
+				self::$preloaded_recent_alerts[ $post_id ] = [];
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Internal table name.
+				$queries[] = $wpdb->prepare( "(SELECT * FROM $table WHERE post_id = %d ORDER BY id DESC LIMIT 3)", $post_id );
+			}
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared -- Each subquery is prepared above; results cached for this request.
+			$alerts = $wpdb->get_results( implode( ' UNION ALL ', $queries ) );
+			foreach ( $alerts as $alert ) {
+				self::$preloaded_recent_alerts[ $alert->post_id ][] = $alert;
+			}
+		}
+	}
+
+	/**
 	 * Get all test items from database
 	 *
 	 * @param array $args Optional.
@@ -222,6 +253,34 @@ class Alert {
 				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
 				"SELECT * FROM $alerts_table WHERE test_run_id = %d ORDER BY post_id DESC",
 				$id
+			)
+		);
+	}
+
+	/**
+	 * Get the latest alerts of a post.
+	 *
+	 * @param int $post_id the id of the post.
+	 * @param int $limit the maximum number of alerts.
+	 *
+	 * @return array
+	 */
+	public static function get_latest_items_by_post_id( $post_id = 0, $limit = 3 ) {
+		if ( 3 === $limit && isset( self::$preloaded_recent_alerts[ $post_id ] ) ) {
+			return self::$preloaded_recent_alerts[ $post_id ];
+		}
+
+		global $wpdb;
+
+		$alerts_table = Alerts_Table::get_table_name();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
+		return $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- It's ok.
+				"SELECT * FROM $alerts_table WHERE post_id = %d ORDER BY id DESC LIMIT %d",
+				$post_id,
+				$limit
 			)
 		);
 	}

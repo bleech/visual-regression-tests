@@ -35,3 +35,5 @@
 		<?php endif; ?>
 	</div>
 </vrts-test-run-page>
+
+<?php vrts()->component( 'test-settings' ); ?>

@@ -119,10 +119,6 @@ class Enqueue_Scripts {
 					'is_connected' => Service::is_connected(),
 					'test_status' => Test::get_status_data( $test ),
 					'screenshot' => Test::get_screenshot_data( $test ),
-					'test_settings' => [
-						'test_id' => isset( $test->id ) ? $test->id : null,
-						'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
-					],
 				]
 			);
 		}//end if

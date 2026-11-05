@@ -1,10 +1,6 @@
-import Dropdown from '../../assets/scripts/dropdown';
-import { invalidateAlert } from '../../assets/scripts/page-cache';
-
 class VrtsAlertActions extends window.HTMLElement {
 	constructor() {
 		super();
-		this.dropdown = null;
 		this.setAsReadTimeout = null;
 		this.resolveElements();
 		this.bindFunctions();
@@ -15,42 +11,19 @@ class VrtsAlertActions extends window.HTMLElement {
 		this.$actionButtons = this.querySelectorAll(
 			'[data-vrts-alert-action]'
 		);
-		this.$hideElementsForm = this.querySelector(
-			'[data-vrts-hide-elements-form]'
-		);
-		this.$hideElementsModal = document.getElementById(
-			'vrts-modal-hide-elements'
-		);
-		this.$spinner = this.querySelector( '.spinner' );
-		this.$success = this.querySelector(
-			'.vrts-alert-actions__modal-action-success'
-		);
 	}
 
 	bindFunctions() {
 		this.onActionClick = this.onActionClick.bind( this );
-		this.onHideElementsFormSubmit =
-			this.onHideElementsFormSubmit.bind( this );
-		this.onHideElementsModalClose =
-			this.onHideElementsModalClose.bind( this );
 	}
 
 	bindEvents() {
 		this.$actionButtons.forEach( ( item ) => {
 			item.addEventListener( 'click', this.onActionClick );
 		} );
-		this.$hideElementsForm.addEventListener(
-			'submit',
-			this.onHideElementsFormSubmit
-		);
-		this.$hideElementsModal.addEventListener(
-			'hide',
-			this.onHideElementsModalClose
-		);
 	}
 
 	connectedCallback() {
-		this.dropdown = Dropdown( this );
 		this.syncStateFromSidebar();
 		this.setAsReadOnView();
 	}
@@ -71,22 +44,33 @@ class VrtsAlertActions extends window.HTMLElement {
 			if ( 'read-status' === type ) {
 				const isRead =
 					$alert.getAttribute( 'data-vrts-state' ) === 'read';
-				action.setAttribute(
-					'data-vrts-action-state',
-					isRead ? 'secondary' : 'primary'
-				);
+				this.setState( action, isRead ? 'secondary' : 'primary' );
 			}
 
 			if ( 'false-positive' === type ) {
 				const isFalsePositive =
 					$alert.getAttribute( 'data-vrts-false-positive' ) ===
 					'true';
-				action.setAttribute(
-					'data-vrts-action-state',
+				this.setState(
+					action,
 					isFalsePositive ? 'secondary' : 'primary'
 				);
 			}
 		} );
+	}
+
+	setState( $el, state ) {
+		$el.setAttribute( 'data-vrts-action-state', state );
+
+		if ( $el.hasAttribute( 'aria-pressed' ) ) {
+			$el.setAttribute( 'aria-pressed', String( state === 'secondary' ) );
+		}
+
+		const title = $el.getAttribute( `data-title-${ state }` );
+
+		if ( title ) {
+			$el.setAttribute( 'title', title );
+		}
 	}
 
 	setAsReadOnView() {
@@ -103,48 +87,6 @@ class VrtsAlertActions extends window.HTMLElement {
 				}, 1000 );
 			}
 		} );
-	}
-
-	onHideElementsFormSubmit( e ) {
-		e.preventDefault();
-		const $form = e.currentTarget;
-		const formData = new window.FormData( $form );
-		const postId = formData.get( 'post_id' );
-
-		this.$spinner.classList.add( 'is-active' );
-		this.$success.classList.remove( 'is-active' );
-
-		fetch( `${ window.vrts_admin_vars.rest_url }/tests/post/${ postId }`, {
-			method: 'PUT',
-			headers: {
-				'X-WP-Nonce': window.vrts_admin_vars.rest_nonce,
-			},
-			body: new URLSearchParams( formData ),
-		} )
-			.then( ( response ) => {
-				if ( ! response.ok ) {
-					throw new Error( `HTTP ${ response.status }` );
-				}
-
-				return response.json();
-			} )
-			.then( () => {
-				// The alert's cached markup embeds the selectors in the modal.
-				const alertId = this.querySelector(
-					'[data-vrts-alert-id]'
-				)?.getAttribute( 'data-vrts-alert-id' );
-
-				invalidateAlert( alertId );
-				this.$spinner.classList.remove( 'is-active' );
-				this.$success.classList.add( 'is-active' );
-			} )
-			.catch( () => {
-				this.$spinner.classList.remove( 'is-active' );
-			} );
-	}
-
-	onHideElementsModalClose() {
-		this.$success.classList.remove( 'is-active' );
 	}
 
 	onActionClick( e ) {
@@ -218,8 +160,8 @@ class VrtsAlertActions extends window.HTMLElement {
 				setTimeout( () => {
 					$el.setAttribute( 'data-vrts-loading', 'false' );
 
-					$el.setAttribute(
-						'data-vrts-action-state',
+					this.setState(
+						$el,
 						shouldSetAction ? 'secondary' : 'primary'
 					);
 				}, loadingTimeoutTime );
@@ -235,19 +177,10 @@ class VrtsAlertActions extends window.HTMLElement {
 	}
 
 	disconnectedCallback() {
-		this.dropdown?.();
 		clearTimeout( this.setAsReadTimeout );
 		this.$actionButtons?.forEach( ( item ) => {
 			item.removeEventListener( 'click', this.onActionClick );
 		} );
-		this.$hideElementsForm?.removeEventListener(
-			'submit',
-			this.onHideElementsFormSubmit
-		);
-		this.$hideElementsModal?.removeEventListener(
-			'hide',
-			this.onHideElementsModalClose
-		);
 	}
 }
 

@@ -79,20 +79,15 @@
 	}
 }
 
-.vrts-list-table-page {
+.vrts-list-table-page .tests .column-settings {
+	width: 5rem;
 
-	.quick-edit-row-test {
+	@media (min-width: 783px) {
+		text-align: center;
+		vertical-align: middle;
 
-		label {
-			pointer-events: none;
-		}
-
-		textarea {
-			width: 100%;
-		}
-
-		.inline-edit-col {
-			max-width: 485px;
+		.vrts-test-settings-button {
+			margin-inline: auto;
 		}
 	}
 }

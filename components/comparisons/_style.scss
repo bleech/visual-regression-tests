@@ -62,6 +62,14 @@
 				margin-left: 0.75rem;
 			}
 		}
+
+		// The expand button is hidden here, so the actions are the last visible item.
+		@media (max-width: 667px) {
+
+			> .vrts-alert-actions::after {
+				display: none;
+			}
+		}
 	}
 
 	&__difference {
@@ -73,6 +81,7 @@
 	}
 
 	&__expand-button {
+		position: relative;
 		background: transparent;
 		border: 0;
 		padding: 0;

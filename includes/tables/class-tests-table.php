@@ -4,7 +4,7 @@ namespace Vrts\Tables;
 
 class Tests_Table {
 
-	const DB_VERSION = '1.6';
+	const DB_VERSION = '1.7';
 	const TABLE_NAME = 'vrts_tests';
 
 	/**
@@ -59,6 +59,8 @@ class Tests_Table {
 				next_run_date datetime,
 				is_running boolean,
 				hide_css_selectors longtext,
+				custom_css longtext,
+				custom_js longtext,
 				meta longtext,
 				PRIMARY KEY (id)
 			) $charset_collate;";

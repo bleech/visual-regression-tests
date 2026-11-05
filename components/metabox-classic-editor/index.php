@@ -75,27 +75,13 @@ if ( $data['run_tests_checked'] ) {
 		</figure>
 	</div>
 
+	<?php if ( $data['test_id'] ) : ?>
 	<div class="settings">
-		<input name="test_id" type="hidden" value="<?php echo esc_html( $data['test_settings']['test_id'] ); ?>"/>
-		<label for="vrts-hide-css-selectors" class="settings-title">
-			<span><?php esc_html_e( 'Hide elements from VRTs', 'visual-regression-tests' ); ?></span>
-			<span class="vrts-tooltip">
-				<span class="vrts-tooltip-icon dashicons dashicons-info-outline"></span>
-				<span class="vrts-tooltip-content">
-					<span class="vrts-tooltip-content-inner">
-					<?php
-					printf(
-						/* translators: %1$s, %2$s: link wrapper. */
-						esc_html__( 'Exclude elements on this page: Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.', 'visual-regression-tests' ),
-						'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
-						'</a>'
-					);
-					?>
-					</span>
-				</span>
-			</span>
-		</label>
-		<textarea id="vrts-hide-css-selectors" name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4"><?php echo esc_html( $data['test_settings']['hide_css_selectors'] ); ?></textarea>
+		<button type="button" class="button" data-vrts-test-id="<?php echo esc_attr( $data['test_id'] ); ?>" data-a11y-dialog-show="vrts-modal-test-settings">
+			<?php vrts()->icon( 'settings' ); ?>
+			<?php esc_html_e( 'Test settings', 'visual-regression-tests' ); ?>
+		</button>
 	</div>
+	<?php endif; ?>
 <?php }//end if
 ?>

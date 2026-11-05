@@ -109,6 +109,8 @@ class Test {
 						tests.next_run_date,
 						tests.is_running,
 						tests.hide_css_selectors,
+						tests.custom_css,
+						tests.custom_js,
 						tests.meta,
 						posts.post_title,
 						CASE
@@ -247,6 +249,8 @@ class Test {
 					test.next_run_date,
 					test.is_running,
 					test.hide_css_selectors,
+					test.custom_css,
+					test.custom_js,
 					test.meta
 				FROM $tests_table as test
 				LEFT JOIN (
@@ -542,37 +546,85 @@ class Test {
 	}
 
 	/**
-	 * Save hide CSS selectors for a test.
+	 * Save custom CSS and JS for a test. Clears the legacy hide selectors, which the CSS replaces.
 	 *
 	 * @param int    $id Test ID.
-	 * @param string $hide_css_selectors Hide CSS selectors.
+	 * @param string $custom_css Custom CSS.
+	 * @param string $custom_js Custom JS.
 	 * @return bool
 	 */
-	public static function save_hide_css_selectors( $id = 0, $hide_css_selectors = '' ) {
-		if ( ! $id ) {
-			return false;
-		}
-
+	public static function save_custom_code( $id, $custom_css, $custom_js ) {
 		global $wpdb;
 
 		$tests_table = Tests_Table::get_table_name();
-		$hide_css_selectors = sanitize_text_field( $hide_css_selectors );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- It's ok.
 		$result = $wpdb->update(
 			$tests_table,
 			[
-				'hide_css_selectors' => '' === $hide_css_selectors ? null : $hide_css_selectors,
+				'custom_css' => '' === $custom_css ? null : $custom_css,
+				'custom_js' => '' === $custom_js ? null : $custom_js,
+				'hide_css_selectors' => null,
 			],
 			[
 				'id' => $id,
 			]
 		);
 
-		if ( false === $result ) {
-			return false;
+		return false !== $result;
+	}
+
+	/**
+	 * Get the custom CSS and JS of a test. Legacy hide selectors are shown as the equivalent CSS.
+	 *
+	 * @param object $test Test.
+	 *
+	 * @return array
+	 */
+	public static function get_custom_code( $test ) {
+		$custom_css = $test->custom_css ?? '';
+		if ( '' === (string) $custom_css && ! empty( $test->hide_css_selectors ) ) {
+			$custom_css = self::hide_selectors_to_css( $test->hide_css_selectors );
 		}
 
-		return true;
+		return [
+			'custom_css' => (string) $custom_css,
+			'custom_js' => (string) ( $test->custom_js ?? '' ),
+		];
+	}
+
+	/**
+	 * Convert hide selectors to the CSS the screenshotter injects for them.
+	 *
+	 * @param string $hide_css_selectors Comma separated selectors.
+	 *
+	 * @return string
+	 */
+	public static function hide_selectors_to_css( $hide_css_selectors ) {
+		$hide_css_selectors = trim( $hide_css_selectors );
+		if ( '' === $hide_css_selectors ) {
+			return '';
+		}
+
+		return $hide_css_selectors . " {\n\tvisibility: hidden !important;\n}\n";
+	}
+
+	/**
+	 * Get the screenshot options the service expects for a test.
+	 *
+	 * @param object|array $test Test.
+	 *
+	 * @return array
+	 */
+	public static function get_screenshot_options( $test ) {
+		$test = (object) $test;
+		if ( empty( $test->custom_css ) && empty( $test->custom_js ) ) {
+			return empty( $test->hide_css_selectors ) ? [] : [ 'hideSelectors' => $test->hide_css_selectors ];
+		}
+
+		return [
+			'customCss' => (string) ( $test->custom_css ?? '' ),
+			'customJs' => (string) ( $test->custom_js ?? '' ),
+		];
 	}
 
 	/**

@@ -59,13 +59,11 @@ use Vrts\Services\Manual_Test_Service;
 			$list_table->views();
 			$list_table->search_box( esc_attr__( 'Search', 'visual-regression-tests' ), 'search_id' );
 			$list_table->display();
-
-			if ( $list_table->has_items() ) {
-				$list_table->inline_edit();
-			}
 			?>
 		</form>
 	</div>
+
+	<?php vrts()->component( 'test-settings' ); ?>
 
 	<?php
 	// Skip the one-shot notice on background refresh requests so it is only

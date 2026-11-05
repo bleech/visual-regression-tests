@@ -278,6 +278,10 @@ class Test_Service {
 			if ( ! empty( $meta ) ) {
 				$parameters['meta'] = $meta;
 			}
+			$options = Test::get_screenshot_options( $test );
+			if ( ! empty( $options ) ) {
+				$parameters['options'] = $options;
+			}
 			$service_request = Service::rest_service_request( $request_url, $parameters, 'post' );
 			if ( 201 === $service_request['status_code'] ) {
 				$test_id = $service_request['response']['id'];
@@ -440,32 +444,45 @@ class Test_Service {
 	}
 
 	/**
-	 * Update test.
+	 * Update the custom CSS and JS of a test.
+	 *
+	 * Changes the screenshot, so the caller must resume the test afterwards when this returns 'changed'.
 	 *
 	 * @param int    $test_id Test id.
-	 * @param string $css_hide_selector CSS selector to hide.
+	 * @param string $custom_css Custom CSS.
+	 * @param string $custom_js Custom JS.
 	 *
-	 * @return int|WP_Error
+	 * @return string|WP_Error 'changed' or 'unchanged'.
 	 */
-	public function update_css_hide_selectors( $test_id, $css_hide_selector ) {
-		if ( Service::is_connected() ) {
-			$test = Test::get_item( $test_id );
-			if ( ! $test ) {
-				return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-tests' ) );
-			}
+	public function update_custom_code( $test_id, $custom_css, $custom_js ) {
+		$test = Test::get_item( $test_id );
+		if ( ! $test ) {
+			return new WP_Error( 'vrts_test_error', __( 'Test not found.', 'visual-regression-tests' ) );
+		}
 
-			$updated = Service::update_test(
-				$test->service_test_id,
-				[ 'options' => [ 'hideSelectors' => $css_hide_selector ] ]
-			);
-			if ( $updated ) {
-				return Test::save_hide_css_selectors( $test_id, $css_hide_selector );
-			} else {
+		$current = Test::get_custom_code( $test );
+		if ( $current['custom_css'] === $custom_css && $current['custom_js'] === $custom_js ) {
+			return 'unchanged';
+		}
+
+		if ( $test->service_test_id ) {
+			if ( ! Service::is_connected() ) {
+				return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
+			}
+			$options = [
+				'customCss' => $custom_css,
+				'customJs' => $custom_js,
+			];
+			if ( ! Service::update_test( $test->service_test_id, [ 'options' => $options ] ) ) {
 				return new WP_Error( 'vrts_service_error', __( 'Service could not update test.', 'visual-regression-tests' ) );
 			}
-		} else {
-			return new WP_Error( 'vrts_service_error', __( 'Service is not connected.', 'visual-regression-tests' ) );
 		}
+
+		if ( ! Test::save_custom_code( $test_id, $custom_css, $custom_js ) ) {
+			return new WP_Error( 'vrts_test_error', __( 'Test could not be saved.', 'visual-regression-tests' ) );
+		}
+
+		return 'changed';
 	}
 
 	/**

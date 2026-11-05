@@ -38,7 +38,9 @@ class Metaboxes {
 	 */
 	public function __construct() {
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
-		add_action( 'rest_api_init', [ $this, 'add_rest_actions' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_test_settings_assets' ] );
+		add_action( 'admin_footer-post.php', [ $this, 'render_test_settings' ] );
+		add_action( 'admin_footer-post-new.php', [ $this, 'render_test_settings' ] );
 		add_action( 'save_post', [ $this, 'save_meta_boxes_data' ], 10, 2 );
 	}
 
@@ -90,18 +92,37 @@ class Metaboxes {
 	}
 
 	/**
-	 * Add rest actions.
+	 * Enqueue the code editor for the test settings modal. In the block editor, scripts enqueued
+	 * while the modal renders in the footer would not be printed.
+	 *
+	 * @param string $hook_suffix Admin page.
 	 */
-	public function add_rest_actions() {
-		if ( current_user_can( 'manage_options' ) ) {
-			$custom_post_types = get_post_types([
-				'public' => true,
-				'_builtin' => false,
-			]);
-			foreach ( array_merge( [ 'post', 'page' ], $custom_post_types ) as $custom_post_type ) {
-				add_action( 'rest_after_insert_' . $custom_post_type, [ $this, 'update_rest_data' ], 10, 2 );
-			}
+	public function enqueue_test_settings_assets( $hook_suffix ) {
+		if ( in_array( $hook_suffix, [ 'post.php', 'post-new.php' ], true ) && $this->has_test_settings() ) {
+			wp_enqueue_code_editor( [ 'type' => 'text/css' ] );
+			wp_enqueue_code_editor( [ 'type' => 'application/javascript' ] );
 		}
+	}
+
+	/**
+	 * Render the test settings modal opened from the meta box and the block editor sidebar.
+	 */
+	public function render_test_settings() {
+		if ( $this->has_test_settings() ) {
+			$test = Test::get_item_by_post_id( get_the_ID() );
+			vrts()->component( 'test-settings', [
+				'preloaded' => $test ? [ $test->id => \Vrts\Services\Test_Settings::get_settings( $test ) ] : [],
+			] );
+		}
+	}
+
+	/**
+	 * Whether the current post edit screen offers test settings.
+	 *
+	 * @return bool
+	 */
+	private function has_test_settings() {
+		return current_user_can( 'manage_options' ) && in_array( get_current_screen()->post_type, vrts()->get_public_post_types(), true );
 	}
 
 	/**
@@ -144,10 +165,7 @@ class Metaboxes {
 			'is_connected' => Service::is_connected(),
 			'test_status' => Test::get_status_data( $test ),
 			'screenshot' => Test::get_screenshot_data( $test ),
-			'test_settings' => [
-				'test_id' => isset( $test->id ) ? $test->id : null,
-				'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
-			],
+			'test_id' => isset( $test->id ) ? $test->id : null,
 		]);
 	}
 
@@ -183,16 +201,6 @@ class Metaboxes {
 				$service->delete_test( (int) $test_id );
 			}
 		}
-
-		// Save Settings of the test.
-		$test = (object) Test::get_item_by_post_id( $post_id );
-		$test_id = isset( $_POST['test_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['test_id'] ) ) : 0;
-
-		if ( ! empty( $test ) && ! empty( $test->id ) && (int) $test->id === (int) $test_id ) {
-			$hide_css_selectors = isset( $_POST['hide_css_selectors'] ) ? sanitize_text_field( wp_unslash( $_POST['hide_css_selectors'] ) ) : '';
-			$test_service = new Test_Service();
-			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
-		}
 	}
 
 	/**
@@ -218,21 +226,5 @@ class Metaboxes {
 				'meta_key' => self::get_post_meta_key_is_new_test(),
 			]
 		);
-	}
-
-	/**
-	 * Update rest data.
-	 *
-	 * @param WP_Post         $post Post object.
-	 * @param WP_REST_Request $request Request object.
-	 */
-	public function update_rest_data( $post, $request ) {
-		$vrts_params = $request->get_param( 'vrts' );
-		if ( array_key_exists( 'hide_css_selectors', $vrts_params ?? [] ) ) {
-			$hide_css_selectors = $vrts_params['hide_css_selectors'] ? sanitize_text_field( $vrts_params['hide_css_selectors'] ) : '';
-			$test_id = Test::get_item_id( $post->ID );
-			$test_service = new Test_Service();
-			$test_service->update_css_hide_selectors( $test_id, $hide_css_selectors );
-		}
 	}
 }

@@ -4,6 +4,8 @@ namespace Vrts\List_Tables;
 
 use Vrts\Core\Utilities\Url_Helpers;
 use Vrts\Models\Test;
+use Vrts\Models\Alert;
+use Vrts\Services\Test_Settings;
 use Vrts\Features\Service;
 use Vrts\Features\Subscription;
 use Vrts\Services\Test_Service;
@@ -93,6 +95,7 @@ class Tests_List_Table extends \WP_List_Table {
 			'internal_url' => esc_html__( 'Path', 'visual-regression-tests' ),
 			'base_screenshot_date' => esc_html__( 'Snapshot', 'visual-regression-tests' ),
 			'status' => esc_html__( 'Test Status', 'visual-regression-tests' ),
+			'settings' => esc_html__( 'Settings', 'visual-regression-tests' ),
 		];
 
 		return $columns;
@@ -117,13 +120,6 @@ class Tests_List_Table extends \WP_List_Table {
 			esc_html__( 'Edit Page', 'visual-regression-tests' )
 		);
 
-		$actions['inline hide-if-no-js'] = sprintf(
-			'<button type="button" class="button-link editinline" aria-label="%s" aria-expanded="false">%s</button>',
-			/* translators: %s: Page Title. */
-			esc_attr( sprintf( __( 'Quick edit &#8220;%s&#8221; inline', 'visual-regression-tests' ), $item->post_title ) ),
-			__( 'Quick&nbsp;Edit', 'visual-regression-tests' )
-		);
-
 		if ( $is_connected ) {
 			$actions['trash'] = sprintf(
 				'<a href="%s" data-id="%d" title="%s">%s</a>',
@@ -134,20 +130,31 @@ class Tests_List_Table extends \WP_List_Table {
 			);
 		}
 
-		$row_actions = sprintf(
+		return sprintf(
 			'<strong><a class="row-title" href="%1$s" title="%2$s">%3$s</a></strong> %4$s',
 			get_edit_post_link( $item->post_id ),
 			esc_html__( 'Edit this page', 'visual-regression-tests' ),
 			$item->post_title,
 			$this->row_actions( $actions )
 		);
+	}
 
-		$quickedit_hidden_fields = "
-		<div class='hidden' id='inline_{$item->id}'>
-			<div class='hide_css_selectors'>$item->hide_css_selectors</div>
-		</div>";
-
-		return $row_actions . $quickedit_hidden_fields;
+	/**
+	 * Render the settings column.
+	 *
+	 * @param object $item column item.
+	 *
+	 * @return string
+	 */
+	public function column_settings( $item ) {
+		return sprintf(
+			'<button type="button" id="vrts-test-settings-%1$d" class="vrts-test-settings-button" data-vrts-test-id="%1$d" data-vrts-test-settings="%4$s" data-a11y-dialog-show="vrts-modal-test-settings" aria-label="%2$s" title="%3$s"></button>',
+			$item->id,
+			/* translators: %s: Page Title. */
+			esc_attr( sprintf( __( 'Test settings for &#8220;%s&#8221;', 'visual-regression-tests' ), $item->post_title ) ),
+			esc_attr__( 'Test settings', 'visual-regression-tests' ),
+			esc_attr( wp_json_encode( Test_Settings::get_settings( $item ) ) )
+		);
 	}
 
 	/**
@@ -307,6 +314,7 @@ class Tests_List_Table extends \WP_List_Table {
 		// Process any bulk actions.
 		$this->process_bulk_action();
 		$this->items = Test::get_items( $args );
+		Alert::preload_recent_alerts( wp_list_pluck( $this->items, 'post_id' ) );
 
 		$total_items = count( $this->items );
 
@@ -328,68 +336,6 @@ class Tests_List_Table extends \WP_List_Table {
 		<tr id="test-<?php echo esc_attr( $item->id ); ?>" class="<?php echo esc_attr( $classes ); ?>">
 			<?php $this->single_row_columns( $item ); ?>
 		</tr>
-		<?php
-	}
-
-	/**
-	 * Outputs the hidden row displayed when inline editing
-	 *
-	 * @global string $mode List table view mode.
-	 */
-	public function inline_edit() {
-		$screen = $this->screen;
-		?>
-
-		<form method="get">
-		<table style="display: none"><tbody id="inlineedit">
-		<?php
-		$hclass              = 'test';
-		$inline_edit_classes = "inline-edit-row inline-edit-row-$hclass";
-		$quick_edit_classes  = "quick-edit-row quick-edit-row-$hclass inline-edit-{$screen->post_type}";
-		$classes  = $inline_edit_classes . ' ' . $quick_edit_classes;
-		?>
-		<tr id="inline-edit" style="display: none" class="<?php echo esc_attr( $classes ); ?>">
-			<td colspan="<?php echo esc_attr( $this->get_column_count() ); ?>" class="colspanchange">
-				<div class="inline-edit-wrapper" role="region" aria-labelledby="quick-edit-legend">
-					<fieldset class="inline-edit-col-left">
-						<legend class="inline-edit-legend" id="quick-edit-legend"><?php esc_html_e( 'Quick Edit', 'visual-regression-tests' ); ?></legend>
-						<div class="inline-edit-col">
-							<label><?php esc_html_e( 'Hide elements from VRTs' ); ?></label>
-							<textarea name="hide_css_selectors" placeholder="<?php esc_html_e( 'e.g.: .lottie, #ads', 'visual-regression-tests' ); ?>" rows="4" cols="50"></textarea>
-							<p>
-							<?php
-							printf(
-								/* translators: %1$s, %2$s: strong element wrapper. */
-								esc_html__( '%1$sExclude elements on this page:%2$s ', 'visual-regression-tests' ),
-								'<strong>',
-								'</strong>'
-							);
-							printf(
-								/* translators: %1$s, %2$s: link wrapper. */
-								esc_html__( 'Add %1$sCSS selectors%2$s (as comma separated list) to exclude elements from VRTs when a new snapshot gets created.', 'visual-regression-tests' ),
-								'<a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Selectors" target="_blank">',
-								'</a>'
-							);
-							?>
-							</p>
-						</div>
-					</fieldset>
-					<div class="submit inline-edit-save">
-					<?php wp_nonce_field( 'vrts_test_quick_edit', '_vrts_test_quick_edit_nonce', false ); ?>
-					<button type="button" class="button button-primary save"><?php esc_html_e( 'Update' ); ?></button>
-					<button type="button" class="button cancel"><?php esc_html_e( 'Cancel' ); ?></button>
-					<span class="spinner"></span>
-					<input type="hidden" name="screen" value="<?php echo esc_attr( $screen->id ); ?>" />
-					<div class="notice notice-error notice-alt inline hidden">
-						<p class="error"></p>
-					</div>
-				</div>
-				</div>
-			</td>
-		</tr>
-		</tbody>
-		</table>
-		</form>
 		<?php
 	}
 

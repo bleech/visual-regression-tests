@@ -138,7 +138,7 @@ class Test_Runs_Page {
 				'tests' => $tests,
 				'test_settings' => [
 					'test_id' => isset( $test->id ) ? $test->id : null,
-					'hide_css_selectors' => isset( $test->hide_css_selectors ) ? $test->hide_css_selectors : null,
+					'settings' => $test ? \Vrts\Services\Test_Settings::get_settings( $test ) : null,
 				],
 			]);
 		} else {
