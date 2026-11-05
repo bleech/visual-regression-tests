@@ -17,12 +17,6 @@
 			position: sticky;
 			top: 0;
 		}
-
-		// Sticky creates a stacking context, so the modal overlay can only cover
-		// the admin bar (z-index 99999) when this wrapper is above it.
-		&:has(vrts-modal:not([aria-hidden="true"])) {
-			z-index: 100000;
-		}
 	}
 }
 

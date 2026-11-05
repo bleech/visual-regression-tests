@@ -1,7 +1,7 @@
 .vrts-modal {
 	animation: vrts-fade-in 200ms both;
 	display: flex;
-	padding: 15px;
+	padding: calc(var(--wp-admin--admin-bar--height, 0px) + 5px) 15px 15px;
 	outline: 0;
 	z-index: 9999999999;
 
@@ -30,7 +30,7 @@
 		display: flex;
 		flex-direction: column;
 		margin: auto;
-		max-height: min(calc(100vh - 40px), 620px);
+		max-height: min(100%, 620px);
 		min-width: 250px;
 		max-width: 345px;
 		position: relative;
