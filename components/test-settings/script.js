@@ -1,3 +1,5 @@
+import { clearCache } from '../../assets/scripts/page-cache';
+
 // First line of the prompt, also shown as its preview.
 const PROMPT_INTRO =
 	'Help me configure this test to prevent noise and only alert on real changes.';
@@ -633,6 +635,7 @@ class VrtsTestSettings extends window.HTMLElement {
 		this.request( 'PUT', this.getValues() )
 			.then( ( settings ) => {
 				this.rememberSettings( testId, settings );
+				clearCache();
 				if ( testId !== this.testId ) {
 					return;
 				}

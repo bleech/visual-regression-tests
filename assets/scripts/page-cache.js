@@ -131,6 +131,10 @@ export function warmAlert( href ) {
 		} );
 }
 
+export function clearCache() {
+	cache.clear();
+}
+
 export function invalidateAlert( alertId ) {
 	cache.forEach( ( entry, url ) => {
 		const params = new window.URL( url, window.location.origin )
