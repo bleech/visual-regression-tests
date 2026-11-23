@@ -49,6 +49,14 @@ switch ( $data['view'] ) {
 		$template = __DIR__ . '/views/admin-notification-test-failed.php';
 		break;
 
+	case 'test_run_deleted':
+		$template = __DIR__ . '/views/admin-notification-test-run-deleted.php';
+		break;
+
+	case 'test_run_delete_failed':
+		$template = __DIR__ . '/views/admin-notification-test-run-delete-failed.php';
+		break;
+
 	case 'unlock_more_tests':
 		$template = __DIR__ . '/views/admin-notification-unlock-more-tests.php';
 		break;

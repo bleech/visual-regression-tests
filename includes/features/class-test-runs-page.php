@@ -72,6 +72,7 @@ class Test_Runs_Page {
 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's ok.
 		if ( ! isset( $_GET['run_id'] ) ) {
 			add_action( 'load-' . $submenu_page, [ $this, 'screen_option' ] );
+			add_action( 'load-' . $submenu_page, [ $this, 'process_delete_test_run' ] );
 			add_action( 'load-' . $submenu_page, [ $this, 'init_notifications' ] );
 		}
 	}
@@ -262,6 +263,52 @@ class Test_Runs_Page {
 		if ( ! Service::is_connected() ) {
 			add_action( 'admin_notices', [ $this, 'render_notification_connection_failed' ] );
 		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- It's only the result of a verified delete request.
+		$test_run_deleted = isset( $_GET['test-run-deleted'] ) ? sanitize_text_field( wp_unslash( $_GET['test-run-deleted'] ) ) : null;
+		if ( '1' === $test_run_deleted ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_test_run_deleted' ] );
+		} elseif ( '0' === $test_run_deleted ) {
+			add_action( 'admin_notices', [ $this, 'render_notification_test_run_delete_failed' ] );
+		}
+	}
+
+	/**
+	 * Delete a finished test run from the row action.
+	 */
+	public function process_delete_test_run() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- The nonce is verified below.
+		if ( ! isset( $_GET['action'] ) || 'delete-test-run' !== $_GET['action'] ) {
+			return;
+		}
+
+		$test_run_id = isset( $_GET['test_run_id'] ) ? intval( $_GET['test_run_id'] ) : 0;
+		check_admin_referer( 'vrts_delete_test_run_' . $test_run_id );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Permission Denied!', 'visual-regression-tests' ) );
+		}
+
+		$service = new Test_Run_Service();
+		$deleted = $test_run_id ? $service->delete_finished_test_run( $test_run_id ) : false;
+
+		$redirect_to = remove_query_arg( [ 'action', 'test_run_id', '_wpnonce', 'test-run-deleted' ], wp_get_referer() ?: Url_Helpers::get_page_url( 'runs' ) );
+		wp_safe_redirect( add_query_arg( [ 'test-run-deleted' => $deleted ? '1' : '0' ], $redirect_to ) );
+		exit;
+	}
+
+	/**
+	 * Render test_run_deleted Notification.
+	 */
+	public function render_notification_test_run_deleted() {
+		Admin_Notices::render_notification( 'test_run_deleted' );
+	}
+
+	/**
+	 * Render test_run_delete_failed Notification.
+	 */
+	public function render_notification_test_run_delete_failed() {
+		Admin_Notices::render_notification( 'test_run_delete_failed' );
 	}
 
 	/**

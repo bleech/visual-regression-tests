@@ -3,6 +3,7 @@ class VrtsTestRunsPage extends window.HTMLElement {
 		super();
 		this.resolveElements();
 		this.onRefreshed = this.onRefreshed.bind( this );
+		this.onClick = this.onClick.bind( this );
 	}
 
 	resolveElements() {
@@ -14,10 +15,24 @@ class VrtsTestRunsPage extends window.HTMLElement {
 	connectedCallback() {
 		this.highlightNewTestRuns();
 		this.addEventListener( 'vrts-refreshed', this.onRefreshed );
+		this.addEventListener( 'click', this.onClick );
 	}
 
 	disconnectedCallback() {
 		this.removeEventListener( 'vrts-refreshed', this.onRefreshed );
+		this.removeEventListener( 'click', this.onClick );
+	}
+
+	onClick( e ) {
+		const $deleteLink = e.target.closest( '.vrts-delete-test-run' );
+
+		if (
+			$deleteLink &&
+			// eslint-disable-next-line no-alert
+			! window.confirm( $deleteLink.getAttribute( 'data-vrts-confirm' ) )
+		) {
+			e.preventDefault();
+		}
 	}
 
 	onRefreshed() {

@@ -113,6 +113,21 @@ class Url_Helpers {
 	}
 
 	/**
+	 * Get the delete test run URL.
+	 *
+	 * @param int $test_run_id Test run id.
+	 *
+	 * @return string
+	 */
+	public static function get_delete_test_run_url( $test_run_id ) {
+		return wp_nonce_url( add_query_arg( [
+			'page' => 'vrts-runs',
+			'action' => 'delete-test-run',
+			'test_run_id' => $test_run_id,
+		], admin_url( 'admin.php' ) ), 'vrts_delete_test_run_' . $test_run_id );
+	}
+
+	/**
 	 * Get the test run page URL.
 	 *
 	 * @param int $test_run_id Test run id.
