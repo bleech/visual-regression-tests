@@ -44,7 +44,7 @@ $code_fields = [
 ];
 ?>
 
-<vrts-test-settings class="vrts-test-settings" data-vrts-preloaded-settings="<?php echo esc_attr( wp_json_encode( $data['preloaded'] ?? [] ) ); ?>" data-vrts-code-editor="<?php echo esc_attr( wp_json_encode( $code_editor_settings ) ); ?>">
+<vrts-test-settings class="vrts-test-settings" data-vrts-preloaded-settings="<?php echo esc_attr( wp_json_encode( $data['preloaded'] ?? [], JSON_HEX_AMP ) ); ?>" data-vrts-code-editor="<?php echo esc_attr( wp_json_encode( $code_editor_settings ) ); ?>">
 	<vrts-modal id="vrts-modal-test-settings" class="vrts-modal vrts-test-settings-modal" aria-hidden="true" aria-labelledby="vrts-test-settings-title">
 		<div class="vrts-modal__overlay" data-a11y-dialog-hide></div>
 		<div class="vrts-modal__content" role="document">

@@ -1,6 +1,6 @@
 <vrts-alert-actions class="vrts-alert-actions">
 	<?php if ( ! empty( $data['test_settings']['test_id'] ) ) : ?>
-		<button type="button" class="vrts-alert-actions__action" title="<?php esc_attr_e( 'Test settings', 'visual-regression-tests' ); ?>" data-vrts-test-id="<?php echo esc_attr( $data['test_settings']['test_id'] ); ?>" data-vrts-test-settings="<?php echo esc_attr( wp_json_encode( $data['test_settings']['settings'] ) ); ?>" data-a11y-dialog-show="vrts-modal-test-settings">
+		<button type="button" class="vrts-alert-actions__action" title="<?php esc_attr_e( 'Test settings', 'visual-regression-tests' ); ?>" data-vrts-test-id="<?php echo esc_attr( $data['test_settings']['test_id'] ); ?>" data-vrts-test-settings="<?php echo esc_attr( wp_json_encode( $data['test_settings']['settings'], JSON_HEX_AMP ) ); ?>" data-a11y-dialog-show="vrts-modal-test-settings">
 			<?php vrts()->icon( 'settings' ); ?>
 			<span class="vrts-alert-actions__label"><?php esc_html_e( 'Test settings', 'visual-regression-tests' ); ?></span>
 		</button>

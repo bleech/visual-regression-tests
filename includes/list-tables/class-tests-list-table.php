@@ -153,7 +153,7 @@ class Tests_List_Table extends \WP_List_Table {
 			/* translators: %s: Page Title. */
 			esc_attr( sprintf( __( 'Test settings for &#8220;%s&#8221;', 'visual-regression-tests' ), $item->post_title ) ),
 			esc_attr__( 'Test settings', 'visual-regression-tests' ),
-			esc_attr( wp_json_encode( Test_Settings::get_settings( $item ) ) )
+			esc_attr( wp_json_encode( Test_Settings::get_settings( $item ), JSON_HEX_AMP ) )
 		);
 	}
 
