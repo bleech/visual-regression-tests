@@ -111,6 +111,9 @@ class Test_Run_Service {
 			if ( $marked_finished && ! empty( $result['alert_ids'] ) ) {
 				$email_service = new Email_Service();
 				$email_service->send_test_run_email( $test_run_id );
+
+				$webhook_service = new Webhook_Service();
+				$webhook_service->send_test_run_webhook( $test_run_id );
 			}
 		}//end if
 

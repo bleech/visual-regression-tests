@@ -99,6 +99,7 @@ class Subscription {
 		delete_option( 'vrts_email_update_notification_address' );
 		delete_option( 'vrts_email_api_notification_address' );
 		delete_option( 'vrts_email_manual_notification_address' );
+		delete_option( 'vrts_webhook_url' );
 		delete_option( 'vrts_click_selectors' );
 		delete_option( 'vrts_license_key' );
 		delete_option( 'vrts_automatic_comparison' );

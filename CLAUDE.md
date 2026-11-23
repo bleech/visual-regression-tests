@@ -76,6 +76,7 @@ Vrts\
 │   ├── Test_Run_Service          # Process run webhooks, create alerts from comparisons
 │   ├── Alert_Service             # Create alert records; exceeds_alert_threshold() compares the comparison's meta.viewport_diff_percentage with the global `vrts_alert_threshold` (0 = pixels_diff > 1)
 │   ├── Email_Service             # Send HTML test run notification emails
+│   ├── Webhook_Service           # POST a finished run's alerts as JSON to `vrts_webhook_url` (not for manual runs), sent once next to the email, no retry
 │   └── Manual_Test_Service       # Trigger manual test runs (subscription required)
 ├── Tables\                       # DB schema definitions (dbDelta)
 │   ├── Tests_Table
@@ -184,7 +185,7 @@ Signature verification: HMAC-SHA256 of JSON payload using `vrts_project_secret`.
 | Action                 | Purpose                                            |
 |------------------------|----------------------------------------------------|
 | `test_updated`         | Test screenshot/comparison ready                   |
-| `run_updated`          | Test run completed, creates alerts per `Alert_Service::exceeds_alert_threshold()` |
+| `run_updated`          | Test run completed, creates alerts per `Alert_Service::exceeds_alert_threshold()`, then sends the email and the webhook |
 | `run_deleted`          | Run deleted remotely                               |
 | `subscription_changed` | Subscription tier changed                          |
 
@@ -242,6 +243,7 @@ All registered under `wp-json/vrts/v1/`:
 | `vrts_has_subscription` | Premium subscription flag   |
 | `vrts_tier_id`          | Subscription tier           |
 | `vrts_alert_threshold`  | Alert threshold for all tests (0 = any change; 1/10/25/50 percent = Small/Medium/Large/Huge), shown as "Alert threshold" on the Settings page, pushed to the service as project `meta` |
+| `vrts_webhook_url`      | Webhook URL (Pro, own section without a heading, below Notifications). Receives one JSON POST per Schedule/Update/API run with alerts; payload built in `Webhook_Service::get_payload()` |
 
 ## Frontend / JavaScript
 

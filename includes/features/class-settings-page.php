@@ -28,8 +28,9 @@ class Settings_Page {
 		add_action( 'add_option_vrts_alert_threshold', [ $this, 'do_after_update_alert_threshold' ], 10, 2 );
 		add_action( 'update_option_vrts_alert_threshold', [ $this, 'do_after_update_alert_threshold' ], 10, 2 );
 		add_action( 'pre_update_option_vrts_license_key', [ $this, 'do_before_add_license_key' ], 10, 2 );
-		add_action( 'pre_update_option_vrts_email_update_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
-		add_action( 'pre_update_option_vrts_email_api_notification_address', [ $this, 'do_before_updating_email_address' ], 10 );
+		add_action( 'pre_update_option_vrts_email_update_notification_address', [ $this, 'do_before_updating_pro_setting' ], 10 );
+		add_action( 'pre_update_option_vrts_email_api_notification_address', [ $this, 'do_before_updating_pro_setting' ], 10 );
+		add_action( 'pre_update_option_vrts_webhook_url', [ $this, 'do_before_updating_pro_setting' ], 10 );
 		add_action( 'update_option_vrts_automatic_comparison', [ $this, 'do_after_update_vrts_automatic_comparison' ], 10, 2 );
 	}
 
@@ -262,6 +263,28 @@ class Settings_Page {
 			'description' => esc_html__( 'Alerts are automatically sent to the user who triggers the Manual Test.', 'visual-regression-tests' ),
 			'is_pro' => $has_subscription,
 		]);
+
+		vrts()->settings()->add_section([
+			'id' => 'vrts-settings-section-integrations',
+			'page' => $this->page_slug,
+			'title' => '',
+		]);
+
+		vrts()->settings()->add_setting([
+			'type' => 'text',
+			'id' => 'vrts_webhook_url',
+			'section' => 'vrts-settings-section-integrations',
+			'title' => esc_html__( 'Webhook URL', 'visual-regression-tests' ),
+			'description' => esc_html__( 'Alerts are sent to this URL, except for Manual Tests. Leave blank to disable.', 'visual-regression-tests' ),
+			'placeholder' => esc_html__( 'e.g.: https://example.com/webhook', 'visual-regression-tests' ),
+			'sanitize_callback' => function ( $url ) {
+				return esc_url_raw( trim( (string) $url ), [ 'http', 'https' ] );
+			},
+			'value_type' => 'string',
+			'default' => '',
+			'readonly' => ! $has_subscription,
+			'is_pro' => $has_subscription,
+		]);
 	}
 
 	/**
@@ -397,11 +420,11 @@ class Settings_Page {
 	}
 
 	/**
-	 * Prevent updating email address if there is no subscription
+	 * Prevent updating a Pro notification setting (email address, webhook URL) if there is no subscription
 	 *
 	 * @param string $value New value.
 	 */
-	public function do_before_updating_email_address( $value ) {
+	public function do_before_updating_pro_setting( $value ) {
 		$has_subscription = (bool) Subscription::get_subscription_status();
 		return $has_subscription ? $value : '';
 	}
