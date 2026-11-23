@@ -1,9 +1,9 @@
 === VRTs - Visual Regression Tests ===
 Contributors: bleechberlin
 Tags: vrts, visual regression, visual, regression, tests
-Requires at least: 5.0
+Requires at least: 5.9
 Tested up to: 7.1
-Stable tag: 2.2.1
+Stable tag: 2.3.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ How do you check your website after updates and code changes? Do you manually go
 2. **VRTs monitors your pages:** Every day, VRTs captures and compares screenshots of your selected pages. Upgrade to Pro to automate tests for WordPress updates, integrate deployment pipelines via API, and run manual tests on demand.
 3. **Receive instant alerts:** If a change is detected between the snapshot and the comparison screenshot, the plugin will notify you via email.
 4. **Review changes:** The difference view makes it easy to spot changes, while the comparison slider lets you inspect the details.
-5. **Hide elements:** Prevent false positives by excluding dynamic elements, ads, and animations from snapshots.
+5. **Custom CSS & JS:** Prevent false positives by hiding or freezing dynamic elements, ads, and animations in snapshots.
 6. **Set alert thresholds:** Only get alerted when a change is big enough to matter.
 
 
@@ -44,16 +44,16 @@ In which cases can visual regression testing help you spot issues?
 
 * **No Setup:** After plugin activation, the frontpage is immediately monitored and alerts are sent to the WordPress admin email.
 * **Daily Tests:** The plugin monitors selected posts and pages and compares screenshots daily.
-* **Hide Elements:** Hide dynamic or irrelevant elements to prevent false positives in your tests.
+* **Custom CSS & JS:** Add CSS and JavaScript per test to hide or freeze dynamic elements, with a prompt to get suggestions from your AI agent.
 * **Click Element:** Define an element that should be clicked before taking a screenshot. This is useful for closing cookie banners or modals.
 * **Alert Threshold:** Only get alerts for changes above a threshold you choose.
 * **Email Notifications:** As soon as a change is detected between the snapshot and the comparison screenshot, you will be notified via email.
 * **Fullscreen Review:** Inspect changes up close using the difference view and comparison slider in fullscreen mode.
-* **Read / Unread:** Keep track of test results that require further attention by marking alerts as unread.
-* **Flag False Positives:** Identify acceptable changes or non-issues to minimize unnecessary notifications.
+* **Read / Unread:** Keep track of test runs that require further attention by marking them as unread.
 * **Update Automation (Pro):** Automatically trigger tests on WordPress core, plugin, theme, or language updates and catch any issues right away.
 * **Manual Testing (Pro):** Run tests manually on demand, either for all configured pages or for specific pages, to verify any changes or global edits immediately.
 * **API Integration (Pro):** Trigger tests via PHP scripts or WP CLI for integration with other tools, deployment pipelines, or custom automations.
+* **Webhook (Pro):** Send the alerts of each Schedule, Update or API run as JSON to any URL, to connect VRTs with other tools.
 * **Customizable Notifications (Pro):** Specify email addresses for each trigger, to set up notifications for various teams or stakeholders.
 
 
@@ -74,6 +74,7 @@ Unlock more features with our paid plans:
 * **Multiple** alert recipient groups by alert type
 * **Manual tests** (unlimited)
 * **API access** (unlimited) [Read the docs.](https://vrts.app/docs/)
+* **Webhook** to send alerts to other tools
 * **Automatic tests** after WordPress updates, plugin updates and plugin installations
 
 [See pricing plans](https://vrts.app/pricing/)
@@ -121,6 +122,10 @@ Yes, cookie banners are not an issue. Before taking a snapshot, the tool can aut
 Yes. Set an alert threshold, and VRTs only alerts you when the most-changed screen of a page differs by more than it: Small (1%), Medium (10%), Large (25%) or Huge (50%). By default, every change triggers an alert.
 
 Set it for all tests under **VRTs > Settings**.
+
+= Can I send alerts to other tools? =
+
+Yes, with VRTs Pro. Enter a **Webhook URL** under **VRTs > Settings**. After each Schedule, Update or API run that has alerts, VRTs sends one JSON request to that URL with the run, the changed pages, links to the screenshots and each test's custom CSS and JavaScript. Manual Tests do not send it.
 
 = Can I test custom post type archives with VRTs? =
 
@@ -177,6 +182,12 @@ If your firewall is blocking our screenshot service, whitelist our IP addresses.
 
 
 == Changelog ==
+
+= 2.3.0 =
+* Added test settings for custom CSS and JavaScript. They replace Hide Elements: existing selectors keep working and are shown as custom CSS.
+* Added a webhook that sends the alerts of each Schedule, Update or API run as JSON.
+* Removed the per-test alert threshold and kept the site-wide one.
+* Removed the false positive flag.
 
 = 2.2.1 =
 * Improved the scroll to changes button to stay visible whenever more changes are further down the page.
