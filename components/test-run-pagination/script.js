@@ -151,6 +151,10 @@ class VrtsTestRunPagination extends window.HTMLElement {
 	}
 
 	handleKeyDown( e ) {
+		if ( e.target.closest?.( 'vrts-modal, input, textarea, select' ) ) {
+			return;
+		}
+
 		if ( e.key === 'ArrowUp' ) {
 			e.preventDefault();
 			this.querySelector( '[data-vrts-pagination="prev"]' ).click();
