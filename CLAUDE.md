@@ -109,7 +109,7 @@ Vrts\
 | `is_running`           | boolean       | Whether comparison is in progress       |
 | `hide_css_selectors`   | longtext      | Legacy CSS selectors to hide; shown as the equivalent custom CSS in the Test settings modal and cleared when it is saved |
 | `custom_css`           | longtext      | Custom CSS injected before the screenshot (service option `customCss`) |
-| `custom_js`            | longtext      | Custom JS run after load, before the screenshot (service option `customJs`) |
+| `custom_js`            | longtext      | Custom JS run after the scroll pass, right before the screenshot (service option `customJs`) |
 | `meta`                 | longtext      | Serialized settings array. Per-test `alert_threshold` values written by 2.2.x are ignored: the threshold is global (`vrts_alert_threshold`) |
 
 **Calculated statuses** (in `Test` model): `disconnected`, `no-credit-left`, `post-not-published`, `waiting`, `running`, `scheduled`, `has-alert`, `passed`

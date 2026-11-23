@@ -34,7 +34,7 @@ $code_fields = [
 		'filename' => 'script.js',
 		'icon' => 'JS',
 		'label' => __( 'Custom JavaScript', 'visual-regression-tests' ),
-		'description' => __( 'Run actions after page load, before capture. Supports await (15-second limit); errors do not stop the snapshot.', 'visual-regression-tests' ),
+		'description' => __( 'Run actions after the page was scrolled, right before the snapshot. Supports await (15-second limit); errors do not stop the snapshot.', 'visual-regression-tests' ),
 		'snippets' => [
 			__( 'Remove element', 'visual-regression-tests' ) => "document.querySelector( '.selector' )?.remove();\n",
 			__( 'Click element', 'visual-regression-tests' ) => "// For cookie banners, use the click selector in Settings instead.\ndocument.querySelector( '.selector' )?.click();\n",
@@ -87,7 +87,7 @@ $code_fields = [
 							<span class="vrts-tooltip" tabindex="0" aria-label="<?php esc_attr_e( 'Injected code', 'visual-regression-tests' ); ?>" aria-describedby="vrts-test-settings-code-description">
 								<span class="vrts-tooltip-icon dashicons dashicons-info-outline" aria-hidden="true"></span>
 								<span class="vrts-tooltip-content" role="tooltip" id="vrts-test-settings-code-description">
-									<span class="vrts-tooltip-content-inner"><?php esc_html_e( 'Applied after the page loads: CSS first, then JavaScript.', 'visual-regression-tests' ); ?></span>
+									<span class="vrts-tooltip-content-inner"><?php esc_html_e( 'CSS is added after the page loads. JavaScript runs after the page was scrolled, right before the screenshot.', 'visual-regression-tests' ); ?></span>
 								</span>
 							</span>
 						</div>
