@@ -151,7 +151,7 @@ class VrtsTestRunPagination extends window.HTMLElement {
 	}
 
 	handleKeyDown( e ) {
-		if ( e.target.closest?.( 'vrts-modal, input, textarea, select' ) ) {
+		if ( e.target.closest?.( 'vrts-modal' ) ) {
 			return;
 		}
 
