@@ -572,6 +572,9 @@ class VrtsTestSettings extends window.HTMLElement {
 				path: '',
 			}
 		);
+		Object.values( this.editors ).forEach( ( editor ) =>
+			editor.clearHistory()
+		);
 		this.setDisabled( ! settings );
 		this.setMessage( settings ? null : 'load-error' );
 		if ( ! settings ) {
