@@ -647,7 +647,8 @@ class VrtsTestSettings extends window.HTMLElement {
 					return;
 				}
 
-				this.fill( settings );
+				this.agent = settings.agent;
+				this.loaded = this.getValues();
 				this.setMessage( changed ? 'success-snapshot' : 'success' );
 				document.dispatchEvent(
 					new window.CustomEvent( 'vrts-refresh' )
