@@ -554,6 +554,10 @@ class VrtsTestSettings extends window.HTMLElement {
 	}
 
 	onShow( e ) {
+		if ( document.fullscreenElement ) {
+			document.exitFullscreen();
+		}
+
 		const $opener = e.detail?.target?.closest( '[data-vrts-test-id]' );
 		this.testId = $opener?.getAttribute( 'data-vrts-test-id' );
 
